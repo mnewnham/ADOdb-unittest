@@ -1,28 +1,27 @@
 <?php
 /**
  * Tests cases for cache SQL functions of ADODb
+ * 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * the ADOdb Database Abstraction Layer library for PHP.
  *
- * This file is part of ADOdb, a Database Abstraction Layer library for PHP.
- *
- * @author Mark Newnham
- * @package ADOdb
- * @link https://adodb.org Project's web site and documentation
+ * PHP version 8.0.0+
+ * 
+ * @category  Library
+ * @package   ADOdb-unittest
+ * @author    Mark Newnham <mnewnham@github.com>
+ * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @license   MIT https://en.wikipedia.org/wiki/MIT_License
+ * 
+ * @link https://github.com/adodb-unittest This projects home site
+ * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
- *
- * The ADOdb Library is dual-licensed, released under both the BSD 3-Clause
- * and the GNU Lesser General Public Licence (LGPL) v2.1 or, at your option,
- * any later version. This means you can use it in proprietary products.
- * See the LICENSE.md file distributed with this source code for details.
- * @license BSD-3-Clause
- * @license LGPL-2.1-or-later
- *
- * @copyright 2025 Damien Regad, Mark Newnham and the ADOdb community
  */
 
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MetaFunctionsTest
+ * Class cacheSqlTest
  *
  * Test cases for for ADOdb MetaFunctions
  */
@@ -100,15 +99,19 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
+    
 
         if ($this->skipAllTests) {
             $this->markTestSkipped('Skipping tests as caching not configured');
         }
 
-       
-        //print_r($cacheParams);
-        //$this->db->debug = true;
-       
+        if ($this->createNewConnection == false) {
+            return;
+        }
+
+        /*
+        * Reactivates the caching against the newly created $db
+        */
         switch ($cacheMethod) {
         case 1:
             $ADODB_CACHE_DIR = $cacheParams['cacheDir'] ?? '';
@@ -119,18 +122,6 @@ class CacheSqlTest extends ADOdbTestCase
             $this->db->memCachePort = 11211;
             break;
         }
-
-        /*
-        $success = $this->db->cacheFlush();
-
-        list($errno, $errmsg) = $this->assertADOdbError('cacheFlush()');
-        if ($errno > 0) {
-            $this->skipFollowingTests = true;
-            $this->markTestSkipped(
-                'Skipping caching tests as initial cacheFlush() failed'
-            );
-        }
-            */
 
     }
    
@@ -151,45 +142,27 @@ class CacheSqlTest extends ADOdbTestCase
         }
 
         $sql = "UPDATE testtable_3 SET empty_field = $value";
-        $this->db->execute($sql);
+        list($result, $errno, $errmsg) = $this->executeSqlString($sql);
     }
 
-    /**
-     * Changes the casing of the keys in an associative array
-     * based on the value of ADODB_ASSOC_CASE
-     *
-     * @param array $input  by reference
-     * 
-     * @return void
-     */
-    protected function changeKeyCasing(array &$input) : void
-    {
-        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $input = array_change_key_case($input, CASE_UPPER);
-        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_LOWER) {
-            $input = array_change_key_case($input, CASE_LOWER);
-        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_NATURAL) {
-            // No change needed
-        } else {
-            throw new InvalidArgumentException('Invalid ADODB_ASSOC_CASE value');
-        }   
-
-    }
-
+    
     /**
      * Test for {@see ADODConnection::execute() in select mode]
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
-     *
-     * @dataProvider providerTestSelectCacheExecute
      * 
-     * @param bool $expectedValue Expected value of the result
-     * @param string $sql SQL query to execute
-     * @param ?array $bind Optional array of bind parameters
+     * @param bool   $expectedValue Expected value of the result
+     * @param string $sql           SQL query to execute
+     * @param ?array $bind          Optional array of bind parameters
      * 
      * @return void
+     * 
+     * @dataProvider providerTestSelectCacheExecute
+     * @link         https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
      */
-    public function testSelectCacheExecute(bool $expectedValue, string $sql, ?array $bind): void
-    {
+    public function testSelectCacheExecute(
+        bool $expectedValue, 
+        string $sql, 
+        ?array $bind
+    ): void {
         
         if ($this->skipAllTests) {
             
@@ -197,11 +170,14 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
+        $expectedError = ($expectedValue == false) ? true : false;
+
         if ($bind) {
             $result = $this->db->cacheExecute($this->timeout, $sql, $bind);
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
         
         $this->assertSame(
             $expectedValue, 
@@ -214,11 +190,13 @@ class CacheSqlTest extends ADOdbTestCase
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
         
         $this->assertSame(
             $expectedValue, 
             is_object($result), 
-            'Second access of cacheexecute() in SELECT mode should read object from cache, not database'
+            'Second access of cacheexecute() in SELECT mode ' . 
+            'should read object from cache, not database'
         );
             
     }
@@ -226,7 +204,7 @@ class CacheSqlTest extends ADOdbTestCase
     /**
      * Data provider for {@see testSelectExecute()}
      *
-     * @return array [string(getRe, array return value]
+     * @return array [bool $success string $sql, ?array $bind]
      */
     public function providerTestSelectCacheExecute(): array
     {
@@ -250,16 +228,16 @@ class CacheSqlTest extends ADOdbTestCase
     
     /**
      * Test for {@see ADODConnection::cacheexecute() in non-seelct mode]
+     *
+     * @param bool   $expectedValue Expected value of the result
+     * @param string $sql           SQL query to execute
+     * @param ?array $bind          Optional array of bind parameters
+     * 
+     * @return void
      * 
      * @dataProvider providerTestNonSelectCacheExecute
      * 
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
-     * 
-     * @param bool $expectedValue Expected value of the result
-     * @param string $sql SQL query to execute
-     * @param ?array $bind Optional array of bind parameters
-     * 
-     * @return void
      */
     public function testNonSelectCacheExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
@@ -270,16 +248,21 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
+        $expectedError = ($expectedValue == false) ? true : false;
+
         if ($bind) {
             $result = $this->db->cacheExecute($this->timeout, $sql, $bind);
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
         
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
+
         $this->assertSame(
             $expectedValue, 
             is_object($result) && get_class($result) == 'ADORecordSet_empty', 
-            'ADOConnection::execute() in INSERT/UPDATE/DELETE mode returns ADORecordSet_empty'
+            'ADOConnection::execute() in INSERT/UPDATE/DELETE ' . 
+            'mode should return ADORecordSet_empty'
         );
             
     }
@@ -296,17 +279,17 @@ class CacheSqlTest extends ADOdbTestCase
         return [
              'Update Unbound' => [
                 true, 
-                "UPDATE TESTTABLE_3 SET INTEGER_FIELD=2000 WHERE ID=1", 
+                "UPDATE testtable_3 SET integer_field=2000 WHERE id=1", 
                 null
             ],
               'Invalid' => [
                 false, 
-                "UPDATE TESTTABLE_3 SET XINTEGER_FIELD=2000 WHERE ID=1",
+                "UPDATE testtable_3 SET xinteger_field=2000 WHERE id=1",
                  null
             ],
               'Select, Bound' =>  [
                 true, 
-                "UPDATE TESTTABLE_3 SET INTEGER_FIELD=2000 WHERE VARCHAR_FIELD=$p1",
+                "UPDATE testtable_3 SET integer_field=2000 WHERE varchar_field=$p1",
                  $bind
             ],
         ];
@@ -336,14 +319,17 @@ class CacheSqlTest extends ADOdbTestCase
         if ($bind) {
             $actualValue = $this->db->cacheGetOne($this->timeout, $sql, $bind);
 
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
             $this->assertSame(
                 $expectedValue, 
                 $actualValue, 
-                'First access of cacheGetOne() with bind reads from database and sets cache'
+                'First access of cacheGetOne() with bind ' . 
+                'reads from database and sets cache'
             );
         } else {
             
             $actualValue = $this->db->cacheGetOne($this->timeout, $sql);
+            list($errno, $errmsg) = $this->assertADOdbError($sql);
             
             $this->assertSame(
                 $expectedValue, 
@@ -352,31 +338,39 @@ class CacheSqlTest extends ADOdbTestCase
             );
         }
 
-        $rewriteSql = "UPDATE TESTTABLE_3 
-                          SET VARCHAR_FIELD = 'NOCACHE VALUE1' 
-                        WHERE VARCHAR_FIELD = 'LINE 1'";
+        $rewriteSql = "UPDATE testtable_3 
+                          SET varchar_field = 'NOCACHE VALUE1' 
+                        WHERE varchar_field = 'LINE 1'";
 
-        $this->db->execute($rewriteSql);
+        list($result, $errno, $errmsg) = $this->executeSqlString($rewriteSql);
 
         if ($bind) {
             $actualValue = $this->db->cacheGetOne($this->timeout, $sql, $bind);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+            
             $this->assertSame(
                 $expectedValue, 
                 $actualValue,
-                'Second access of cacheGetOne() with bind reads from cache, not database'
+                'Second access of cacheGetOne() with bind should read ' . 
+                'from cache, not database'
             );
         } else {
             $actualValue = $this->db->cacheGetOne($this->timeout, $sql);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+            
             $this->assertSame(
                 $expectedValue, 
                 $actualValue,
                 'Second access of cacheGetOne() reads from cache, not database'
             );
         }
-        $rewriteSql = "UPDATE TESTTABLE_3 
-                          SET VARCHAR_FIELD = 'LINE 1' 
-                        WHERE VARCHAR_FIELD = 'NOCACHE VALUE1'";
-        $this->db->execute($rewriteSql);
+        $rewriteSql = "UPDATE testtable_3 
+                          SET varchar_field = 'LINE 1' 
+                        WHERE varchar_field = 'NOCACHE VALUE1'";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($rewriteSql);
     }
 
     /**
@@ -392,17 +386,17 @@ class CacheSqlTest extends ADOdbTestCase
         return [
             'Return Last Col, Unbound' => [
                 'LINE 11', 
-                "SELECT VARCHAR_FIELD FROM TESTTABLE_3 ORDER BY NUMBER_RUN_FIELD DESC", 
+                "SELECT varchar_field FROM testtable_3 ORDER BY number_run_field DESC", 
                 null
             ],
             'Return Multiple Cols, take first, Unbound' => [
                 'LINE 11', 
-                "SELECT TESTTABLE_3.VARCHAR_FIELD,TESTTABLE_3.* FROM TESTTABLE_3 ORDER BY NUMBER_RUN_FIELD DESC",
+                "SELECT testtable_3.varchar_field,testtable_3.* FROM testtable_3 ORDER BY number_run_field DESC",
                 null
             ],
             'Return Multiple Cols, take first, Bound' => [
                 'LINE 11', 
-                "SELECT testtable_3.varchar_field,testtable_3.* FROM testtable_3 WHERE VARCHAR_FIELD=$p1", 
+                "SELECT testtable_3.varchar_field,testtable_3.* FROM testtable_3 WHERE varchar_field=$p1", 
                 $bind
             ],
 
@@ -430,7 +424,11 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
         if ($bind) {
+
             $cols = $this->db->cacheGetCol($sql, $bind);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+
             $this->assertSame(
                 $expectedValue, 
                 count($cols),
@@ -438,6 +436,9 @@ class CacheSqlTest extends ADOdbTestCase
             );
         } else {
             $cols = $this->db->cacheGetCol($sql);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql);
+
             $this->assertSame(
                 $expectedValue, 
                 count($cols),
@@ -446,22 +447,32 @@ class CacheSqlTest extends ADOdbTestCase
     
         }
 
-        $rewriteSql = "UPDATE testtable_3 SET varchar_field = null WHERE varchar_field = 'LINE 1'";
+        $rewriteSql = "UPDATE testtable_3 
+                          SET varchar_field = null
+                        WHERE varchar_field = 'LINE 1'";
         $this->db->execute($rewriteSql);
 
         if ($bind) {
             $cols = $this->db->cacheGetCol($sql, $bind);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+
             $this->assertSame(
                 $expectedValue, 
                 count($cols),
-                'Second access of cacheGetCol with bound variables() should read cache, not database'
+                'Second access of cacheGetCol with bound variables() ' . 
+                'should read cache, not database'
             );
         } else {
             $cols = $this->db->cacheGetCol($sql);
+            
+            list($errno, $errmsg) = $this->assertADOdbError($sql);
+
             $this->assertSame(
                 $expectedValue, 
                 count($cols), 
-                'Second access of cacheGetCol without bound variables() should read cache not database'
+                'Second access of cacheGetCol without bound variables() ' . 
+                'should read cache not database'
             );
     
         }
@@ -469,7 +480,7 @@ class CacheSqlTest extends ADOdbTestCase
                           SET varchar_field = 'LINE 1' 
                         WHERE varchar_field = NULL";
 
-        $this->db->execute($rewriteSql);
+        list($result, $errno, $errmsg) = $this->executeSqlString($rewriteSql);
 
     }
     /**
@@ -488,7 +499,8 @@ class CacheSqlTest extends ADOdbTestCase
                     null
                 ],[
                     1, 
-                    "SELECT testtable_3.varchar_field,testtable_3.* FROM testtable_3 WHERE varchar_field=$p1", 
+                    "SELECT testtable_3.varchar_field,testtable_3.* 
+                       FROM testtable_3 WHERE varchar_field=$p1", 
                     $bind
                 ],
 
@@ -508,8 +520,13 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @dataProvider providerTestCacheGetRow
      */
-    public function testCacheGetRow(int $expectedValue, string $emptyColumn, string $sql, ?array $bind): void
-    {
+    public function testCacheGetRow(
+        int $expectedValue, 
+        string $emptyColumn, 
+        string $sql, 
+        ?array $bind
+    ): void {
+
         global $ADODB_CACHE_DIR;
 
         if ($this->skipAllTests) {
@@ -557,6 +574,8 @@ class CacheSqlTest extends ADOdbTestCase
     
             $record = $this->db->cacheGetRow($this->timeout, $sql, $bind);
 
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+
             foreach ($fields as $key => $value) {
                 $this->assertArrayHasKey(
                     $value, 
@@ -567,6 +586,8 @@ class CacheSqlTest extends ADOdbTestCase
          } else {
             $this->db->setFetchMode(ADODB_FETCH_NUM);
             $record = $this->db->cacheGetRow($this->timeout, $sql);
+
+            list($errno, $errmsg) = $this->assertADOdbError($sql);
             
             foreach ($fields as $key => $value) {
                 $this->assertArrayHasKey(
@@ -590,6 +611,8 @@ class CacheSqlTest extends ADOdbTestCase
             $this->db->setFetchMode(ADODB_FETCH_ASSOC);
     
             $record = $this->db->cacheGetRow($this->timeout, $sql, $bind);
+
+            list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
             foreach ($fields as $key => $value) {
                 $this->assertArrayHasKey(
                     $value, 
@@ -608,6 +631,8 @@ class CacheSqlTest extends ADOdbTestCase
             
             $this->db->setFetchMode(ADODB_FETCH_NUM);
             $record = $this->db->cacheGetRow($this->timeout, $sql);
+
+            list($errno, $errmsg) = $this->assertADOdbError($sql);
             
             foreach ($fields as $key => $value) {
                 $this->assertArrayHasKey(
@@ -652,8 +677,17 @@ class CacheSqlTest extends ADOdbTestCase
            
         }
         return [
-                [1, $firstColumn, "SELECT * FROM testtable_3 ORDER BY number_run_field DESC", null],
-                [1, $firstColumn, "SELECT * FROM testtable_3 WHERE varchar_field=$p1", $bind],
+                [
+                    1, 
+                    $firstColumn, 
+                    "SELECT * FROM testtable_3 ORDER BY number_run_field DESC", 
+                    null
+                ],[
+                    1, 
+                    $firstColumn, 
+                    "SELECT * FROM testtable_3 WHERE varchar_field=$p1", 
+                    $bind
+                ],
             ];
     }
 
@@ -671,8 +705,12 @@ class CacheSqlTest extends ADOdbTestCase
      * 
      * @dataProvider providerTestCacheGetAll
      */
-    public function testCacheGetAll(int $fetchMode,array $expectedValue, string $sql, ?array $bind): void
-    {
+    public function testCacheGetAll(
+        int $fetchMode,
+        array $expectedValue, 
+        string $sql, 
+        ?array $bind
+    ): void {
         
 
         if ($this->skipAllTests) {
@@ -688,15 +726,22 @@ class CacheSqlTest extends ADOdbTestCase
             $returnedRows = $this->db->cacheGetAll($this->timeout, $sql);
         }
          
-        //foreach ($expectedValue as $eIndex => $eRow) {
-         //   $this->changeKeyCasing($expectedValue[$eIndex]);
-        //}
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
 
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $expectedValue = array_change_key_case($expectedValue, CASE_UPPER);
+        }
 
         $this->assertSame(
             $expectedValue,
             $returnedRows, 
-            'Initial read of cacheGetAll()'
+            sprintf(
+                "Initial read of cacheGetAll() with FETCH MODE %s
+                and casing %s returns %s",
+                $fetchMode,
+                ADODB_ASSOC_CASE,
+                print_r($returnedRows)
+            )
         );
 
         /*
@@ -706,13 +751,16 @@ class CacheSqlTest extends ADOdbTestCase
         $rewriteSql = "UPDATE testtable_3 
                           SET varchar_field = 'SOME OTHER VALUE'
                         WHERE number_run_field = 3";
-        $this->db->execute($rewriteSql);
+
+        list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
 
         if ($bind) {
             $returnedRows = $this->db->cacheGetAll($this->timeout, $sql, $bind);
         } else {
             $returnedRows = $this->db->cacheGetAll($this->timeout, $sql);
         }
+
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
         
         $this->assertSame(
             $expectedValue, 
@@ -723,7 +771,8 @@ class CacheSqlTest extends ADOdbTestCase
          $rewriteSql = "UPDATE testtable_3 
                           SET varchar_field = 'LINE 3' 
                         WHERE number_run_field = 3";
-        $this->db->execute($rewriteSql);
+
+        list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
 
 
     }
@@ -744,11 +793,11 @@ class CacheSqlTest extends ADOdbTestCase
             'Numbers Between 2 and 6,Unbound, FETCH_ASSOC' => 
                 [ADODB_FETCH_ASSOC, 
                     array(
-                        array('VARCHAR_FIELD'=>'LINE 2'),
-                        array('VARCHAR_FIELD'=>'LINE 3'),
-                        array('VARCHAR_FIELD'=>'LINE 4'),
-                        array('VARCHAR_FIELD'=>'LINE 5'),
-                        array('VARCHAR_FIELD'=>'LINE 6')
+                        array('varchar_field'=>'LINE 2'),
+                        array('varchar_field'=>'LINE 3'),
+                        array('varchar_field'=>'LINE 4'),
+                        array('varchar_field'=>'LINE 5'),
+                        array('varchar_field'=>'LINE 6')
                     ),
                      "SELECT testtable_3.varchar_field 
                         FROM testtable_3 
@@ -775,24 +824,36 @@ class CacheSqlTest extends ADOdbTestCase
     /**
      * Test for {@see ADODConnection::cacheselectlimit() in select mode]
      * 
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheselectlimit
-     * 
-     * @param int $fetchMode Fetch mode to use
-     * @param array $expectedValue Expected value of the result
-     * @param string $sql SQL query to execute
-     * @param int $rows Number of rows to return
-     * @param int $offset Offset to start returning rows from
-     * @param ?array $bind Optional array of bind parameters
+     * @param int    $fetchMode     Fetch mode to use
+     * @param array  $expectedValue Expected value of the result
+     * @param string $sql           SQL query to execute
+     * @param int    $rows          Number of rows to return
+     * @param int    $offset        Offset to start returning rows from
+     * @param ?array $bind          Optional array of bind parameters
      * 
      * @return void
      * 
      * @dataProvider providerTestCacheSelectLimit
+     * 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheselectlimit
+     * 
      */
-    public function testCacheSelectLimit(int $fetchMode,array $expectedValue, string $sql, int $rows, int $offset, ?array $bind): void
-    {
+    public function testCacheSelectLimit(
+        int $fetchMode,
+        array $expectedValue, 
+        string $sql, 
+        int $rows, 
+        int $offset, 
+        ?array $bind
+    ): void {
+     
         global $ADODB_CACHE_DIR;
+        global $ADODB_FETCH_MODE;
+        
         if ($this->skipAllTests) {
-            $this->markTestSkipped('Skipping tests as caching not configured');
+            $this->markTestSkipped(
+                'Skipping tests as caching not configured'
+            );
             return;
         }
 
@@ -817,27 +878,38 @@ class CacheSqlTest extends ADOdbTestCase
             );
         }
 
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+
         $returnedRows = array();
         while ($row = $result->fetchRow()) {
             $returnedRows[] = $row;
 
         }
+
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $expectedValue = array_change_key_case($expectedValue, CASE_UPPER);
+        }
     
         $this->db->completeTrans();
-        $this->db->startTrans();
+ 
         $this->assertSame(
             $expectedValue, 
             $returnedRows, 
-            'First read of cacheSelectLimit(), builds cache'
+            sprintf(
+                "Initial read of cacheSelectLimit() with FETCH MODE %s
+                and casing %s returns %s",
+                $ADODB_FETCH_MODE,
+                ADODB_ASSOC_CASE,
+                print_r($returnedRows)
+            )
         );
             
         $rewriteSql = "UPDATE testtable_3 
                           SET varchar_field = 'TCSL TEST VALUE' 
                         WHERE number_run_field = 3
                           AND varchar_field = 'LINE 3'";
-        $this->db->execute($rewriteSql);
+        list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
 
-         $this->db->completeTrans();
         $this->db->startTrans();
 
         if ($bind) {
@@ -857,14 +929,15 @@ class CacheSqlTest extends ADOdbTestCase
             );
         }
 
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
+
         $returnedRows = array();
         while ($row = $result->fetchRow()) {
             $returnedRows[] = $row;
 
         }
 
-         $this->db->completeTrans();
-        $this->db->startTrans();
+        $this->db->completeTrans();
     
         $this->assertSame(
             $expectedValue, 
@@ -880,9 +953,8 @@ class CacheSqlTest extends ADOdbTestCase
                         WHERE number_run_field = 3
                           AND varchar_field = 'TCSL TEST VALUE'";
 
-        $this->db->execute($rewriteSql);
+        list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
     
-         $this->db->completeTrans();
         
     }
     
@@ -903,10 +975,10 @@ class CacheSqlTest extends ADOdbTestCase
             'Select Unbound, FETCH_ASSOC' => 
                 [ADODB_FETCH_ASSOC, 
                     array(
-                        array('VARCHAR_FIELD'=>'LINE 5'),
-                        array('VARCHAR_FIELD'=>'LINE 6'),
-                        array('VARCHAR_FIELD'=>'LINE 7'),
-                        array('VARCHAR_FIELD'=>'LINE 8')
+                        array('varchar_field'=>'LINE 5'),
+                        array('varchar_field'=>'LINE 6'),
+                        array('varchar_field'=>'LINE 7'),
+                        array('varchar_field'=>'LINE 8')
                     ),
                     "SELECT testtable_3.varchar_field 
                         FROM testtable_3 

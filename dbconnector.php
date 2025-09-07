@@ -1,24 +1,21 @@
 <?php
 /**
+ * This is the unittest connection bootstrap file
+ * 
  * This file is part of ADOdb-unittest, a PHPUnit test suite for 
  * the ADOdb Database Abstraction Layer library for PHP.
- * This is the unittest connection bootstrap file
  *
+ * PHP version 8.0.0+
+ * 
+ * @category  Library
  * @package   ADOdb-unittest
+ * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
- * @license   MIT https://google.com
- *
- * This must be called as part of the phpunit run to expose a database connection
- * The connection must be located in the parent of the ADOdb Source
- * and should be named adodb-connection-<driver>.php 
- * If the driver is PDO, it should be named adodb-connection-<pdo-driver>.php
- * to call a driver dynamically for testing, use the following syntax:
- * phpunit unittest --bootstrap unittest/dbconnector.php sqlite3
+ * @license   MIT https://en.wikipedia.org/wiki/MIT_License
  * 
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
- *
  */
 
 require __DIR__ . '/ADOdbTestCase.php';
@@ -29,13 +26,15 @@ use PHPUnit\Framework\TestCase;
 /**
  * Reads an external SQL file and executes its statements against the database.
  * The format of the SQL file must match the database's SQL dialect.
- *
- * @param ADOConnection $db The database connection object.
+ * 
+ * @param object $db       The database connection object.
  * @param string $fileName The name of the SQL file to read.
  * 
  * @return void
- */
-function readSqlIntoDatabase(ADOConnection $db, string $fileName) : void
+ *
+ * @example DatabaseSetup/db2/table-schema.sql 
+*/
+function readSqlIntoDatabase(object $db, string $fileName) : void
 {
     
     if (!file_exists($fileName)) {
@@ -249,9 +248,9 @@ $tableSchema = sprintf(
 /*
 * Loads the schema based on the DB type
 */
-//$db->debug = true;
+
 readSqlIntoDatabase($db, $tableSchema);
-//exit;
+
 
 /*
 * Reads common format data and nserts it into the database

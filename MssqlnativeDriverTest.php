@@ -3,20 +3,19 @@
  * Tests cases for the mssqlnative driver of ADOdb.
  * Try to write database-agnostic tests where possible.
  *
- * This file is part of ADOdb, a Database Abstraction Layer library for PHP.
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * the ADOdb Database Abstraction Layer library for PHP.
  *
- * @package ADOdb
- * @link https://adodb.org Project's web site and documentation
+ * @category  Library
+ * @package   ADOdb-unittest
+ * @author    Mark Newnham <email@email.com>
+ * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @license   MIT https://google.com
+ *  
+ * @link https://github.com/adodb-unittest This projects home site
+ * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  *
- * The ADOdb Library is dual-licensed, released under both the BSD 3-Clause
- * and the GNU Lesser General Public Licence (LGPL) v2.1 or, at your option,
- * any later version. This means you can use it in proprietary products.
- * See the LICENSE.md file distributed with this source code for details.
- * @license BSD-3-Clause
- * @license LGPL-2.1-or-later
- *
- * @copyright 2025 Damien Regad, Mark Newnham and the ADOdb community
  */
 
 use PHPUnit\Framework\TestCase;
@@ -26,6 +25,7 @@ use PHPUnit\Framework\TestCase;
  *
  * Test cases for for ADOdb MetaFunctions
  */
+#[RequiresPhpExtension('sqlsrv')]
 class MssqlnativeDriverTest extends ADOdbTestCase
 {
     
@@ -41,6 +41,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
         if ($this->adoDriver !== 'mssqlnative') {
             $this->skipFollowingTests = true;
+            return;
             $this->markTestSkipped(
                 'This test is only applicable for the mssqlnative driver'
             );
@@ -70,20 +71,32 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      * 
      * @return void
      */
-    public function testSqlDate(string $dateFormat, string $field, string $region,string $result) :void {
-        
+    public function testSqlDate(
+        string $dateFormat, 
+        string $field, 
+        string $region,
+        string $result
+    ) :void {
+       
         if ($this->skipFollowingTests) {
-            $this->markTestSkipped('Skipping testSqlDate as it is not applicable for the current driver');
+            return;
         }
+        
+        $formatDate = "{$this->db->sqlDate($dateFormat,$field)}";
 
-        $sql = "SELECT testdate, {$this->db->sqlDate($dateFormat,$field)} $region, null 
+        $sql = "SELECT testdate, $formatDate $region, null 
                   FROM (
-                SELECT CONVERT(DATETIME,'2016-12-17 18:55:30.590' ,121) testdate,
-                       CONVERT(DATETIME,'2016-01-01 18:55:30.590' ,121) testdatesmall,
+                SELECT CONVERT(
+                        DATETIME,'2016-12-17 18:55:30.590' ,121
+                        ) testdate,
+                       CONVERT(
+                       DATETIME,'2016-01-01 18:55:30.590' ,121
+                       ) testdatesmall,
                 null nulldate
                 ) q ";
         
         $res = $this->db->GetRow($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
        
         $this->assertEquals(
             $res['region'], 

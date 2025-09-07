@@ -1,21 +1,21 @@
 <?php
 /**
- * Tests cases for date functions of ADODb
+ * Tests cases for Meta functions of ADODb
  *
- * This file is part of ADOdb, a Database Abstraction Layer library for PHP.
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * the ADOdb Database Abstraction Layer library for PHP.
  *
- * @package ADOdb
- * @link https://adodb.org Project's web site and documentation
+ * PHP version 8.0.0+
+ * 
+ * @category  Library
+ * @package   ADOdb-unittest
+ * @author    Mark Newnham <mnewnham@github.com>
+ * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @license   MIT https://en.wikipedia.org/wiki/MIT_License
+ * 
+ * @link https://github.com/adodb-unittest This projects home site
+ * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
- *
- * The ADOdb Library is dual-licensed, released under both the BSD 3-Clause
- * and the GNU Lesser General Public Licence (LGPL) v2.1 or, at your option,
- * any later version. This means you can use it in proprietary products.
- * See the LICENSE.md file distributed with this source code for details.
- * @license BSD-3-Clause
- * @license LGPL-2.1-or-later
- *
- * @copyright 2025 Damien Regad, Mark Newnham and the ADOdb community
  */
 
 use PHPUnit\Framework\TestCase;
@@ -62,17 +62,23 @@ class MetaFunctionsTest extends ADOdbTestCase
             );
             list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
 
-            $tableExists = $executionResult && in_array(strtoupper($this->testTableName), $executionResult);
+            $tableExists = $executionResult && in_array(
+                strtoupper($this->testTableName), 
+                array_map('strtoupper', $executionResult)
+            );
 
             $this->assertSame(
                 $includesTable1,            
                 $tableExists,
                 sprintf(
-                    '[FETCH MODE: %s] Table %s should be in metaTables with filterType %s mask %s',
+                    "[FETCH MODE: %s] Table %s should be in metaTables with 
+                    filterType %s mask %s, actually returned:
+                    %s",
                     $fetchModeName,
                     $this->testTableName,
                     $filterType,
-                    $mask
+                    $mask,
+                    print_r($executionResult, true)
                 )
             );
         }
@@ -645,7 +651,10 @@ class MetaFunctionsTest extends ADOdbTestCase
         datetime_field DATETIME,
         date_field DATE,
         integer_field INT(2) DEFAULT 0,
-        decimal_field decimal(12.2) DEFAULT 1,2 
+        decimal_field decimal(12.2) DEFAULT 0,
+        boolean_field BOOLEAN DEFAULT 0,
+        empty_field VARCHAR(240) DEFAULT '',
+        number_run_field INT(4) DEFAULT 0,
         */
         
         return [
@@ -655,7 +664,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             'Field 3 Is DATE' => ['D',3],
             'Field 4 Is INTEGER' => ['I',4],
             'Field 5 Is NUMBER' => ['N',5],
-            'Field 6 Is BOOLEAN' => ['L',6],
+            'Field 6 Is BOOLEAN' => ['I',6],
             'Field 7 Is VARCHAR' => ['C',7],
             'Field 8 Is INTEGER' => ['I',8],
             'Field 9 Does not Exist' => [false,9],
@@ -729,12 +738,17 @@ class MetaFunctionsTest extends ADOdbTestCase
         
 
             $response = $this->db->metaColumns('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+            list($errno, $errmsg) = $this->assertADOdbError(
+                'metaColumns()', 
+                null,
+                true
+            );
 
             $this->assertTrue(
-                $this->db->errorNo() > 0,
+                ($errno > 0),
                 sprintf(
-                    '[FETCH MODE %s] Checking for error when querying metaColumns for an invalid table',
+                    '[FETCH MODE %s] Checking for error when ' . 
+                    'querying metaColumns for an invalid table',
                     $fetchModeName
                 )
             );
@@ -742,18 +756,24 @@ class MetaFunctionsTest extends ADOdbTestCase
             $this->assertFalse(
                 $response,
                 sprintf(
-                    '[FETCH MODE %s] Checking that metaColumns returns false for an invalid table',
+                    '[FETCH MODE %s] Checking that metaColumns returns ' . 
+                    'false for an invalid table',
                     $fetchModeName
                 )
             );
 
             $response = $this->db->metaColumnNames('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError('metaColumnNames()');
+            list($errno, $errmsg) = $this->assertADOdbError(
+                'metaColumnNames()', 
+                null,
+                true
+            );
 
             $this->assertTrue(
-                $this->db->errorNo() > 0,
+                ($errno > 0),
                 sprintf(
-                    '[FETCH MODE %s] Checking for error when querying metaColumnNames for an invalid table',
+                    '[FETCH MODE %s] Checking for error when querying ' . 
+                    'metaColumnNames for an invalid table',
                     $fetchModeName
                 )
             );
@@ -761,49 +781,69 @@ class MetaFunctionsTest extends ADOdbTestCase
             $this->assertFalse(
                 $response,
                 sprintf(
-                    '[FETCH MODE %s] Checking that metaColumnNames returns false for an invalid table',
+                    '[FETCH MODE %s] Checking that metaColumnNames returns ' . 
+                    'false for an invalid table',
                     $fetchModeName
                 )
             );
 
             $response = $this->db->metaIndexes('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
+            list($errno, $errmsg) = $this->assertADOdbError(
+                'metaIndexes()', 
+                null,
+                true
+            );
             $this->assertTrue(
-                $this->db->errorNo() > 0,
+                ($errno > 0),
                 sprintf(
-                    '[FETCH MODE %s] Checking for error when querying metaIndexes for an invalid table',
+                    '[FETCH MODE %s] Checking for error when querying ' . 
+                    'metaIndexes for an invalid table',
                     $fetchModeName
                 )
             );
             $this->assertFalse(
                 $response,
                 sprintf(
-                    '[FETCH MODE %s] Checking that metaIndexes returns false for an invalid table',
+                    '[FETCH MODE %s] Checking that metaIndexes returns false' . 
+                    'for an invalid table',
                     $fetchModeName
                 )
             );
             $response = $this->db->metaPrimaryKeys('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError('metaPrimaryKeys()');
+            list($errno, $errmsg) = $this->assertADOdbError(
+                'metaPrimaryKeys()', 
+                null,
+                true
+            );
+            
             $this->assertTrue(
-                $this->db->errorNo() > 0,
+                ($errno > 0),
                 sprintf(
-                    '[FETCH MODE %s] Checking for error when querying metaPrimaryKeys for an invalid table',
+                    '[FETCH MODE %s] Checking for error when querying ' . 
+                    'metaPrimaryKeys for an invalid table',
                     $fetchModeName
                 )
             );
             $this->assertFalse(
                 $response,
                 sprintf(
-                    '[FETCH MODE %s] Checking that metaPrimaryKeys returns false for an invalid table',
+                    '[FETCH MODE %s] Checking that metaPrimaryKeys returns ' . 
+                    'false for an invalid table',
                     $fetchModeName
                 )
             );
             $response = $this->db->metaForeignKeys('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError('metaForeignKeys()');
+            list($errno, $errmsg) = $this->assertADOdbError(
+                'metaForeignKeys()', 
+                null,
+                true
+            );
+            
             $this->assertTrue(
-                $this->db->errorNo() > 0,
+                ($errno > 0),
                 sprintf(
-                    '[FETCH MODE %s] Checking for error when querying metaForeignKeys for an invalid table',
+                    '[FETCH MODE %s] Checking for error when querying ' . 
+                    'metaForeignKeys for an invalid table',
                     $fetchModeName
                 )
             );

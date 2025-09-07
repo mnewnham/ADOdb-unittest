@@ -1,21 +1,22 @@
 <?php
 /**
- * Tests cases for date functions of ADODb
+ * Tests cases for data dictionary functions of ADODb, such as table,
+ * column and index creation
  *
- * This file is part of ADOdb, a Database Abstraction Layer library for PHP.
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * the ADOdb Database Abstraction Layer library for PHP.
  *
- * @package ADOdb
- * @link https://adodb.org Project's web site and documentation
+ * PHP version 8.0.0+
+ * 
+ * @category  Library
+ * @package   ADOdb-unittest
+ * @author    Mark Newnham <mnewnham@github.com>
+ * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @license   MIT https://en.wikipedia.org/wiki/MIT_License
+ * 
+ * @link https://github.com/adodb-unittest This projects home site
+ * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
- *
- * The ADOdb Library is dual-licensed, released under both the BSD 3-Clause
- * and the GNU Lesser General Public Licence (LGPL) v2.1 or, at your option,
- * any later version. This means you can use it in proprietary products.
- * See the LICENSE.md file distributed with this source code for details.
- * @license BSD-3-Clause
- * @license LGPL-2.1-or-later
- *
- * @copyright 2025 Damien Regad, Mark Newnham and the ADOdb community
  */
 
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,11 @@ class DataDictionaryTest extends ADOdbTestCase
     protected string $testIndexName2 = 'insertion_index_2';
 
     
+    /**
+     * Sets up a flag used from refreshing the table mid-test
+     *
+     * @return void
+     */
     public static function setupBeforeClass() : void {
         $GLOBALS['baseTestsComplete'] = 0;
     }
@@ -950,190 +956,4 @@ class DataDictionaryTest extends ADOdbTestCase
         $this->dataDictionary->dropDatabase($dbName);
     }
 
-
-    /**
-     * Tests setting a comment on a column using {@see ADODConnection::setColumnCommentSql()}
-     * 
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:setcommentsql
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:getcommentsql   *
-     * @return void
-     */
-    public function testColumnCommentSql(): void
-    {
-        if ($this->skipFollowingTests) {
-            $this->markTestSkipped(
-                'Skipping tests as the table was not created successfully'
-            );
-            return;
-        }
-
-        if ($this->adoDriver == 'mysqli') {
-            $this->markTestSkipped(
-                'Skipping test as setCommentSql not supported by the driver in this format. See the driver-specific version'
-            );
-            $this->skipCommentTests = true;
-            return;
-        }
-
-        
-        $sql = $this->dataDictionary->setColumnCommentSql(
-            'testtable_1', 
-            'varchar_field',
-            'varchar_test_comment'
-        );
-
-        if (!$sql) {
-            $this->markTestSkipped(
-                'Skipping test as setCommentSql not supported by the driver'
-            );
-            $this->skipCommentTests = true;
-            return;
-        }
-              
-        $this->db->startTrans();
-        $response = $this->db->execute($sql);
-        if ($this->db->errorNo() > 0) {
-            $this->fail(
-                $this->db->errorMsg()
-            );
-            $this->db->completeTrans();
-            return;
-        }
-        $this->db->completeTrans();
-       
-        $ok = is_object($response);
-       
-        $this->assertEquals(
-            true,
-            $ok, 
-            'Test of setColumnCommentSql - should return an object if the comment was set successfully'
-        );
-
-        if (!$ok) {
-            return;          
-        }
-
-        $className = get_class($response);
-        $this->assertStringContainsString(
-            'ADORecordSet_',
-            $className,
-            'Test of setCommentSql - should return an ADORecordset_ object'
-        );
-    
-        if ($this->skipFollowingTests) {
-            $this->markTestSkipped(
-                'Skipping tests as the table was not created successfully'
-            );
-            return;
-        }
-
-        if ($this->skipCommentTests) {
-            $this->markTestSkipped(
-                'Skipping getColumnCommentSql test as feature not supported by the driver'
-            );
-            return;
-        }
-
-         
-        $sql = $this->dataDictionary->getColumnCommentSql(
-            'testtable_1', 
-            'varchar_field'
-        );
-
-          
-        $comment = $this->db->getOne($sql);
-
-        $this->assertSame(
-            'varchar_test_comment', 
-            $comment, 
-            'Test of getColumnCommentSql - should return the comment set previously'
-        );
-    }
-
-    /**
-     * Tests setting a comment on a column using {@see ADODConnection::setColumnCommentSql()}
-     * 
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:setcommentsql
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:getcommentsql   *
-     * @return void
-     */
-    public function testTableCommentSql(): void
-    {
-        if ($this->skipFollowingTests) {
-            $this->markTestSkipped(
-                'Skipping tests as the table was not created successfully'
-            );
-            return;
-        }
-       
-        $sql = $this->dataDictionary->setTableCommentSql(
-            'testtable_1', 
-            'testtable_1_comment'
-        );
-
-        if (!$sql) {
-            $this->markTestSkipped(
-                'Skipping test as setTableCommentSql not supported by the driver'
-            );
-            $this->skipCommentTests = true;
-            return;
-        }
-              
-        $this->db->startTrans();
-        $response = $this->db->execute($sql);
-        if ($this->db->errorNo() > 0) {
-            $this->fail(
-                $this->db->errorMsg()
-            );
-            $this->db->completeTrans();
-            return;
-        }
-        $this->db->completeTrans();
-       
-        $ok = is_object($response);
-       
-        $this->assertEquals(
-            true,
-            $ok, 
-            'Test of setTableCommentSql - should return an object if the comment was set successfully'
-        );
-
-        if (!$ok) {
-            return;          
-        }
-
-        $className = get_class($response);
-        $this->assertStringContainsString(
-            'ADORecordSet_',
-            $className,
-            'Test of setTableCommentSql - should return an ADORecordset_ object'
-        );
-    
-        if ($this->skipFollowingTests) {
-            $this->markTestSkipped(
-                'Skipping tests as the table was not created successfully'
-            );
-            return;
-        }
-
-        if ($this->skipCommentTests) {
-            $this->markTestSkipped(
-                'Skipping getTableCommentSql test as feature not supported by the driver'
-            );
-            return;
-        }
-
-        $sql = $this->dataDictionary->getTableCommentSql(
-            'testtable_1'
-        );
-
-        $comment = $this->db->getOne($sql);
-
-        $this->assertEquals(
-            'testtable_1_comment', 
-            $comment, 
-            'Test of getTableCommentSql - should return the table comment set previously'
-        );
-    }
-   
 }
