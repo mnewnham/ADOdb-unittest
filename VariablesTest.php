@@ -155,10 +155,9 @@ class VariablesTest extends ADOdbTestCase
             $testRow,
             sprintf(
                 "With casing set to %s and fetch mode set to ADODB_FETCH_ASSOC,\n" . 
-                "row should have an [%s] column:\n actually %s",
+                "row should have an [%s] column",
                 $caseDescription,
-                $expectedResult,
-                print_r($testRow, true)
+                $expectedResult
             )
         );
 
@@ -177,14 +176,42 @@ class VariablesTest extends ADOdbTestCase
             $testRow, 
             sprintf(
                 "With casing set to %s and fetch mode set to ADODB_FETCH_NUM,\n" . 
-                "row should have an array index [%s] column\n actually %s",
+                "row should have an array index [%s] column",
                 $caseDescription,
-                $expectedResult,
-                print_r($testRow, true)
+                $expectedResult
+            )
+        );
+
+        $this->db->setFetchMode(ADODB_FETCH_BOTH);
+
+        $testRow = $this->db->getRow($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $expectedResult = '0'; // Numeric index for the first column
+
+        $this->assertArrayHasKey(
+            $expectedResult,
+            $testRow, 
+            sprintf(
+                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" . 
+                "row should have an array index [%s] column",
+                $caseDescription,
+                $expectedResult
+            )
+        );
+
+        $this->assertArrayHasKey(
+            $expectedResult,
+            $testRow,
+            sprintf(
+                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" . 
+                "row should also have an [%s] column",
+                $caseDescription,
+                $expectedResult
             )
         );
     
-        $this->db->setFectchMode($fetchMode);
+        $this->db->setFetchMode($fetchMode);
     }
 
     /**
