@@ -5,4 +5,4 @@ This is an early non-install feature. There is no composer file. Just clone the 
 #### Setup
 https://adodb.org/dokuwiki/doku.php?id=project:unittests
 #### Prerequsites
-This does need [https://phpunit.org](PHPunit version 9.5+) installed and running to work 
+https://phpunit.org PHPunit version 9.5+ must be installed and running for this to work 
