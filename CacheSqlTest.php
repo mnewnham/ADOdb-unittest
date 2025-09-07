@@ -694,16 +694,16 @@ class CacheSqlTest extends ADOdbTestCase
     /**
      * Test for {@see ADODConnection::cachegetAll()}
      *
-     *  @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cachegetall
-     *
-     * @param int $fetchMode Fetch mode to use
-     * @param array $expectedValue Expected value of the result
-     * @param string $sql SQL query to execute
-     * @param ?array $bind Optional array of bind parameters
+     * @param int    $fetchMode     Fetch mode to use
+     * @param array  $expectedValue Expected value of the result
+     * @param string $sql           SQL query to execute
+     * @param ?array $bind          Optional array of bind parameters
      * 
      * @return void
      * 
      * @dataProvider providerTestCacheGetAll
+     * 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cachegetall
      */
     public function testCacheGetAll(
         int $fetchMode,
@@ -729,7 +729,10 @@ class CacheSqlTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql, $bind);
 
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $expectedValue = array_change_key_case($expectedValue, CASE_UPPER);
+            foreach ($expectedValue as $ek=>$er) {
+                $er = array_change_key_case($er, CASE_UPPER);
+                $expectedValue[$ek] = $er;
+            }
         }
 
         $this->assertSame(
@@ -740,7 +743,7 @@ class CacheSqlTest extends ADOdbTestCase
                 and casing %s returns %s",
                 $fetchMode,
                 ADODB_ASSOC_CASE,
-                print_r($returnedRows)
+                print_r($returnedRows, true)
             )
         );
 
@@ -882,14 +885,18 @@ class CacheSqlTest extends ADOdbTestCase
 
         $returnedRows = array();
         while ($row = $result->fetchRow()) {
+                        
             $returnedRows[] = $row;
 
         }
 
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $expectedValue = array_change_key_case($expectedValue, CASE_UPPER);
+            foreach ($expectedValue as $ek=>$er) {
+                $er = array_change_key_case($er, CASE_UPPER);
+                $expectedValue[$ek] = $er;
+            }
         }
-    
+
         $this->db->completeTrans();
  
         $this->assertSame(
@@ -898,9 +905,9 @@ class CacheSqlTest extends ADOdbTestCase
             sprintf(
                 "Initial read of cacheSelectLimit() with FETCH MODE %s
                 and casing %s returns %s",
-                $ADODB_FETCH_MODE,
-                ADODB_ASSOC_CASE,
-                print_r($returnedRows)
+                $this->modeDescription[$ADODB_FETCH_MODE],
+                $this->caseDescription[ADODB_ASSOC_CASE],
+                print_r($returnedRows, true)
             )
         );
             
@@ -942,7 +949,13 @@ class CacheSqlTest extends ADOdbTestCase
         $this->assertSame(
             $expectedValue, 
             $returnedRows, 
-            'Second read of cacheSelectLimit(), should re-read cache, not database'
+            sprintf(
+                "Second read of cacheSelectLimit() with FETCH MODE %s
+                and casing %s should read cache, not database but returns %s",
+                $this->modeDescription[$ADODB_FETCH_MODE],
+                $this->caseDescription[ADODB_ASSOC_CASE],
+                print_r($returnedRows, true)
+            )
         );
 
         /*
