@@ -41,10 +41,11 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
         if ($this->adoDriver !== 'mssqlnative') {
             $this->skipFollowingTests = true;
-            return;
+           
             $this->markTestSkipped(
                 'This test is only applicable for the mssqlnative driver'
             );
+            return;
         }
         
     }
