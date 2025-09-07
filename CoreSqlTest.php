@@ -68,28 +68,6 @@ class CoreSqlTest extends ADOdbTestCase
     }
 
     /**
-     * Changes the casing of the keys in an associative array
-     * based on the value of ADODB_ASSOC_CASE
-     *
-     * @param array $input  by reference
-     * 
-     * @return void
-     */
-    protected function changeKeyCasing(array &$input) : void
-    {
-        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $input = array_change_key_case($input, CASE_UPPER);
-        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_LOWER) {
-            $input = array_change_key_case($input, CASE_LOWER);
-        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_NATURAL) {
-            // No change needed
-        } else {
-            throw new InvalidArgumentException('Invalid ADODB_ASSOC_CASE value');
-        }   
-
-    }
-    
-    /**
      * Test for {@see ADODConnection::execute() in select mode]
      * 
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:execute
@@ -491,11 +469,13 @@ class CoreSqlTest extends ADOdbTestCase
                      "SELECT testtable_3.varchar_field 
                         FROM testtable_3 
                        WHERE number_run_field BETWEEN 2 AND 6
-                    ORDER BY number_run_field", null]];
-            /*
+                    ORDER BY number_run_field", null
+                ],
+                           
             'Bound, FETCH_NUM' => 
                 [ADODB_FETCH_NUM, 
                     array(
+                        array('0'=>'LINE 2'),
                         array('0'=>'LINE 3'),
                         array('0'=>'LINE 4'),
                         array('0'=>'LINE 5'),
@@ -504,11 +484,12 @@ class CoreSqlTest extends ADOdbTestCase
                     "SELECT testtable_3.varchar_field 
                        FROM testtable_3 
                       WHERE number_run_field BETWEEN $p1 AND $p2
-                   ORDER BY number_run_field", $bind],
+                   ORDER BY number_run_field", $bind
+                ],
 
-                ];
-            */
-                break;
+            ];
+           
+            break;
             case ADODB_ASSOC_CASE_LOWER:
                return [
             'Unbound, FETCH_ASSOC, ASSOC_CASE_LOWER' => 
@@ -549,20 +530,20 @@ class CoreSqlTest extends ADOdbTestCase
 
     /**
      * Test for {@see ADODConnection::selectlimit]
-     * 
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:selectlimit
      *
-     * @param int $fetchMode
-     * @param array $expectedValue
-     * @param string $sql
-     * @param int $count
-     * @param int $offset
-     * @param ?array $bind
+     * @param int    $fetchMode     The ADOdb fetch mode
+     * @param array  $expectedValue The expected result
+     * @param string $sql           The SQL statement
+     * @param int    $count         The number of records to return
+     * @param int    $offset        The start point
+     * @param ?array $bind          Any bind array values
      * 
      * @return void
      * 
      * @dataProvider providerTestSelectLimit
-    */
+     * 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:selectlimit  
+     */
     public function testSelectLimit(int $fetchMode,array $expectedValue, string $sql, $count, $offset, ?array $bind): void
     {
         $this->db->setFetchMode($fetchMode);
