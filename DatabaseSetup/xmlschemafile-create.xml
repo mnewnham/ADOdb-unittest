@@ -8,6 +8,7 @@
         <AUTOINCREMENT/>
     </field> 
     <field name="varchar_field" type="C" size="240"><NOTNULL/></field>
+    <field name="varchar_field_to_drop" type="C" size="240"></field>
     <field name="decimal_field" type="N" size="12.4" default="1"></field>
     <field name="integer_field" type="I4" default="999"></field>
     <field name="logical_field" type="L" default="1"></field>
