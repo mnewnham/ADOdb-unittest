@@ -21,17 +21,13 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MetaFunctionsTest
+ * Class XMLSchemaTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for for ADOdb XMLSchema functions
  */
 class XmlSchemaTest extends ADOdbTestCase
 {
     protected ?object $xmlSchema;
-
-    protected string $testTableName = 'insertion_table';
-    protected string $testIndexName1 = 'insertion_index_1';
-    protected string $testIndexName2 = 'insertion_index_2';
 
     /**
      * Global setup for the test class
@@ -44,9 +40,6 @@ class XmlSchemaTest extends ADOdbTestCase
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
             return;
         }
-        
-       
-       // $GLOBALS['ADOdbConnection']->transOff = 0;
 
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
@@ -76,8 +69,7 @@ class XmlSchemaTest extends ADOdbTestCase
         }
       
         
-         $this->xmlSchema = new adoSchema($this->db);
-
+         $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
        
         
     }
@@ -95,6 +87,10 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
+        /*
+        * Load the first of 2 files designed to create then modify
+        * a table using the XMLSchema functions
+        */
         $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
   
         
@@ -158,10 +154,8 @@ class XmlSchemaTest extends ADOdbTestCase
         );
 
         /**
-         * Test the XML Schema update
-         *
+         * Load the second file to test the XML Schema update
          */
-     
         $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-update.xml', dirname(__FILE__));
         $this->assertFileExists(
             $schemaFile,
@@ -205,6 +199,60 @@ class XmlSchemaTest extends ADOdbTestCase
             'Field "varchar_field_to_drop" should not be found in the table'
         );
 
+        
+        $this->assertArrayHasKey(
+            'VARCHAR_FIELD_TO_ADD',
+            $fields,
+            'Field "varchar_field_to_add" should now be found in the table'
+        );
+
+
+        /**
+         * Load the third file to drop the XML Schema update
+         */
+        $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-drop.xml', dirname(__FILE__));
+        $this->assertFileExists(
+            $schemaFile,
+            'Schema file does not exist: ' . $schemaFile
+        );
+
+        
+        $ok = $this->xmlSchema->parseSchema($schemaFile); 
+        list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
+
+        if (!$ok) {
+            $this->assertTrue(
+                $ok,
+                'XML Schema parsing for table drop failed'
+            );
+            $this->markTestSkipped('XML Schema parsing failed for drop table');
+            $this->skipFollowingTests = true;
+            return;
+        }
+
+        $ok = $this->xmlSchema->executeSchema(); 
+        list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
+
+        $this->assertSame(
+            2,
+            $ok,
+            'XML Schema drop failed after calling executeSchema()'
+        );
+
+        /**
+        * Test the table does not exist
+        */
+            
+        $tables = $this->db->metaTables();
+
+        $this->assertNotContains(
+            'TESTXMLTABLE_1',
+            $tables,
+            'table testxmltable_1 should not be found in the database'
+        );
+
     }   
+
+    
 
 }
