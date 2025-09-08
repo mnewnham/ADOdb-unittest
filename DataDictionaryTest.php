@@ -694,7 +694,7 @@ class DataDictionaryTest extends ADOdbTestCase
             $flds
         );
 
-        $assertion = $this->assetIsArray(
+        $assertion = $this->assertIsArray(
             $sqlArray,
             'changeTableSql() should alway return an array'
         );
@@ -754,7 +754,7 @@ class DataDictionaryTest extends ADOdbTestCase
         );
 
         
-        $assertion = $this->assetIsArray(
+        $assertion = $this->assertIsArray(
             $sqlArray,
             'changeTableSql() should alway return an array'
         );
