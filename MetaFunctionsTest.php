@@ -472,10 +472,10 @@ class MetaFunctionsTest extends ADOdbTestCase
             }
 
             $this->assertCount(
-                1,
+                2,
                 $executionResult,
                 sprintf(
-                    '[FETCH MODE %s] Checking Primary Key Count should be 1',
+                    '[FETCH MODE %s] Checking Primary Key Elements Count should be 2',
                     $fetchModeName
                 )
             );
