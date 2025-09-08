@@ -97,8 +97,19 @@ if (!array_key_exists('casing', $ADOdbSettings)) {
 }
 
 if (!array_key_exists('blob', $availableCredentials)) {
-    die('blob section not found in adodb-unittest.ini. See the documentation for details on how to set this up');
+    die('blob section not found in adodb-unittest.ini.' . 
+        'See the documentation for details on how to set this up'
+    );
 }
+
+if (array_key_exists('xmlschema', $availableCredentials)) {
+    if (array_key_exists('debug' , $availableCredentials['xmlschema']) 
+        && $availableCredentials['xmlschema']['debug']
+    ) {
+        define('XMLS_DEBUG', 1);
+    }
+}
+
 
 require_once $ADOdbSettings['directory'] . '/adodb.inc.php';
 require_once $ADOdbSettings['directory'] . '/adodb-xmlschema03.inc.php';
@@ -233,7 +244,7 @@ if (!$db->isConnected()) {
 $GLOBALS['ADOdbConnection'] = &$db;
 $GLOBALS['ADOdriver']       = $adoDriver;
 $GLOBALS['loadDriver']      = $loadDriver;
-$GLOBALS['ADOxmlSchema']    = false;
+$GLOBALS['ADOxmlSchema']    = new adoSchema($db);
 $GLOBALS['TestingControl']  = $availableCredentials;
 $GLOBALS['globalTransOff']  = 0;
 
