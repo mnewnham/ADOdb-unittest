@@ -8,12 +8,21 @@
         <AUTOINCREMENT/>
     </field> 
     <descr>Varchar_field increases the size to 280 characters</descr>
-    <field name="varchar_field" type="C" size="280"><NOTNULL/></field>
+    <field name="varchar_field" type="C" size="280"><NOTNULL/><DEFAULT VALUE="this is a default value"/></field>
+    <field name="varchar_field_for_default" type="C" size="100"><DEFAULT VALUE="this is a no-change default value"/></field>
     <field name="varchar_field_to_add" type="C" size="280"><NOTNULL/></field>
     <field name="decimal_field" type="N" size="12.4" default="1"></field>
-    <field name="integer_field" type="I4" default="999"></field>
-    <field name="logical_field" type="L" default="1"></field>
-    <field name="blob_field" type="XL"></field>
+   
+    <field name="decimal_field_change" type="N" size="14.8">
+         <default value="801.11"/>
+    </field>
+    <field name="integer_field" type="I8" default="999"></field>
+    <field name="logical_field" type="I1" default="1"></field>
+    <field name="blob_field" type="B"></field>
+    <field name="date_field_to_add" type="D"><DEFDATE/></field>
+    <field name="date_field_to_keep" type="D"><DEFDATE/></field>
+    <field name="timestamp_field_to_add" type="T"><DEFTIMESTAMP/></field>
+    <field name="timestamp_field_to_keep" type="T"><DEFTIMESTAMP/></field>
     <index name="integer_field_index">
         <descr>Put a unique index on the integer_field</descr>
         <col>integer_field</col>
