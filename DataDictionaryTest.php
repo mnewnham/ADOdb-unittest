@@ -58,7 +58,7 @@ class DataDictionaryTest extends ADOdbTestCase
         * Find the correct test table name
         */
          
-        $this->buildBasicTable();
+        //$this->buildBasicTable();
          
     }
     
@@ -70,63 +70,81 @@ class DataDictionaryTest extends ADOdbTestCase
      * 
      * @return void
      */
-    public function buildBasicTable(): void
+    public function testCreateTableSql(): void
     {
 
         $sql = "DROP TABLE IF EXISTS {$this->testTableName}";
 
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
-               
-        if ($GLOBALS['baseTestsComplete'] > 0) {
-            $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
-                    VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
-                    DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
-                    INTEGER_FIELD I4 NOTNULL DEFAULT 0,
-                    BOOLEAN_FIELD I NOTNULL DEFAULT 0,
-                    DECIMAL_FIELD N(8.4) DEFAULT 0,
-                    DROPPABLE_FIELD N(10.6) DEFAULT 80.111
-            ";
-        } else {
-            $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT";
-
-        }
-
-        $sqlArray = $this->dataDictionary->CreateTableSQL(
+        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);        
+        
+        $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
+                 DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+                 VARCHAR_FIELD C(50) NOTNULL DEFAULT ''
+              ";
+        $sqlArray = $this->dataDictionary->createTableSQL(
             $this->testTableName, 
             $flds
         );
 
+        print "\n ----------- TEST CREATE TABLE ======\n";
+        print_r($sqlArray);
+
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
-        $this->dataDictionary->executeSqlArray($sqlArray);
+    
+         $flds = array(
+            "DATE_FIELD", 
+            "INTEGER_FIELD",
+            "VARCHAR_FIELD" 
+        );
+        $indexOptions = array(
+            'UNIQUE'
+        );
+
+        $sqlArray = $this->dataDictionary->createIndexSQL(
+            $this->testIndexName1,
+            $this->testTableName,
+            $flds,
+            $indexOptions
+        );
+
+        list(
+            $result, 
+            $errno, 
+            $errmsg
+            ) = $this->executeDictionaryAction($sqlArray);
+
+    }
+
+    
+    public function testChangeTableSql() : void {
+                     
+        $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
+                VARCHAR_FIELD C(50) NOTNULL DEFAULT 'This is a default value with spaces',
+                DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+                DATE_FIELD_WITH_DEFDATE D NOTNULL DEFDATE,
+                TIMESTAMP_FIELD_WITH_DEFDATE TS NOTNULL DEFTIMESTAMP,
+                INTEGER_FIELD I4 NOTNULL DEFAULT 0,
+                BOOLEAN_FIELD I NOTNULL DEFAULT 0,
+                DECIMAL_FIELD N(8.4) DEFAULT 0,
+                DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
+                BLOB_FIELD B,
+                LONG_FIELD XL
+        ";
+        $sqlArray = $this->dataDictionary->changeTableSQL(
+            $this->testTableName, 
+            $flds
+        );
+            
+
+        list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
+       
         if ($errno > 0) {
             $this->fail(
                 'Error creating insertion_table'
             );
         }
 
-        if ($GLOBALS['baseTestsComplete'] > 1) {
-            $flds = array(
-                "DATE_FIELD", 
-                "INTEGER_FIELD",
-                "VARCHAR_FIELD" 
-            );
-            $indexOptions = array(
-                'UNIQUE'
-            );
-
-            $sqlArray = $this->dataDictionary->createIndexSQL(
-                $this->testIndexName1,
-                $this->testTableName,
-                $flds,
-                $indexOptions
-            );
-
-            list(
-                $result, 
-                $errno, 
-                $errmsg
-                ) = $this->executeDictionaryAction($sqlArray);
-        }
+       
     }
 
     /**
@@ -148,12 +166,12 @@ class DataDictionaryTest extends ADOdbTestCase
         }
 
         $flds = " 
-            VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
-            DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
-            INTEGER_FIELD I4 NOTNULL DEFAULT 0,
-            BOOLEAN_FIELD I NOTNULL DEFAULT 0,
-            DECIMAL_FIELD N(8.4) DEFAULT 0,
-            DROPPABLE_FIELD N(10.6) DEFAULT 80.111
+            NEW_VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
+            NEW_DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+            NEW_INTEGER_FIELD I4 NOTNULL DEFAULT 0,
+            NEW_BOOLEAN_FIELD L NOTNULL DEFAULT 0,
+            NEW_DECIMAL_FIELD N(8.4) DEFAULT 0,
+            NEW_DROPPABLE_FIELD N(10.6) DEFAULT 80.111
             ";
 
         $sqlArray = $this->dataDictionary->AddColumnSQL($this->testTableName, $flds);
@@ -372,6 +390,7 @@ class DataDictionaryTest extends ADOdbTestCase
                 'AddColumnSql should return an empty array ' . 
                 'if the column already exists'
             );
+           
         }
 
         $flds = " 
