@@ -86,9 +86,6 @@ class DataDictionaryTest extends ADOdbTestCase
             $flds
         );
 
-        print "\n ----------- TEST CREATE TABLE ======\n";
-        print_r($sqlArray);
-
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
     
          $flds = array(
@@ -390,7 +387,6 @@ class DataDictionaryTest extends ADOdbTestCase
                 'AddColumnSql should return an empty array ' . 
                 'if the column already exists'
             );
-           
         }
 
         $flds = " 
