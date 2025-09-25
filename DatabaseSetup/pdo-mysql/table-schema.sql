@@ -26,7 +26,7 @@ CREATE TABLE testtable_1 (
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
-	PRIMARY KEY(id),
+	PRIMARY KEY(id,integer_field),
 	unique INDEX vdx1 (varchar_field),
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
@@ -37,12 +37,14 @@ CREATE TABLE testtable_2 (
     id INT NOT NULL AUTO_INCREMENT,
     integer_field INT(2),
 	date_field DATE,
-	blob_field LONGTEXT,
+	blob_field LONGBLOB,
+	tt_id INTEGER NOT NULL,
 	PRIMARY KEY(id),
-    FOREIGN KEY (integer_field,date_field) REFERENCES testtable_1(integer_field,date_field)
+    FOREIGN KEY (tt_id,integer_field) REFERENCES testtable_1(id,integer_field)
 );
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
+-- It must be innodb else we cannot test transaction scoping
 CREATE TABLE testtable_3 (
 	id INT NOT NULL AUTO_INCREMENT,
 	varchar_field VARCHAR(20),
@@ -56,7 +58,7 @@ CREATE TABLE testtable_3 (
 	PRIMARY KEY(id),
 	unique INDEX vdx31 (varchar_field),
 	UNIQUE INDEX vdx33 (number_run_field)
-);
+) ENGINE=INNODB;
 
 -- This table is used to test the quoting of table and field names
 -- It uses a reserved word as the table name and column names
