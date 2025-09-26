@@ -586,14 +586,53 @@ class CoreSqlTest extends ADOdbTestCase
             'p1'=>3
         );
 
-        return [
-            'Select Unbound, FETCH_ASSOC' => 
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            return [
+                'Select Unbound, FETCH_ASSOC, ASSOC_CASE_UPPER' => 
+                    [ADODB_FETCH_ASSOC, 
+                        array(
+                            array('VARCHAR_FIELD'=>'LINE 6'),
+                            array('VARCHAR_FIELD'=>'LINE 7'),
+                            array('VARCHAR_FIELD'=>'LINE 8'),
+                            array('VARCHAR_FIELD'=>'LINE 9')
+                        ),
+                        "SELECT testtable_3.varchar_field 
+                            FROM testtable_3 
+                            WHERE number_run_field>3
+                        ORDER BY number_run_field", 4, 2, null
+                    ],
+                'Select, Bound, FETCH_NUM' => 
+                    [ADODB_FETCH_NUM,
+                        array(
+                            array('0'=>'LINE 5'),
+                            array('0'=>'LINE 6'),
+                            array('0'=>'LINE 7'),
+                            array('0'=>'LINE 8')
+                            ),
+                        "SELECT testtable_3.varchar_field 
+                        FROM testtable_3 
+                        WHERE number_run_field>=$p1 
+                    ORDER BY number_run_field", 4, 2, $bind
+                    ],
+                'Select Unbound, FETCH_ASSOC Get first record, ASSOC_CASE_UPPER' => 
+                    [ADODB_FETCH_ASSOC, 
+                        array(
+                            array('DATE_FIELD'=>'2025-01-01'),
+                        ),
+                        "SELECT testtable_3.date_field 
+                            FROM testtable_3 
+                        ORDER BY number_run_field", 1, -1, null
+                    ],
+            ];
+        } else {
+             return [
+            'Select Unbound, FETCH_ASSOC, ASSOC_CASE_LOWER' => 
                 [ADODB_FETCH_ASSOC, 
                     array(
-                        array('VARCHAR_FIELD'=>'LINE 6'),
-                        array('VARCHAR_FIELD'=>'LINE 7'),
-                        array('VARCHAR_FIELD'=>'LINE 8'),
-                        array('VARCHAR_FIELD'=>'LINE 9')
+                        array('varchar_field'=>'LINE 6'),
+                        array('varchar_field'=>'LINE 7'),
+                        array('varchar_field'=>'LINE 8'),
+                        array('varchar_field'=>'LINE 9')
                     ),
                      "SELECT testtable_3.varchar_field 
                         FROM testtable_3 
@@ -613,16 +652,17 @@ class CoreSqlTest extends ADOdbTestCase
                       WHERE number_run_field>=$p1 
                    ORDER BY number_run_field", 4, 2, $bind
                 ],
-            'Select Unbound, FETCH_ASSOC Get first record' => 
+            'Select Unbound, FETCH_ASSOC Get first record, ASSOC_CASE_LOWER' => 
                 [ADODB_FETCH_ASSOC, 
                     array(
-                        array('DATE_FIELD'=>'2025-01-01'),
+                        array('date_field'=>'2025-01-01'),
                     ),
                     "SELECT testtable_3.date_field 
                           FROM testtable_3 
                       ORDER BY number_run_field", 1, -1, null
                 ],
-        ];
+            ];
+        }
 
     }
 
@@ -721,6 +761,186 @@ class CoreSqlTest extends ADOdbTestCase
             'GenID should return 1 for a non-existing sequence'
         );
        
-    }   
+    }
+
+    /**
+     * Test for {@see ADODConnection::execute() in select mode]
+     * 
+     * @param string $sql
+     * @param ?array $bind
+     * 
+     * @return void
+     * 
+     *  * 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:execute
+     * 
+     * @dataProvider providerTestObjects
+     */
+    public function testSelectObjects(string $sql, ?array $bind): void
+    {
+       
+        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
+
+        list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+        
+        $comparison       = $result->fetchRow();
+        $comparisonLcKeys = array_map(
+            'strtolower',
+            array_keys($comparison)
+        );
+
+        $comparisonUcKeys = array_map(
+            'strtoupper',
+            array_keys($comparison)
+        );
+
+
+        list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+
+        $object = $result->fetchObj();
+
+        $this->assertIsObject(
+            $object,
+            'FetchObj() should return an Object containg the record data'
+        );
+       
+        foreach ($comparisonLcKeys as $key) {
+            if (!isset($object->$key)) {
+                $this->assertSame(
+                    true,
+                    false,
+                    'fetchObj object should have a lowercase property ' . 
+                    $key . ' that match record keys'
+                );
+            }
+        }
+
+        $nextObject = $result->fetchObj();
+
+        $this->assertEquals(
+            $object->id,
+            $nextObject->id,
+            'fetchObj() should not advance the record pointer'
+        );
+
+        $nextObject = $result->fetchNextObj();
+
+        $this->assertEquals(
+            $object->id,
+            $nextObject->id,
+            'fetchNextObj() should not advance the record pointer ' . 
+            'until after this record is read'
+        );
+
+
+        $nextObject = $result->fetchNextObj();
+
+        $this->assertNotEquals(
+            $object->id,
+            $nextObject->id,
+            'fetchNextObj() should have advanced the record pointer ' . 
+            'before this record was read'
+        );
+
+        while (!$result->EOF) {
+            $nextObject = $result->fetchNextObj();
+        }
+ 
+        $this->assertIsObject(
+            $nextObject,
+            'fetchNextObj() should leave last record in the buffer after ' . 
+            'advancing the record pointer beyond EOF'
+        );
+
+        /**
+         * FetchnextObject
+         */
+
+        list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+        
+        $object = $result->fetchObject();
+
+        $this->assertIsObject(
+            $object,
+            'FetchObject() should return an Object containg the record data'
+        );
+
+        foreach ($comparisonUcKeys as $key) {
+            if (!isset($object->$key)) {
+                $this->assertSame(
+                    true,
+                    false,
+                    'fetchObject object should have an uppercase property ' . 
+                    $key . ' that match record keys'
+                );
+            }
+        }
+
+        $nextObject = $result->fetchObject();
+
+        $this->assertEquals(
+            $object->ID,
+            $nextObject->ID,
+            'fetchObject() should not advance the record pointer'
+        );
+
+        $nextObject = $result->fetchNextObject();
+
+        $this->assertEquals(
+            $object->ID,
+            $nextObject->ID,
+            'fetchNextObject() should not advance the record pointer ' . 
+            'until after this record is read'
+        );
+
+
+        $nextObject = $result->fetchNextObject();
+
+        $this->assertNotEquals(
+            $object->ID,
+            $nextObject->ID,
+            'fetchNextObject() should have advanced the record pointer ' . 
+            'before this record was read'
+        );
+
+        while (!$result->EOF) {
+            $nextObject = $result->fetchNextObject();
+        }
+ 
+        $this->assertIsObject(
+            $nextObject,
+            'fetchNextObject() should leave last record in the buffer after ' . 
+            'advancing the record pointer beyond EOF'
+        );
+        
+    }
+    
+    /**
+     * Data provider for {@see testSelectExecute()}
+     *
+     * @return array [bool success, string sql ?array bind]
+     */
+    public function providerTestObjects(): array
+    {
+        $p1 = $GLOBALS['ADOdbConnection']->param('p1');
+        $bind = array('p1'=>'LINE 1');
+        return [
+            'Select Unbound' => [
+                "SELECT * FROM testtable_3 ORDER BY id", 
+                null
+            ],
+            /*
+            'Invalid' => [
+                false, 
+                "SELECT testtable_3.varchar_fieldx FROM testtable_3 ORDER BY id", 
+                null
+            ],
+            */
+            'Select, Bound' => [ 
+                "SELECT testtable_3.* FROM testtable_3 WHERE varchar_field>=$p1", 
+                $bind
+            ],
+        ];
+    }
 
 }
