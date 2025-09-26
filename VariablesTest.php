@@ -37,6 +37,24 @@ class VariablesTest extends ADOdbTestCase
     protected string $testIdColumnName = 'ID';
 
     /**
+     * Tests if the isConnected method works
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:isconnected
+     * 
+     * @return void
+     */
+    public function testIsConnected(): void 
+    {
+        $isConnected = $this->db->isConnected();
+
+        $this->assertSame(
+            true,
+            $isConnected, 
+            'A connected database should return true from the isConnected() method'
+        );
+    }
+    
+    /**
      * Test for {@see $ADODB_QUOTE_FIELDNAMES}
      * 
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_quote_fieldnames
