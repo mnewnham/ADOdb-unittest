@@ -89,45 +89,26 @@ class DataDictionaryTest extends ADOdbTestCase
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
     
-        /*
-         $flds = array(
-            "DATE_FIELD", 
-            "INTEGER_FIELD",
-            "VARCHAR_FIELD" 
-        );
-        $indexOptions = array(
-            'UNIQUE'
-        );
-
-        $sqlArray = $this->dataDictionary->createIndexSQL(
-            $this->testIndexName1,
-            $this->testTableName,
-            $flds,
-            $indexOptions
-        );
-
-        list(
-            $result, 
-            $errno, 
-            $errmsg
-            ) = $this->executeDictionaryAction($sqlArray);
-        */
     }
 
     
     public function testChangeTableSql() : void {
                      
+        $this->db->debug = true;
+
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                 VARCHAR_FIELD C(50) NOTNULL DEFAULT 'This is a default value with spaces',
                 DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
                 DATE_FIELD_WITH_DEFDATE D NOTNULL DEFDATE,
                 TIMESTAMP_FIELD_WITH_DEFDATE TS NOTNULL DEFTIMESTAMP,
                 INTEGER_FIELD I4 NOTNULL DEFAULT 0,
+                UNSIGNED_INTEGER_FIELD I4 UNSIGNED NOTNULL DEFAULT 0,
                 BOOLEAN_FIELD I NOTNULL DEFAULT 0,
-                DECIMAL_FIELD N(8.4) DEFAULT 0,
+                DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
                 DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
                 BLOB_FIELD B,
-                LONG_FIELD XL
+                LONG_FIELD XL,
+                ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'halibut'
         ";
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName, 
