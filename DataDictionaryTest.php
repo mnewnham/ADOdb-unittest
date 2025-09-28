@@ -79,7 +79,8 @@ class DataDictionaryTest extends ADOdbTestCase
         
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                  DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
-                 VARCHAR_FIELD C(50) NOTNULL DEFAULT ''
+                 VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
+                 INTEGER_FIELD I DEFAULT 0
               ";
         $sqlArray = $this->dataDictionary->createTableSQL(
             $this->testTableName, 
@@ -88,6 +89,7 @@ class DataDictionaryTest extends ADOdbTestCase
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
     
+        /*
          $flds = array(
             "DATE_FIELD", 
             "INTEGER_FIELD",
@@ -109,7 +111,7 @@ class DataDictionaryTest extends ADOdbTestCase
             $errno, 
             $errmsg
             ) = $this->executeDictionaryAction($sqlArray);
-
+        */
     }
 
     
@@ -560,9 +562,17 @@ class DataDictionaryTest extends ADOdbTestCase
     public function testaddIndexToBasicTableViaString(): void
     {
         if ($this->skipFollowingTests) {
-            $this->markTestSkipped('Skipping tests as the table or column was not created successfully');
+            $this->markTestSkipped(
+                'Skipping tests as the table or column ' . 
+                'was not created successfully'
+            );
             return;
         }
+
+       
+        $sql = "DROP TABLE IF EXISTS {$this->testIndexName1}";
+
+        list ($response,$errno,$errmsg) = $this->executeSqlString($sql); 
 
         $flds = "VARCHAR_FIELD, DATE_FIELD, INTEGER_FIELD";
         $indexOptions = array(
