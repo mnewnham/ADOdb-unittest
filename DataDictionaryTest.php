@@ -94,8 +94,7 @@ class DataDictionaryTest extends ADOdbTestCase
     
     public function testChangeTableSql() : void {
                      
-        $this->db->debug = true;
-
+        
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                 VARCHAR_FIELD C(50) NOTNULL DEFAULT 'This is a default value with spaces',
                 DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
