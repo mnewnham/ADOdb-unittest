@@ -82,7 +82,7 @@ class CoreSqlTest extends ADOdbTestCase
     {
 
 
-        foreach ($this->testfetchModes as $fetchMode => $fetchDescription) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->db->setFetchMode($fetchMode);
             list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
         
@@ -363,7 +363,7 @@ class CoreSqlTest extends ADOdbTestCase
         
         $this->db->startTrans();
 
-        foreach ($this->testfetchModes as $fetchMode=>$fetchDescription) {
+        foreach ($this->testFetchModes as $fetchMode=>$fetchDescription) {
              $this->db->setFetchMode($fetchMode);
             
             if ($bind) {

@@ -46,7 +46,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     public function testMetaTables(bool $includesTable1,mixed $filterType, mixed $mask) : void
     {
         
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
             
@@ -110,7 +110,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     public function testExactMatchMetaTables(): void
     {
         
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
             
@@ -184,7 +184,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             $executionResult,
             sprintf(
                 '[FETCH MODE: %s] Checking metaColumnNames with returnType %s',
-                $this->testfetchModes[$fetchMode],
+                $this->testFetchModes[$fetchMode],
                 $returnType ? 'true' : 'false'
             )
         );
@@ -242,7 +242,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         $expectedResult  = 9;
 
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
      
@@ -286,7 +286,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     public function testMetaColumnObjects(): void
     {
 
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
      
@@ -337,7 +337,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             '7' => 'EMPTY_FIELD'
         ];
         
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
                         
@@ -375,7 +375,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     public function testMetaIndexCount(): void
     {
 
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
         
@@ -406,7 +406,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     public function testMetaIndexUniqueness($result,$indexName): void
     {
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
         
@@ -447,7 +447,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     public function testMetaPrimaryKeys(): void
     {
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
         
@@ -679,7 +679,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     public function testServerInfoVersion(): void
     {
         
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->setFetchMode($fetchMode);
             
             $executionResult = $this->db->serverInfo();
@@ -727,7 +727,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         
       
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
         
@@ -768,7 +768,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         
     
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
         
@@ -810,7 +810,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         
     
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
    
@@ -850,7 +850,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         
     
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
    
@@ -889,7 +889,7 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
         
     
-        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             
             $this->db->setFetchMode($fetchMode);
 

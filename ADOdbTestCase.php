@@ -55,7 +55,7 @@ class ADOdbTestCase extends TestCase
         ADODB_ASSOC_CASE_NATIVE => 'ADODB_ASSOC_CASE_NATIVE'
     );
 
-    protected array $testfetchModes = [
+    protected array $testFetchModes = [
         ADODB_FETCH_NUM   => 'ADODB_FETCH_NUM',
         ADODB_FETCH_ASSOC => 'ADODB_FETCH_ASSOC',
         ADODB_FETCH_BOTH  => 'ADODB_FETCH_BOTH'
