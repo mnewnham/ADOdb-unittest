@@ -23,8 +23,10 @@
     <field name="date_field_to_keep" type="D"><DEFDATE/></field>
     <field name="timestamp_field_to_add" type="T"><DEFTIMESTAMP/></field>
     <field name="timestamp_field_to_keep" type="T"><DEFTIMESTAMP/></field>
+    <field name="unsigned_integer_field" type="I4" default="0"><UNSIGNED/><NOTNULL/></field>
+    <field name="enum_field" type="ENUM('lions','tigers','halibut')" default="halibut"></field>
     <index name="integer_field_index">
-        <descr>Put a unique index on the integer_field</descr>
+        <descr>Put a unique index on the integer_field</descr> 
         <col>integer_field</col>
         <UNIQUE/>
     </index>
