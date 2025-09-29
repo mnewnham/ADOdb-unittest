@@ -17,10 +17,12 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+namespace ADOdbUnitTest;
 
 require __DIR__ . '/ADOdbTestCase.php';
+require __DIR__ . '/Drivers/ADOdbCustomDriver.php';
 
-
+use ADOdb;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -244,7 +246,7 @@ if (!$db->isConnected()) {
 $GLOBALS['ADOdbConnection'] = &$db;
 $GLOBALS['ADOdriver']       = $adoDriver;
 $GLOBALS['loadDriver']      = $loadDriver;
-$GLOBALS['ADOxmlSchema']    = new adoSchema($db);
+$GLOBALS['ADOxmlSchema']    = new \adoSchema($db);
 $GLOBALS['TestingControl']  = $availableCredentials;
 $GLOBALS['globalTransOff']  = 0;
 
