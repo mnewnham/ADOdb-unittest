@@ -20,6 +20,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use ADOdbUnitTest\Drivers;
 
 /**
  * Class MetaFunctionsTest
@@ -27,9 +28,30 @@ use PHPUnit\Framework\TestCase;
  * Test cases for for ADOdb MetaFunctions
  */
 #[RequiresPhpExtension('mysqli')]
-class MysqliDriverTest extends ADOdbTestCase
+class MysqliDriverTest extends ADOdbCustomDriver
 {
     
+
+    protected mixed $physicalType;
+    protected ?string $columnType;
+
+    /**
+     * Global setup for the test class
+     *
+     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        
+        if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
+            return;
+        }
+
+        $GLOBALS['ADOdbConnection']->startTrans();
+        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
+        $GLOBALS['ADOdbConnection']->completeTrans();
+
+    }
     /**
      * Set up the test environment
      *
@@ -46,93 +68,9 @@ class MysqliDriverTest extends ADOdbTestCase
                 'This test is only applicable for the mysqli driver'
             );
         }
+
+        $this->physicalType = MYSQLI_TYPE_JSON;
+        $this->columnType   = 'JSON';
         
-    }
-
-    public function testSetCustomMetaType() : void
-    {
-        /*
-        * We must define the custom type before loading the data dictionary
-        */
-        $ok = $this->db->setCustomMetaType('J', MYSQLI_TYPE_JSON, 'JSON');
-
-        $this->assertTrue(
-            $ok,
-            'setCustomMetaType() should successfully append a JSON metaType'
-        );
-    }
-
-    public function testCreateTableWithCustomMetaType(): void 
-    {
-        
-        /*
-        * Then create a data dictionary object, using this connection
-        */
-        
-        $sql = "DROP TABLE IF EXISTS mt_test";
-
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);    
-               
-        $tabname = "mt_test";
-        $flds = " 
-        COL1 I  NOTNULL AUTO PRIMARY,
-        CUSTOM_JSON_COLUMN J
-        ";
-        
-        $sqlArray = $this->dataDictionary->createTableSQL(
-            'mt_test', 
-            $flds
-        );
-
-        list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
-
-        if ($errno > 0) {
-            $this->fail(
-                'Error creating table holding custom meta type'
-            );
-        }
-
-        $metaColumns = $this->db->metaColumns('mt_test');
-
-        $this->assertArrayHasKey(
-            'CUSTOM_JSON_COLUMN', 
-            $metaColumns, 
-            'createTableSQL() should have added CUSTOM_JSON_COLUMN'
-        );
-
-
-    }
-
-    public function testChangeTableWithCustomMetaType(): void 
-    {
-        
-                      
-        $tabname = "mt_test";
-        $flds = " 
-        ADDITIONAL_JSON_COLUMN J
-        ";
-        
-        $sqlArray = $this->dataDictionary->changeTableSQL(
-            'mt_test', 
-            $flds
-        );
-
-        list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
-       
-        if ($errno > 0) {
-            $this->fail(
-                'Error adding additional custom meta type'
-            );
-        }
-
-        $metaColumns = $this->db->metaColumns('mt_test');
-
-
-        $this->assertArrayHasKey(
-            'ADDITIONAL_JSON_COLUMN', 
-            $metaColumns, 
-            'createTableSQL() should have added ADDITIONAL_JSON_COLUMN'
-        );
-
     }
 }
