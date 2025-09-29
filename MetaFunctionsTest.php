@@ -30,11 +30,6 @@ class MetaFunctionsTest extends ADOdbTestCase
    
     protected string $testTableName = 'testtable_1';
 
-    protected array $testfetchModes = [
-        ADODB_FETCH_NUM   => 'ADODB_FETCH_NUM',
-        ADODB_FETCH_ASSOC => 'ADODB_FETCH_ASSOC',
-        ADODB_FETCH_BOTH  => 'ADODB_FETCH_BOTH'
-    ];
     
          
     /**
