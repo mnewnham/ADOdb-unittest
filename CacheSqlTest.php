@@ -1018,6 +1018,35 @@ class CacheSqlTest extends ADOdbTestCase
                 $bind
             ],
 
+             'Select, Bound, FETCH_BOTH' => [
+                ADODB_FETCH_BOTH, 
+                array(
+                    array(
+                        '0'=>'LINE 5',
+                        'varchar_field'=>'LINE 5'
+                    ),
+                    array(
+                        '0'=>'LINE 6',
+                        'varchar_field'=>'LINE 6'
+                    ),
+                    array(
+                        '0'=>'LINE 7',
+                        'varchar_field'=>'LINE 7'
+                    ),
+                    array(
+                        '0'=>'LINE 8',
+                        'varchar_field'=>'LINE 8'
+                    )
+                ),
+                "SELECT testtable_3.varchar_field 
+                   FROM testtable_3 
+                  WHERE number_run_field>$p1 
+               ORDER BY number_run_field", 
+                4,
+                2,
+                $bind
+            ],
+
         ];
     }
 }
