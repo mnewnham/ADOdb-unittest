@@ -153,6 +153,15 @@ class XmlSchemaTest extends ADOdbTestCase
             'Field "decimal_fields" not found in the table'
         );
 
+    }
+
+    /**
+     * Applies a test to update a schena using XML
+     *
+     * @return void
+     */
+    public function testXmlSchemaUpdate() :void {
+
         /**
          * Load the second file to test the XML Schema update
          */
@@ -205,7 +214,14 @@ class XmlSchemaTest extends ADOdbTestCase
             $fields,
             'Field "varchar_field_to_add" should now be found in the table'
         );
+    }
 
+    /**
+     * Tests dropping the Schema using XML
+     *
+     * @return void
+     */
+    public function testXmlSchemaDrop(): void {
 
         /**
          * Load the third file to drop the XML Schema update
@@ -252,7 +268,5 @@ class XmlSchemaTest extends ADOdbTestCase
         );
 
     }   
-
-    
 
 }
