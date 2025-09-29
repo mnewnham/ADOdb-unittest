@@ -55,12 +55,12 @@ class ADOdbTestCase extends TestCase
         ADODB_ASSOC_CASE_NATIVE => 'ADODB_ASSOC_CASE_NATIVE'
     );
 
-    protected array $modeDescription = array(
-        ADODB_FETCH_ASSOC => ' ADODB_FETCH_ASSOC',
-        ADODB_FETCH_NUM => ' ADODB_FETCH_NUM',
-        ADODB_FETCH_BOTH => ' ADODB_FETCH_BOTH'
-
-    );
+    protected array $testfetchModes = [
+        ADODB_FETCH_NUM   => 'ADODB_FETCH_NUM',
+        ADODB_FETCH_ASSOC => 'ADODB_FETCH_ASSOC',
+        ADODB_FETCH_BOTH  => 'ADODB_FETCH_BOTH'
+    ];
+    
     /**
      * Instantiates new ADOdb connection to flush every test
      *

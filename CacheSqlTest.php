@@ -905,7 +905,7 @@ class CacheSqlTest extends ADOdbTestCase
             sprintf(
                 "Initial read of cacheSelectLimit() with FETCH MODE %s
                 and casing %s returns %s",
-                $this->modeDescription[$ADODB_FETCH_MODE],
+                $this->testFetchModes[$ADODB_FETCH_MODE],
                 $this->caseDescription[ADODB_ASSOC_CASE],
                 print_r($returnedRows, true)
             )
@@ -952,7 +952,7 @@ class CacheSqlTest extends ADOdbTestCase
             sprintf(
                 "Second read of cacheSelectLimit() with FETCH MODE %s
                 and casing %s should read cache, not database but returns %s",
-                $this->modeDescription[$ADODB_FETCH_MODE],
+                $this->testFetchModes[$ADODB_FETCH_MODE],
                 $this->caseDescription[ADODB_ASSOC_CASE],
                 print_r($returnedRows, true)
             )
