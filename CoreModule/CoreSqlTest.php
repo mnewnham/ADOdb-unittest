@@ -36,8 +36,6 @@ class CoreSqlTest extends ADOdbTestCase
     public static function setupBeforeClass(): void
     {
 
-       
-           
         $db        = $GLOBALS['ADOdbConnection'];
         $adoDriver = $GLOBALS['ADOdriver'];
 
@@ -83,13 +81,20 @@ class CoreSqlTest extends ADOdbTestCase
     public function testSelectExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
 
-        list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+
+        foreach ($this->testfetchModes as $fetchMode => $fetchDescription) {
+            $this->db->setFetchMode($fetchMode);
+            list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
         
-        $this->assertSame(
-            $expectedValue, 
-            is_object($result), 
-            'ADOConnection::execute() in SELECT mode'
-        );
+            $this->assertSame(
+                $expectedValue, 
+                is_object($result), 
+                sprintf(
+                    '[%s] ADOConnection::execute() in SELECT mode',
+                    $fetchDescription
+                )
+            );
+        }
             
     }
     
@@ -357,34 +362,78 @@ class CoreSqlTest extends ADOdbTestCase
         
         
         $this->db->startTrans();
-        if ($bind) {
-            $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-       
-            $record = $this->db->getRow($sql, $bind);
 
-            list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
-        
-            foreach ($fields as $key => $value) {
-                $this->assertArrayHasKey(
-                    $value, 
-                    $record, 
-                    'Checking if associative key exists in fields array'
-                );
+        foreach ($this->testfetchModes as $fetchMode=>$fetchDescription) {
+             $this->db->setFetchMode($fetchMode);
+            
+            if ($bind) {
+                    
+                $record = $this->db->getRow($sql, $bind);
+
+                
+            } else {
+            
+                $record = $this->db->getRow($sql);
+                
+
             }
-        } else {
-            $this->db->setFetchMode(ADODB_FETCH_NUM);
-            $record = $this->db->getRow($sql);
             
-            list($errno,$errmsg) = $this->assertADOdbError($sql);
+            list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
             
-            foreach ($fields as $key => $value) {
-                $this->assertArrayHasKey(
-                    $key,
-                    $record,
-                    'Checking if numeric key exists in fields array'
-                );
+            switch ($fetchMode) {
+                case ADODB_FETCH_ASSOC:
+                          
+                foreach ($fields as $key => $value) {
+                    $this->assertArrayHasKey(
+                        $value, 
+                        $record, 
+                        sprintf(
+                            '[%s] Checking if associative key exists in fields array',
+                            $fetchDescription
+                        )
+                    );
+                }
+                break;
+                case ADODB_FETCH_NUM:
+           
+                foreach ($fields as $key => $value) {
+                    $this->assertArrayHasKey(
+                        $key, 
+                        $record, 
+                        sprintf(
+                            '[%s] Checking if numeric key exists in fields array',
+                            $fetchDescription
+                        )
+                    );
+                }
+                break;
+                case ADODB_FETCH_BOTH:
+                          
+                foreach ($fields as $key => $value) {
+                    $this->assertArrayHasKey(
+                        $value, 
+                        $record, 
+                        sprintf(
+                            '[%s] Checking if associative key exists in fields array',
+                            $fetchDescription
+                        )
+                    );
+                }
+                
+                foreach ($fields as $key => $value) {
+                    $this->assertArrayHasKey(
+                        $key, 
+                        $record, 
+                        sprintf(
+                            '[%s] Checking if numeric key exists in fields array',
+                            $fetchDescription
+                        )
+                    );
+                }
+                break;
             }
         }
+        
         $this->db->completeTrans();
     }
     
@@ -487,6 +536,37 @@ class CoreSqlTest extends ADOdbTestCase
                    ORDER BY number_run_field", $bind
                 ],
 
+            'Bound, FETCH_BOTH' => 
+                [ADODB_FETCH_BOTH, 
+                    array(
+                        array(
+                            '0'=>'LINE 2',
+                            'VARCHAR_FIELD'=>'LINE 2'
+                        ),
+                        array(
+                            '0'=>'LINE 3',
+                            'VARCHAR_FIELD'=>'LINE 3'
+                        ),
+                        array(
+                            '0'=>'LINE 4',
+                            'VARCHAR_FIELD'=>'LINE 4'
+                        ),
+                        array(
+                            '0'=>'LINE 5',
+                            'VARCHAR_FIELD'=>'LINE 5'
+                        ),
+                        array(
+                            '0'=>'LINE 6',
+                            'VARCHAR_FIELD'=>'LINE 6'
+                        )
+                    ),
+                    "SELECT testtable_3.varchar_field 
+                       FROM testtable_3 
+                      WHERE number_run_field BETWEEN $p1 AND $p2
+                   ORDER BY number_run_field", $bind
+                ],
+
+
             ];
            
             break;
@@ -504,8 +584,8 @@ class CoreSqlTest extends ADOdbTestCase
                      "SELECT testtable_3.varchar_field 
                         FROM testtable_3 
                        WHERE number_run_field BETWEEN 2 AND 6
-                    ORDER BY number_run_field", null]];
-            /*
+                    ORDER BY number_run_field", null],
+            
             'Bound, FETCH_NUM' => 
                 [ADODB_FETCH_NUM, 
                     array(
@@ -518,9 +598,37 @@ class CoreSqlTest extends ADOdbTestCase
                        FROM testtable_3 
                       WHERE number_run_field BETWEEN $p1 AND $p2
                    ORDER BY number_run_field", $bind],
-
+            'Bound, FETCH_BOTH' => 
+                [ADODB_FETCH_BOTH, 
+                    array(
+                        array(
+                            '0'=>'LINE 2',
+                            'varchar_field'=>'LINE 2'
+                        ),
+                        array(
+                            '0'=>'LINE 3',
+                            'varchar_field'=>'LINE 3'
+                        ),
+                        array(
+                            '0'=>'LINE 4',
+                            'varchar_field'=>'LINE 4'
+                        ),
+                        array(
+                            '0'=>'LINE 5',
+                            'varchar_field'=>'LINE 5'
+                        ),
+                        array(
+                            '0'=>'LINE 6',
+                            'varchar_field'=>'LINE 6'
+                        )
+                    ),
+                    "SELECT testtable_3.varchar_field 
+                       FROM testtable_3 
+                      WHERE number_run_field BETWEEN $p1 AND $p2
+                   ORDER BY number_run_field", $bind
+                ],
                 ];
-            */
+            
                 break;
       
         }
@@ -621,6 +729,31 @@ class CoreSqlTest extends ADOdbTestCase
                         WHERE number_run_field>=$p1 
                     ORDER BY number_run_field", 4, 2, $bind
                     ],
+                'Select, Bound, FETCH_BOTH' => 
+                    [ADODB_FETCH_BOTH,
+                        array(
+                            array(
+                                '0'=>'LINE 5',
+                                'VARCHAR_FIELD'=>'LINE 5'
+                            ),
+                            array(
+                                '0'=>'LINE 6',
+                                'VARCHAR_FIELD'=>'LINE 6'
+                            ),
+                            array(
+                                '0'=>'LINE 7',
+                                'VARCHAR_FIELD'=>'LINE 7'
+                            ),
+                            array(
+                                '0'=>'LINE 8',
+                                'VARCHAR_FIELD'=>'LINE 8'
+                            )
+                        ),
+                        "SELECT testtable_3.varchar_field 
+                        FROM testtable_3 
+                        WHERE number_run_field>=$p1 
+                    ORDER BY number_run_field", 4, 2, $bind
+                    ],
                 'Select Unbound, FETCH_ASSOC Get first record, ASSOC_CASE_UPPER' => 
                     [ADODB_FETCH_ASSOC, 
                         array(
@@ -659,6 +792,31 @@ class CoreSqlTest extends ADOdbTestCase
                       WHERE number_run_field>=$p1 
                    ORDER BY number_run_field", 4, 2, $bind
                 ],
+            'Select, Bound, FETCH_BOTH, CASE LOWER' => 
+                    [ADODB_FETCH_BOTH,
+                        array(
+                            array(
+                                '0'=>'LINE 5',
+                                'varchar_field'=>'LINE 5'
+                            ),
+                            array(
+                                '0'=>'LINE 6',
+                                'varchar_field'=>'LINE 6'
+                            ),
+                            array(
+                                '0'=>'LINE 7',
+                                'varchar_field'=>'LINE 7'
+                            ),
+                            array(
+                                '0'=>'LINE 8',
+                                'varchar_field'=>'LINE 8'
+                            )
+                        ),
+                        "SELECT testtable_3.varchar_field 
+                        FROM testtable_3 
+                        WHERE number_run_field>=$p1 
+                    ORDER BY number_run_field", 4, 2, $bind
+            ],
             'Select Unbound, FETCH_ASSOC Get first record, ASSOC_CASE_LOWER' => 
                 [ADODB_FETCH_ASSOC, 
                     array(
