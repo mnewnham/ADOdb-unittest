@@ -724,11 +724,11 @@ class MetaFunctionsTest extends ADOdbTestCase
     }
    
     /**
-     * Test for errors when a meta function is called on an invalid table
+     * Test for errors when a metacolumns function is called on an invalid table
      *
      * @return void
      */
-    public function testMetaFunctionsForInvalidTable(): void
+    public function testMetaColumnsForInvalidTable(): void
     {
         
       
@@ -761,6 +761,22 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $fetchModeName
                 )
             );
+        }
+    }
+
+    /**
+     * Test for errors when a metacolumnNames function is called on an invalid table
+     *
+     * @return void
+     */
+    public function testMetaColumnNamesForInvalidTable(): void
+    {
+        
+    
+        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+            
+            $this->db->setFetchMode($fetchMode);
+        
 
             $response = $this->db->metaColumnNames('invalid_table');
             list($errno, $errmsg) = $this->assertADOdbError(
@@ -787,6 +803,23 @@ class MetaFunctionsTest extends ADOdbTestCase
                 )
             );
 
+        }
+    }
+
+    /**
+     * Test for errors when a meta function is called on an invalid table
+     *
+     * @return void
+     */
+    public function testMetaIndexesForInvalidTable(): void
+    {
+        
+    
+        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+            
+            $this->db->setFetchMode($fetchMode);
+   
+
             $response = $this->db->metaIndexes('invalid_table');
             list($errno, $errmsg) = $this->assertADOdbError(
                 'metaIndexes()', 
@@ -809,6 +842,23 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $fetchModeName
                 )
             );
+
+        }
+    }
+
+    /**
+     * Test for errors when a metaprimarykeys function is called on an invalid table
+     *
+     * @return void
+     */
+    public function testMetaPrimaryKeysForInvalidTable(): void
+    {
+        
+    
+        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+            
+            $this->db->setFetchMode($fetchMode);
+   
             $response = $this->db->metaPrimaryKeys('invalid_table');
             list($errno, $errmsg) = $this->assertADOdbError(
                 'metaPrimaryKeys()', 
@@ -832,6 +882,22 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $fetchModeName
                 )
             );
+     }
+    }
+
+    /**
+     * Test for errors when a metaforeignkeys function is called on an invalid table
+     *
+     * @return void
+     */
+    public function testMetaForeignKeysForInvalidTable(): void
+    {
+        
+    
+        foreach ($this->testfetchModes as $fetchMode => $fetchModeName) {
+            
+            $this->db->setFetchMode($fetchMode);
+
             $response = $this->db->metaForeignKeys('invalid_table');
             list($errno, $errmsg) = $this->assertADOdbError(
                 'metaForeignKeys()', 
