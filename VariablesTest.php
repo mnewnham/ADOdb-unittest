@@ -277,16 +277,24 @@ class VariablesTest extends ADOdbTestCase
         global $ADODB_COUNTRECS;
         $ADODB_COUNTRECS = true; // Set to true by default
 
+        $sql = "SELECT COUNT(*) FROM testtable_3";
+
+        $this->db->startTrans();
+        $countedRecords = $this->db->getOne($sql);
+        $this->db->completeTrans();
+
  
         $sql = "SELECT * FROM testtable_3";
                 
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $this->assertEquals(
-            11,
+            $countedRecords,
             $result->recordCount(), 
-            'With ADODB_COUNTRECS set to true, the record count should be 11'
-        );        
+            'With ADODB_COUNTRECS set to true, the record count should be ' . $countedRecords
+        );     
+        
+        $this->db->fetchRow();
 
         $ADODB_COUNTRECS = false;
 
