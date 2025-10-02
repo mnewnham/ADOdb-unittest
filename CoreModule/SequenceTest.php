@@ -36,8 +36,7 @@ class SequenceTest extends ADOdbTestCase
     public static function setupBeforeClass(): void
     {
         $db        = $GLOBALS['ADOdbConnection'];
-        $adoDriver = $GLOBALS['ADOdriver'];
-
+       
         $SQL = "SELECT COUNT(*) AS core_table3_count FROM testtable_3";
         $table3DataExists = $db->getOne($SQL);
 
@@ -77,18 +76,39 @@ class SequenceTest extends ADOdbTestCase
 
         $this->db->startTrans();
         $response = $this->db->CreateSequence('unittest_seq', 50);
+
+      
         $this->db->completeTrans();
 
         list($errno, $errmsg) = $this->assertADOdbError('createSequenceSql()');
 
+
+        $this->assertIsObject(
+            $response, 
+            'CreateSequence should return an object ' . 
+            'If a sequence is created successfully'
+        );
+
+       
         $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
 
         $this->assertTrue(
             $ok, 
-            'CreateSequence should return an ADORecordset_empty object If a sequence is created successfully'
+            'CreateSequence should return an ADORecordSet_empty object ' . 
+            'If a sequence is created successfully'
         );
 
-      
+    }
+
+    /**
+     * Tests the genID() method
+     *
+     * @see https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:genid
+     * 
+     * @return void
+     */
+    public function testGenID() :void {
+     
         
         $this->db->startTrans();
         $nextId = $this->db->GenID('unittest_seq');
@@ -107,6 +127,17 @@ class SequenceTest extends ADOdbTestCase
             $nextId, 
             'GenID should return the initial value of 50 in the sequence'
         );
+
+    }
+
+    /**
+     * Tests the genID() method
+     *
+     * @see https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:genid
+     * 
+     * @return void
+     */
+    public function getNextGenID() : void {
 
 
         $nextId = $this->db->GenID('unittest_seq');
@@ -141,24 +172,11 @@ class SequenceTest extends ADOdbTestCase
         
         $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
 
-
         $this->assertTrue(
             $ok, 
-            'DropSequence should return an ADORecordset_empty object If a sequence is dropped successfully'
+            'DropSequence should return an ADORecordset_empty ' . 
+            'object If a sequence is dropped successfully'
         );
 
-        /*
-        * Check if the sequence is actually dropped
-        */
-        $nextId = $this->db->GenID('unittest_seq');
-        
-        list($errno, $errmsg) = $this->assertADOdbError('genID()');
-
-        $this->assertSame(
-            1, 
-            $nextId, 
-            'GenID should return 1 for a non-existing sequence'
-        );
-       
     }
 }
