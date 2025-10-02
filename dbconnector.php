@@ -21,6 +21,7 @@ namespace ADOdbUnitTest;
 
 require __DIR__ . '/ADOdbTestCase.php';
 require __DIR__ . '/Drivers/ADOdbCustomDriver.php';
+require __DIR__ . '/CoreModule/ADOdbCoreSetup.php';
 
 use ADOdb;
 use PHPUnit\Framework\TestCase;

@@ -231,7 +231,7 @@ class ADOdbTestCase extends TestCase
      */
     public function assertADOdbError(
         string $sql, 
-        ?array $bind=null, 
+        mixed $bind=false, 
         bool $expectError=false
     ) : array {
 
