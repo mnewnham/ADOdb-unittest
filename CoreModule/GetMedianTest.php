@@ -31,9 +31,9 @@ class GetMedianTest extends ADOdbCoreSetup
     
      
     /**
-     * Test for {@see ADODConnection::getOne()]
+     * Test for {@see ADODConnection::getMedian()]
      *
-     * @param int $expectedValue The expected value to be returned
+     * @param int    $expectedValue The expected value to be returned
      * @param string $table         Table name
      * @param string $column        Table column
      * @param string $where         An optional criteria
@@ -51,8 +51,6 @@ class GetMedianTest extends ADOdbCoreSetup
         mixed $where
     ): void {
     
-        
-
         foreach ($this->testFetchModes as $fetchMode=>$fetchDescription) {
         
             $this->db->startTrans();
@@ -68,14 +66,18 @@ class GetMedianTest extends ADOdbCoreSetup
             );
 
         }
-        
-       
+
     }
 
     /**
-     * Data provider for {@see testGetOne()}
+     * Data provider for {@see testGetMedian()}
      *
-     * @return array [string expected value, string sql ?array bind]
+     * @return array [
+     *   string expected value, 
+     *   string table
+     *   string column
+     *   string where
+     *   ]
      */
     public function providerTestGetMedian(): array
     {
