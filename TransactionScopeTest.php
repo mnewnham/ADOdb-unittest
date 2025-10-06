@@ -67,6 +67,13 @@ class TransactionScopeTest extends ADOdbTestCase
             );
         }
 
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $idField = 'ID';
+            $vcField = 'VARCHAR_FIELD';
+        } else {
+            $idField = 'id';
+            $vcField = 'varchar_field';
+        }
        
         $this->db->StartTrans();
             
@@ -100,10 +107,12 @@ class TransactionScopeTest extends ADOdbTestCase
             return;
         }
 
+        
+
         /*
         * Check that the data has been updated in the transaction
         */
-        $sql = "SELECT varchar_field FROM testtable_3 WHERE id = {$baseData['ID']}";
+        $sql = "SELECT varchar_field FROM testtable_3 WHERE id = {$baseData[$idField]}";
         $preCommit = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -134,7 +143,7 @@ class TransactionScopeTest extends ADOdbTestCase
             'transaction but before the completeTrans()'
         );
 
-        $sql = "SELECT varchar_field FROM testtable_3 WHERE id = {$baseData['ID']}";
+        $sql = "SELECT varchar_field FROM testtable_3 WHERE id = {$baseData[$idField]}";
         $postRollback = $this->db->getOne($sql);
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -175,7 +184,7 @@ class TransactionScopeTest extends ADOdbTestCase
 
         $sql = "SELECT varchar_field 
                   FROM testtable_3 
-                 WHERE id = {$baseData['ID']}";
+                 WHERE id = {$baseData[$idField]}";
         
         $postCommit = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -185,7 +194,7 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         $this->assertEquals(
-            $baseData['VARCHAR_FIELD'],
+            $baseData[$vcField],
             $postCommit,
             'Data should still be reverted to the original ' . 
             'value after committing the transaction'
@@ -206,6 +215,14 @@ class TransactionScopeTest extends ADOdbTestCase
                 'Skipping testBeginCommitTransaction as it ' . 
                 'is not applicable for the current driver'
             );
+        }
+
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $idField = 'ID';
+            $vcField = 'VARCHAR_FIELD';
+        } else {
+            $idField = 'id';
+            $vcField = 'varchar_field';
         }
 
         $this->db->beginTrans();
@@ -245,7 +262,7 @@ class TransactionScopeTest extends ADOdbTestCase
         */
         $sql = "SELECT varchar_field 
                   FROM testtable_3 
-                 WHERE id = {$baseData['ID']}";
+                 WHERE id = {$baseData[$idField]}";
         $preCommit = $this->db->getOne($sql);
         
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -255,7 +272,7 @@ class TransactionScopeTest extends ADOdbTestCase
         }
         
         $this->assertEquals(
-            $baseData['VARCHAR_FIELD'],
+            $baseData[$vcField],
             $preCommit,
             'VARCHAR_FIELD Data should not yet be updated ' . 
             'in the transaction before commit'
@@ -268,7 +285,7 @@ class TransactionScopeTest extends ADOdbTestCase
         */
         $sql = "SELECT varchar_field 
                   FROM testtable_3 
-                 WHERE id = {$baseData['ID']}";
+                 WHERE id = {$baseData[$idField]}";
 
         $postCommit = $this->db->getOne($sql);
         
