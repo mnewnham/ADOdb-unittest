@@ -56,13 +56,15 @@ class GetAllTest extends ADOdbCoreSetup
 
         list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
+        $this->db->completeTrans();
+
         $this->assertSame(
             $expectedValue,
             $returnedRows,
             'getall() should return expected rows using casing ' . ADODB_ASSOC_CASE
         );
 
-        $this->db->completeTrans();
+      
     }
     
     /**

@@ -60,13 +60,15 @@ class GetAssocTest extends ADOdbCoreSetup
      
         list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
+        $this->db->completeTrans();
+
         $this->assertSame(
             $expectedValue,
             $returnedRows,
             'getAssoc() should return expected rows using casing ' . ADODB_ASSOC_CASE
         );
 
-        $this->db->completeTrans();
+        
     }
     
     /**
@@ -198,7 +200,7 @@ class GetAssocTest extends ADOdbCoreSetup
                      "SELECT testtable_3.varchar_field 
                         FROM testtable_3 
                        WHERE number_run_field BETWEEN 2 AND 6
-                    ORDER BY number_run_field", null],
+                    ORDER BY number_run_field", false],
             
             'Bound, FETCH_NUM' => 
                 [ADODB_FETCH_NUM, 
