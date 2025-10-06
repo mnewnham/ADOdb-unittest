@@ -113,9 +113,36 @@ if (array_key_exists('xmlschema', $availableCredentials)) {
     }
 }
 
+$arTypeLoad = 'record';
+$GLOBALS['skipActiveRecordTests'] = 0;
+
+if (array_key_exists('activerecord', $availableCredentials)) {
+
+    if (array_key_exists('skipTests' , $availableCredentials['activerecord']) 
+        && $availableCredentials['activerecord']['skipTests']
+    ) {
+        $GLOBALS['skipActiveRecordTests'] = 1;
+    }
+
+    if (array_key_exists('extended' , $availableCredentials['activerecord']) 
+        && $availableCredentials['activerecord']['extended']
+    ) {
+        $arTypeLoad = 'recordx';
+    }
+    $arInclude = "/adodb-active-$arTypeLoad.inc.php";
+    if (array_key_exists('debug' , $availableCredentials['xmlschema']) 
+        && $availableCredentials['xmlschema']['debug']
+    ) {
+        //define('XMLS_DEBUG', 1);
+    }
+    
+} else {
+    $GLOBALS['skipActiveRecordTests'] = 1;
+}
 
 require_once $ADOdbSettings['directory'] . '/adodb.inc.php';
 require_once $ADOdbSettings['directory'] . '/adodb-xmlschema03.inc.php';
+require_once $ADOdbSettings['directory'] . $arInclude;
 
 global $argv;
 global $db;
@@ -241,6 +268,8 @@ if (!$db->isConnected()) {
     die(sprintf('%s database connection not established', $adoDriver));
 }
 
+print "Connected to driver $adoDriver\n";
+
 /*
 * This is now available to unittests. The caching section will need this info
 */
@@ -296,10 +325,25 @@ if (array_key_exists('caching', $availableCredentials)) {
     }
 }
 
+if ($GLOBALS['skipActiveRecordTests'] == 0) {
+    $_ADODB_ACTIVE_DBS = array();
+    class person extends \ADOdb_Active_Record{}
+    class child  extends \ADOdb_Active_Record{}
+
+    $GLOBALS['person']   = new person(false, false, $db);
+    $GLOBALS['child']    = new child('children', array('id'), $db);
+    
+    ADODB_SetDatabaseAdapter($db);
+
+}
+
 /**
  * Set some global variables for the tests
  */
 $ADODB_QUOTE_FIELDNAMES = false;
-$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-$ADODB_GETONE_EOF = null;
-$ADODB_COUNTRECS = true;
+$ADODB_FETCH_MODE       = ADODB_FETCH_ASSOC;
+$ADODB_GETONE_EOF       = null;
+$ADODB_COUNTRECS        = true;
+$ADODB_COMPAT_FETCH     = false;
+
+$GLOBALS['comparisonData'] = false;
