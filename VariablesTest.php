@@ -272,7 +272,32 @@ class VariablesTest extends ADOdbTestCase
      * 
      * @return void
      */ 
-    public function testCountRecs(): void
+    public function testCountRecsUsingCountRecsFalse(): void
+    {   
+        global $ADODB_COUNTRECS;
+        $ADODB_COUNTRECS = false; // Set to true by default
+        
+        $sql = 'select varchar_field from testtable_1 where id<9999';
+        
+        list($result, $errno, $errmsg) = $this->executeSqlString($sql);
+
+        $this->assertEquals(
+            -1,
+            $result->recordCount(), 
+            'With ADODB_COUNTRECS set to false, the record count should be -1'
+        );
+
+        $ADODB_COUNTRECS = true; // Reset to default for other tests
+    }
+
+    /**
+     * Test for {@see $ADODB_COUNTRECS}
+     * 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_countrecs
+     * 
+     * @return void
+     */ 
+    public function testCountRecsUsingCountRecsTrue(): void
     {   
         global $ADODB_COUNTRECS;
         $ADODB_COUNTRECS = true; // Set to true by default
@@ -294,19 +319,37 @@ class VariablesTest extends ADOdbTestCase
             'With ADODB_COUNTRECS set to true, the record count should be ' . $countedRecords
         );     
         
-        $this->db->fetchRow();
+        $result->fetchRow();
+    }
 
-        $ADODB_COUNTRECS = false;
+    /**
+     * Tests the charMax() method
+     *
+     * @return void
+     */
+    public function testCharMax(): void {
 
-        list($result, $errno, $errmsg) = $this->executeSqlString($sql);
+        $value = $this->db->charMax();
 
-        $this->assertEquals(
-            -1,
-            $result->recordCount(), 
-            'With ADODB_COUNTRECS set to false, the record count should be -1'
+        $this->assertIsInt(
+            $value,
+            'charMax() should return an integer value'
         );
+    }
 
-        $ADODB_COUNTRECS = true; // Reset to default for other tests
+    /**
+     * Tests the textMax() method
+     *
+     * @return void
+     */
+    public function testTextMax(): void {
+
+        $value = $this->db->textMax();
+
+        $this->assertIsInt(
+            $value,
+            'textMax() should return an integer value'
+        );
     }
 
 }
