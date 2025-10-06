@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Tests cases for the mssqlnative driver of ADOdb.
  * Try to write database-agnostic tests where possible.
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * @category  Library
@@ -11,7 +12,7 @@
  * @author    Mark Newnham <email@email.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://google.com
- *  
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -28,7 +29,6 @@ use PHPUnit\Framework\TestCase;
 #[RequiresPhpExtension('sqlsrv')]
 class MssqlnativeDriverTest extends ADOdbTestCase
 {
-    
     /**
      * Set up the test environment
      *
@@ -41,15 +41,14 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
         if ($this->adoDriver !== 'mssqlnative') {
             $this->skipFollowingTests = true;
-           
+
             $this->markTestSkipped(
                 'This test is only applicable for the mssqlnative driver'
             );
             return;
         }
-        
     }
-    
+
     /**
      * Tear down the test environment
      *
@@ -57,32 +56,31 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      */
     public function tearDown(): void
     {
-        
     }
 
     /**
      * Test the SQLDate function. Cloned from the original test_mssqlnative.php
-     * 
+     *
      * @param string $dateFormat The date to test
      * @param string $field      The field to test
      * @param string $region     The region to test
      * @param string $result     The expected result
-     * 
+     *
      * @dataProvider providerSqlDate
-     * 
+     *
      * @return void
      */
     public function testSqlDate(
-        string $dateFormat, 
-        string $field, 
+        string $dateFormat,
+        string $field,
         string $region,
         string $result
-    ) :void {
-       
+    ): void {
+
         if ($this->skipFollowingTests) {
             return;
         }
-        
+
         $formatDate = "{$this->db->sqlDate($dateFormat,$field)}";
 
         $sql = "SELECT testdate, $formatDate $region, null 
@@ -95,26 +93,26 @@ class MssqlnativeDriverTest extends ADOdbTestCase
                        ) testdatesmall,
                 null nulldate
                 ) q ";
-        
+
         $res = $this->db->GetRow($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-       
+
         $this->assertEquals(
-            $res['region'], 
-            $result, 
+            $res['region'],
+            $result,
             'SQL Date format for region ' . $region . ' should match expected format'
         );
-    }   
+    }
 
     /**
      * Data provider for testSqlDate
      *
      * @return array
      */
-    public function providerSQLDate() : array
+    public function providerSQLDate(): array
     {
         return [
-              
+
             ["d/m/Y", "testdate" ," FR4","17/12/2016"],
             ["d/m/y", "testdate" ," FR4b", "17/12/2016",],
             ["d/m/Y", "NULL", "nullFR4", null],

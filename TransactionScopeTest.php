@@ -1,18 +1,19 @@
 <?php
+
 /**
  * Tests cases for transaction scope handling functions of ADOdb
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -49,10 +50,9 @@ class TransactionScopeTest extends ADOdbTestCase
                 'This database driver does not support transactions'
             );
         }
-        
     }
-    
-   
+
+
     /**
      * Tests the smart transaction handling capabilities
      *
@@ -62,7 +62,7 @@ class TransactionScopeTest extends ADOdbTestCase
     {
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
-                'Skipping testStartCompleteTransaction as it ' . 
+                'Skipping testStartCompleteTransaction as it ' .
                 'is not applicable for the current driver'
             );
         }
@@ -74,18 +74,18 @@ class TransactionScopeTest extends ADOdbTestCase
             $idField = 'id';
             $vcField = 'varchar_field';
         }
-       
+
         $this->db->StartTrans();
-            
-  
+
+
         $assertion = $this->assertEquals(
             1,
             $this->db->transOff,
-            'Transaction did not start correctly, ' . 
+            'Transaction did not start correctly, ' .
             'transOff should be greater than 0'
         );
-        
-        
+
+
         $sql = "SELECT id, varchar_field 
                   FROM testtable_3 
               ORDER BY id";
@@ -96,7 +96,7 @@ class TransactionScopeTest extends ADOdbTestCase
         if ($errno > 0) {
             return;
         }
-      
+
         $sql = "UPDATE testtable_3 
                    SET varchar_field = 'transaction test' 
                  WHERE id = 1";
@@ -107,7 +107,7 @@ class TransactionScopeTest extends ADOdbTestCase
             return;
         }
 
-        
+
 
         /*
         * Check that the data has been updated in the transaction
@@ -139,7 +139,7 @@ class TransactionScopeTest extends ADOdbTestCase
         $this->assertEquals(
             1,
             $this->db->transOff,
-            'Transaction count still should be 1 after rolling back the ' . 
+            'Transaction count still should be 1 after rolling back the ' .
             'transaction but before the completeTrans()'
         );
 
@@ -155,7 +155,7 @@ class TransactionScopeTest extends ADOdbTestCase
         $this->assertEquals(
             'transaction test',
             $postRollback,
-            'Data should still be the updated value ' . 
+            'Data should still be the updated value ' .
             'after rolling back the transaction'
         );
 
@@ -168,14 +168,14 @@ class TransactionScopeTest extends ADOdbTestCase
         $assertion = $this->assertEquals(
             0,
             $this->db->transOff,
-            'Transaction count $transOff should now equal 0 ' . 
+            'Transaction count $transOff should now equal 0 ' .
             'after completing the transaction'
         );
 
         if ($this->db->transOff <> 0) {
             $this->fail(
                 sprintf(
-                    'Trans Count shoud be 0 but is %d', 
+                    'Trans Count shoud be 0 but is %d',
                     $this->db->transOff
                 )
             );
@@ -185,7 +185,7 @@ class TransactionScopeTest extends ADOdbTestCase
         $sql = "SELECT varchar_field 
                   FROM testtable_3 
                  WHERE id = {$baseData[$idField]}";
-        
+
         $postCommit = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -196,13 +196,11 @@ class TransactionScopeTest extends ADOdbTestCase
         $this->assertEquals(
             $baseData[$vcField],
             $postCommit,
-            'Data should still be reverted to the original ' . 
+            'Data should still be reverted to the original ' .
             'value after committing the transaction'
         );
-
-    
     }
-    
+
     /**
      * Test beginning a transaction, committing it, and checking the data
      *
@@ -212,7 +210,7 @@ class TransactionScopeTest extends ADOdbTestCase
     {
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
-                'Skipping testBeginCommitTransaction as it ' . 
+                'Skipping testBeginCommitTransaction as it ' .
                 'is not applicable for the current driver'
             );
         }
@@ -226,14 +224,14 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         $this->db->beginTrans();
-            
+
         $assertion = $this->assertEquals(
             1,
             $this->db->transCnt,
-            'Transaction did not start correctly,' . 
+            'Transaction did not start correctly,' .
             'transCnt should be equal to 1'
         );
-        
+
         $sql = "SELECT id, varchar_field 
                   FROM testtable_3 
               ORDER BY id";
@@ -264,17 +262,17 @@ class TransactionScopeTest extends ADOdbTestCase
                   FROM testtable_3 
                  WHERE id = {$baseData[$idField]}";
         $preCommit = $this->db->getOne($sql);
-        
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         if ($errno > 0) {
             return;
         }
-        
+
         $this->assertEquals(
             $baseData[$vcField],
             $preCommit,
-            'VARCHAR_FIELD Data should not yet be updated ' . 
+            'VARCHAR_FIELD Data should not yet be updated ' .
             'in the transaction before commit'
         );
 
@@ -288,7 +286,7 @@ class TransactionScopeTest extends ADOdbTestCase
                  WHERE id = {$baseData[$idField]}";
 
         $postCommit = $this->db->getOne($sql);
-        
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         if ($errno > 0) {
@@ -297,9 +295,8 @@ class TransactionScopeTest extends ADOdbTestCase
         $this->assertEquals(
             'transaction test',
             $postCommit,
-            'VARCHAR_FIELD Data should now be updated ' . 
+            'VARCHAR_FIELD Data should now be updated ' .
             'in the transaction after commit'
         );
-
     }
 }

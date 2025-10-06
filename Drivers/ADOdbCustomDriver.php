@@ -1,19 +1,20 @@
 <?php
+
 /**
- * Base Tests cases for custom drivers 
+ * Base Tests cases for custom drivers
  * Try to write database-agnostic tests where possible.
- * 
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ *
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -28,8 +29,6 @@ use PHPUnit\Framework\TestCase;
 
 class ADOdbCustomDriver extends ADOdbTestCase
 {
-    
-
     protected ?object $xmlSchema;
 
     protected string $customMetaType = 'J';
@@ -41,7 +40,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      * @var     mixed $physicalType
      */
     protected mixed $physicalType;
-    
+
     /**
      * The DB Field identifier must be set in the
      * overload class
@@ -58,7 +57,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        
+
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
             return;
         }
@@ -66,7 +65,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
         $GLOBALS['ADOdbConnection']->completeTrans();
-
     }
     /**
      * Set up the test environment
@@ -77,7 +75,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
     {
 
         parent::setup();
-        
     }
 
     /**
@@ -85,14 +82,14 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return void
      */
-    public function testSetCustomMetaType() : void
+    public function testSetCustomMetaType(): void
     {
         /*
         * We must define the custom type before loading the data dictionary
         */
         $ok = $this->db->setCustomMetaType(
-            $this->customMetaType, 
-            $this->physicalType, 
+            $this->customMetaType,
+            $this->physicalType,
             $this->columnType
         );
 
@@ -109,22 +106,22 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return void
      */
-    public function testGetCustomMetaTypes(): void {
-     
-        $cmtArray = $this->db->getCustomMetaTypes(); 
+    public function testGetCustomMetaTypes(): void
+    {
+
+        $cmtArray = $this->db->getCustomMetaTypes();
         list($errno, $errmsg) = $this->assertADOdbError('getCustomMetaTypes()');
-        
+
         if (!is_array($cmtArray)) {
             $this->fail('getCustomMetaTypes() shoud return an array');
             return;
         }
-        
+
         $this->assertArrayHasKey(
             'J',
             $cmtArray,
             'J Custom metatype should be returned in list of custom metaTypes'
         );
-       
     }
 
     /**
@@ -132,16 +129,16 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return void
      */
-    public function testCreateTableWithCustomMetaType(): void 
+    public function testCreateTableWithCustomMetaType(): void
     {
-        
+
         /*
         * Remove the table if it exists
         */
         $sql = "DROP TABLE IF EXISTS metatype_test";
 
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);    
-               
+        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
+
         /*
         * Create a new table with the standard syntax
         */
@@ -150,9 +147,9 @@ class ADOdbCustomDriver extends ADOdbTestCase
         COL1 I  NOTNULL AUTO PRIMARY,
         CUSTOM_JSON_COLUMN J
         ";
-        
+
         $sqlArray = $this->dataDictionary->createTableSQL(
-            'metatype_test', 
+            'metatype_test',
             $flds
         );
 
@@ -167,11 +164,10 @@ class ADOdbCustomDriver extends ADOdbTestCase
         $metaColumns = $this->db->metaColumns('mt_test');
 
         $this->assertArrayHasKey(
-            'CUSTOM_JSON_COLUMN', 
-            $metaColumns, 
+            'CUSTOM_JSON_COLUMN',
+            $metaColumns,
             'createTableSQL() should have added CUSTOM_JSON_COLUMN'
         );
-
     }
 
     /**
@@ -179,21 +175,21 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return void
      */
-    public function testChangeTableWithCustomMetaType(): void 
+    public function testChangeTableWithCustomMetaType(): void
     {
-        
+
         $tabname = "metatype_test";
         $flds = " 
         ADDITIONAL_JSON_COLUMN J
         ";
-        
+
         $sqlArray = $this->dataDictionary->changeTableSQL(
-            'metatype_test', 
+            'metatype_test',
             $flds
         );
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
-       
+
         if ($errno > 0) {
             $this->fail(
                 'Error adding additional custom meta type'
@@ -204,11 +200,10 @@ class ADOdbCustomDriver extends ADOdbTestCase
 
 
         $this->assertArrayHasKey(
-            'ADDITIONAL_JSON_COLUMN', 
-            $metaColumns, 
+            'ADDITIONAL_JSON_COLUMN',
+            $metaColumns,
             'createTableSQL() should have added ADDITIONAL_JSON_COLUMN'
         );
-
     }
 
     /**
@@ -216,7 +211,8 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return void
      */
-    public function testCreateCustomFieldWithXmlSchema() : void {
+    public function testCreateCustomFieldWithXmlSchema(): void
+    {
 
 
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
@@ -229,22 +225,22 @@ class ADOdbCustomDriver extends ADOdbTestCase
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
             return;
         }
-      
-        
+
+
         $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
         /*
         * Load the file designed to create then modify
-        * a table containing custom metaTypes 
+        * a table containing custom metaTypes
         * using the XMLSchema functions
         */
         $schemaFile = sprintf(
-            '%s/../DatabaseSetup/xmlschemafile-metatype.xml', 
+            '%s/../DatabaseSetup/xmlschemafile-metatype.xml',
             dirname(__FILE__)
         );
-  
-        
-        $ok = $this->xmlSchema->parseSchema($schemaFile); 
-        
+
+
+        $ok = $this->xmlSchema->parseSchema($schemaFile);
+
         if (!$ok) {
             $this->assertTrue(
                 $ok,
@@ -256,52 +252,51 @@ class ADOdbCustomDriver extends ADOdbTestCase
         }
 
 
-        $ok = $this->xmlSchema->executeSchema(); 
+        $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
-        $this->assertSame
-        (
+        $this->assertSame(
             2, // Successful operations
             $ok,
             'XML Schema Creation failed'
         );
         if ($ok !== 2) {
             $this->markTestSkipped(
-                'Schema File Creation failed, ' . 
+                'Schema File Creation failed, ' .
                 'skipping XML Schema tests'
             );
             return;
         }
-        
+
         $table = 'testxmltable_1';
         $fields = $this->db->MetaColumns($table);
-    
+
         $this->assertNotEmpty(
             $fields,
             'No fields found in the table'
         );
-        
+
         $this->assertArrayHasKey(
             'ID',
             $fields,
             'Field "id" not found in the table'
         );
-        
+
         $this->assertArrayHasKey(
             'JSON_FIELD_TO_ADD',
             $fields,
             'Field "json_field_to_add" not found in the table. Customer MetaType Creation has failed'
         );
-
     }
 
     /**
-     * Tests using XMLSchema to update a table, 
+     * Tests using XMLSchema to update a table,
      * adding a field with a custom MetaType (J=JSON)
      *
      * @return void
      */
-    public function testUpdateCustomFieldWithXmlSchema() : void {
+    public function testUpdateCustomFieldWithXmlSchema(): void
+    {
 
 
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
@@ -314,7 +309,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
             return;
         }
-      
+
 
         /*
         * Drop the JSON column so that we can re-add it again
@@ -325,27 +320,27 @@ class ADOdbCustomDriver extends ADOdbTestCase
         );
 
          list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
-       
+
         if ($errno > 0) {
             $this->fail(
                 'Error dropping custom meta type field'
             );
         }
 
-        
+
         $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
         /*
         * ReLoad the custom metatype XML files designed to create then modify
         * a table using the XMLSchema functions
         */
         $schemaFile = sprintf(
-            '%s/../DatabaseSetup/xmlschemafile-metatype.xml', 
+            '%s/../DatabaseSetup/xmlschemafile-metatype.xml',
             dirname(__FILE__)
         );
-  
-        
-        $ok = $this->xmlSchema->parseSchema($schemaFile); 
-        
+
+
+        $ok = $this->xmlSchema->parseSchema($schemaFile);
+
         if (!$ok) {
             $this->assertTrue(
                 $ok,
@@ -357,46 +352,41 @@ class ADOdbCustomDriver extends ADOdbTestCase
         }
 
 
-        $ok = $this->xmlSchema->executeSchema(); 
+        $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
-        $this->assertSame
-        (
+        $this->assertSame(
             2, // Successful operations
             $ok,
             'XML Schema Update failed'
         );
         if ($ok !== 2) {
             $this->markTestSkipped(
-                'Schema File Update failed, ' . 
+                'Schema File Update failed, ' .
                 'skipping XML Schema tests'
             );
             return;
         }
-        
+
         $table = 'testxmltable_1';
         $fields = $this->db->MetaColumns($table);
-    
+
         $this->assertNotEmpty(
             $fields,
             'No fields found in the table'
         );
-        
+
         $this->assertArrayHasKey(
             'ID',
             $fields,
             'Field "id" not found in the table after update'
         );
-        
+
         $this->assertArrayHasKey(
             'JSON_FIELD_TO_ADD',
             $fields,
-            'Field "json_field_to_add" not found in the table. ' . 
+            'Field "json_field_to_add" not found in the table. ' .
             'Custom MetaType Update has failed'
         );
-
     }
-
-    
-
 }

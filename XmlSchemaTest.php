@@ -1,18 +1,19 @@
 <?php
+
 /**
  * Tests cases for XMLSchema functions of ADODb
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -36,7 +37,7 @@ class XmlSchemaTest extends ADOdbTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        
+
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
             return;
         }
@@ -44,9 +45,8 @@ class XmlSchemaTest extends ADOdbTestCase
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
         $GLOBALS['ADOdbConnection']->completeTrans();
-
     }
-    
+
     /**
      * Set up the test environment
      *
@@ -56,7 +56,7 @@ class XmlSchemaTest extends ADOdbTestCase
     {
 
         parent::setup();
-       
+
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
@@ -67,14 +67,12 @@ class XmlSchemaTest extends ADOdbTestCase
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
             return;
         }
-      
-        
+
+
          $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
-       
-        
     }
 
-    
+
     /**
      * Test the XML Schema creation
      *
@@ -92,10 +90,10 @@ class XmlSchemaTest extends ADOdbTestCase
         * a table using the XMLSchema functions
         */
         $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
-  
-        
-        $ok = $this->xmlSchema->parseSchema($schemaFile); 
-        
+
+
+        $ok = $this->xmlSchema->parseSchema($schemaFile);
+
         if (!$ok) {
             $this->assertTrue(
                 $ok,
@@ -107,11 +105,10 @@ class XmlSchemaTest extends ADOdbTestCase
         }
 
 
-        $ok = $this->xmlSchema->executeSchema(); 
+        $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
-        $this->assertSame
-        (
+        $this->assertSame(
             2, // Successful operations
             $ok,
             'XML Schema Creation failed'
@@ -120,21 +117,21 @@ class XmlSchemaTest extends ADOdbTestCase
             $this->markTestSkipped('Schema File Creation failed, skipping XML Schema tests');
             return;
         }
-        
+
         $table = 'testxmltable_1';
         $fields = $this->db->MetaColumns($table);
-    
+
         $this->assertNotEmpty(
             $fields,
             'No fields found in the table'
         );
-        
+
         $this->assertArrayHasKey(
             'ID',
             $fields,
             'Field "id" not found in the table'
         );
-        
+
         $this->assertArrayHasKey(
             'VARCHAR_FIELD',
             $fields,
@@ -152,7 +149,6 @@ class XmlSchemaTest extends ADOdbTestCase
             $fields,
             'Field "decimal_fields" not found in the table'
         );
-
     }
 
     /**
@@ -160,7 +156,8 @@ class XmlSchemaTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testXmlSchemaUpdate() :void {
+    public function testXmlSchemaUpdate(): void
+    {
 
         /**
          * Load the second file to test the XML Schema update
@@ -172,7 +169,7 @@ class XmlSchemaTest extends ADOdbTestCase
         );
 
 
-        $ok = $this->xmlSchema->parseSchema($schemaFile); 
+        $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
         if (!$ok) {
@@ -185,7 +182,7 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        $ok = $this->xmlSchema->executeSchema(); 
+        $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
         $this->assertSame(
@@ -193,22 +190,22 @@ class XmlSchemaTest extends ADOdbTestCase
             $ok,
             'XML Schema update failed after calling executeSchema()'
         );
-      
+
         /**
         * Test the update fields in the table
         */
-        
+
         $table = 'testxmltable_1';
         $fields = $this->db->MetaColumns($table);
-    
-  
+
+
         $this->assertArrayNotHasKey(
             'VARCHAR_FIELD_TO_DROP',
             $fields,
             'Field "varchar_field_to_drop" should not be found in the table'
         );
 
-        
+
         $this->assertArrayHasKey(
             'VARCHAR_FIELD_TO_ADD',
             $fields,
@@ -221,7 +218,8 @@ class XmlSchemaTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testXmlSchemaDrop(): void {
+    public function testXmlSchemaDrop(): void
+    {
 
         /**
          * Load the third file to drop the XML Schema update
@@ -232,8 +230,8 @@ class XmlSchemaTest extends ADOdbTestCase
             'Schema file does not exist: ' . $schemaFile
         );
 
-        
-        $ok = $this->xmlSchema->parseSchema($schemaFile); 
+
+        $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
         if (!$ok) {
@@ -246,7 +244,7 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        $ok = $this->xmlSchema->executeSchema(); 
+        $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
         $this->assertSame(
@@ -258,7 +256,7 @@ class XmlSchemaTest extends ADOdbTestCase
         /**
         * Test the table does not exist
         */
-            
+
         $tables = $this->db->metaTables();
 
         $this->assertNotContains(
@@ -266,7 +264,5 @@ class XmlSchemaTest extends ADOdbTestCase
             $tables,
             'table testxmltable_1 should not be found in the database'
         );
-
-    }   
-
+    }
 }

@@ -1,22 +1,24 @@
 <?php
+
 /**
  * This is the unittest connection bootstrap file
- * 
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ *
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
 namespace ADOdbUnitTest;
 
 require __DIR__ . '/ADOdbTestCase.php';
@@ -29,17 +31,17 @@ use PHPUnit\Framework\TestCase;
 /**
  * Reads an external SQL file and executes its statements against the database.
  * The format of the SQL file must match the database's SQL dialect.
- * 
+ *
  * @param object $db       The database connection object.
  * @param string $fileName The name of the SQL file to read.
- * 
+ *
  * @return void
  *
- * @example DatabaseSetup/db2/table-schema.sql 
+ * @example DatabaseSetup/db2/table-schema.sql
 */
-function readSqlIntoDatabase(object $db, string $fileName) : void
+function readSqlIntoDatabase(object $db, string $fileName): void
 {
-    
+
     if (!file_exists($fileName)) {
         die('Schema ' . $fileName . ' file for unit testing not found');
     }
@@ -48,14 +50,14 @@ function readSqlIntoDatabase(object $db, string $fileName) : void
     while ($filePointer && !feof($filePointer)) {
         $line = fgets($filePointer);
         $line = trim($line);
-        
+
         if (!$line) {
             continue; // skip empty lines
         }
-        
+
         if (substr($line, 0, 2) === '--') {
             continue; // skip comments
-        }   
+        }
 
         $executionPoint .= $line;
         if (preg_match('/;$/', $line)) {
@@ -64,10 +66,9 @@ function readSqlIntoDatabase(object $db, string $fileName) : void
                 $db->execute($executionPoint);
             }
             $executionPoint = ''; // reset for the next statement
-            continue; 
+            continue;
         }
         $executionPoint .= ' ';
-        
     }
     fclose($filePointer);
 }
@@ -82,14 +83,14 @@ if (!$iniFile) {
 $availableCredentials = parse_ini_file($iniFile, true);
 
 if (!array_key_exists('ADOdb', $availableCredentials)) {
-    /* 
-    * If the ADOdb section is not present, we assume the directory is the 
+    /*
+    * If the ADOdb section is not present, we assume the directory is the
     * parent of the current directory
     */
     $availableCredentials['ADOdb'] = array(
         'directory' => dirname(__DIR__),
         'casing' => 1, // 1= Upper Case
-        
+
     );
 }
 
@@ -100,13 +101,13 @@ if (!array_key_exists('casing', $ADOdbSettings)) {
 }
 
 if (!array_key_exists('blob', $availableCredentials)) {
-    die('blob section not found in adodb-unittest.ini.' . 
-        'See the documentation for details on how to set this up'
-    );
+    die('blob section not found in adodb-unittest.ini.' .
+        'See the documentation for details on how to set this up');
 }
 
 if (array_key_exists('xmlschema', $availableCredentials)) {
-    if (array_key_exists('debug' , $availableCredentials['xmlschema']) 
+    if (
+        array_key_exists('debug', $availableCredentials['xmlschema'])
         && $availableCredentials['xmlschema']['debug']
     ) {
         define('XMLS_DEBUG', 1);
@@ -117,25 +118,26 @@ $arTypeLoad = 'record';
 $GLOBALS['skipActiveRecordTests'] = 0;
 
 if (array_key_exists('activerecord', $availableCredentials)) {
-
-    if (array_key_exists('skipTests' , $availableCredentials['activerecord']) 
+    if (
+        array_key_exists('skipTests', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['skipTests']
     ) {
         $GLOBALS['skipActiveRecordTests'] = 1;
     }
 
-    if (array_key_exists('extended' , $availableCredentials['activerecord']) 
+    if (
+        array_key_exists('extended', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['extended']
     ) {
         $arTypeLoad = 'recordx';
     }
     $arInclude = "/adodb-active-$arTypeLoad.inc.php";
-    if (array_key_exists('debug' , $availableCredentials['xmlschema']) 
+    if (
+        array_key_exists('debug', $availableCredentials['xmlschema'])
         && $availableCredentials['xmlschema']['debug']
     ) {
         //define('XMLS_DEBUG', 1);
     }
-    
 } else {
     $GLOBALS['skipActiveRecordTests'] = 1;
 }
@@ -156,7 +158,7 @@ define('ADODB_ASSOC_CASE', $ADOdbSettings['casing']);
 * First try to use the active flag in the ini file because
 * Version 12 of PHPUnit does not support the unnammed parameters
 */
-foreach ($availableCredentials as $driver=>$driverOptions) {
+foreach ($availableCredentials as $driver => $driverOptions) {
     if (isset($driverOptions['active']) && $driverOptions['active']) {
         $adoDriver = $driver;
         break;
@@ -164,7 +166,6 @@ foreach ($availableCredentials as $driver=>$driverOptions) {
 }
 
 if (!$adoDriver) {
- 
     $o = (preg_grep('/dbconnector/', $argv));
 
     if ($o) {
@@ -174,8 +175,8 @@ if (!$adoDriver) {
     /*
     * See if there is an unnamed parameter
     */
-    $o = array_keys($o);
-    $oIndex = $o[0] + 1;
+        $o = array_keys($o);
+        $oIndex = $o[0] + 1;
 
     //if (!array_key_exists($oIndex, $argv)) {
       //  die('The dbconnector argument must be followed by the name of the driver');
@@ -185,11 +186,10 @@ if (!$adoDriver) {
     * the driver name is the next argument
     */
 
-    $adoDriver = strtolower($argv[$oIndex] ?? '');
+        $adoDriver = strtolower($argv[$oIndex] ?? '');
 
-    unset($argv[$oIndex]);
+        unset($argv[$oIndex]);
     }
-
 }
 
 /*
@@ -197,7 +197,7 @@ if (!$adoDriver) {
 */
 
 if (!isset($availableCredentials[$adoDriver])) {
-    die('login credentials not available for driver ' . $adoDriver); 
+    die('login credentials not available for driver ' . $adoDriver);
 }
 
 /*
@@ -206,25 +206,24 @@ if (!isset($availableCredentials[$adoDriver])) {
 $iniParams = $availableCredentials['globals'];
 if (is_array($iniParams)) {
     foreach ($iniParams as $key => $value) {
-                
         ini_set($key, $value);
     }
 }
 
 
 $template = array(
-    'dsn'=>'',
-    'host'=>null,
-    'user'=>null,
-    'password'=>null,
-    'database'=>null,
-    'parameters'=>null,
-    'debug'=>0
+    'dsn' => '',
+    'host' => null,
+    'user' => null,
+    'password' => null,
+    'database' => null,
+    'parameters' => null,
+    'debug' => 0
 );
 
 
 $credentials = array_merge(
-    $template, 
+    $template,
     $availableCredentials[$adoDriver]
 );
 
@@ -234,16 +233,17 @@ $db = newAdoConnection($loadDriver);
 $db->debug = $credentials['debug'];
 
 if ($credentials['parameters']) {
-
     $p = explode(';', $credentials['parameters']);
     $p = array_filter($p);
     foreach ($p as $param) {
         $scp = explode('=', $param);
-        if (preg_match('/^[0-9]+$/', $scp[0]))
+        if (preg_match('/^[0-9]+$/', $scp[0])) {
             $scp[0] = (int)$scp[0];
-        if (preg_match('/^[0-9]+$/', $scp[1]))
+        }
+        if (preg_match('/^[0-9]+$/', $scp[1])) {
             $scp[1] = (int)$scp[1];
-        
+        }
+
         $db->setConnectionParameter($scp[0], $scp[1]);
     }
 }
@@ -283,8 +283,8 @@ $GLOBALS['globalTransOff']  = 0;
 //$db->startTrans();
 
 $tableSchema = sprintf(
-    '%s/DatabaseSetup/%s/table-schema.sql', 
-    dirname(__FILE__), 
+    '%s/DatabaseSetup/%s/table-schema.sql',
+    dirname(__FILE__),
     $adoDriver
 );
 
@@ -310,31 +310,33 @@ readSqlIntoDatabase($db, $table3Data);
 $GLOBALS['ADOdataDictionary'] = NewDataDictionary($db);
 
 $ADODB_CACHE_DIR = '';
-if (array_key_exists('caching', $availableCredentials)) {   
-
+if (array_key_exists('caching', $availableCredentials)) {
     $cacheParams = $availableCredentials['caching'];
     switch ($cacheParams['cacheMethod'] ?? 0) {
-    case 1:
-        $ADODB_CACHE_DIR = $cacheParams['cacheDir'] ?? '';
-        break;
-    case 2:
-        $db->memCache     = true;
-        $db->memCacheHost = $cacheParams['cacheHost'];
-        $db->memCachePort = 11211;
-        break;
+        case 1:
+            $ADODB_CACHE_DIR = $cacheParams['cacheDir'] ?? '';
+            break;
+        case 2:
+            $db->memCache     = true;
+            $db->memCacheHost = $cacheParams['cacheHost'];
+            $db->memCachePort = 11211;
+            break;
     }
 }
 
 if ($GLOBALS['skipActiveRecordTests'] == 0) {
     $_ADODB_ACTIVE_DBS = array();
-    class person extends \ADOdb_Active_Record{}
-    class child  extends \ADOdb_Active_Record{}
+    class person extends \ADOdb_Active_Record
+    {
+    }
+    class child extends \ADOdb_Active_Record
+    {
+    }
 
     $GLOBALS['person']   = new person(false, false, $db);
     $GLOBALS['child']    = new child('children', array('id'), $db);
-    
-    ADODB_SetDatabaseAdapter($db);
 
+    ADODB_SetDatabaseAdapter($db);
 }
 
 /**

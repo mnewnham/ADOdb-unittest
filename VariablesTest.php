@@ -1,18 +1,19 @@
 <?php
+
 /**
  * Tests cases for variables and constants of ADODb
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -40,30 +41,30 @@ class VariablesTest extends ADOdbTestCase
      * Tests if the isConnected method works
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:isconnected
-     * 
+     *
      * @return void
      */
-    public function testIsConnected(): void 
+    public function testIsConnected(): void
     {
         $isConnected = $this->db->isConnected();
 
         $this->assertSame(
             true,
-            $isConnected, 
+            $isConnected,
             'A connected database should return true from the isConnected() method'
         );
     }
-    
+
     /**
      * Test for {@see $ADODB_QUOTE_FIELDNAMES}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_quote_fieldnames
-     * 
+     *
      * @return void
      */
     public function testQuotingExecute(): void
     {
-       
+
         global $ADODB_QUOTE_FIELDNAMES;
 
         $ADODB_QUOTE_FIELDNAMES = false;
@@ -72,18 +73,18 @@ class VariablesTest extends ADOdbTestCase
         */
 
         $quotedTable = sprintf(
-            '%s%s%s', 
-            $this->db->nameQuote, 
+            '%s%s%s',
+            $this->db->nameQuote,
             $this->testTableName,
             $this->db->nameQuote
         );
 
-        
+
         $sql = "SELECT * FROM $quotedTable WHERE {$this->testIdColumnName}=-1";
 
         list($template, $errno, $errmsg) = $this->executeSqlString($sql);
-       
-       
+
+
         $ar = array(
             'column_name' => 'Sample data'
         );
@@ -100,7 +101,7 @@ class VariablesTest extends ADOdbTestCase
 
         $this->assertSame(
             false,
-            $success, 
+            $success,
             'Data insertion should not succeed using Unquoted field and table names'
         );
 
@@ -108,11 +109,11 @@ class VariablesTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
-            0, 
-            $count, 
+            0,
+            $count,
             'Data insertion should not have succeeded using Unquoted field and table names'
         );
-        
+
         /*
         * Now activate the quoting of field and table names
         */
@@ -125,14 +126,13 @@ class VariablesTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         list($success, $errno, $errmsg) = $this->executeSqlString($sql);
-
     }
 
     /**
      * Test for {@see $ADODB_FETCH_MODE}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_fetch_mode
-     * 
+     *
      * @return void
      */
     public function testFetchMode(): void
@@ -141,30 +141,29 @@ class VariablesTest extends ADOdbTestCase
 
         $caseDescription = 'NOT SET';
         switch (ADODB_ASSOC_CASE) {
-        case ADODB_ASSOC_CASE_UPPER:
-            $expectedResult = 'ID';
-            $caseDescription = 'ADODB_ASSOC_CASE_UPPER';
-            break;
-        case ADODB_ASSOC_CASE_LOWER:
-            $caseDescription = 'ADODB_ASSOC_CASE_LOWER';
-            $expectedResult = 'id';
-            break;
+            case ADODB_ASSOC_CASE_UPPER:
+                $expectedResult = 'ID';
+                $caseDescription = 'ADODB_ASSOC_CASE_UPPER';
+                break;
+            case ADODB_ASSOC_CASE_LOWER:
+                $caseDescription = 'ADODB_ASSOC_CASE_LOWER';
+                $expectedResult = 'id';
+                break;
 
-        case ADODB_ASSOC_CASE_NATURAL:
-            $expectedResult = 'id';
-            $caseDescription = 'ADODB_ASSOC_CASE_NATURAL';
-            break;
-
+            case ADODB_ASSOC_CASE_NATURAL:
+                $expectedResult = 'id';
+                $caseDescription = 'ADODB_ASSOC_CASE_NATURAL';
+                break;
         }
 
         $fetchMode = $ADODB_FETCH_MODE;
         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-        
+
         /*
         * Fetch a template row from the table
         */
         $sql = "SELECT * FROM {$this->testTableName}";
-        
+
         $testRow = $this->db->getRow($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -172,7 +171,7 @@ class VariablesTest extends ADOdbTestCase
             $expectedResult,
             $testRow,
             sprintf(
-                "With casing set to %s and fetch mode set to ADODB_FETCH_ASSOC,\n" . 
+                "With casing set to %s and fetch mode set to ADODB_FETCH_ASSOC,\n" .
                 "row should have an [%s] column",
                 $caseDescription,
                 $expectedResult
@@ -191,9 +190,9 @@ class VariablesTest extends ADOdbTestCase
 
         $this->assertArrayHasKey(
             $expectedResult,
-            $testRow, 
+            $testRow,
             sprintf(
-                "With casing set to %s and fetch mode set to ADODB_FETCH_NUM,\n" . 
+                "With casing set to %s and fetch mode set to ADODB_FETCH_NUM,\n" .
                 "row should have an array index [%s] column",
                 $caseDescription,
                 $expectedResult
@@ -209,9 +208,9 @@ class VariablesTest extends ADOdbTestCase
 
         $this->assertArrayHasKey(
             $expectedResult,
-            $testRow, 
+            $testRow,
             sprintf(
-                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" . 
+                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" .
                 "row should have an array index [%s] column",
                 $caseDescription,
                 $expectedResult
@@ -222,34 +221,34 @@ class VariablesTest extends ADOdbTestCase
             $expectedResult,
             $testRow,
             sprintf(
-                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" . 
+                "With casing set to %s and fetch mode set to ADODB_FETCH_BOTH,\n" .
                 "row should also have an [%s] column",
                 $caseDescription,
                 $expectedResult
             )
         );
-    
+
         $this->db->setFetchMode($fetchMode);
     }
 
     /**
      * Test for {@see $ADODB_GETONE_EOF}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_getone_eof
-     * 
+     *
      * @return void
      */
     public function testGetOneEof(): void
     {
         global $ADODB_GETONE_EOF;
-     
+
         $sql = 'select varchar_field from testtable_1 where id=9999';
         $test = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
-            $test, 
-            false, 
+            $test,
+            false,
             'getOne by default should return false when no row is found'
         );
 
@@ -263,27 +262,26 @@ class VariablesTest extends ADOdbTestCase
             -1,
             'getOne should now flag by -1 when no row is found'
         );
-
     }
     /**
      * Test for {@see $ADODB_COUNTRECS}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_countrecs
-     * 
+     *
      * @return void
-     */ 
+     */
     public function testCountRecsUsingCountRecsFalse(): void
-    {   
+    {
         global $ADODB_COUNTRECS;
         $ADODB_COUNTRECS = false; // Set to true by default
-        
+
         $sql = 'select varchar_field from testtable_1 where id<9999';
-        
+
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $this->assertEquals(
             -1,
-            $result->recordCount(), 
+            $result->recordCount(),
             'With ADODB_COUNTRECS set to false, the record count should be -1'
         );
 
@@ -292,13 +290,13 @@ class VariablesTest extends ADOdbTestCase
 
     /**
      * Test for {@see $ADODB_COUNTRECS}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_countrecs
-     * 
+     *
      * @return void
-     */ 
+     */
     public function testCountRecsUsingCountRecsTrue(): void
-    {   
+    {
         global $ADODB_COUNTRECS;
         $ADODB_COUNTRECS = true; // Set to true by default
 
@@ -308,17 +306,17 @@ class VariablesTest extends ADOdbTestCase
         $countedRecords = $this->db->getOne($sql);
         $this->db->completeTrans();
 
- 
+
         $sql = "SELECT * FROM testtable_3";
-                
+
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $this->assertEquals(
             $countedRecords,
-            $result->recordCount(), 
+            $result->recordCount(),
             'With ADODB_COUNTRECS set to true, the record count should be ' . $countedRecords
-        );     
-        
+        );
+
         $result->fetchRow();
     }
 
@@ -327,7 +325,8 @@ class VariablesTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testCharMax(): void {
+    public function testCharMax(): void
+    {
 
         $value = $this->db->charMax();
 
@@ -342,7 +341,8 @@ class VariablesTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testTextMax(): void {
+    public function testTextMax(): void
+    {
 
         $value = $this->db->textMax();
 
@@ -351,5 +351,4 @@ class VariablesTest extends ADOdbTestCase
             'textMax() should return an integer value'
         );
     }
-
 }

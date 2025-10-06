@@ -1,20 +1,21 @@
 <?php
+
 /**
  * Tests cases for the mysqli driver of ADOdb.
  * Try to write database-agnostic tests where possible. Use the
  * driver-specific include if not possible
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -60,28 +61,28 @@ class ADOdbTestCase extends TestCase
         ADODB_FETCH_ASSOC => 'ADODB_FETCH_ASSOC',
         ADODB_FETCH_BOTH  => 'ADODB_FETCH_BOTH'
     ];
-    
+
     /**
      * Instantiates new ADOdb connection to flush every test
      *
      * @return object
      */
-    public function establishDatabaseConnector() : object
+    public function establishDatabaseConnector(): object
     {
-        
+
         $template = array(
-            'dsn'=>'',
-            'host'=>null,
-            'user'=>null,
-            'password'=>null,
-            'database'=>null,
-            'parameters'=>null,
-            'debug'=>0
+            'dsn' => '',
+            'host' => null,
+            'user' => null,
+            'password' => null,
+            'database' => null,
+            'parameters' => null,
+            'debug' => 0
         );
 
 
         $credentials = array_merge(
-            $template, 
+            $template,
             $GLOBALS['TestingControl'][$GLOBALS['loadDriver']]
         );
 
@@ -91,16 +92,17 @@ class ADOdbTestCase extends TestCase
         $db->debug = $credentials['debug'];
 
         if ($credentials['parameters']) {
-
             $p = explode(';', $credentials['parameters']);
             $p = array_filter($p);
             foreach ($p as $param) {
                 $scp = explode('=', $param);
-                if (preg_match('/^[0-9]+$/', $scp[0]))
+                if (preg_match('/^[0-9]+$/', $scp[0])) {
                     $scp[0] = (int)$scp[0];
-                if (preg_match('/^[0-9]+$/', $scp[1]))
+                }
+                if (preg_match('/^[0-9]+$/', $scp[1])) {
                     $scp[1] = (int)$scp[1];
-                
+                }
+
                 $db->setConnectionParameter($scp[0], $scp[1]);
             }
         }
@@ -124,7 +126,7 @@ class ADOdbTestCase extends TestCase
         if (!$db->isConnected()) {
             die(
                 sprintf(
-                    '%s database connection not established', 
+                    '%s database connection not established',
                     $GLOBALS['adoDriver']
                 )
             );
@@ -146,14 +148,12 @@ class ADOdbTestCase extends TestCase
         if ($this->createNewConnection) {
             $this->db             = $this->establishDatabaseConnector();
             $this->dataDictionary = NewDataDictionary($this->db);
-
         } else {
             $this->db             = $GLOBALS['ADOdbConnection'];
             $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
         }
-        
     }
-    
+
     /**
      * Tear down the test environment
      *
@@ -161,27 +161,26 @@ class ADOdbTestCase extends TestCase
      */
     public function tearDown(): void
     {
-        
     }
 
     /**
-     * Exwcutes an SQL statement within a transaction and returns 
+     * Exwcutes an SQL statement within a transaction and returns
      * the result plus any message if it fails
      *
      * @param string     $sql          The SQL to execute
      * @param array|null $bind         Optional bind parameters
      * @param bool       $transactions Optional Use transactions
-     * 
+     *
      * @return array
      */
     public function executeSqlString(
-        string $sql, 
-        ?array $bind=null, 
-        bool $transactions=true
-    ) : array {
+        string $sql,
+        ?array $bind = null,
+        bool $transactions = true
+    ): array {
 
         $db = $this->db;
-        
+
         if ($transactions) {
             $db->startTrans();
         }
@@ -207,17 +206,16 @@ class ADOdbTestCase extends TestCase
             0,
             $errno,
             sprintf(
-                'ADOdb string execution of SQL %s%s ' . 
+                'ADOdb string execution of SQL %s%s ' .
                 'should not return error: %d - %s',
                 $sql,
                 $params,
                 $errno,
                 $errmsg
-            )    
+            )
         );
 
         return array($result,$errno,$errmsg);
-
     }
 
     /**
@@ -226,16 +224,16 @@ class ADOdbTestCase extends TestCase
      * @param string $sql         The statement executed
      * @param ?array $bind        Optional Bind
      * @param bool   $expectError Should an error be thrown
-     * 
+     *
      * @return array
      */
     public function assertADOdbError(
-        string $sql, 
-        mixed $bind=false, 
-        bool $expectError=false
-    ) : array {
+        string $sql,
+        mixed $bind = false,
+        bool $expectError = false
+    ): array {
 
-      
+
         $db = $this->db;
 
         $errno  = $db->errorNo();
@@ -246,7 +244,7 @@ class ADOdbTestCase extends TestCase
 
         $transOff = $db->transOff;
 
-        
+
         $params = '';
         if ($bind) {
             $params = ' [' . implode(' , ', $bind) . ']';
@@ -262,7 +260,7 @@ class ADOdbTestCase extends TestCase
                     $params,
                     $errno,
                     $errmsg
-                )    
+                )
             );
         } else {
             $this->assertEquals(
@@ -274,12 +272,11 @@ class ADOdbTestCase extends TestCase
                     $params,
                     $errno,
                     $errmsg
-                )    
+                )
             );
         }
 
         if ($GLOBALS['globalTransOff'] < $transOff) {
-
             $this->assertTrue(
                 $transOff < 2,
                 sprintf(
@@ -288,32 +285,29 @@ class ADOdbTestCase extends TestCase
                     $GLOBALS['globalTransOff']
                 )
             );
-         
         }
         $GLOBALS['globalTransOff'] = $transOff;
-        
+
         return array($errno,$errmsg);
-
-
     }
 
     /**
-     * Exwcutes an SQL statement within a transaction and returns 
+     * Exwcutes an SQL statement within a transaction and returns
      * the result plus any message if it fails
      *
      * @param array      $sqlArray The SQL to execute
      * @param array|null $bind     Optional bind parameters
-     * 
+     *
      * @return array
      */
     public function executeDictionaryAction(
-        array $sqlArray, 
-        ?array $bind=null
-    ) : array {
-    
+        array $sqlArray,
+        ?array $bind = null
+    ): array {
+
         $db = $this->db;
         $dictionary = $this->dataDictionary;
-        
+
         $db->startTrans();
 
         if ($bind) {
@@ -327,7 +321,7 @@ class ADOdbTestCase extends TestCase
 
         $db->completeTrans();
 
-        
+
         $params = '';
         if ($bind) {
             $params = ' [' . implode(' , ', $bind) . ']';
@@ -342,10 +336,9 @@ class ADOdbTestCase extends TestCase
                 $params,
                 $errno,
                 $errmsg
-            )    
+            )
         );
 
         return array($result,$errno,$errmsg);
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tests cases for core move() methods on an empty recordset
  *

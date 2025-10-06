@@ -1,18 +1,19 @@
 <?php
+
 /**
  * Tests cases for DB Independent String manipulation functions of ADODb
  *
- * This file is part of ADOdb-unittest, a PHPUnit test suite for 
+ * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
  * PHP version 8.0.0+
- * 
+ *
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
  * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
- * 
+ *
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
@@ -27,10 +28,9 @@ use PHPUnit\Framework\TestCase;
 */
 class DbStringFunctionsTest extends ADOdbTestCase
 {
-        
     /**
      * Test for {@see ADODConnection::qstr()}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:qstr
      *
      * @return void
@@ -49,21 +49,21 @@ class DbStringFunctionsTest extends ADOdbTestCase
         * the total number of rows updated is correct
         */
         $SQL = "UPDATE testtable_3 SET empty_field = null";
-        
+
         list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
 
         if ($errno > 0) {
             return;
         }
-        
+
         $SQL = "UPDATE testtable_3 SET empty_field = {$this->db->qstr($testString)}";
-        
+
         list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
 
         if ($errno > 0) {
             return;
         }
-        
+
         $expectedValue = 11;
         $actualValue = $this->db->Affected_Rows();
 
@@ -73,7 +73,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
         // We should have updated 11 rows
         $this->assertSame(
             $expectedValue,
-            $actualValue, 
+            $actualValue,
             'All rows should have been updated with the test string'
         );
 
@@ -84,32 +84,31 @@ class DbStringFunctionsTest extends ADOdbTestCase
         $returnValue = $this->db->getOne($sql);
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-        
+
         $this->db->CompleteTrans();
         if ($errno > 0) {
             return;
         }
-   
-        
+
+
         $testResult = preg_match('/^(Famed author James O)[\\\'](\'Sullivan)$/', $returnValue);
-                
+
         $this->assertSame(
-            true, 
-            $testResult, 
+            true,
+            $testResult,
             'Qstr should have returned a string with the apostrophe escaped'
         );
-            
     }
-    
+
     /**
      * Test for {@see ADODConnection::addq()}
-     * 
+     *
      * @link   https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:addq
      * @return void
      */
     public function testAddq(): void
     {
-        
+
         /*
         * The expected result is db dependent, so we will
         * insert the string into the empty_field column
@@ -122,7 +121,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
         );
 
         $sql = "UPDATE testtable_3 SET empty_field = $p1";
-        
+
         list($result, $errno, $errmsg) = $this->executeSqlString($sql, $bind);
 
         if ($errno > 0) {
@@ -133,10 +132,10 @@ class DbStringFunctionsTest extends ADOdbTestCase
 
         list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
 
-       
+
         // We should have updated 11 rows
         $this->assertSame(
-            11, 
+            11,
             $affectedRows,
             'All rows should have been updated with the test string'
         );
@@ -154,27 +153,26 @@ class DbStringFunctionsTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $testResult = preg_match('/^(Famed author James O)[\\\'](\'Sullivan)$/', $returnValue);
-                
+
         $this->assertSame(
-            true, 
-            $testResult, 
+            true,
+            $testResult,
             'addQ should have returned a string with the apostrophe escaped'
         );
-            
     }
-    
+
     /**
      * Test for {@see ADODConnection::concat()}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:concat
-     * 
+     *
      * @dataProvider providerTestConcat
-     * 
+     *
      * @return void
      */
     public function testConcat(int $fetchMode, string $firstColumn, string $secondColumn): void
     {
-        
+
         /*
         * Find a record that has a varchar_field value
         */
@@ -197,7 +195,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
 
         $field = $this->db->Concat('varchar_field', "'|'", 'varchar_field');
         list($errno, $errmsg) = $this->assertADOdbError('concat()');
-        
+
         $sql = "SELECT $field 
                   FROM testtable_1 
                  WHERE number_run_field={$row[$firstColumn]}";
@@ -213,7 +211,6 @@ class DbStringFunctionsTest extends ADOdbTestCase
         );
 
         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-            
     }
 
     /**
@@ -223,62 +220,58 @@ class DbStringFunctionsTest extends ADOdbTestCase
      */
     public function providerTestConcat(): array
     {
-        
+
         switch (ADODB_ASSOC_CASE) {
             case ADODB_ASSOC_CASE_UPPER:
-            
-            return [
-                'FETCH_ASSOC,ASSOC_CASE_UPPER' => 
+                return [
+                'FETCH_ASSOC,ASSOC_CASE_UPPER' =>
                 array(
-                    ADODB_FETCH_ASSOC, 
+                    ADODB_FETCH_ASSOC,
                     'NUMBER_RUN_FIELD',
                     'VARCHAR_FIELD',
                 ),
                 'FETCH_NUM,ASSOC_CASE_UPPER' =>
                 array(
-                    0=>ADODB_FETCH_NUM, 
-                    1=>"0",
-                    2=>"1"
-                
+                    0 => ADODB_FETCH_NUM,
+                    1 => "0",
+                    2 => "1"
+
                 )
             ];
             break;
-            
+
             case ADODB_ASSOC_CASE_LOWER:
             default:
-            
-            return [
+                return [
                 'FETCH_ASSOC,ASSOC_CASE_LOWER' => [
-                    ADODB_FETCH_ASSOC, 
+                    ADODB_FETCH_ASSOC,
                     'number_run_field',
                     'varchar_field',
                 ],
                 'FETCH_NUM,ASSOC_CASE_UPPER' => [
-                    0=>ADODB_FETCH_NUM, 
-                    1=>"0",
-                    2=>"1"
+                    0 => ADODB_FETCH_NUM,
+                    1 => "0",
+                    2 => "1"
                 ]
             ];
- 
-            break;
 
+            break;
         }
-       
     }
 
     /**
      * Test for {@see ADODConnection::ifNull()}
-     * 
+     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:ifnull
-     * 
+     *
      * @dataProvider providerTestIfnull
-     * 
+     *
      * @return void
      */
     public function testIfNull(int $fetchMode, string $firstColumn, string $secondColumn): void
     {
 
-        
+
 
         $this->db->setFetchMode($fetchMode);
 
@@ -288,7 +281,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
 
         $row = $this->db->getRow($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-       
+
         /*
         * Set up a test record that has a NULL value
         */
@@ -304,15 +297,15 @@ class DbStringFunctionsTest extends ADOdbTestCase
         /*
         * Now get a weird value back from the ifnull function
         */
-       
+
         $sql = "SELECT {$this->db->ifNull('decimal_field', 8675304)} 
                   FROM testtable_1 
                  WHERE number_run_field={$row[$firstColumn]}";
 
         $expectedResult = (float)$this->db->getOne($sql);
-        
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-        
+
         $this->assertEquals(
             8675304,
             $expectedResult,
@@ -327,9 +320,8 @@ class DbStringFunctionsTest extends ADOdbTestCase
                  WHERE number_run_field={$row[$firstColumn]}";
 
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
-             
+
         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-            
     }
 
     /**
@@ -339,43 +331,40 @@ class DbStringFunctionsTest extends ADOdbTestCase
      */
     public function providerTestIfnull(): array
     {
-        
-        
+
+
         switch (ADODB_ASSOC_CASE) {
             case ADODB_ASSOC_CASE_UPPER:
-            return [
+                return [
                 'FETCH_ASSOC,ASSOC_CASE_UPPER' => [
-                    ADODB_FETCH_ASSOC, 
+                    ADODB_FETCH_ASSOC,
                     'NUMBER_RUN_FIELD',
                     'DECIMAL_FIELD',
                 ],
                 'FETCH_NUM,ASSOC_CASE_UPPER' => [
-                    0=>ADODB_FETCH_NUM, 
-                    1=>"0",
-                    2=>"1"
-    
+                    0 => ADODB_FETCH_NUM,
+                    1 => "0",
+                    2 => "1"
+
                 ]
             ];
             break;
             case ADODB_ASSOC_CASE_LOWER:
             default:
-            return [
+                return [
                 'FETCH_ASSOC,ASSOC_CASE_LOWER' => [
-                    ADODB_FETCH_ASSOC, 
+                    ADODB_FETCH_ASSOC,
                     'number_run_field',
                     'decimal_field',
                 ],
                 'FETCH_NUM,ASSOC_CASE_UPPER' => [
-                    0=>ADODB_FETCH_NUM, 
-                    1=>"0",
-                    2=>"1"
+                    0 => ADODB_FETCH_NUM,
+                    1 => "0",
+                    2 => "1"
 
                 ]
             ];
             break;
-
         }
-       
     }
-
 }
