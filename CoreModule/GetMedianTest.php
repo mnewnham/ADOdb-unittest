@@ -45,15 +45,19 @@ class GetMedianTest extends ADOdbCoreSetup
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getmedian
      */
     public function testGetMedian(
-        string $expectedValue, 
+        mixed $expectedValue, 
         string $table, 
         string $column,
         mixed $where
     ): void {
     
+        
         foreach ($this->testFetchModes as $fetchMode=>$fetchDescription) {
         
             $this->db->startTrans();
+            
+            $this->db->setFetchMode($fetchMode);
+
             $actualValue = $this->db->getMedian($table, $column, $where);
 
             list($errno,$errmsg) = $this->assertADOdbError('getMedian()');
@@ -93,13 +97,19 @@ class GetMedianTest extends ADOdbCoreSetup
                 '8', 
                 'testtable_3',
                 'number_run_field',
-               'where id>4'
+               'WHERE id>4'
             ],
             'Return testtable_3, number_run_field, id<0' => [
-                '0', 
+                false, 
                 'testtable_3',
                 'number_run_field',
-               'where id<0'
+               'WHERE id<0'
+            ],
+            'Return testtable_3, varchar_field' => [
+                'LINE 4', 
+                'testtable_3',
+                'varchar_field',
+               'WHERE id>0 ORDER BY varchar_field'
             ],
         ];
     }
