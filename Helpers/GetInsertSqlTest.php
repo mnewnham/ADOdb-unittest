@@ -323,7 +323,9 @@ class GetInsertSqlTest extends ADOdbTestCase
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $lastRecord = $this->db->getRow($sql);
 
+            $sql = "SELECT * FROM {$this->testTableName} WHERE id=-1";
 
+            list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
             $ar = array(
                 'varchar_field' => 'GETINSERTSQL\'4' . $fetchMode,
