@@ -104,12 +104,17 @@ class CacheSqlTest extends ADOdbTestCase
             $this->markTestSkipped('Skipping tests as caching not configured');
         }
 
-        if ($this->createNewConnection == false) {
-            return;
-        }
-
         /*
-        * Reactivates the caching against the newly created $db
+        * reset the value of line 3 at the start of each test
+        */
+        $rewriteSql = "UPDATE testtable_3 
+                          SET varchar_field = 'LINE 3'
+                        WHERE number_run_field = 3";
+
+        list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
+        
+        /*
+        * activate the caching against the $db
         */
         switch ($cacheMethod) {
             case 1:
@@ -121,6 +126,8 @@ class CacheSqlTest extends ADOdbTestCase
                 $this->db->memCachePort = 11211;
                 break;
         }
+
+        
     }
 
     /**
@@ -700,6 +707,8 @@ class CacheSqlTest extends ADOdbTestCase
             $this->markTestSkipped('Skipping tests as caching not configured');
             return;
         }
+
+        global $ADODB_CACHE_DIR;
 
         $this->db->setFetchMode($fetchMode);
 
