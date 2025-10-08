@@ -122,6 +122,11 @@ class ObjectTest extends ADOdbTestCase
     public function testFetchFirstObj(): void
     {
 
+        /*
+        * Must put the record pointer in place first
+        */
+        $this->fetchRecordSet->move(0);
+
         $object = $this->fetchRecordSet->fetchObj();
 
         $this->assertIsObject(
