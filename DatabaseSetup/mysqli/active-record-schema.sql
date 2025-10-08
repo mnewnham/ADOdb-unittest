@@ -9,7 +9,7 @@ CREATE TABLE persons (
     name_last VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
     PRIMARY KEY  (id)
-);
+) ENGINE=INNODB;
 
 CREATE TABLE children (
     id INT NOT NULL AUTO_INCREMENT,
@@ -18,4 +18,4 @@ CREATE TABLE children (
     name_last VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
     PRIMARY KEY (id)
-);
+) ENGINE=INNODB;

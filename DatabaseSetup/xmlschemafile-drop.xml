@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <schema version="0.3">
-  <table name="testxmltable_1">
-    <drop/>
-    <descr>Dropping A test table for xmlschema unit testing</descr>
-  </table>
-    
-</schema>	
+    <table name="testxmltable_1">
+        <drop/>
+        <descr>Dropping A test table for xmlschema unit testing</descr>
+    </table>
+</schema>

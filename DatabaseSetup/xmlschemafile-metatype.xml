@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <schema version="0.3">
-  <table name="testxmltable_1">
-    <descr>A test table for xmlschema unit testing</descr>
-    <field name="id" type="I">
-        <descr>A unique ID assigned to each record.</descr>
-        <KEY/>
-        <AUTOINCREMENT/>
-    </field> 
-    <field name="integer_field" type="I8" default="999"></field>
-    <descr>The custom JSON [J] Metatype must be preloaded</descr> 
-    <field name="json_field_to_add" type="J"></field>
+    <table name="testxmltable_1">
+        <opt platform="mysql">TYPE=INNODB</opt>
+        <descr>A test table for xmlschema unit testing</descr>
+        <field name="id" type="I">
+            <descr>A unique ID assigned to each record.</descr>
+            <KEY/>
+            <AUTOINCREMENT/>
+        </field> 
+        <field name="integer_field" type="I8" default="999"></field>
+        <descr>The custom JSON [J] Metatype must be preloaded</descr> 
+        <field name="json_field_to_add" type="J"></field>
 
-    <index name="integer_field_index">
-        <descr>Put a unique index on the integer_field</descr> 
-        <col>integer_field</col>
-        <UNIQUE/>
-    </index>
+        <index name="integer_field_index">
+            <descr>Put a unique index on the integer_field</descr> 
+            <col>integer_field</col>
+            <UNIQUE/>
+        </index>
     </table>
 </schema>	

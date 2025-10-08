@@ -30,7 +30,7 @@ CREATE TABLE testtable_1 (
 	UNIQUE INDEX vdx1 (varchar_field),
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
-);
+) ENGINE=INNODB;
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table
 CREATE TABLE testtable_2 (
@@ -41,7 +41,7 @@ CREATE TABLE testtable_2 (
 	tt_id INTEGER NOT NULL,
 	PRIMARY KEY(id),
     FOREIGN KEY (tt_id,integer_field) REFERENCES testtable_1(id,integer_field)
-);
+) ENGINE=INNODB;
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 -- It must be innodb else we cannot test transaction scoping
@@ -67,4 +67,4 @@ CREATE TABLE `table_name` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`column_name` VARCHAR(20),
 	PRIMARY KEY(`id`)
-);
+) ENGINE=INNODB;
