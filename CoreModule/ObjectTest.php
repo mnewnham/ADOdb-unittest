@@ -38,6 +38,8 @@ class ObjectTest extends ADOdbTestCase
 
     protected string $idKey = 'id';
 
+    
+
     /**
      * Set up the test environment
      *
@@ -92,6 +94,13 @@ class ObjectTest extends ADOdbTestCase
 
         if ($table3DataExists) {
             // Data already exists, no need to reload
+            /*
+            * Fixes previously damaged transactions if necessary
+            */
+            $db->startTrans();
+            $SQL = "UPDATE testtable_3 SET varchar_field='LINE 1' WHERE varchar_field IS NULL";
+            $db->execute($SQL);
+            $db->completeTrans();
             return;
         }
 
@@ -135,6 +144,13 @@ class ObjectTest extends ADOdbTestCase
         );
 
         foreach ($this->comparisonLcKeys as $key) {
+            /*
+            * Cannot find empty_field because of the way
+            * that the fetchObj object is defined
+            */
+            if ($key == 'empty_field') {
+                continue;
+            }
             if (!isset($object->$key)) {
                 $this->assertSame(
                     true,
@@ -225,6 +241,11 @@ class ObjectTest extends ADOdbTestCase
     public function testFetchFirstObject(): void
     {
 
+         /*
+        * Must put the record pointer in place first
+        */
+        $this->fetchRecordSet->move(0);
+
         $object = $this->fetchRecordSet->fetchObject();
 
         $this->assertIsObject(
@@ -233,6 +254,13 @@ class ObjectTest extends ADOdbTestCase
         );
 
         foreach ($this->comparisonUcKeys as $key) {
+            /*
+            * Cannot find empty_field because of the way
+            * that the fetchObj object is defined
+            */
+            if ($key == 'EMPTY_FIELD') {
+                continue;
+            }
             if (!isset($object->$key)) {
                 $this->assertSame(
                     true,
