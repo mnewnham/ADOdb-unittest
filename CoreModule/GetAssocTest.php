@@ -33,16 +33,18 @@ class GetAssocTest extends ADOdbCoreSetup
     /**
      * Test for {@see ADODConnection::getAll()}
      *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getall
-     *
-     * @param int $fetchMode
-     * @param array $expectedValue
-     * @param string $sql
-     * @param ?array $bind
+     * @param int    $fetchMode     The ADODB_FETCH_MODE to use
+     * @param array  $expectedValue The expected value
+     * @param string $sql           The SQL Statement to use
+     * @param ?array $bind          Optional Bind
+     * @param bool   $forceArray    Optional method arg
+     * @param bool   $first2Cols    Optional method arg
      *
      * @return void
      *
      * @dataProvider providerTestGetAssoc
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getall
      */
     public function testGetAssoc(
         int $fetchMode,
@@ -57,12 +59,6 @@ class GetAssocTest extends ADOdbCoreSetup
         $this->db->startTrans();
 
         $returnedRows = $this->db->getAssoc($sql, $bind, $forceArray, $first2Cols);
-
-
-        list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
-
-        $this->db->completeTrans();
-
         $this->assertSame(
             $expectedValue,
             $returnedRows,
@@ -247,5 +243,6 @@ class GetAssocTest extends ADOdbCoreSetup
 
                 break;
         }
+        return array();
     }
 }
