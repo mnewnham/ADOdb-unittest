@@ -55,7 +55,7 @@ CREATE TABLE testtable_3 (
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
-	PRIMARY KEY(id),
+	PRIMARY KEY(id,integer_field),
 	UNIQUE INDEX vdx31 (varchar_field),
 	UNIQUE INDEX vdx33 (number_run_field)
 ) ENGINE=INNODB;
