@@ -32,14 +32,15 @@ class GetRowTest extends ADOdbCoreSetup
     /**
      * Test for {@see ADODConnection::getRow()]
      *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getrow
+     * @param int    $expectedValue The value to return
+     * @param string $sql           The SQL to execute
+     * @param ?array $bind          Optional Bind
      *
-     * @param int $expectedValue
-     * @param string $sql
-     * @param ?array $bind
      * @return void
      *
      * @dataProvider providerTestGetRow
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getrow
      */
     public function testGetRow(int $expectedValue, string $sql, ?array $bind): void
     {
@@ -68,21 +69,20 @@ class GetRowTest extends ADOdbCoreSetup
                       ];
         }
 
-
-        $this->db->startTrans();
-
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-             $this->db->setFetchMode($fetchMode);
+            
+            $this->db->setFetchMode($fetchMode);
 
-            if ($bind) {
-                $record = $this->db->getRow($sql, $bind);
-            } else {
-                $record = $this->db->getRow($sql);
-            }
+            $this->db->startTrans();
 
+            $record = $this->db->getRow($sql, $bind);
+            
             list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
-            switch ($fetchMode) {
+            $this->db->completeTrans();
+
+            if ($expectedValue == 1) {
+                switch ($fetchMode) {
                 case ADODB_FETCH_ASSOC:
                     foreach ($fields as $key => $value) {
                         $this->assertArrayHasKey(
@@ -113,7 +113,8 @@ class GetRowTest extends ADOdbCoreSetup
                             $value,
                             $record,
                             sprintf(
-                                '[%s] Checking if associative key exists in fields array',
+                                '[%s] Checking if associative key ' .
+                                'exists in fields array',
                                 $fetchDescription
                             )
                         );
@@ -124,16 +125,22 @@ class GetRowTest extends ADOdbCoreSetup
                             $key,
                             $record,
                             sprintf(
-                                '[%s] Checking if numeric key exists in fields array',
+                                '[%s] Checking if numeric key ' . 
+                                'exists in fields array',
                                 $fetchDescription
                             )
                         );
                     }
                     break;
+                }
+            } else {
+                $this->assertSame(
+                    $record,
+                    array(),
+                    'Out of range record for getRow() should return empty array'
+                );
             }
         }
-
-        $this->db->completeTrans();
     }
 
     /**
@@ -146,9 +153,27 @@ class GetRowTest extends ADOdbCoreSetup
 
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 11);
+        
         return [
-                [1, "SELECT * FROM testtable_3 ORDER BY number_run_field", null],
-                [11, "SELECT * FROM testtable_3 WHERE number_run_field=$p1", $bind],
-            ];
+            [
+                1, 
+                "SELECT * 
+                   FROM testtable_3 
+               ORDER BY number_run_field", 
+               null
+            ],[
+                1, 
+                "SELECT * 
+                   FROM testtable_3 
+                  WHERE number_run_field=$p1", 
+                array('p1' => 11)
+            ],[
+                0, 
+                "SELECT * 
+                   FROM testtable_3 
+                  WHERE number_run_field=$p1", 
+                array('p1' => -999)
+            ],
+        ];
     }
 }
