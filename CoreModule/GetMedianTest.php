@@ -58,6 +58,10 @@ class GetMedianTest extends ADOdbCoreSetup
 
             $actualValue = $this->db->getMedian($table, $column, $where);
 
+            if ($actualValue !== false) {
+                $actualValue = (string)$actualValue;
+            }
+
             list($errno,$errmsg) = $this->assertADOdbError('getMedian()');
             $this->db->completeTrans();
 
