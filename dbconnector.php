@@ -19,13 +19,11 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace ADOdbUnitTest;
 
 require __DIR__ . '/ADOdbTestCase.php';
 require __DIR__ . '/Drivers/ADOdbCustomDriver.php';
 require __DIR__ . '/CoreModule/ADOdbCoreSetup.php';
 
-use ADOdb;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -101,13 +99,17 @@ if (!array_key_exists('casing', $ADOdbSettings)) {
 }
 
 if (!array_key_exists('blob', $availableCredentials)) {
-    die('blob section not found in adodb-unittest.ini.' .
-        'See the documentation for details on how to set this up');
+    die(
+        'blob section not found in adodb-unittest.ini.' .
+        'See the documentation for details on how to set this up'
+    );
 }
 
 if (array_key_exists('xmlschema', $availableCredentials)) {
-    if (
-        array_key_exists('debug', $availableCredentials['xmlschema'])
+    if (array_key_exists(
+        'debug', 
+        $availableCredentials['xmlschema']
+    )
         && $availableCredentials['xmlschema']['debug']
     ) {
         define('XMLS_DEBUG', 1);
@@ -323,7 +325,15 @@ if (array_key_exists('caching', $availableCredentials)) {
             break;
     }
 }
+/*
+* Must be available at root level
+*/
+global $ADODB_CACHE_DIR;
 
+
+/*
+* The base classes for Activw record testing
+*/
 if ($GLOBALS['skipActiveRecordTests'] == 0) {
     $_ADODB_ACTIVE_DBS = array();
     class person extends \ADOdb_Active_Record
