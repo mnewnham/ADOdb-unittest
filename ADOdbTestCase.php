@@ -57,9 +57,9 @@ class ADOdbTestCase extends TestCase
     );
 
     protected array $testFetchModes = [
-        ADODB_FETCH_NUM   => 'ADODB_FETCH_NUM',
-        ADODB_FETCH_ASSOC => 'ADODB_FETCH_ASSOC',
-        ADODB_FETCH_BOTH  => 'ADODB_FETCH_BOTH'
+        ADODB_FETCH_NUM   => '[1] ADODB_FETCH_NUM',
+        ADODB_FETCH_ASSOC => '[2] ADODB_FETCH_ASSOC',
+        ADODB_FETCH_BOTH  => '[3] ADODB_FETCH_BOTH'
     ];
 
     /**
@@ -340,5 +340,26 @@ class ADOdbTestCase extends TestCase
         );
 
         return array($result,$errno,$errmsg);
+    }
+
+    /**
+     * We don't know what format the data will be returned in ADODB_FETCH_BOTH
+     * requests, numeric key first then associative or vice-versa. This
+     * method sorts them to all numeric keysJ followed by all associative keys.
+     * That way we can get a standardized data set for comparisons
+     *
+     * @param array $inputArray The data to sort
+     *
+     * @return array
+     */
+    protected function sortFetchBothRecords(array $inputArray): array
+    {
+        $outputArray         = array();
+
+        foreach ($inputArray as $k => $v) {
+            $outputArray[$k] = ksort($v);
+        }
+
+        return $outputArray;
     }
 }
