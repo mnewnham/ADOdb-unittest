@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class MetaFunctionsTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for for ADOdb 
  */
 class Db2DriverTest extends ADOdbTestCase
 {
