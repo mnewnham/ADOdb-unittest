@@ -58,10 +58,16 @@ class GetAllTest extends ADOdbCoreSetup
 
         $this->db->completeTrans();
 
+        if ($fetchMode == ADODB_FETCH_BOTH) {
+            $expectedValue = $this->sortFetchBothRecords($expectedValue);
+            $returnedRows  = $this->sortFetchBothRecords($returnedRows);
+        }
+       
         $this->assertSame(
             $expectedValue,
             $returnedRows,
-            'getall() should return expected rows using casing ' . ADODB_ASSOC_CASE
+            'getall() should return expected rows using casing ' . 
+            $this->testFetchModes[$fetchMode]
         );
     }
 
