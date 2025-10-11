@@ -59,6 +59,9 @@ class GetAssocTest extends ADOdbCoreSetup
         $this->db->startTrans();
 
         $returnedRows = $this->db->getAssoc($sql, $bind, $forceArray, $first2Cols);
+
+        $this->db->completeTrans();
+
         $this->assertSame(
             $expectedValue,
             $returnedRows,
