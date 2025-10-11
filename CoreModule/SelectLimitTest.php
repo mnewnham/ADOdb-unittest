@@ -66,6 +66,11 @@ class SelectLimitTest extends ADOdbCoreSetup
             $returnedRows[] = $row;
         }
 
+        if ($fetchMode == ADODB_FETCH_BOTH) {
+            $returnedRows  = $this->sortFetchBothRecords($returnedRows);
+            $expectedValue = $this->sortFetchBothRecords($expectedValue);
+        }
+
         $this->assertSame(
             $expectedValue,
             $returnedRows,
