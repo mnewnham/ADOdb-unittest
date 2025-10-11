@@ -32,41 +32,54 @@ class GetColTest extends ADOdbCoreSetup
     /**
      * Test for {@see ADODConnection::getCol()]
      *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getcol
-     *
-     * @param int $expectedValue
-     * @param string $sql
-     * @param ?array $bind
+     * @param mixed  $expectedValue The expected response
+     * @param string $sql           The SQL to execute
+     * @param ?array $bind          Optional Bind
      *
      * @return void
      *
      * @dataProvider providerTestGetCol
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getcol 
      */
-    public function testGetCol(int $expectedValue, string $sql, ?array $bind): void
+    public function testGetCol(mixed $expectedValue, string $sql, ?array $bind): void
     {
 
-        $this->db->startTrans();
-        if ($bind) {
-            $cols = $this->db->getCol($sql, $bind);
+        foreach ($this->testFetchModes as $fetchMode=>$fetchDescription) {
+            
+            $this->db->setFetchMode($fetchMode);
+            
+            $this->db->startTrans();
+            if ($bind) {
+                $cols = $this->db->getCol($sql, $bind);
 
-            list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
+                list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
-            $this->assertSame(
-                $expectedValue,
-                count($cols),
-                'Get col with bind variables should return expected number of rows'
-            );
-        } else {
-            $cols = $this->db->getCol($sql);
+                $this->assertSame(
+                    $expectedValue,
+                    count($cols),
+                    sprintf(
+                        '[%s] Get col with bind variables should return' . 
+                        'expected number of rows',
+                        $fetchDescription
+                    )
+                );
+            } else {
+                $cols = $this->db->getCol($sql);
 
-            list($errno,$errmsg) = $this->assertADOdbError($sql);
-            $this->assertSame(
-                $expectedValue,
-                count($cols),
-                'getCol without bind variables should return expected number of rows'
-            );
+                list($errno,$errmsg) = $this->assertADOdbError($sql);
+                $this->assertSame(
+                    $expectedValue,
+                    count($cols),
+                    sprintf(
+                        '[%s] getCol without bind variables should return ' . 
+                        'expected number of rows',
+                        $fetchDescription
+                    )
+                );
+            }
+            $this->db->completeTrans();
         }
-        $this->db->completeTrans();
     }
     /**
      * Data provider for {@see testGetCol`()}
@@ -78,132 +91,27 @@ class GetColTest extends ADOdbCoreSetup
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
         return [
-                [11, "SELECT varchar_field FROM testtable_3 ORDER BY id", null],
-                [1, "SELECT testtable_3.varchar_field,testtable_3.* FROM testtable_3 WHERE varchar_field=$p1", $bind],
-
-            ];
-    }
-
-    /**
-     * Test for {@see ADODConnection::getRow()]
-     *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getrow
-     *
-     * @param int $expectedValue
-     * @param string $sql
-     * @param ?array $bind
-     * @return void
-     *
-     * @dataProvider providerTestGetRow
-     */
-    public function testGetRow(int $expectedValue, string $sql, ?array $bind): void
-    {
-
-        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $fields = [ '0' => 'ID',
-                        '1' => 'VARCHAR_FIELD',
-                        '2' => 'DATETIME_FIELD',
-                        '3' => 'DATE_FIELD',
-                        '4' => 'INTEGER_FIELD',
-                        '5' => 'DECIMAL_FIELD',
-                        '6' => 'BOOLEAN_FIELD',
-                        '7' => 'EMPTY_FIELD',
-                        '8' => 'NUMBER_RUN_FIELD'
-                      ];
-        } else {
-            $fields = [ '0' => 'id',
-                        '1' => 'varchar_field',
-                        '2' => 'datetime_field',
-                        '3' => 'date_field',
-                        '4' => 'integer_field',
-                        '5' => 'decimal_field',
-                        '6' => 'boolean_field',
-                        '7' => 'empty_field',
-                        '8' => 'number_run_field'
-                      ];
-        }
-
-
-        $this->db->startTrans();
-
-        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-             $this->db->setFetchMode($fetchMode);
-
-            if ($bind) {
-                $record = $this->db->getRow($sql, $bind);
-            } else {
-                $record = $this->db->getRow($sql);
-            }
-
-            list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
-
-            switch ($fetchMode) {
-                case ADODB_FETCH_ASSOC:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $value,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if associative key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
-                case ADODB_FETCH_NUM:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $key,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if numeric key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
-                case ADODB_FETCH_BOTH:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $value,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if associative key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $key,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if numeric key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
-            }
-        }
-
-        $this->db->completeTrans();
-    }
-
-    /**
-     * Data provider for {@see testGetRow()}
-     *
-     * @return array [int numOfRows, string sql, ?array bind]
-     */
-    public function providerTestGetRow(): array
-    {
-
-        $p1 = $GLOBALS['ADOdbConnection']->param('p1');
-        $bind = array('p1' => 11);
-        return [
-                [1, "SELECT * FROM testtable_3 ORDER BY number_run_field", null],
-                [11, "SELECT * FROM testtable_3 WHERE number_run_field=$p1", $bind],
-            ];
+            [
+                11, 
+                "SELECT varchar_field 
+                   FROM testtable_3 
+               ORDER BY id", 
+                    null    
+            ],[
+                1,
+                "SELECT testtable_3.varchar_field,testtable_3.* 
+                   FROM testtable_3 
+                  WHERE varchar_field=$p1", 
+                $bind
+            ],
+            [
+                0,
+                "SELECT testtable_3.varchar_field,testtable_3.* 
+                   FROM testtable_3 
+                  WHERE integer_field=-999
+                    AND varchar_field=$p1", 
+                $bind
+            ],
+        ];
     }
 }
