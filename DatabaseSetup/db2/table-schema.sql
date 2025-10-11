@@ -23,7 +23,7 @@ CREATE TABLE TESTTABLE_1 (
 	date_field DATE DEFAULT CURRENT DATE,
 	integer_field SMALLINT NOT NULL DEFAULT 0,
 	decimal_field DECIMAL(12,2) DEFAULT 0,
-	boolean_field BOOLEAN WITH DEFAULT FALSE,
+	boolean_field SMALLINT DEFAULT 0,
     empty_field VARCHAR(240) DEFAULT '',
 	number_run_field SMALLINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (id,integer_field)
@@ -61,7 +61,7 @@ CREATE TABLE testtable_3 (
 	date_field DATE DEFAULT CURRENT DATE,
 	integer_field SMALLINT NOT NULL DEFAULT 0,
 	decimal_field DECIMAL(12,2) DEFAULT 0,
-	boolean_field BOOLEAN WITH DEFAULT FALSE,
+	boolean_field SMALLINT DEFAULT 0,
     empty_field VARCHAR(240) DEFAULT '',
 	number_run_field SMALLINT NOT NULL DEFAULT 0
 );
