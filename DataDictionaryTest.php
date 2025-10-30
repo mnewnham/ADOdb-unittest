@@ -80,7 +80,8 @@ class DataDictionaryTest extends ADOdbTestCase
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                  DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
-                 INTEGER_FIELD I DEFAULT 0
+                 INTEGER_FIELD I DEFAULT 0,
+                 ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
               ";
         $sqlArray = $this->dataDictionary->createTableSQL(
             $this->testTableName,
@@ -107,8 +108,26 @@ class DataDictionaryTest extends ADOdbTestCase
                 DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
                 BLOB_FIELD B,
                 LONG_FIELD XL,
-                ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'halibut'
+                ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers'
         ";
+
+        /*
+         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
+                VARCHAR_FIELD C(50) NOTNULL,
+                DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+                DATE_FIELD_WITH_DEFDATE D NOTNULL DEFDATE,
+                TIMESTAMP_FIELD_WITH_DEFDATE TS NOTNULL DEFTIMESTAMP,
+                INTEGER_FIELD I4 NOTNULL DEFAULT 0,
+                UNSIGNED_INTEGER_FIELD I4 UNSIGNED NOTNULL DEFAULT 0,
+                BOOLEAN_FIELD I NOTNULL DEFAULT 0,
+                DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
+                DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
+                BLOB_FIELD B,
+                LONG_FIELD XL
+              
+        ";
+        */
+
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName,
             $flds
@@ -210,6 +229,9 @@ class DataDictionaryTest extends ADOdbTestCase
         $flds = " 
             VARCHAR_FIELD VARCHAR(120) NOTNULL DEFAULT ''
             ";
+         $flds = " 
+            VARCHAR_FIELD VARCHAR(120)
+            ";
 
         $sqlArray = $this->dataDictionary->alterColumnSQL(
             $tableName,
@@ -241,7 +263,7 @@ class DataDictionaryTest extends ADOdbTestCase
 
         $this->assertSame(
             '120',
-            $metaColumns['VARCHAR_FIELD']->max_length,
+            (string)$metaColumns['VARCHAR_FIELD']->max_length,
             'AlterColumnSQL should have Increased the ' .
             'length of VARCHAR_FIELD to from 50 to 120'
         );
