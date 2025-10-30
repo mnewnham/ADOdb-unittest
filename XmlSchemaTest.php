@@ -104,7 +104,6 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-
         $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
 
@@ -169,6 +168,13 @@ class XmlSchemaTest extends ADOdbTestCase
         );
 
 
+        print "
+###################################################
+START PARSING UPDATE XML SCHEMA
+###################################################
+";
+        
+
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
@@ -230,6 +236,11 @@ class XmlSchemaTest extends ADOdbTestCase
             'Schema file does not exist: ' . $schemaFile
         );
 
+         print "
+###################################################
+START PARSING DROP XML SCHEMA
+###################################################
+";
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
