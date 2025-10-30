@@ -22,6 +22,9 @@
         <field name="date_field_to_keep" type="D"><DEFDATE/></field>
         <field name="timestamp_field" type="T"><DEFTIMESTAMP/></field>
         <field name="timestamp_field_to_keep" type="T"><DEFTIMESTAMP/></field>
+        <field name="enum_field_to_keep" type="ENUM('duplo','lego','meccano')">
+            <default value="lego"/>
+        </field>
     
         <index name="integer_field_index">
             <descr>Put a unique index on the integer_field</descr>
