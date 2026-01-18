@@ -78,7 +78,7 @@ class DataDictionaryTest extends ADOdbTestCase
         list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
-                 DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+                 DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
                  INTEGER_FIELD I DEFAULT 0,
                  ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
