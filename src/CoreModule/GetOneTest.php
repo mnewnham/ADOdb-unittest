@@ -76,7 +76,7 @@ class GetOneTest extends ADOdbCoreSetup
      *
      * @return array [string expected value, string sql ?array bind]
      */
-    public function providerTestGetOne(): array
+    static function providerTestGetOne(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 9);

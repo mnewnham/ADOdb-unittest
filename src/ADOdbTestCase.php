@@ -24,6 +24,7 @@ namespace MNewnham\ADOdbUnitTest;
 
 use PHPUnit\Framework\TestCase;
 
+
 /**
  * Class MetaFunctionsTest
  *

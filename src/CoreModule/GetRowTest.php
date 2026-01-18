@@ -147,7 +147,7 @@ class GetRowTest extends ADOdbCoreSetup
      *
      * @return array [int numOfRows, string sql, ?array bind]
      */
-    public function providerTestGetRow(): array
+    static function providerTestGetRow(): array
     {
 
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');

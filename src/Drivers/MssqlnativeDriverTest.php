@@ -108,7 +108,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      *
      * @return array
      */
-    public function providerSQLDate(): array
+    static function providerSQLDate(): array
     {
         return [
 

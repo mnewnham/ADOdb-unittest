@@ -218,7 +218,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
      *
      * @return array [int $fetchmode, string $number_run_column, string $varchar_column]
      */
-    public function providerTestConcat(): array
+    static function providerTestConcat(): array
     {
 
         switch (ADODB_ASSOC_CASE) {
@@ -329,7 +329,7 @@ class DbStringFunctionsTest extends ADOdbTestCase
      *
      * @return array [int fetchmode, string number_run column, string date column]
      */
-    public function providerTestIfnull(): array
+    static function providerTestIfnull(): array
     {
 
 

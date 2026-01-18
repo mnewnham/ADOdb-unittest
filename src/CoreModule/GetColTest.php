@@ -86,7 +86,7 @@ class GetColTest extends ADOdbCoreSetup
      *
      * @return array [string(getRe, array return value]
      */
-    public function providerTestGetCol(): array
+    static function providerTestGetCol(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');

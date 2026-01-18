@@ -82,7 +82,7 @@ class GetMedianTest extends ADOdbCoreSetup
      *   string where
      *   ]
      */
-    public function providerTestGetMedian(): array
+    static function providerTestGetMedian(): array
     {
 
         return [

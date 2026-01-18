@@ -83,7 +83,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool match, string $filterType string $mask]
      */
-    public function providerTestMetaTables(): array
+    static function providerTestMetaTables(): array
     {
         $match = substr($this->testTableName, 0, 4) . '%';
         return [
@@ -193,7 +193,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool array type, array return value]
      */
-    public function providerTestMetaColumnNames(): array
+    static function providerTestMetaColumnNames(): array
     {
         return array(
             'Returning Associative Array' => array(
@@ -419,7 +419,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool array type, array return value]
      */
-    public function providerTestMetaIndexUniqueness(): array
+    static function providerTestMetaIndexUniqueness(): array
     {
         return [
              'Index vdx1 is unique' => [true,'vdx1'],
@@ -623,7 +623,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [string metatype, int offset]
      */
-    public function providerTestMetaTypes(): array
+    static function providerTestMetaTypes(): array
     {
 
         /*

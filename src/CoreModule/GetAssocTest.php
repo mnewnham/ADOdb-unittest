@@ -73,7 +73,7 @@ class GetAssocTest extends ADOdbCoreSetup
      *
      * @return array [int fetchmode, array expected result, string sql, ?array bind]
      */
-    public function providerTestGetAssoc(): array
+    static function providerTestGetAssoc(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');

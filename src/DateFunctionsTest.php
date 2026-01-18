@@ -341,7 +341,7 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return array
      */
-    public function providerTestSqlDate(): array
+    static function providerTestSqlDate(): array
     {
         $testPastTimestamp = strtotime('2000-01-02 03:04:05');
         $testNowTimestamp = time();

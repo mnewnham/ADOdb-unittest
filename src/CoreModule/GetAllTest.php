@@ -74,7 +74,7 @@ class GetAllTest extends ADOdbCoreSetup
      *
      * @return array [int fetchmode, array expected result, string sql, ?array bind]
      */
-    public function providerTestGetAll(): array
+    static function providerTestGetAll(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');

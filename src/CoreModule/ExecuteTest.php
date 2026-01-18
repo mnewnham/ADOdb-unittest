@@ -68,7 +68,7 @@ class ExecuteTest extends ADOdbCoreSetup
      *
      * @return array [bool success, string sql ?array bind]
      */
-    public function providerTestSelectExecute(): array
+    static function providerTestSelectExecute(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
@@ -124,7 +124,7 @@ class ExecuteTest extends ADOdbCoreSetup
      *
      * @return array [string success, string sql, ?array bind]
      */
-    public function providerTestNonSelectExecute(): array
+    static function providerTestNonSelectExecute(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
