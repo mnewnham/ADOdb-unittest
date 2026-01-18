@@ -19,7 +19,10 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-use PHPUnit\Framework\TestCase;
+namespace MNewnham\ADOdbUnitTest\CoreModule;
+
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+
 
 /**
  * Class CoreSetup

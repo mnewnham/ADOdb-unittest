@@ -20,14 +20,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-use PHPUnit\Framework\TestCase;
+use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
  * Class MetaFunctionsTest
  *
  * Test cases for for ADOdb MetaFunctions
  */
-class Postgres9DriverTest extends ADOdbTestCase
+class Postgres9DriverTest extends ADOdbCustomDriver
 {
     /**
      * Set up the test environment

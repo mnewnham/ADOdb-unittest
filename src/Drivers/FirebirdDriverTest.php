@@ -20,7 +20,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-use PHPUnit\Framework\TestCase;
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
  * Class MetaFunctionsTest

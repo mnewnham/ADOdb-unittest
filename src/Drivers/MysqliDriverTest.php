@@ -20,8 +20,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-use PHPUnit\Framework\TestCase;
-use ADOdbUnitTest\Drivers;
+use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
  * Class MetaFunctionsTest

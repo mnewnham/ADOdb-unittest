@@ -19,10 +19,23 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest;
+set_include_path(__DIR__ . '/../../' . PATH_SEPARATOR . get_include_path());
+require 'vendor/autoload.php';
+function common_autoloader($class) {
+/*
+* Check that the file exists to stop it autoloading normal classes
+*/
+$file = "c:/dev/github/ADOdb-unittest/src/$class.inc";
 
-require __DIR__ . '/ADOdbTestCase.php';
-require __DIR__ . '/Drivers/ADOdbCustomDriver.php';
-require __DIR__ . '/CoreModule/ADOdbCoreSetup.php';
+if (file_exists($file))
+    include $file;
+}
+spl_autoload_register('common_autoloader');
+//require 'src/ADOdbTestCase.php';
+//require __DIR__ . '/src/ADOdbTestCase.php';
+require __DIR__ . '/src/Drivers/ADOdbCustomDriver.php';
+require __DIR__ . '/src/CoreModule/ADOdbCoreSetup.php';
 
 use PHPUnit\Framework\TestCase;
 
