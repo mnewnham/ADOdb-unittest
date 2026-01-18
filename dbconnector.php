@@ -120,22 +120,22 @@ $arTypeLoad = 'record';
 $GLOBALS['skipActiveRecordTests'] = 0;
 
 if (array_key_exists('activerecord', $availableCredentials)) {
-    if (
-        array_key_exists('skipTests', $availableCredentials['activerecord'])
+    if (array_key_exists('skipTests', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['skipTests']
     ) {
         $GLOBALS['skipActiveRecordTests'] = 1;
     }
 
-    if (
-        array_key_exists('extended', $availableCredentials['activerecord'])
+    if (array_key_exists('extended', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['extended']
     ) {
         $arTypeLoad = 'recordx';
     }
     $arInclude = "/adodb-active-$arTypeLoad.inc.php";
-    if (
-        array_key_exists('debug', $availableCredentials['xmlschema'])
+    if (array_key_exists(
+        'debug', 
+        $availableCredentials['xmlschema']
+    )
         && $availableCredentials['xmlschema']['debug']
     ) {
         //define('XMLS_DEBUG', 1);
@@ -168,30 +168,7 @@ foreach ($availableCredentials as $driver => $driverOptions) {
 }
 
 if (!$adoDriver) {
-    $o = (preg_grep('/dbconnector/', $argv));
-
-    if ($o) {
-        //die('unit tests must contain either an entry in the INI file or a dbconnector argument');
-    //}
-
-    /*
-    * See if there is an unnamed parameter
-    */
-        $o = array_keys($o);
-        $oIndex = $o[0] + 1;
-
-    //if (!array_key_exists($oIndex, $argv)) {
-      //  die('The dbconnector argument must be followed by the name of the driver');
-    //}
-    /*
-    * Match the location of the bootstrap load
-    * the driver name is the next argument
-    */
-
-        $adoDriver = strtolower($argv[$oIndex] ?? '');
-
-        unset($argv[$oIndex]);
-    }
+    die('unit tests must contain an active entry in the INI file');
 }
 
 /*
@@ -358,4 +335,4 @@ $ADODB_GETONE_EOF       = null;
 $ADODB_COUNTRECS        = true;
 $ADODB_COMPAT_FETCH     = false;
 
-$GLOBALS['comparisonData'] = false;
+$GLOBALS['comparisonData'] = [];
