@@ -77,7 +77,7 @@ class MoveTest extends ADOdbTestCase
 
         $comparisonData = $db->getAll($setupSql);
         foreach ($comparisonData as $cd) {
-            $obj = new ADOFetchObj();
+            $obj = new \ADOFetchObj();
             foreach ($cd as $k => $v) {
                 $k = strtolower($k);
                 $obj->$k = $v;

@@ -20,6 +20,7 @@
  */
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class MetaFunctionsTest
@@ -41,10 +42,9 @@ class GetAssocTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @dataProvider providerTestGetAssoc
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getall
      */
+    #[DataProvider('providerTestGetAssoc')]
     public function testGetAssoc(
         int $fetchMode,
         array $expectedValue,

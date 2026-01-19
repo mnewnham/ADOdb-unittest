@@ -31,7 +31,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 class ADOdbCustomDriver extends ADOdbTestCase
 {
     protected ?object $xmlSchema;
-
+ 
     protected string $customMetaType = 'J';
     /**
      * The DB Physical identifier must be set in the
@@ -40,7 +40,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      * @example MYSQLI_TYPE_JSON
      * @var     mixed $physicalType
      */
-    protected mixed $physicalType;
+    protected mixed $physicalType = null;
 
     /**
      * The DB Field identifier must be set in the
@@ -85,6 +85,17 @@ class ADOdbCustomDriver extends ADOdbTestCase
      */
     public function testSetCustomMetaType(): void
     {
+        
+        if ($this->physicalType === null ||
+            $this->columnType === null
+        ) {
+            $this->markTestSkipped(
+                'Physical type and Column type must be set ' .
+                'for the driver being tested'
+            );
+            return;
+        }
+    
         /*
         * We must define the custom type before loading the data dictionary
         */

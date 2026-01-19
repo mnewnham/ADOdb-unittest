@@ -21,6 +21,7 @@
 
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class MetaFunctionsTest
  *
@@ -37,10 +38,9 @@ class GetRowTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @dataProvider providerTestGetRow
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getrow
      */
+    #[DataProvider('providerTestGetRow')]
     public function testGetRow(int $expectedValue, string $sql, ?array $bind): void
     {
 

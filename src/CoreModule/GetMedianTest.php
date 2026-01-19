@@ -21,6 +21,7 @@
 
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * ClassGetOneTest
  *
@@ -38,10 +39,9 @@ class GetMedianTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @dataProvider providerTestGetMedian
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getmedian
      */
+    #[DataProvider('providerTestGetMedian')]
     public function testGetMedian(
         mixed $expectedValue,
         string $table,

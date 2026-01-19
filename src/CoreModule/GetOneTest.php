@@ -21,6 +21,7 @@
 
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * ClassGetOneTest
  *
@@ -38,9 +39,8 @@ class GetOneTest extends ADOdbCoreSetup
      * @param ?array $bind An optional array of bind parameters
      *
      * @return void
-     *
-     * @dataProvider providerTestGetOne
      */
+    #[DataProvider('providerTestGetOne')]
     public function testGetOne(string $expectedValue, string $sql, ?array $bind): void
     {
 

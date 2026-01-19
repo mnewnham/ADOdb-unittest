@@ -20,7 +20,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class DateFunctions.
@@ -266,8 +266,8 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return void
      *
-     * * @dataProvider providerTestSqlDate
      */
+    #[DataProvider('providerTestSqlDate')]
     public function testSqlDate(int $testMethod, string $format, ?int $timestamp): void
     {
 

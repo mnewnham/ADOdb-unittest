@@ -20,6 +20,7 @@
  */
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class MetaFunctionsTest
  *
@@ -65,10 +66,9 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      * @param string $region     The region to test
      * @param string $result     The expected result
      *
-     * @dataProvider providerSqlDate
-     *
      * @return void
      */
+    #[DataProvider('providerSQLDate')]
     public function testSqlDate(
         string $dateFormat,
         string $field,

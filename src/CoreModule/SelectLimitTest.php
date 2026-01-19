@@ -20,6 +20,7 @@
  */
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class MetaFunctionsTest
@@ -40,10 +41,9 @@ class SelectLimitTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @dataProvider providerTestSelectLimit
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:selectlimit
      */
+    #[DataProvider('providerTestSelectLimit')]
     public function testSelectLimit(int $fetchMode, array $expectedValue, string $sql, $count, $offset, ?array $bind): void
     {
         $this->db->setFetchMode($fetchMode);

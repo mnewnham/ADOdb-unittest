@@ -58,7 +58,7 @@ class ActiveRecordTest extends ADOdbTestCase
         $db->startTrans();
 
         $tableSchema = sprintf(
-            '%s/DatabaseSetup/%s/active-record-schema.sql',
+            '%s/../tools/DatabaseSetup/%s/active-record-schema.sql',
             dirname(__FILE__),
             $adoDriver
         );
@@ -72,7 +72,7 @@ class ActiveRecordTest extends ADOdbTestCase
         }
 
         $tableData = sprintf(
-            '%s/DatabaseSetup/active-record-data.sql',
+            '%s/../tools/DatabaseSetup/active-record-data.sql',
             dirname(__FILE__)
         );
         $tableSql = file_get_contents($tableData);

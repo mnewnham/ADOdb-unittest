@@ -229,8 +229,6 @@ class CacheSqlTest extends ADOdbTestCase
         );
     }
 
-    
-
     /**
      * Test for {@see ADODConnection::cacheexecute() in non-seelct mode]
      *
@@ -240,7 +238,6 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     * @dataProvider providerTestNonSelectCacheExecute
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
      */
@@ -418,9 +415,8 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     * @dataProvider providerTestCacheGetCol
-    */
-     #[DataProvider('providerTestCacheGetCol')]
+     */
+    #[DataProvider('providerTestCacheGetCol')]
     public function testGetCacheCol(int $expectedValue, string $sql, ?array $bind): void
     {
         global $ADODB_CACHE_DIR;
@@ -519,9 +515,8 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     * @dataProvider providerTestCacheGetRow
      */
-     #[DataProvider('providerTestCacheGetRow')]
+    #[DataProvider('providerTestCacheGetRow')]
     public function testCacheGetRow(
         int $expectedValue,
         string $emptyColumn,
@@ -696,7 +691,6 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     * @dataProvider providerTestCacheGetAll
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cachegetall
      */
@@ -832,7 +826,6 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     * @dataProvider providerTestCacheSelectLimit
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheselectlimit
      *

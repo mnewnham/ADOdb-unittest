@@ -20,6 +20,7 @@
  */
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class MetaFunctionsTest
  *
@@ -38,9 +39,8 @@ class GetAllTest extends ADOdbCoreSetup
      * @param ?array $bind
      *
      * @return void
-     *
-     * @dataProvider providerTestGetAll
      */
+    #[DataProvider('providerTestGetAll')]
     public function testGetAll(int $fetchMode, array $expectedValue, string $sql, ?array $bind): void
     {
         $this->db->setFetchMode($fetchMode);

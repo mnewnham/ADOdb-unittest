@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class MetaFunctionsTest
@@ -35,14 +35,13 @@ class MetaFunctionsTest extends ADOdbTestCase
     /**
      * Test for {@see ADODConnection::metaTables()]
      *
-     * @dataProvider providerTestMetaTables
-     *
      * @param bool   $includesTable1
      * @param string $filterType
      * @param string $mask
      *
      * @return void
      */
+    #[DataProvider('providerTestMetaTables')]
     public function testMetaTables(bool $includesTable1, mixed $filterType, mixed $mask): void
     {
 
@@ -85,7 +84,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     static function providerTestMetaTables(): array
     {
-        $match = substr($this->testTableName, 0, 4) . '%';
+        $match = substr($GLOBALS['testTableName'], 0, 4) . '%';
         return [
             'Show both Tables & Views' => [true,false,false],
             'Show only Tables' => [true,'TABLES',false],
@@ -158,13 +157,12 @@ class MetaFunctionsTest extends ADOdbTestCase
     /**
      * Test for {@see ADODConnection::metaColumnNames()]
      *
-     * @dataProvider providerTestMetaColumnNames
-     *
      * @param bool  $returnType
      * @param array $expectedResult
      *
      * @return void
      */
+    #[DataProvider('providerTestMetaColumnNames')]
     public function testMetaColumnNames(bool $returnType, int $fetchMode, array $expectedResult): void
     {
 
@@ -388,13 +386,12 @@ class MetaFunctionsTest extends ADOdbTestCase
      * Test 2 for {@see ADODConnection::metaIndexes()]
      * Checks that the correct unique indexes is returned
      *
-     * @dataProvider providerTestMetaIndexUniqueness
-     *
      * @param bool $result
      * @param string $indexName
      *
      * @return void
      */
+    #[DataProvider('providerTestMetaIndexUniqueness')]
     public function testMetaIndexUniqueness($result, $indexName): void
     {
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
@@ -595,9 +592,8 @@ class MetaFunctionsTest extends ADOdbTestCase
      * @param int $offset
      *
      * @return void
-     *
-     * @dataProvider providerTestMetaTypes
-    */
+     */
+    #[DataProvider('providerTestMetaTypes')]
     public function testMetaTypes(mixed $metaType, int $offset): void
     {
         $sql = 'SELECT * FROM ' . $this->testTableName;

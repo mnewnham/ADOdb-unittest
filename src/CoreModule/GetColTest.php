@@ -21,6 +21,8 @@
 
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 
 /**
  * Class GetColTest
@@ -38,10 +40,9 @@ class GetColTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @dataProvider providerTestGetCol
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getcol 
      */
+    #[DataProvider('providerTestGetCol')]
     public function testGetCol(mixed $expectedValue, string $sql, ?array $bind): void
     {
 

@@ -20,7 +20,9 @@
  */
 
 namespace MNewnham\ADOdbUnitTest\CoreModule;
+
 use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 
 
@@ -41,9 +43,8 @@ class ExecuteTest extends ADOdbCoreSetup
      * @param ?array $bind
      *
      * @return void
-     *
-     * @dataProvider providerTestSelectExecute
      */
+    #[DataProvider('providerTestSelectExecute')]
     public function testSelectExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
 
@@ -98,14 +99,13 @@ class ExecuteTest extends ADOdbCoreSetup
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:execute
      *
-     * @dataProvider providerTestNonSelectExecute
-     *
      * @param bool $expectedValue
      * @param string $sql
      * @param ?array $bind
      *
      * @return void
      */
+    #[DataProvider('providerTestNonSelectExecute')]
     public function testNonSelectExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
 

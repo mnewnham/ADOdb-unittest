@@ -154,6 +154,10 @@ class ADOdbTestCase extends TestCase
             $this->db             = $GLOBALS['ADOdbConnection'];
             $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
         }
+
+        $GLOBALS['testTableName']   = $this->testTableName;
+        $GLOBALS['testIndexName1']  = $this->testIndexName1;
+        $GLOBALS['testIndexName2']  = $this->testIndexName2;
     }
 
     /**

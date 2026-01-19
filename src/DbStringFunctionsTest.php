@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class MetaFunctionsTest
@@ -166,10 +166,9 @@ class DbStringFunctionsTest extends ADOdbTestCase
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:concat
      *
-     * @dataProvider providerTestConcat
-     *
      * @return void
      */
+    #[DataProvider('providerTestConcat')]
     public function testConcat(int $fetchMode, string $firstColumn, string $secondColumn): void
     {
 
@@ -264,10 +263,9 @@ class DbStringFunctionsTest extends ADOdbTestCase
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:ifnull
      *
-     * @dataProvider providerTestIfnull
-     *
      * @return void
      */
+    #[DataProvider('providerTestIfnull')]
     public function testIfNull(int $fetchMode, string $firstColumn, string $secondColumn): void
     {
 
