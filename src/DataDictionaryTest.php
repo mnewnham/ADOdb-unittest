@@ -81,6 +81,9 @@ class DataDictionaryTest extends ADOdbTestCase
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
                  INTEGER_FIELD I DEFAULT 0,
+                 DECIMAL_FIELD_TO_MODIFY N(8.4) DEFAULT 0 NOTNULL,
+                 BOOLEAN_FIELD_TO_RENAME I NOTNULL DEFAULT 0,
+                 DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
                  ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
               ";
         $sqlArray = $this->dataDictionary->createTableSQL(
@@ -105,34 +108,15 @@ class DataDictionaryTest extends ADOdbTestCase
                 UNSIGNED_INTEGER_FIELD I4 UNSIGNED NOTNULL DEFAULT 0,
                 BOOLEAN_FIELD I NOTNULL DEFAULT 0,
                 DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
-                DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
                 BLOB_FIELD B,
                 LONG_FIELD XL,
                 ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers'
         ";
 
-        /*
-         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
-                VARCHAR_FIELD C(50) NOTNULL,
-                DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
-                DATE_FIELD_WITH_DEFDATE D NOTNULL DEFDATE,
-                TIMESTAMP_FIELD_WITH_DEFDATE TS NOTNULL DEFTIMESTAMP,
-                INTEGER_FIELD I4 NOTNULL DEFAULT 0,
-                UNSIGNED_INTEGER_FIELD I4 UNSIGNED NOTNULL DEFAULT 0,
-                BOOLEAN_FIELD I NOTNULL DEFAULT 0,
-                DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
-                DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
-                BLOB_FIELD B,
-                LONG_FIELD XL
-              
-        ";
-        */
-
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName,
             $flds
         );
-
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
@@ -216,6 +200,11 @@ class DataDictionaryTest extends ADOdbTestCase
             );
             return;
         }
+
+        /*
+        * Ensure the column to be altered exists
+        */
+        $this->testChangeTableSql();
 
         $tableName = $this->testTableName;
 
@@ -304,7 +293,7 @@ class DataDictionaryTest extends ADOdbTestCase
         */
 
          $flds = " 
-            DECIMAL_FIELD N(16.12) NOTNULL
+            DECIMAL_FIELD_TO_MODIFY N(16.12) NOTNULL
             ";
 
         $sqlArray = $this->dataDictionary->alterColumnSQL(
@@ -323,22 +312,22 @@ class DataDictionaryTest extends ADOdbTestCase
         $metaColumns = $this->db->metaColumns($tableName);
 
         $this->assertArrayHasKey(
-            'DECIMAL_FIELD',
+            'DECIMAL_FIELD_TO_MODIFY',
             $metaColumns,
-            'AltercolumnSQL DECIMAL_FIELD should still exist in the table'
+            'AltercolumnSQL DECIMAL_FIELD_TO_MODIFY should still exist in the table'
         );
 
         $this->assertSame(
             '16',
-            $metaColumns['DECIMAL_FIELD']->max_length,
-            'AlterColumnSQL: maxlength of DECIMAL_FIELD' .
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->max_length,
+            'AlterColumnSQL: maxlength of DECIMAL_FIELD_TO_MODIFY' .
             'should have changed from 8 to 16'
         );
 
         $this->assertSame(
             '12',
-            $metaColumns['DECIMAL_FIELD']->scale,
-            'AlterColumnSQL: Change of scale of DECIMAL_FIELD 4 to 12'
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->scale,
+            'AlterColumnSQL: Change of scale of DECIMAL_FIELD_TO_MODIFY 4 to 12'
         );
     }
 
@@ -349,7 +338,7 @@ class DataDictionaryTest extends ADOdbTestCase
      *
      * @return void
      */
-    function testAddDuplicateCasedColumn(): void
+    public function testAddDuplicateCasedColumn(): void
     {
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
@@ -432,7 +421,7 @@ class DataDictionaryTest extends ADOdbTestCase
 
         $sqlArray = $this->dataDictionary->renameColumnSQL(
             $this->testTableName,
-            'BOOLEAN_FIELD',
+            'BOOLEAN_FIELD_TO_RENAME',
             'ANOTHER_BOOLEAN_FIELD'
         );
 
