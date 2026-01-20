@@ -89,7 +89,7 @@ class XmlSchemaTest extends ADOdbTestCase
         * Load the first of 2 files designed to create then modify
         * a table using the XMLSchema functions
         */
-        $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
+        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
 
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
@@ -161,7 +161,7 @@ class XmlSchemaTest extends ADOdbTestCase
         /**
          * Load the second file to test the XML Schema update
          */
-        $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-update.xml', dirname(__FILE__));
+        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-update.xml', dirname(__FILE__));
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile
@@ -230,7 +230,7 @@ START PARSING UPDATE XML SCHEMA
         /**
          * Load the third file to drop the XML Schema update
          */
-        $schemaFile = sprintf('%s/DatabaseSetup/xmlschemafile-drop.xml', dirname(__FILE__));
+        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-drop.xml', dirname(__FILE__));
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile

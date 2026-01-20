@@ -74,8 +74,12 @@ class GetRowTest extends ADOdbCoreSetup
 
             $this->db->startTrans();
 
-            $record = $this->db->getRow($sql, $bind);
-            
+            if ($bind == null) {
+                $record = $this->db->getRow($sql);
+            } else {
+                $record = $this->db->getRow($sql, $bind);
+            }
+
             list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
             $this->db->completeTrans();

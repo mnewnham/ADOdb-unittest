@@ -28,9 +28,19 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class MetaFunctionsTest extends ADOdbTestCase
 {
-    protected string $testTableName = 'testtable_1';
+   
+    /**
+     * Global setup for the test class
+     *
+     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
 
-
+        if (!$GLOBALS['testTableName']) {
+            $GLOBALS['testTableName'] = 'testtable_1';
+        }
+    }
 
     /**
      * Test for {@see ADODConnection::metaTables()]
@@ -84,14 +94,13 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     static function providerTestMetaTables(): array
     {
-        $match = substr($GLOBALS['testTableName'], 0, 4) . '%';
         return [
             'Show both Tables & Views' => [true,false,false],
             'Show only Tables' => [true,'TABLES',false],
             'Show only Views' => [false,'VIEWS',false],
             'Show only [T]ables' => [true,'T',false],
             'Show only [V]iews' => [false,'V',false],
-            'Show only tables beginning test%' => [true,false,$match],
+            'Show only tables beginning test%' => [true,false,'test%'],
             'Show only tables beginning notest%' => [false,false,'notest%']
            ];
     }

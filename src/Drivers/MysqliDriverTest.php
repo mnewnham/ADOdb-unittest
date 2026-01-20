@@ -27,7 +27,7 @@ use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
  *
  * Test cases for for ADOdb MetaFunctions
  */
-#[RequiresPhpExtension('mysqli')]
+//#[RequiresPhpExtension('mysqli')]
 class MysqliDriverTest extends ADOdbCustomDriver
 {
     protected mixed $physicalType;

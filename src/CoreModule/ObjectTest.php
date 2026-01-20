@@ -110,7 +110,7 @@ class ObjectTest extends ADOdbTestCase
         */
         $db->startTrans();
 
-        $table3Data = sprintf('%s/DatabaseSetup/table3-data.sql', dirname(__FILE__));
+        $table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
         $table3Sql = file_get_contents($table3Data);
         $t3Sql = explode(';', $table3Sql);
         foreach ($t3Sql as $sql) {
