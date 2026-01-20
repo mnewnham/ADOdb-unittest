@@ -20,12 +20,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Drivers;
+
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
- * Class MetaFunctionsTest
+ * Class Postgres9DriverTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for the ADOdb Postgres9 Driver
  */
 class Postgres9DriverTest extends ADOdbCustomDriver
 {

@@ -5,7 +5,7 @@
  * Try to write database-agnostic tests where possible.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
- * the ADOdb Database Abstraction Layer library for PHP.
+ * the ADOdb Database Abstraction Layer library for PHP.s
  *
  * PHP version 8.0.0+
  *
@@ -24,6 +24,7 @@ namespace MNewnham\ADOdbUnitTest\Drivers;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class ADOdbCustomDriver
  * Base Class for custom driver tests
@@ -32,7 +33,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class ADOdbCustomDriver extends ADOdbTestCase
 {
     protected ?object $xmlSchema;
- 
+
     /**
      * The custom metatype identifier
      *
@@ -40,7 +41,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      * @var     string $customMetaType
      */
     protected string $customMetaType = 'J';
-    
+
     /**
      * The DB Physical identifier must be set in the
      * overload class
@@ -79,6 +80,10 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
+        if (array_key_exists('skipXmlTests', $GLOBALS['TestingControl']['xmlschema'])) {
+            return;
+        }
+
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
         $GLOBALS['ADOdbConnection']->completeTrans();
@@ -101,17 +106,16 @@ class ADOdbCustomDriver extends ADOdbTestCase
      */
     public function testSetCustomMetaType(): void
     {
-        
-        if ($this->physicalType === null ||
-            $this->columnType === null
-        ) {
+
+        if ($this->physicalType === null || $this->columnType === null) {
+
             $this->markTestSkipped(
                 'Physical type and Column type must be set ' .
                 'for the driver being tested'
             );
             return;
         }
-    
+
         /*
         * We must define the custom type before loading the data dictionary
         */
@@ -242,7 +246,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
     public function testCreateCustomFieldWithXmlSchema(): void
     {
 
-
         if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
@@ -253,7 +256,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             $this->markTestSkipped('ADOxmlSchema testing is disabled');
             return;
         }
-
 
         $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
         /*
@@ -338,7 +340,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-
         /*
         * Drop the JSON column so that we can re-add it again
         */
@@ -355,7 +356,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             );
         }
 
-
         $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
         /*
         * ReLoad the custom metatype XML files designed to create then modify
@@ -365,7 +365,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             '%s/../tools/DatabaseSetup/xmlschemafile-metatype.xml',
             dirname(__FILE__)
         );
-
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
 
@@ -378,7 +377,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             $this->skipFollowingTests = true;
             return;
         }
-
 
         $ok = $this->xmlSchema->executeSchema();
         list($errno, $errmsg) = $this->assertADOdbError('xml->executeSchema()');
@@ -417,7 +415,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             'Custom MetaType Update has failed'
         );
     }
-    
     /**
      * Test for {@see ADODConnection::qstr()}
      *
@@ -480,7 +477,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-       
         $qStrResult = sprintf('/%s/', $this->qStrExpectedResult);
 
         $testResult = preg_match($qStrResult, $returnValue);
@@ -609,7 +605,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return array [int $fetchmode, string $number_run_column, string $varchar_column]
      */
-    static function providerTestConcat(): array
+    public static function providerTestConcat(): array
     {
 
         switch (ADODB_ASSOC_CASE) {
@@ -719,7 +715,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
      *
      * @return array [int fetchmode, string number_run column, string date column]
      */
-    static function providerTestIfnull(): array
+    public static function providerTestIfnull(): array
     {
 
 

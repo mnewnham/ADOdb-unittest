@@ -20,12 +20,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Drivers;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class MetaFunctionsTest
+ * Class FirebirdDriverTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for the ADOdb firebird Driver
  */
 class FirebirdDriverTest extends ADOdbTestCase
 {

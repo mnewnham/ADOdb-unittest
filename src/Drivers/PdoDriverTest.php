@@ -22,12 +22,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Drivers;
+
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
- * Class MetaFunctionsTest
+ * Class PdoDriverTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for the ADOdb PDO Drivers
  */
 class PdoDriverTest extends ADOdbCustomDriver
 {

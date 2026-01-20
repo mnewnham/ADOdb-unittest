@@ -18,15 +18,17 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  *
  */
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
+namespace MNewnham\ADOdbUnitTest\Drivers;
+
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
- * Class MetaFunctionsTest
+ * Class MssqlnativeDriverTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for the ADOdb mssqlnative Driver
  */
-#[RequiresPhpExtension('sqlsrv')]
 class MssqlnativeDriverTest extends ADOdbTestCase
 {
     /**
@@ -108,7 +110,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      *
      * @return array
      */
-    static function providerSQLDate(): array
+    public static function providerSQLDate(): array
     {
         return [
 

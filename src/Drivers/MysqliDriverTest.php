@@ -20,6 +20,8 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Drivers;
+
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
@@ -27,28 +29,17 @@ use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
  *
  * Test cases for for ADOdb MetaFunctions
  */
-//#[RequiresPhpExtension('mysqli')]
 class MysqliDriverTest extends ADOdbCustomDriver
 {
-    protected mixed $physicalType;
-    protected ?string $columnType;
-
-    /**
-     * Global setup for the test class
+     /**
+     * The DB Physical identifier must be set in the
+     * overload class
      *
-     * @return void
+     * @example MYSQLI_TYPE_JSON
+     * @var     mixed $physicalType
      */
-    public static function setUpBeforeClass(): void
-    {
+    protected mixed $physicalType = MYSQLI_TYPE_JSON;
 
-        if (!array_key_exists('xmlschema', $GLOBALS['TestingControl'])) {
-            return;
-        }
-
-        $GLOBALS['ADOdbConnection']->startTrans();
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
-        $GLOBALS['ADOdbConnection']->completeTrans();
-    }
     /**
      * Set up the test environment
      *

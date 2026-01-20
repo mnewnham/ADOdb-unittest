@@ -18,14 +18,17 @@
  * @link https://github.com/adodb-unittest This projects home site
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
+ *
  */
+
+namespace MNewnham\ADOdbUnitTest\Drivers;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class MetaFunctionsTest
+ * Class Db2DriverTest
  *
- * Test cases for for ADOdb 
+ * Test cases for the IBM DB2 driver of ADOdb
  */
 class Db2DriverTest extends ADOdbTestCase
 {

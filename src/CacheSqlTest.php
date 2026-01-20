@@ -18,6 +18,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -57,15 +60,13 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
-
-
         /*
         *load Data into the table
         */
 
         $db->startTrans();
 
-        $table3Data = sprintf('%s/DatabaseSetup/table3-data.sql', dirname(__FILE__));
+        $table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
         $table3Sql = file_get_contents($table3Data);
         $t3Sql = explode(';', $table3Sql);
         foreach ($t3Sql as $sql) {
@@ -98,8 +99,6 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
-
-
         if ($this->skipAllTests) {
             $this->markTestSkipped('Skipping tests as caching not configured');
         }
@@ -112,7 +111,7 @@ class CacheSqlTest extends ADOdbTestCase
                         WHERE number_run_field = 3";
 
         list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
-        
+
         /*
         * activate the caching against the $db
         */
@@ -126,8 +125,6 @@ class CacheSqlTest extends ADOdbTestCase
                 $this->db->memCachePort = 11211;
                 break;
         }
-
-        
     }
 
     /**
@@ -155,8 +152,9 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [bool $success string $sql, ?array $bind]
      */
-    static function providerTestSelectCacheExecute(): array
+    public static function providerTestSelectCacheExecute(): array
     {
+
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 1);
         return [
@@ -186,7 +184,6 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @link         https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
      */
-
     #[DataProvider('providerTestSelectCacheExecute')]
     public function testSelectCacheExecute(
         bool $expectedValue,
@@ -274,7 +271,7 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [string(getRe, array return value]
      */
-    static function providerTestNonSelectCacheExecute(): array
+    public static function providerTestNonSelectCacheExecute(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
@@ -296,7 +293,6 @@ class CacheSqlTest extends ADOdbTestCase
              ],
         ];
     }
-
 
     /**
      * Test for {@see ADODConnection::cacheGetOne()]
@@ -379,7 +375,7 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [string(getRe, array return value]
      */
-    static function providerTestCacheGetOne(): array
+    public static function providerTestCacheGetOne(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
@@ -480,12 +476,13 @@ class CacheSqlTest extends ADOdbTestCase
 
         list($result, $errno, $errmsg) = $this->executeSqlString($rewriteSql);
     }
+
     /**
      * Data provider for {@see testCacheGetCol()}
      *
      * @return array [string(getRe, array return value]
      */
-    static function providerTestCacheGetCol(): array
+    public static function providerTestCacheGetCol(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
@@ -561,7 +558,6 @@ class CacheSqlTest extends ADOdbTestCase
                 'number_run_field'
             ];
         }
-
 
         if ($bind != null) {
             $this->db->setFetchMode(ADODB_FETCH_ASSOC);
@@ -648,7 +644,7 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [int success, string sql, ?array bind]
      */
-    static function providerTestCacheGetRow(): array
+    public static function providerTestCacheGetRow(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array(
@@ -691,17 +687,15 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return void
      *
-     *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cachegetall
      */
-     #[DataProvider('providerTestCacheGetAll')]
+    #[DataProvider('providerTestCacheGetAll')]
     public function testCacheGetAll(
         int $fetchMode,
         array $expectedValue,
         string $sql,
         ?array $bind
     ): void {
-
 
         if ($this->skipAllTests) {
             $this->markTestSkipped('Skipping tests as caching not configured');
@@ -775,7 +769,7 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [int fetchode, array return value, string sql, ?array bind]
      */
-    static function providerTestCacheGetAll(): array
+    public static function providerTestCacheGetAll(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');
@@ -961,7 +955,7 @@ class CacheSqlTest extends ADOdbTestCase
      *
      * @return array [int $fetchMode, array $result, string $sql, int $offset, int $rows, ?array $bind]
      */
-    static function providerTestCacheSelectLimit(): array
+    public static function providerTestCacheSelectLimit(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
 
