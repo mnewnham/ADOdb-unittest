@@ -244,7 +244,16 @@ if (!$db->isConnected()) {
     die(sprintf('%s database connection not established', $adoDriver));
 }
 
-print "Connected to driver $adoDriver\n";
+$casingDescriptions = [
+    0 => 'ADODB_ASSOC_CASE_LOWER',
+    1 => 'ADODB_ASSOC_CASE_UPPER',
+    2 => 'ADODB_ASSOC_CASE_NATIVE'
+];
+
+print "
+Connected to driver: $adoDriver
+Casing is set to {$casingDescriptions[$ADOdbSettings['casing']]}
+";
 
 /*
 * This is now available to unittests. The caching section will need this info
@@ -259,7 +268,7 @@ $GLOBALS['globalTransOff']  = 0;
 //$db->startTrans();
 
 $tableSchema = sprintf(
-    '%s/DatabaseSetup/%s/table-schema.sql',
+    '%s/../tools/DatabaseSetup/%s/table-schema.sql',
     dirname(__FILE__),
     $adoDriver
 );
@@ -274,7 +283,7 @@ readSqlIntoDatabase($db, $tableSchema);
 /*
 * Reads common format data and nserts it into the database
 */
-$table3Data = sprintf('%s/DatabaseSetup/table3-data.sql', dirname(__FILE__));
+$table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
 
 readSqlIntoDatabase($db, $table3Data);
 
