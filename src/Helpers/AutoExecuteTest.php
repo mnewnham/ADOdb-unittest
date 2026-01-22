@@ -19,11 +19,13 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Helpers;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class getUpdateSqlTest
- * Test cases for getUpdateSql
+ * Class AutoExecuteTest
+ * Test cases for AutoExecute
  */
 class AutoExecuteTest extends ADOdbTestCase
 {
@@ -96,9 +98,10 @@ class AutoExecuteTest extends ADOdbTestCase
                     $aeVar,
                     $value,
                     sprintf(
-                        '[%s] updated record should have an varchar_field value %s',
+                        '[%s] updated record should have an varchar_field value %s in array %s',
                         $fetchDescription,
-                        'AUTOEXECUTE' . $forceMode . $fetchMode
+                        'AUTOEXECUTE01' . $forceMode . $fetchMode,
+                        print_r($newRecord, true)
                     )
                 );
             }
