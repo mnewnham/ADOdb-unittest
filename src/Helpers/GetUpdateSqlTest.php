@@ -19,6 +19,8 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Helpers;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
@@ -70,7 +72,6 @@ class GetUpdateSqlTest extends ADOdbTestCase
             * This should create a record populated with default values and the
             * next available id
             */
-
             $sql = $this->db->getUpdateSql($template, $ar);
 
 
@@ -213,7 +214,9 @@ class GetUpdateSqlTest extends ADOdbTestCase
             $lastId = $this->db->getOne($sql);
 
             $p1 = $this->db->param('p1');
-            $bind = array('p1' => $lastId);
+            $bind = [
+                'p1' => $lastId
+            ];
 
             $sql = "SELECT * FROM {$this->testTableName} WHERE id=$p1";
 
@@ -231,7 +234,6 @@ class GetUpdateSqlTest extends ADOdbTestCase
             */
 
             $sql = $this->db->getUpdateSql($template, $ar);
-
 
             $response = $this->db->execute($sql, $bind);
 
@@ -294,12 +296,13 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $lastId = $this->db->getOne($sql);
 
                 $p1 = $this->db->param('p1');
-                $bind = array('p1' => $lastId);
+                $bind = [
+                    'p1' => $lastId
+                ];
 
                 $sql = "SELECT * FROM {$this->testTableName} WHERE id=$p1";
 
                 list ($template,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
-
 
                 $ar = array(
                     'varchar_field' => 'GETUPDATESQL0' . $fetchMode . $forceMode,
@@ -320,16 +323,15 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $this->assertIsObject(
                     $response,
                     'updates should return an object ' .
-                    'If the record is created successfully'
+                    'If the record is updated successfully'
                 );
-
 
                 $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
 
                 $this->assertTrue(
                     $ok,
                     'getUpdateSql should return an ADORecordSet_empty object ' .
-                    'If the record is created successfully'
+                    'If the record is updated successfully'
                 );
 
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
