@@ -18,6 +18,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest\XmlSchema;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -28,6 +31,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class XmlSchemaTest extends ADOdbTestCase
 {
+   /**
+    * Holding point for the XMLSchema object
+    * @var object|null
+    */
     protected ?object $xmlSchema;
 
     /**
@@ -72,7 +79,6 @@ class XmlSchemaTest extends ADOdbTestCase
          $this->xmlSchema = $GLOBALS['ADOxmlSchema'] ;
     }
 
-
     /**
      * Test the XML Schema creation
      *
@@ -90,7 +96,6 @@ class XmlSchemaTest extends ADOdbTestCase
         * a table using the XMLSchema functions
         */
         $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
-
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
 
@@ -167,13 +172,11 @@ class XmlSchemaTest extends ADOdbTestCase
             'Schema file does not exist: ' . $schemaFile
         );
 
-
         print "
 ###################################################
 START PARSING UPDATE XML SCHEMA
 ###################################################
 ";
-        
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
@@ -200,7 +203,6 @@ START PARSING UPDATE XML SCHEMA
         /**
         * Test the update fields in the table
         */
-
         $table = 'testxmltable_1';
         $fields = $this->db->MetaColumns($table);
 
