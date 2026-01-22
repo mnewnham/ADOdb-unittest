@@ -19,12 +19,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
+namespace MNewnham\ADOdbUnitTest\Helpers;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class MetaFunctionsTest
+ * Class GetInsertSqlTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for for ADOdb getInsertSql
  */
 class GetInsertSqlTest extends ADOdbTestCase
 {
@@ -62,7 +64,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
             $ar = array(
-                'varchar_field' => 'GETINSERTSQL\'0' . $fetchMode,
+                'varchar_field' => $this->db->qStr("GETINSERTSQL'0") . $fetchMode,
                 'integer_field' => 99,
                 'number_run_field' => 3001 + $fetchMode
             );
