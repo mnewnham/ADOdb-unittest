@@ -60,13 +60,15 @@ class ADOdbCustomDriver extends ADOdbTestCase
      */
     protected ?string $columnType;
 
+    protected string $qStrInboundValue = "Famed author James O'Sullivan";
+
     /**
      * The expected result from the qstr test which has
      * database-specific escaping. This is a reasonable default
      *
      * @var     string $qStrExpectedResult
      */
-    protected string $qStrExpectedResult = '^(Famed author James O)[\\\'](\'Sullivan)$';
+    protected string $qStrExpectedResult = "Famed author James O\\'Sullivan";
 
     /**
      * Global setup for the test class
@@ -220,11 +222,18 @@ class ADOdbCustomDriver extends ADOdbTestCase
             $flds
         );
 
+        if (!is_array($sqlArray)) {
+            $this->fail(
+                'changeTableSQL() adding metatype JSON should return an array of SQL statements'
+            );
+            return;
+        }
+
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
         if ($errno > 0) {
             $this->fail(
-                'Error adding additional custom meta type'
+                'Error adding additional custom meta type ' . $response
             );
         }
 
@@ -425,13 +434,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
     public function testQstr(): void
     {
         /*
-        * The expected result is db dependent, so we will
-        * inser the string into the empty_field column
-        * and see if it fails to insert or not.
-        */
-        $testString = "Famed author James O'Sullivan";
-
-        /*
         * Blank out the empty_field column first to ensure that
         * the total number of rows updated is correct
         */
@@ -443,8 +445,22 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-        $SQL = "UPDATE testtable_3 SET empty_field = {$this->db->qstr($testString)}";
+        $qStrInboundValue = $this->db->qstr($this->qStrInboundValue);
 
+        /*
+        * Check that the escaping is correct
+        */
+        $this->assertSame(
+            $qStrInboundValue,
+            "'$this->qStrExpectedResult'",
+            'The qstr() method should escape the inbound string correctly'
+        );
+
+
+
+        $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
+
+        print "UPDATE QSTR SQL: $SQL\n";
         list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
 
         if ($errno > 0) {
@@ -452,7 +468,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         }
 
         $expectedValue = 11;
-        $actualValue = $this->db->Affected_Rows();
+        $actualValue = $this->getAffectedRows();
 
         list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
 
@@ -477,14 +493,11 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-        $qStrResult = sprintf('/%s/', $this->qStrExpectedResult);
-
-        $testResult = preg_match($qStrResult, $returnValue);
-
         $this->assertSame(
-            true,
-            $testResult,
-            'Qstr should have returned a string with the apostrophe escaped via the database-specific method'
+            $this->qStrInboundValue,
+            $returnValue,
+            'Qstr should have returned a string with the apostrophe ' . 
+            'set back to normal after retrieval from DB'
         );
     }
 
@@ -502,10 +515,9 @@ class ADOdbCustomDriver extends ADOdbTestCase
         * insert the string into the empty_field column
         * and see if it fails to insert or not.
         */
-        $testString = "Famed author James O'Sullivan";
         $p1 = $this->db->param('p1');
         $bind = array(
-            'p1' => $this->db->addQ($testString)
+            'p1' => $this->db->addQ($this->qStrInboundValue)
         );
 
         $sql = "UPDATE testtable_3 SET empty_field = $p1";
@@ -516,10 +528,9 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-        $affectedRows =  $this->db->Affected_Rows();
+        $affectedRows =  $this->getAffectedRows();
 
         list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
-
 
         // We should have updated 11 rows
         $this->assertSame(
@@ -529,23 +540,17 @@ class ADOdbCustomDriver extends ADOdbTestCase
         );
 
         // Now we will check the value in the empty_field column
-        $sql = "SELECT empty_field FROM testtable_1";
-
-        $returnValue = $this->db->getOne($sql);
-        list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-        // Now we will check the value in the empty_field column
         $sql = "SELECT empty_field FROM testtable_3";
 
         $returnValue = $this->db->getOne($sql);
+       
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $testResult = preg_match('/^(Famed author James O)[\\\'](\'Sullivan)$/', $returnValue);
-
         $this->assertSame(
-            true,
-            $testResult,
-            'addQ should have returned a string with the apostrophe escaped'
+            $this->qStrInboundValue,
+            $returnValue,
+            'addQ should have returned a string with the apostrophe ' .
+            'set back to normal after retrieval from DB'
         );
     }
 
