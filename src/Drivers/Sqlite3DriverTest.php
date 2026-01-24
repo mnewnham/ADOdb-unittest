@@ -32,6 +32,30 @@ use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 class Sqlite3DriverTest extends ADOdbCustomDriver
 {
     /**
+     * The DB Physical identifier must be set in the
+     * overload class
+     *
+     * @var     mixed $physicalType
+     */
+    protected mixed $physicalType = 'TEXT';
+
+    /**
+     * The DB Field identifier
+     *
+     * @example JSON
+     * @var     mixed $columnType
+     */
+    protected ?string $columnType = 'JSON';
+
+    /**
+     * The expected result from the qstr test which has
+     * database-specific escaping. This is sqlite3-specific
+     * which users single quotes escaped by doubling them.
+     *
+     * @var     string $qStrExpectedResult
+     */
+    protected string $qStrExpectedResult = "Famed author James O''Sullivan";
+    /**
      * Set up the test environment
      *
      * @return void
