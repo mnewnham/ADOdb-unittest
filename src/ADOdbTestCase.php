@@ -43,6 +43,7 @@ class ADOdbTestCase extends TestCase
     protected string $testIndexName1 = 'insertion_index_1';
     protected string $testIndexName2 = 'insertion_index_2';
 
+    protected int $affectedRows = 0;
     /**
      * Starts a new ADOdb connection for each test. Use this
      * if the driver is buggy and throws too many errors. This
@@ -199,6 +200,8 @@ class ADOdbTestCase extends TestCase
         $errno  = $db->errorNo();
         $errmsg = $db->errorMsg();
 
+        $this->affectedRows = $db->Affected_Rows();
+
         if ($transactions) {
             $db->completeTrans();
         }
@@ -222,6 +225,16 @@ class ADOdbTestCase extends TestCase
         );
 
         return array($result,$errno,$errmsg);
+    }
+
+    /**
+     * Returns the number of affected rows, if any
+     *
+     * @return integer
+     */
+    public function getAffectedRows(): int
+    {
+        return $this->affectedRows;
     }
 
     /**
