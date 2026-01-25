@@ -103,10 +103,8 @@ if (!array_key_exists('blob', $availableCredentials)) {
 }
 
 if (array_key_exists('xmlschema', $availableCredentials)) {
-    if (array_key_exists(
-        'debug', 
-        $availableCredentials['xmlschema']
-    )
+    if (
+        array_key_exists('debug', $availableCredentials['xmlschema'])
         && $availableCredentials['xmlschema']['debug']
     ) {
         define('XMLS_DEBUG', 1);
@@ -117,22 +115,22 @@ $arTypeLoad = 'record';
 $GLOBALS['skipActiveRecordTests'] = 0;
 
 if (array_key_exists('activerecord', $availableCredentials)) {
-    if (array_key_exists('skipTests', $availableCredentials['activerecord'])
+    if (
+        array_key_exists('skipTests', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['skipTests']
     ) {
         $GLOBALS['skipActiveRecordTests'] = 1;
     }
 
-    if (array_key_exists('extended', $availableCredentials['activerecord'])
+    if (
+        array_key_exists('extended', $availableCredentials['activerecord'])
         && $availableCredentials['activerecord']['extended']
     ) {
         $arTypeLoad = 'recordx';
     }
     $arInclude = "/adodb-active-$arTypeLoad.inc.php";
-    if (array_key_exists(
-        'debug', 
-        $availableCredentials['xmlschema']
-    )
+    if (
+        array_key_exists('debug', $availableCredentials['xmlschema'])
         && $availableCredentials['xmlschema']['debug']
     ) {
         //define('XMLS_DEBUG', 1);
@@ -144,6 +142,8 @@ if (array_key_exists('activerecord', $availableCredentials)) {
 require_once $ADOdbSettings['directory'] . '/adodb.inc.php';
 require_once $ADOdbSettings['directory'] . '/adodb-xmlschema03.inc.php';
 require_once $ADOdbSettings['directory'] . $arInclude;
+
+require_once __DIR__ . '/../tools/adodb-constants.inc';
 
 global $argv;
 global $db;

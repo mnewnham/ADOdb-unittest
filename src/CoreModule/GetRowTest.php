@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class MetaFunctionsTest
  *
@@ -69,7 +70,6 @@ class GetRowTest extends ADOdbCoreSetup
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            
             $this->db->setFetchMode($fetchMode);
 
             $this->db->startTrans();
@@ -86,55 +86,55 @@ class GetRowTest extends ADOdbCoreSetup
 
             if ($expectedValue == 1) {
                 switch ($fetchMode) {
-                case ADODB_FETCH_ASSOC:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $value,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if associative key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
-                case ADODB_FETCH_NUM:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $key,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if numeric key exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
-                case ADODB_FETCH_BOTH:
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $value,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if associative key ' .
-                                'exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
+                    case ADODB_FETCH_ASSOC:
+                        foreach ($fields as $key => $value) {
+                            $this->assertArrayHasKey(
+                                $value,
+                                $record,
+                                sprintf(
+                                    '[%s] Checking if associative key exists in fields array',
+                                    $fetchDescription
+                                )
+                            );
+                        }
+                        break;
+                    case ADODB_FETCH_NUM:
+                        foreach ($fields as $key => $value) {
+                            $this->assertArrayHasKey(
+                                $key,
+                                $record,
+                                sprintf(
+                                    '[%s] Checking if numeric key exists in fields array',
+                                    $fetchDescription
+                                )
+                            );
+                        }
+                        break;
+                    case ADODB_FETCH_BOTH:
+                        foreach ($fields as $key => $value) {
+                            $this->assertArrayHasKey(
+                                $value,
+                                $record,
+                                sprintf(
+                                    '[%s] Checking if associative key ' .
+                                    'exists in fields array',
+                                    $fetchDescription
+                                )
+                            );
+                        }
 
-                    foreach ($fields as $key => $value) {
-                        $this->assertArrayHasKey(
-                            $key,
-                            $record,
-                            sprintf(
-                                '[%s] Checking if numeric key ' . 
-                                'exists in fields array',
-                                $fetchDescription
-                            )
-                        );
-                    }
-                    break;
+                        foreach ($fields as $key => $value) {
+                            $this->assertArrayHasKey(
+                                $key,
+                                $record,
+                                sprintf(
+                                    '[%s] Checking if numeric key ' .
+                                    'exists in fields array',
+                                    $fetchDescription
+                                )
+                            );
+                        }
+                        break;
                 }
             } else {
                 $this->assertSame(
@@ -151,30 +151,30 @@ class GetRowTest extends ADOdbCoreSetup
      *
      * @return array [int numOfRows, string sql, ?array bind]
      */
-    static function providerTestGetRow(): array
+    public static function providerTestGetRow(): array
     {
 
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 11);
-        
+
         return [
             [
-                1, 
+                1,
                 "SELECT * 
                    FROM testtable_3 
-               ORDER BY number_run_field", 
+               ORDER BY number_run_field",
                null
             ],[
-                1, 
+                1,
                 "SELECT * 
                    FROM testtable_3 
-                  WHERE number_run_field=$p1", 
+                  WHERE number_run_field=$p1",
                 array('p1' => 11)
             ],[
-                0, 
+                0,
                 "SELECT * 
                    FROM testtable_3 
-                  WHERE number_run_field=$p1", 
+                  WHERE number_run_field=$p1",
                 array('p1' => -999)
             ],
         ];

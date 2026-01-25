@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+
 /**
  * Class MetaFunctionsTest
  *
@@ -39,7 +40,7 @@ class ObjectTest extends ADOdbTestCase
 
     protected string $idKey = 'id';
 
-    
+
 
     /**
      * Set up the test environment

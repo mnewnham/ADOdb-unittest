@@ -18,6 +18,7 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -73,7 +74,7 @@ class GetAssocTest extends ADOdbCoreSetup
      *
      * @return array [int fetchmode, array expected result, string sql, ?array bind]
      */
-    static function providerTestGetAssoc(): array
+    public static function providerTestGetAssoc(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');

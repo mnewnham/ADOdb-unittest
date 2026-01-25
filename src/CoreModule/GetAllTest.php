@@ -18,9 +18,11 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class MetaFunctionsTest
  *
@@ -60,11 +62,11 @@ class GetAllTest extends ADOdbCoreSetup
             $expectedValue = $this->sortFetchBothRecords($expectedValue);
             $returnedRows  = $this->sortFetchBothRecords($returnedRows);
         }
-       
+
         $this->assertSame(
             $expectedValue,
             $returnedRows,
-            'getall() should return expected rows using casing ' . 
+            'getall() should return expected rows using casing ' .
             $this->testFetchModes[$fetchMode]
         );
     }
@@ -74,7 +76,7 @@ class GetAllTest extends ADOdbCoreSetup
      *
      * @return array [int fetchmode, array expected result, string sql, ?array bind]
      */
-    static function providerTestGetAll(): array
+    public static function providerTestGetAll(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');

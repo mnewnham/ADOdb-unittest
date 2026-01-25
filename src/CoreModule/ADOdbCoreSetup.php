@@ -23,7 +23,6 @@ namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
-
 /**
  * Class CoreSetup
  *

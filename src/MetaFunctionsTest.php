@@ -40,7 +40,6 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
 
         $GLOBALS['testTableName'] = 'testtable_1';
-
     }
 
     /**
@@ -546,13 +545,15 @@ class MetaFunctionsTest extends ADOdbTestCase
         $this->assertArrayHasKey(
             'TT_ID',
             $fkData,
-            'With fetch mode ADODB_FETCH_ASSOC, Checking for foreign key field TT_ID in testtable_2 foreign key testtable_1'
+            'With fetch mode ADODB_FETCH_ASSOC, Checking for foreign key field' .
+            'TT_ID in testtable_2 foreign key testtable_1'
         );
 
         $this->assertArrayHasKey(
             'INTEGER_FIELD',
             $fkData,
-            'With fetch mode ADODB_FETCH_ASSOC, Checking for foreign key field INTEGER_FIELD in testtable_2 foreign key testtable_1'
+            'With fetch mode ADODB_FETCH_ASSOC, Checking for foreign key field' .
+            'INTEGER_FIELD in testtable_2 foreign key testtable_1'
         );
 
 
@@ -566,7 +567,7 @@ class MetaFunctionsTest extends ADOdbTestCase
         if ($executionResult == false) {
             $this->fail(
                 'With fetch mode set to ADODB_FETCH_NUM, ' .
-                ' metaForeignKeys did not return any foreign keys'
+                'metaForeignKeys did not return any foreign keys'
             );
             return;
         }
@@ -584,13 +585,15 @@ class MetaFunctionsTest extends ADOdbTestCase
         $this->assertContains(
             'TT_ID=ID',
             $fkData,
-            'With fetch mode ADODB_FETCH_NUM, Checking for foreign key field TT_ID in testtable_2 foreign key testtable_1'
+            'With fetch mode ADODB_FETCH_NUM, Checking for foreign key ' .
+            'field TT_ID in testtable_2 foreign key testtable_1'
         );
 
         $this->assertContains(
             'INTEGER_FIELD=INTEGER_FIELD',
             $fkData,
-            'With fetch mode ADODB_FETCH_NUM Checking for foreign key field INTEGER_FIELD in testtable_2 foreign key testtable_1'
+            'With fetch mode ADODB_FETCH_NUM Checking for foreign key ' .
+            'field INTEGER_FIELD in testtable_2 foreign key testtable_1'
         );
     }
 

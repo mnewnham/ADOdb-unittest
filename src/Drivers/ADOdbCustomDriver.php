@@ -110,7 +110,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
     {
 
         if ($this->physicalType === null || $this->columnType === null) {
-
             $this->markTestSkipped(
                 'Physical type and Column type must be set ' .
                 'for the driver being tested'
@@ -496,7 +495,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         $this->assertSame(
             $this->qStrInboundValue,
             $returnValue,
-            'Qstr should have returned a string with the apostrophe ' . 
+            'Qstr should have returned a string with the apostrophe ' .
             'set back to normal after retrieval from DB'
         );
     }

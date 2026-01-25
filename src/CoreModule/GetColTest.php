@@ -23,7 +23,6 @@ namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 
-
 /**
  * Class GetColTest
  *
@@ -40,16 +39,15 @@ class GetColTest extends ADOdbCoreSetup
      *
      * @return void
      *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getcol 
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getcol
      */
     #[DataProvider('providerTestGetCol')]
     public function testGetCol(mixed $expectedValue, string $sql, ?array $bind): void
     {
 
-        foreach ($this->testFetchModes as $fetchMode=>$fetchDescription) {
-            
+        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->db->setFetchMode($fetchMode);
-            
+
             $this->db->startTrans();
             if ($bind) {
                 $cols = $this->db->getCol($sql, $bind);
@@ -60,7 +58,7 @@ class GetColTest extends ADOdbCoreSetup
                     $expectedValue,
                     count($cols),
                     sprintf(
-                        '[%s] Get col with bind variables should return' . 
+                        '[%s] Get col with bind variables should return' .
                         'expected number of rows',
                         $fetchDescription
                     )
@@ -73,7 +71,7 @@ class GetColTest extends ADOdbCoreSetup
                     $expectedValue,
                     count($cols),
                     sprintf(
-                        '[%s] getCol without bind variables should return ' . 
+                        '[%s] getCol without bind variables should return ' .
                         'expected number of rows',
                         $fetchDescription
                     )
@@ -87,22 +85,22 @@ class GetColTest extends ADOdbCoreSetup
      *
      * @return array [string(getRe, array return value]
      */
-    static function providerTestGetCol(): array
+    public static function providerTestGetCol(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
         return [
             [
-                11, 
+                11,
                 "SELECT varchar_field 
                    FROM testtable_3 
-               ORDER BY id", 
-                    null    
+               ORDER BY id",
+                    null
             ],[
                 1,
                 "SELECT testtable_3.varchar_field,testtable_3.* 
                    FROM testtable_3 
-                  WHERE varchar_field=$p1", 
+                  WHERE varchar_field=$p1",
                 $bind
             ],
             [
@@ -110,7 +108,7 @@ class GetColTest extends ADOdbCoreSetup
                 "SELECT testtable_3.varchar_field,testtable_3.* 
                    FROM testtable_3 
                   WHERE integer_field=-999
-                    AND varchar_field=$p1", 
+                    AND varchar_field=$p1",
                 $bind
             ],
         ];

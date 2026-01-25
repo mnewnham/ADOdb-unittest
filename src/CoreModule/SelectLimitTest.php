@@ -18,6 +18,7 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -89,7 +90,7 @@ class SelectLimitTest extends ADOdbCoreSetup
      *      ?array $bind
      *      ]
      */
-    static function providerTestSelectLimit(): array
+    public static function providerTestSelectLimit(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
 

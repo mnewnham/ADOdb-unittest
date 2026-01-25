@@ -19,6 +19,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -341,7 +344,7 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return array
      */
-    static function providerTestSqlDate(): array
+    public static function providerTestSqlDate(): array
     {
         $testPastTimestamp = strtotime('2000-01-02 03:04:05');
         $testNowTimestamp = time();

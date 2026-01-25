@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * ClassGetOneTest
  *
@@ -76,7 +77,7 @@ class GetOneTest extends ADOdbCoreSetup
      *
      * @return array [string expected value, string sql ?array bind]
      */
-    static function providerTestGetOne(): array
+    public static function providerTestGetOne(): array
     {
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 9);

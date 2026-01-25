@@ -18,6 +18,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -150,9 +153,9 @@ class VariablesTest extends ADOdbTestCase
                 $expectedResult = 'id';
                 break;
 
-            case ADODB_ASSOC_CASE_NATURAL:
+            case ADODB_ASSOC_CASE_NATIVE:
                 $expectedResult = 'id';
-                $caseDescription = 'ADODB_ASSOC_CASE_NATURAL';
+                $caseDescription = 'ADODB_ASSOC_CASE_NATIVE';
                 break;
         }
 

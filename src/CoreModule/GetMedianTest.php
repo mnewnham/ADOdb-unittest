@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * ClassGetOneTest
  *
@@ -82,7 +83,7 @@ class GetMedianTest extends ADOdbCoreSetup
      *   string where
      *   ]
      */
-    static function providerTestGetMedian(): array
+    public static function providerTestGetMedian(): array
     {
 
         return [
