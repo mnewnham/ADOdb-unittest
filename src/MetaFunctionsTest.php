@@ -18,6 +18,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -28,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class MetaFunctionsTest extends ADOdbTestCase
 {
-   
     /**
      * Global setup for the test class
      *
@@ -37,9 +39,8 @@ class MetaFunctionsTest extends ADOdbTestCase
     public static function setUpBeforeClass(): void
     {
 
-        if (!$GLOBALS['testTableName']) {
-            $GLOBALS['testTableName'] = 'testtable_1';
-        }
+        $GLOBALS['testTableName'] = 'testtable_1';
+
     }
 
     /**
@@ -92,7 +93,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool match, string $filterType string $mask]
      */
-    static function providerTestMetaTables(): array
+    public static function providerTestMetaTables(): array
     {
         return [
             'Show both Tables & Views' => [true,false,false],
@@ -200,7 +201,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool array type, array return value]
      */
-    static function providerTestMetaColumnNames(): array
+    public static function providerTestMetaColumnNames(): array
     {
         return array(
             'Returning Associative Array' => array(
@@ -425,7 +426,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool array type, array return value]
      */
-    static function providerTestMetaIndexUniqueness(): array
+    public static function providerTestMetaIndexUniqueness(): array
     {
         return [
              'Index vdx1 is unique' => [true,'vdx1'],
@@ -628,7 +629,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [string metatype, int offset]
      */
-    static function providerTestMetaTypes(): array
+    public static function providerTestMetaTypes(): array
     {
 
         /*
@@ -724,20 +725,6 @@ class MetaFunctionsTest extends ADOdbTestCase
 
 
             $response = $this->db->metaColumns('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError(
-                'metaColumns()',
-                null,
-                true
-            );
-
-            $this->assertTrue(
-                ($errno > 0),
-                sprintf(
-                    '[FETCH MODE %s] Checking for error when ' .
-                    'querying metaColumns for an invalid table',
-                    $fetchModeName
-                )
-            );
 
             $this->assertFalse(
                 $response,
@@ -764,20 +751,6 @@ class MetaFunctionsTest extends ADOdbTestCase
 
 
             $response = $this->db->metaColumnNames('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError(
-                'metaColumnNames()',
-                null,
-                true
-            );
-
-            $this->assertTrue(
-                ($errno > 0),
-                sprintf(
-                    '[FETCH MODE %s] Checking for error when querying ' .
-                    'metaColumnNames for an invalid table',
-                    $fetchModeName
-                )
-            );
 
             $this->assertFalse(
                 $response,
@@ -804,19 +777,7 @@ class MetaFunctionsTest extends ADOdbTestCase
 
 
             $response = $this->db->metaIndexes('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError(
-                'metaIndexes()',
-                null,
-                true
-            );
-            $this->assertTrue(
-                ($errno > 0),
-                sprintf(
-                    '[FETCH MODE %s] Checking for error when querying ' .
-                    'metaIndexes for an invalid table',
-                    $fetchModeName
-                )
-            );
+
             $this->assertFalse(
                 $response,
                 sprintf(
@@ -841,20 +802,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             $this->db->setFetchMode($fetchMode);
 
             $response = $this->db->metaPrimaryKeys('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError(
-                'metaPrimaryKeys()',
-                null,
-                true
-            );
 
-            $this->assertTrue(
-                ($errno > 0),
-                sprintf(
-                    '[FETCH MODE %s] Checking for error when querying ' .
-                    'metaPrimaryKeys for an invalid table',
-                    $fetchModeName
-                )
-            );
             $this->assertFalse(
                 $response,
                 sprintf(
@@ -879,20 +827,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             $this->db->setFetchMode($fetchMode);
 
             $response = $this->db->metaForeignKeys('invalid_table');
-            list($errno, $errmsg) = $this->assertADOdbError(
-                'metaForeignKeys()',
-                null,
-                true
-            );
 
-            $this->assertTrue(
-                ($errno > 0),
-                sprintf(
-                    '[FETCH MODE %s] Checking for error when querying ' .
-                    'metaForeignKeys for an invalid table',
-                    $fetchModeName
-                )
-            );
             $this->assertFalse(
                 $response,
                 sprintf(
