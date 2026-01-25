@@ -543,7 +543,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         $sql = "SELECT empty_field FROM testtable_3";
 
         $returnValue = $this->db->getOne($sql);
-       
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertSame(
@@ -616,7 +616,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         switch (ADODB_ASSOC_CASE) {
             case ADODB_ASSOC_CASE_UPPER:
                 return [
-                'FETCH_ASSOC,ASSOC_CASE_UPPER' =>
+                'FETCH_ASSOC, ASSOC_CASE_UPPER' =>
                 array(
                     ADODB_FETCH_ASSOC,
                     'NUMBER_RUN_FIELD',
@@ -635,12 +635,12 @@ class ADOdbCustomDriver extends ADOdbTestCase
             case ADODB_ASSOC_CASE_LOWER:
             default:
                 return [
-                'FETCH_ASSOC,ASSOC_CASE_LOWER' => [
+                'FETCH_ASSOC, ASSOC_CASE_LOWER' => [
                     ADODB_FETCH_ASSOC,
                     'number_run_field',
                     'varchar_field',
                 ],
-                'FETCH_NUM,ASSOC_CASE_UPPER' => [
+                'FETCH_NUM, ASSOC_CASE_UPPER' => [
                     0 => ADODB_FETCH_NUM,
                     1 => "0",
                     2 => "1"
