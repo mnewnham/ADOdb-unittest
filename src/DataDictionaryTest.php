@@ -19,6 +19,9 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
+namespace MNewnham\ADOdbUnitTest;
+
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -55,11 +58,6 @@ class DataDictionaryTest extends ADOdbTestCase
     {
 
         parent::setup();
-        /*
-        * Find the correct test table name
-        */
-
-        //$this->buildBasicTable();
     }
 
 
@@ -97,7 +95,6 @@ class DataDictionaryTest extends ADOdbTestCase
 
     public function testChangeTableSql(): void
     {
-
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                 VARCHAR_FIELD C(50) NOTNULL DEFAULT 'This is a default value with spaces',
@@ -137,7 +134,6 @@ class DataDictionaryTest extends ADOdbTestCase
     public function testaddColumnToBasicTable(): void
     {
 
-
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
                 'Skipping tests as the table was not created successfully'
@@ -160,17 +156,12 @@ class DataDictionaryTest extends ADOdbTestCase
 
         $GLOBALS['baseTestsComplete'] = true;
 
-
         if ($errno > 0) {
-            if ($this->baseTestsComplete == false) {
-                $this->skipFollowingTests(
-                    'Base table buildout failed'
-                );
+            if ($GLOBALS['baseTestsComplete'] == false) {
+                $this->skipFollowingTests = true;
             }
             return;
         }
-
-
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
@@ -409,7 +400,6 @@ class DataDictionaryTest extends ADOdbTestCase
      */
     public function testRenameColumnInBasicTable(): void
     {
-
 
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
