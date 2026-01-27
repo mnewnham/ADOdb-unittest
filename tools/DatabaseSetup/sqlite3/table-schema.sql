@@ -2,6 +2,7 @@
 -- All drivers must have the same table and column structure
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
+DROP VIEW IF EXISTS testtable_1_view;
 
 -- insertion_table will be built by createTable tests
 DROP TABLE IF EXISTS insertion_table;
@@ -34,6 +35,10 @@ CREATE	UNIQUE INDEX vdx1 ON testtable_1 (varchar_field);
 CREATE	UNIQUE INDEX vdx2 ON testtable_1 (integer_field,date_field);
 CREATE UNIQUE INDEX vdx3 ON testtable_1 (number_run_field);
 
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
 
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table

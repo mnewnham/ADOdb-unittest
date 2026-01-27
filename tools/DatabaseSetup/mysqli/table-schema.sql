@@ -3,6 +3,8 @@
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
 
+DROP VIEW IF EXISTS testtable_1_view;
+
 -- insertion_table will be built by createTable tests
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
@@ -31,6 +33,12 @@ CREATE TABLE testtable_1 (
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
 ) ENGINE=INNODB;
+
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
+
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table
 CREATE TABLE testtable_2 (
