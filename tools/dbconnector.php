@@ -30,16 +30,19 @@ require 'vendor/autoload.php';
  * @param object $db       The database connection object.
  * @param string $fileName The name of the SQL file to read.
  *
- * @return void
+ * @return mixed
  *
  * @example DatabaseSetup/db2/table-schema.sql
 */
-function readSqlIntoDatabase(object $db, string $fileName): void
+function readSqlIntoDatabase(object $db, string $fileName): mixed
 {
 
     if (!file_exists($fileName)) {
         die('Schema ' . $fileName . ' file for unit testing not found');
     }
+
+    $ok = false;
+
     $filePointer = fopen($fileName, 'r');
     $executionPoint = '';
     while ($filePointer && !feof($filePointer)) {
@@ -58,7 +61,7 @@ function readSqlIntoDatabase(object $db, string $fileName): void
         if (preg_match('/;$/', $line)) {
             $executionPoint = trim($executionPoint, ';');
             if ($executionPoint) {
-                $db->execute($executionPoint);
+                $ok = $db->execute($executionPoint);
             }
             $executionPoint = ''; // reset for the next statement
             continue;
@@ -66,6 +69,8 @@ function readSqlIntoDatabase(object $db, string $fileName): void
         $executionPoint .= ' ';
     }
     fclose($filePointer);
+
+    return $ok;
 }
 
 
