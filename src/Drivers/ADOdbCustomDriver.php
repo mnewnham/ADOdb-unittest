@@ -459,7 +459,6 @@ class ADOdbCustomDriver extends ADOdbTestCase
 
         $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
 
-        print "UPDATE QSTR SQL: $SQL\n";
         list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
 
         if ($errno > 0) {
