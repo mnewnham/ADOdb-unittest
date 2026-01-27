@@ -884,12 +884,12 @@ class DataDictionaryTest extends ADOdbTestCase
             return;
         }
 
-        $metaTables = $this->db->metaTables('T', '', $this->testTableName);
+        $hasMetaTable = $this->db->metaTables('T', false, $this->testTableName);
 
-        $this->assertArrayNotHasKey(
-            $this->testTableName,
-            $metaTables,
-            'Test of dropTableSQL - table should not exist'
+        
+        $this->assertFalse(
+            $hasMetaTable,
+            'Testing dropTableSQL - table should no longer exist'
         );
     }
 
