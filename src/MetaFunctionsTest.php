@@ -40,10 +40,11 @@ class MetaFunctionsTest extends ADOdbTestCase
     {
 
         $GLOBALS['testTableName'] = 'testtable_1';
+        $GLOBALS['testViewName'] = 'testtable_1_view';
     }
 
     /**
-     * Test for {@see ADODConnection::metaTables()]
+     * Test for {@see ADODConnection::metaTables()] Table Section
      *
      * @param bool   $includesTable1
      * @param string $filterType
@@ -51,8 +52,8 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return void
      */
-    #[DataProvider('providerTestMetaTables')]
-    public function testMetaTables(bool $includesTable1, mixed $filterType, mixed $mask): void
+    #[DataProvider('providerTestMetaTablesForTable')]
+    public function testMetaTablesForTable(bool $includesTable1, mixed $filterType, mixed $mask): void
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
@@ -92,7 +93,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      *
      * @return array [bool match, string $filterType string $mask]
      */
-    public static function providerTestMetaTables(): array
+    public static function providerTestMetaTablesForTable(): array
     {
         return [
             'Show both Tables & Views' => [true,false,false],
@@ -101,8 +102,73 @@ class MetaFunctionsTest extends ADOdbTestCase
             'Show only [T]ables' => [true,'T',false],
             'Show only [V]iews' => [false,'V',false],
             'Show only tables beginning test%' => [true,false,'test%'],
-            'Show only tables beginning notest%' => [false,false,'notest%']
+            'Show only tables beginning notest%' => [false,false,'notest%'],
+            'Show only tables matching testtable_1' => [true,'TABLES','testtable_1']
            ];
+    }
+
+    /**
+     * Test for {@see ADODConnection::metaTables()] Table Section
+     *
+     * @param bool   $includesTable1
+     * @param string $filterType
+     * @param string $mask
+     *
+     * @return void
+     */
+    #[DataProvider('providerTestMetaTablesForView')]
+    public function testMetaTablesForView(bool $includesView1, mixed $filterType, mixed $mask): void
+    {
+
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            $this->db->setFetchMode($fetchMode);
+
+            $executionResult = $this->db->metaTables(
+                $filterType,
+                false, //$this->db->database,
+                $mask
+            );
+            list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
+
+            $tableExists = $executionResult && in_array(
+                strtoupper($GLOBALS['testViewName']),
+                array_map('strtoupper', $executionResult)
+            );
+
+            $this->assertSame(
+                $includesView1,
+                $tableExists,
+                sprintf(
+                    "[FETCH MODE: %s] View %s should be in metaTables with 
+                    filterType %s mask %s, actually returned:
+                    %s",
+                    $fetchModeName,
+                    $GLOBALS['testViewName'],
+                    $filterType,
+                    $mask,
+                    print_r($executionResult, true)
+                )
+            );
+        }
+    }
+
+    /**
+     * Data provider for {@see testMetaTables()}
+     *
+     * @return array [bool match, string $filterType string $mask]
+     */
+    public static function providerTestMetaTablesForView(): array
+    {
+        return [
+            'Show both Tables & Views' => [true,false,false],
+            'Show only Tables' => [false,'TABLES',false],
+            'Show only Views' => [true,'VIEWS',false],
+            'Show only [T]ables' => [false,'T',false],
+            'Show only [V]iews' => [true,'V',false],
+            'Show only views beginning test%' => [true,false,'test%'],
+            'Show only views beginning notest%' => [false,false,'notest%'],
+            'Show only viewa matching testtable_1_view' => [true,'VIEWS','testtable_1_view']
+        ];
     }
 
     /**
@@ -615,7 +681,7 @@ class MetaFunctionsTest extends ADOdbTestCase
 
         $metaResult = false;
         $metaFetch = $executionResult->fetchField($offset);
-
+     
         if ($metaFetch != false) {
             $metaResult = $executionResult->metaType($metaFetch->type);
         }
@@ -839,6 +905,36 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $fetchModeName
                 )
             );
+        }
+    }
+
+    public function testMetaDatabases(): void
+    {
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            $this->db->setFetchMode($fetchMode);
+
+            $response = $this->db->metaDatabases();
+
+            $x = $this->assertIsArray(
+                $response,
+                sprintf(
+                    '[FETCH MODE %s] Checking that metaDatabases ' .
+                    'returns an array of attached databases',
+                    $fetchModeName
+                )
+            );
+
+            $dbMatch = preg_grep('/(' . $this->db->database . ')/', $response);
+
+            $this->assertTrue(
+                (count($dbMatch) == 1),
+                sprintf(
+                    '[FETCH MODE %s] Checking that metaDatabases ' .
+                    'returns the currently attached database',
+                    $fetchModeName
+                )
+            );
+
         }
     }
 }
