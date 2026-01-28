@@ -256,6 +256,7 @@ $casingDescriptions = [
 ];
 
 print "
+PHP Version: " . PHP_VERSION . "
 Connected to driver: $adoDriver
 Casing is set to {$casingDescriptions[$ADOdbSettings['casing']]}
 ";
