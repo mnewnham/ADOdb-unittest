@@ -721,7 +721,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             'Field 3 Is DATE' => ['D',3],
             'Field 4 Is INTEGER' => ['I',4],
             'Field 5 Is NUMBER' => ['N',5],
-            'Field 6 Is BOOLEAN' => ['I',6],
+            'Field 6 Is BOOLEAN' => ['L',6],
             'Field 7 Is VARCHAR' => ['C',7],
             'Field 8 Is INTEGER' => ['I',8],
             'Field 9 Does not Exist' => [false,9],
