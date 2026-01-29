@@ -886,7 +886,7 @@ class DataDictionaryTest extends ADOdbTestCase
 
         $hasMetaTable = $this->db->metaTables('T', false, $this->testTableName);
 
-        
+
         $this->assertFalse(
             $hasMetaTable,
             'Testing dropTableSQL - table should no longer exist'

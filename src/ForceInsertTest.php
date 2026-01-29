@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ForceInsertTest extends ADOdbTestCase
 {
-
     /**
      * Global setup for the test class
      *

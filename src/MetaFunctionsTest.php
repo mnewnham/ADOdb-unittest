@@ -71,11 +71,10 @@ class MetaFunctionsTest extends ADOdbTestCase
                 array_map('strtoupper', $executionResult)
             );
 
-            if (is_array($executionResult) && count($executionResult) > 5)
-            {
+            if (is_array($executionResult) && count($executionResult) > 5) {
                 $statement = sprintf(
-                    '%s and %s others', 
-                    $executionResult[0], 
+                    '%s and %s others',
+                    $executionResult[0],
                     count($executionResult)
                 );
             } else {
@@ -148,12 +147,11 @@ class MetaFunctionsTest extends ADOdbTestCase
                 array_map('strtoupper', $executionResult)
             );
 
-            
-            if (is_array($executionResult) && count($executionResult) > 5)
-            {
+
+            if (is_array($executionResult) && count($executionResult) > 5) {
                 $statement = sprintf(
-                    '%s and %s others', 
-                    $executionResult[0], 
+                    '%s and %s others',
+                    $executionResult[0],
                     count($executionResult)
                 );
             } else {
@@ -701,31 +699,31 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     #[DataProvider('providerTestMetaTypes')]
     public function testMetaTypesAgainstDataDict(
-        mixed $metaType, 
-        int $fieldLength, 
-        int $offset, 
-        string $actualResult): void
-    {
+        mixed $metaType,
+        int $fieldLength,
+        int $offset,
+        string $actualResult
+    ): void {
 
-       
-        
+
+
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $metaResult = false;
         $metaFetch = $executionResult->fetchField($offset);
-     
+
 
         if ($metaFetch != false) {
             /*
             * Stage 1, pass a string and length to MetaType()
-            */     
-           
+            */
+
             $metaResult = $GLOBALS['ADOdataDictionary']->metaType(
                 $metaFetch->type,
                 $metaFetch->max_length
             );
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -742,9 +740,9 @@ class MetaFunctionsTest extends ADOdbTestCase
 
             /*
             * Stage 2, pass a fieldobject to MetaType() as first arg
-            */     
+            */
             $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -761,9 +759,9 @@ class MetaFunctionsTest extends ADOdbTestCase
 
             /*
             * Stage 3, pass a fieldobject to MetaType() as third arg
-            */     
+            */
             $metaResult = $GLOBALS['ADOdataDictionary']->metaType('', -1, $metaFetch);
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -793,31 +791,31 @@ class MetaFunctionsTest extends ADOdbTestCase
      */
     #[DataProvider('providerTestMetaTypes')]
     public function testMetaTypesAgainstAdoConnection(
-        mixed $metaType, 
-        int $fieldLength, 
-        int $offset, 
-        string $actualResult): void
-    {
+        mixed $metaType,
+        int $fieldLength,
+        int $offset,
+        string $actualResult
+    ): void {
 
-       
-        
+
+
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $metaResult = false;
         $metaFetch = $executionResult->fetchField($offset);
-     
+
 
         if ($metaFetch != false) {
             /*
             * Stage 1, pass a string and length to MetaType()
-            */     
-           
+            */
+
             $metaResult = $this->db->metaType(
                 $metaFetch->type,
                 $metaFetch->max_length
             );
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -834,9 +832,9 @@ class MetaFunctionsTest extends ADOdbTestCase
 
             /*
             * Stage 2, pass a fieldobject to MetaType() as first arg
-            */     
+            */
             $metaResult = $this->db->metaType($metaFetch);
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -853,9 +851,9 @@ class MetaFunctionsTest extends ADOdbTestCase
 
             /*
             * Stage 3, pass a fieldobject to MetaType() as third arg
-            */     
+            */
             $metaResult = $this->db->metaType('', -1, $metaFetch);
-        
+
             $this->assertSame(
                 $metaType,
                 $metaResult,
@@ -1113,7 +1111,6 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $fetchModeName
                 )
             );
-
         }
     }
 }
