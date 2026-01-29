@@ -31,11 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ForceInsertTest extends ADOdbTestCase
 {
-   /**
-    * Holding point for the XMLSchema object
-    * @var object|null
-    */
-    protected ?object $xmlSchema;
 
     /**
      * Global setup for the test class
@@ -78,8 +73,9 @@ class ForceInsertTest extends ADOdbTestCase
         );
 
 
+        $this->db->startTrans();
         $ok = readSqlIntoDatabase($this->db, $schemaFile);
-
+        $this->db->completeTrans();
         $this->assertIsObject(
             $ok,
             'Force Schema Creation File parsing failed'
@@ -111,21 +107,18 @@ class ForceInsertTest extends ADOdbTestCase
 
         $ADODB_FORCE_MODE = $forceMode;
 
-        list($result,$errno,$errmsg) = $this->executeSqlString('DELETE FROM adodb_force_insert');
+        //list($result,$errno,$errmsg) = $this->executeSqlString('DELETE FROM adodb_force_insert');
 
-        /*
-        if (!$template) {
-             $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-            $sql = "SELECT * FROM adodb_force_insert WHERE id=-1";
-            list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
-        }
-        */
+
+        $sql = "SELECT * FROM adodb_force_insert WHERE id=-1";
+        $template = $this->db->execute($sql);
+
         $ar = [
             'trigger_field' => 9
         ];
 
         $tTable = 'adodb_force_insert';
-        $sql = $this->db->getInsertSql($tTable, $ar, false, $forceMode);
+        $sql = $this->db->getInsertSql($template, $ar, false, $forceMode);
 
         print "\nFM=$forceMode SQL=$sql\n";
 
@@ -137,7 +130,7 @@ class ForceInsertTest extends ADOdbTestCase
             'If the record is created successfully'
         );
 
-         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
+        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
 
         $sql = "SELECT * FROM adodb_force_insert";
 
