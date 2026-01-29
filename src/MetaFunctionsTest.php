@@ -71,6 +71,17 @@ class MetaFunctionsTest extends ADOdbTestCase
                 array_map('strtoupper', $executionResult)
             );
 
+            if (is_array($executionResult) && count($executionResult) > 5)
+            {
+                $statement = sprintf(
+                    '%s and %s others', 
+                    $executionResult[0], 
+                    count($executionResult)
+                );
+            } else {
+                $statement = print_r($executionResult, true);
+            }
+
             $this->assertSame(
                 $includesTable1,
                 $tableExists,
@@ -82,7 +93,7 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $this->testTableName,
                     $filterType,
                     $mask,
-                    print_r($executionResult, true)
+                    $statement
                 )
             );
         }
@@ -137,6 +148,18 @@ class MetaFunctionsTest extends ADOdbTestCase
                 array_map('strtoupper', $executionResult)
             );
 
+            
+            if (is_array($executionResult) && count($executionResult) > 5)
+            {
+                $statement = sprintf(
+                    '%s and %s others', 
+                    $executionResult[0], 
+                    count($executionResult)
+                );
+            } else {
+                $statement = print_r($executionResult, true);
+            }
+
             $this->assertSame(
                 $includesView1,
                 $tableExists,
@@ -148,7 +171,7 @@ class MetaFunctionsTest extends ADOdbTestCase
                     $GLOBALS['testViewName'],
                     $filterType,
                     $mask,
-                    print_r($executionResult, true)
+                    $statement
                 )
             );
         }
@@ -670,37 +693,183 @@ class MetaFunctionsTest extends ADOdbTestCase
      * Checks that the correct metatype is returned
      *
      * @param ?string $metaType
+     * @param int $fieldLength
      * @param int $offset
+     * @param string $actualResult
      *
      * @return void
      */
     #[DataProvider('providerTestMetaTypes')]
-    public function testMetaTypes(mixed $metaType, int $offset, string $actualResult): void
+    public function testMetaTypesAgainstDataDict(
+        mixed $metaType, 
+        int $fieldLength, 
+        int $offset, 
+        string $actualResult): void
     {
+
+       
+        
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
-
 
         $metaResult = false;
         $metaFetch = $executionResult->fetchField($offset);
      
+
         if ($metaFetch != false) {
-            $metaResult = $executionResult->metaType($metaFetch->type);
+            /*
+            * Stage 1, pass a string and length to MetaType()
+            */     
+           
+            $metaResult = $GLOBALS['ADOdataDictionary']->metaType(
+                $metaFetch->type,
+                $metaFetch->max_length
+            );
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing string type and length'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using string type and length'
+            );
+
+            /*
+            * Stage 2, pass a fieldobject to MetaType() as first arg
+            */     
+            $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing field object as 1st parameter'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using fieldobject as 1st parameter'
+            );
+
+            /*
+            * Stage 3, pass a fieldobject to MetaType() as third arg
+            */     
+            $metaResult = $GLOBALS['ADOdataDictionary']->metaType('', -1, $metaFetch);
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing field object as 3rd parameter'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using fieldobject as 3rd parameter'
+            );
         }
+    }
 
-        $this->assertSame(
-            $metaType,
-            $metaResult,
-            'Checking MetaType'
-        );
+    /**
+     * Test for {@see ADODConnection::metaType()]
+     * Checks that the correct metatype is returned
+     *
+     * @param ?string $metaType
+     * @param int $fieldLength
+     * @param int $offset
+     * @param string $actualResult
+     *
+     * @return void
+     */
+    #[DataProvider('providerTestMetaTypes')]
+    public function testMetaTypesAgainstAdoConnection(
+        mixed $metaType, 
+        int $fieldLength, 
+        int $offset, 
+        string $actualResult): void
+    {
 
-        $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+       
+        
+        $sql = 'SELECT * FROM ' . $this->testTableName;
+        list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
-        $this->assertSame(
-            $actualType,
-            $actualResult,
-            'Checking ActualType Returned By MetaType'
-        );
+        $metaResult = false;
+        $metaFetch = $executionResult->fetchField($offset);
+     
+
+        if ($metaFetch != false) {
+            /*
+            * Stage 1, pass a string and length to MetaType()
+            */     
+           
+            $metaResult = $this->db->metaType(
+                $metaFetch->type,
+                $metaFetch->max_length
+            );
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing string type and length'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using string type and length'
+            );
+
+            /*
+            * Stage 2, pass a fieldobject to MetaType() as first arg
+            */     
+            $metaResult = $this->db->metaType($metaFetch);
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing field object as 1st parameter'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using fieldobject as 1st parameter'
+            );
+
+            /*
+            * Stage 3, pass a fieldobject to MetaType() as third arg
+            */     
+            $metaResult = $this->db->metaType('', -1, $metaFetch);
+        
+            $this->assertSame(
+                $metaType,
+                $metaResult,
+                'Checking MetaType passing field object as 3rd parameter'
+            );
+
+            $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+            $this->assertSame(
+                $actualType,
+                $actualResult,
+                'Checking ActualType returned by MetaType using fieldobject as 3rd parameter'
+            );
+        }
     }
 
     /**
@@ -725,16 +894,16 @@ class MetaFunctionsTest extends ADOdbTestCase
         */
 
         return [
-            'Field 0 Is BIGINT' => ['I', 0, 'BIGINT'],
-            'Field 1 Is VARCHAR' => ['C', 1, 'VARCHAR'],
-            'Field 2 Is DATETIME' => ['T', 2, 'DATETIME'],
-            'Field 3 Is DATE' => ['D', 3, 'DATE'],
-            'Field 4 Is INT' => ['I4', 4, 'INTEGER'],
-            'Field 5 Is NUMBER' => ['N', 5, 'NUMERIC'],
-            'Field 6 Is BOOLEAN' => ['L', 6, 'BOOLEAN'],
-            'Field 7 Is VARCHAR' => ['C', 7, 'VARCHAR'],
-            'Field 8 Is BIGINT' => ['I', 8, 'BIGINT'],
-            'Field 9 Does not Exist' => [false, 9, ADODB_DEFAULT_METATYPE],
+            'Field 0 Is BIGINT' => ['I', 8, 0, 'BIGINT'],
+            'Field 1 Is VARCHAR' => ['C', 20, 1, 'VARCHAR'],
+            'Field 2 Is DATETIME' => ['T', 8, 2, 'DATETIME'],
+            'Field 3 Is DATE' => ['D', 10, 3, 'DATE'],
+            'Field 4 Is INT' => ['I4', 4, 4, 'INTEGER'],
+            'Field 5 Is NUMBER' => ['N', 12, 5, 'NUMERIC'],
+            'Field 6 Is BOOLEAN' => ['L', 1, 6, 'BOOLEAN'],
+            'Field 7 Is VARCHAR' => ['C', 240, 7, 'VARCHAR'],
+            'Field 8 Is BIGINT' => ['I', 4, 8, 'BIGINT'],
+            'Field 9 Does not Exist' => [false, -1, 9, ADODB_DEFAULT_METATYPE],
 
 
         ];
