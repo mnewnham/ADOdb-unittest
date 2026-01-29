@@ -103,7 +103,9 @@ class MetaFunctionsTest extends ADOdbTestCase
             'Show only [V]iews' => [false,'V',false],
             'Show only tables beginning test%' => [true,false,'test%'],
             'Show only tables beginning notest%' => [false,false,'notest%'],
-            'Show only tables matching testtable_1' => [true,'TABLES','testtable_1']
+            'Show only tables matching testtable_1' => [true,'TABLES','testtable_1'],
+            'Show both tables and views matching testtable_1%' => [true,false,'testtable_1%'],
+
            ];
     }
 
@@ -167,7 +169,7 @@ class MetaFunctionsTest extends ADOdbTestCase
             'Show only [V]iews' => [true,'V',false],
             'Show only views beginning test%' => [true,false,'test%'],
             'Show only views beginning notest%' => [false,false,'notest%'],
-            'Show only viewa matching testtable_1_view' => [true,'VIEWS','testtable_1_view']
+            'Show only views matching testtable_1_view' => [true,'VIEWS','testtable_1_view']
         ];
     }
 
@@ -673,7 +675,7 @@ class MetaFunctionsTest extends ADOdbTestCase
      * @return void
      */
     #[DataProvider('providerTestMetaTypes')]
-    public function testMetaTypes(mixed $metaType, int $offset): void
+    public function testMetaTypes(mixed $metaType, int $offset, string $actualResult): void
     {
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
@@ -690,6 +692,14 @@ class MetaFunctionsTest extends ADOdbTestCase
             $metaType,
             $metaResult,
             'Checking MetaType'
+        );
+
+        $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
+
+        $this->assertSame(
+            $actualType,
+            $actualResult,
+            'Checking ActualType Returned By MetaType'
         );
     }
 
@@ -715,16 +725,16 @@ class MetaFunctionsTest extends ADOdbTestCase
         */
 
         return [
-            'Field 0 Is INTEGER' => ['I',0],
-            'Field 1 Is VARCHAR' => ['C',1],
-            'Field 2 Is DATETIME' => ['T',2],
-            'Field 3 Is DATE' => ['D',3],
-            'Field 4 Is INTEGER' => ['I',4],
-            'Field 5 Is NUMBER' => ['N',5],
-            'Field 6 Is BOOLEAN' => ['L',6],
-            'Field 7 Is VARCHAR' => ['C',7],
-            'Field 8 Is INTEGER' => ['I',8],
-            'Field 9 Does not Exist' => [false,9],
+            'Field 0 Is BIGINT' => ['I', 0, 'BIGINT'],
+            'Field 1 Is VARCHAR' => ['C', 1, 'VARCHAR'],
+            'Field 2 Is DATETIME' => ['T', 2, 'DATETIME'],
+            'Field 3 Is DATE' => ['D', 3, 'DATE'],
+            'Field 4 Is INT' => ['I4', 4, 'INTEGER'],
+            'Field 5 Is NUMBER' => ['N', 5, 'NUMERIC'],
+            'Field 6 Is BOOLEAN' => ['L', 6, 'BOOLEAN'],
+            'Field 7 Is VARCHAR' => ['C', 7, 'VARCHAR'],
+            'Field 8 Is BIGINT' => ['I', 8, 'BIGINT'],
+            'Field 9 Does not Exist' => [false, 9, ADODB_DEFAULT_METATYPE],
 
 
         ];
