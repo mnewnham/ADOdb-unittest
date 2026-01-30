@@ -25,9 +25,9 @@ namespace MNewnham\ADOdbUnitTest\Drivers;
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
 
 /**
- * Class MetaFunctionsTest
+ * Class MysqliDriverTest
  *
- * Test cases for for ADOdb MetaFunctions
+ * Test cases for for the MySQLi native driver
  */
 class MysqliDriverTest extends ADOdbCustomDriver
 {
