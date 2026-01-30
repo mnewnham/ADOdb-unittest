@@ -3,6 +3,8 @@
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
 
+DROP VIEW IF EXISTS testtable_1_view;
+
 -- insertion_table will be built by createTable tests
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
@@ -27,10 +29,16 @@ CREATE TABLE testtable_1 (
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
 	PRIMARY KEY(id,integer_field),
-	unique INDEX vdx1 (varchar_field),
+	UNIQUE INDEX vdx1 (varchar_field),
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
-);
+) ENGINE=INNODB;
+
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
+
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table
 CREATE TABLE testtable_2 (
@@ -41,7 +49,7 @@ CREATE TABLE testtable_2 (
 	tt_id INTEGER NOT NULL,
 	PRIMARY KEY(id),
     FOREIGN KEY (tt_id,integer_field) REFERENCES testtable_1(id,integer_field)
-);
+) ENGINE=INNODB;
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 -- It must be innodb else we cannot test transaction scoping
@@ -55,8 +63,8 @@ CREATE TABLE testtable_3 (
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
-	PRIMARY KEY(id),
-	unique INDEX vdx31 (varchar_field),
+	PRIMARY KEY(id,integer_field),
+	UNIQUE INDEX vdx31 (varchar_field),
 	UNIQUE INDEX vdx33 (number_run_field)
 ) ENGINE=INNODB;
 
@@ -67,4 +75,4 @@ CREATE TABLE `table_name` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`column_name` VARCHAR(20),
 	PRIMARY KEY(`id`)
-);
+) ENGINE=INNODB;
