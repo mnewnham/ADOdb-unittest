@@ -156,9 +156,10 @@ class MetaColumnsTest extends MetaFunctions
                     $executionResult,
                     sprintf(
                         '[FETCH MODE %s] ' .
-                        'Checking for expected field %s in metaColumns return value',
+                        'Checking for expected field %s in metaColumns return value, got %s',
                         $fetchModeName,
-                        $expectedField
+                        $expectedField,
+                        print_r($executionResult, true)
                     )
                 );
 
