@@ -30,7 +30,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
  */
 class MoveTest extends ADOdbTestCase
 {
-    protected ?array $comparisonData = null;
+    protected ?array $expectedData = null;
     protected ?object $moveRecordSet  = null;
 
     protected int $recordCount      = 0;
@@ -74,18 +74,23 @@ class MoveTest extends ADOdbTestCase
         $db->setFetchMode(ADODB_FETCH_ASSOC);
 
         $setupSql = "SELECT * FROM testtable_3 ORDER BY id";
+        $ga = [];
 
-        $comparisonData = $db->getAll($setupSql);
-        foreach ($comparisonData as $cd) {
+        $expectedData = $db->getAll($setupSql);
+        foreach ($expectedData as $cd) {
             $obj = new \ADOFetchObj();
             foreach ($cd as $k => $v) {
                 $k = strtolower($k);
                 $obj->$k = $v;
             }
-            $GLOBALS['comparisonData'][] = $obj;
+            $GLOBALS['expectedData'][] = $obj;
+            $ga[] = json_encode($obj);
         }
 
         $GLOBALS['moveRecordSet'] = $db->execute($setupSql);
+
+        //$gax = implode("\n",$ga);
+        //file_put_contents("../gax.txt",$gax);
     }
 
     /**
@@ -98,13 +103,13 @@ class MoveTest extends ADOdbTestCase
 
         parent::setup();
 
-        if (is_array($this->comparisonData)) {
+        if (is_array($this->expectedData)) {
             return;
         }
 
-        $this->comparisonData = $GLOBALS['comparisonData'];
+        $this->expectedData = $GLOBALS['expectedData'];
 
-        $this->recordCount       = count($this->comparisonData);
+        $this->recordCount       = count($this->expectedData);
         $this->lastRecordOffset  = $this->recordCount - 1;
 
         $this->moveRecordSet = &$GLOBALS['moveRecordSet'];
@@ -150,8 +155,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[0]),
-            'The row should match the first record of comparisonData'
+            serialize($this->expectedData[0]),
+            'The row should match the first record of expectedData'
         );
 
         $currentRow = $this->moveRecordSet->currentRow();
@@ -191,8 +196,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[$this->lastRecordOffset]),
-            'The row should match the last record of comparisonData'
+            serialize($this->expectedData[$this->lastRecordOffset]),
+            'The row should match the last record of expectedData'
         );
 
         $this->assertFalse(
@@ -372,8 +377,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[$this->lastRecordOffset]),
-            'The row should match the last record of comparisonData' .
+            serialize($this->expectedData[$this->lastRecordOffset]),
+            'The row should match the last record of expectedData' .
             'after overshooting'
         );
     }
@@ -421,8 +426,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[$this->lastRecordOffset - 1 ]),
-            'The row should match the record of comparisonData'
+            serialize($this->expectedData[$this->lastRecordOffset - 1 ]),
+            'The row should match the record of expectedData'
         );
     }
 
@@ -507,18 +512,18 @@ class MoveTest extends ADOdbTestCase
             ' the set after accessing a negative offset'
         );
 
-        $row = $this->moveRecordSet->fetchObj();
+        $actualRow = $this->moveRecordSet->fetchObj();
 
         $this->assertIsObject(
-            $row,
+            $actualRow,
             'the first row should be returned as an object ' .
             'after a negative offset'
         );
 
         $this->assertSame(
-            serialize($row),
-            serialize($this->comparisonData[0]),
-            'The row should match the first record of comparisonData ' .
+            serialize($this->expectedData[0]),
+            serialize($actualRow),
+            'The row should match the first record of expectedData ' .
             'after accessing a negative offset'
         );
     }
@@ -549,18 +554,18 @@ class MoveTest extends ADOdbTestCase
             ' the set'
         );
 
-        $row = $this->moveRecordSet->fetchObj();
+        $actualRow = $this->moveRecordSet->fetchObj();
 
         $this->assertIsObject(
-            $row,
+            $actualRow,
             'the second row should be returned as an object ' .
             'after moveNext'
         );
 
         $this->assertSame(
-            serialize($row),
-            serialize($GLOBALS['comparisonData'][1]),
-            'The row should match the second record of comparisonData ' .
+            serialize($GLOBALS['expectedData'][1]),
+            serialize($actualRow),
+            'The row should match the second record of expectedData ' .
             'after moveNext'
         );
     }
@@ -582,18 +587,20 @@ class MoveTest extends ADOdbTestCase
             ' the set'
         );
 
-        $row = $this->moveRecordSet->fetchObj();
+        $actualRow = $this->moveRecordSet->fetchObj();
 
         $this->assertIsObject(
-            $row,
+            $actualRow,
             'the third row should be returned as an array ' .
             'after moveNext'
         );
 
+
+
         $this->assertSame(
-            serialize($row),
-            serialize($GLOBALS['comparisonData'][2]),
-            'The row should match the third record of comparisonData ' .
+            serialize($GLOBALS['expectedData'][2]),
+            serialize($actualRow),
+            'The row should match the third record of expectedData ' .
             'after moveNext'
         );
     }
@@ -634,8 +641,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[$this->lastRecordOffset]),
-            'The row should match the last record of comparisonData ' .
+            serialize($this->expectedData[$this->lastRecordOffset]),
+            'The row should match the last record of expectedData ' .
             'after moveLast'
         );
     }
@@ -672,8 +679,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[0]),
-            'The row should match the first record of comparisonData ' .
+            serialize($this->expectedData[0]),
+            'The row should match the first record of expectedData ' .
             'after moveLast'
         );
     }
@@ -711,8 +718,8 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertSame(
             serialize($row),
-            serialize($this->comparisonData[$this->lastRecordOffset]),
-            'The row should match the last record of comparisonData ' .
+            serialize($this->expectedData[$this->lastRecordOffset]),
+            'The row should match the last record of expectedData ' .
             'after moveLast'
         );
 
