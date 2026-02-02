@@ -66,7 +66,9 @@ class GetInsertSqlTest extends ADOdbTestCase
             $ar = array(
                 'varchar_field' => $this->db->qStr("GETINSERTSQL'0") . $fetchMode,
                 'integer_field' => 99,
-                'number_run_field' => 3001 + $fetchMode
+                'number_run_field' => 3001 + $fetchMode,
+                'datetime_field' => time(),
+                'date_field' => date('Y-m-d')
             );
 
             /*
@@ -160,7 +162,9 @@ class GetInsertSqlTest extends ADOdbTestCase
             $ar = array(
                 'varchar_field' => 'GETINSERTSQL\'1' . $fetchMode,
                 'integer_field' => 98,
-                'number_run_field' => 3011 + $fetchMode
+                'number_run_field' => 3011 + $fetchMode,
+                'datetime_field' => time(),
+                'date_field' => date('Y-m-d')
             );
 
             /*
@@ -243,7 +247,9 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'varchar_field' => 'GETINSERTSQL\'2' . $fetchMode,
                 'integer_field' => 99,
                 'number_run_field' => 3021 + $fetchMode,
-                'some_invalid_field' => 'ABC123'
+                'some_invalid_field' => 'ABC123',
+                'datetime_field' => time(),
+                'date_field' => date('Y-m-d')
             );
 
             /*
@@ -333,7 +339,9 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'varchar_field' => 'GETINSERTSQL\'4' . $fetchMode,
                 'integer_field' => 99,
                 'number_run_field' => 3041 + $fetchMode,
-                'some_invalid_field' => 'ABC123'
+                'some_invalid_field' => 'ABC123',
+                'datetime_field' => time(),
+                'date_field' => date('Y-m-d')
             );
 
             /*
