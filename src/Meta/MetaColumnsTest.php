@@ -99,12 +99,11 @@ class MetaColumnsTest extends MetaFunctions
             $this->assertIsArray(
                 $executionResult,
                 sprintf(
-                        '[FETCH MODE %s] ' .
+                    '[FETCH MODE %s] ' .
                         'Retrieving Metacolumns Objects for table %s should have returned an array',
-                        $fetchModeName,
-                        $this->testTableName
-                    )
-
+                    $fetchModeName,
+                    $this->testTableName
+                )
             );
 
 
@@ -151,15 +150,14 @@ class MetaColumnsTest extends MetaFunctions
             $this->assertIsArray(
                 $executionResult,
                 sprintf(
-                        '[FETCH MODE %s] ' .
+                    '[FETCH MODE %s] ' .
                         'Retrieving Metacolumns for table %s should have returned an array',
-                        $fetchModeName,
-                        $this->testTableName
-                    )
-
+                    $fetchModeName,
+                    $this->testTableName
+                )
             );
 
-           
+
             foreach ($expectedResult as $expectedField) {
                 $this->assertArrayHasKey(
                     $expectedField,

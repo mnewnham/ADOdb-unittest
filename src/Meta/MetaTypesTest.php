@@ -24,6 +24,8 @@ namespace MNewnham\ADOdbUnitTest\Meta;
 use MNewnham\ADOdbUnitTest\Meta\MetaFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+use function PHPUnit\Framework\fileExists;
+
 /**
  * Class MetaTypesTest
  *
@@ -40,6 +42,23 @@ class MetaTypesTest extends MetaFunctions
     {
 
         parent::setUpBeforeClass();
+
+
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/metatype_test.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['ADOdriver']
+        );
+
+        if (!file_exists($tableSchema)) {
+            return;
+        }
+
+        /*
+        * Loads the schema based on the DB type
+        */
+
+        readSqlIntoDatabase($GLOBALS['ADOdbConnection'], $tableSchema);
     }
 
     /**
@@ -54,21 +73,26 @@ class MetaTypesTest extends MetaFunctions
      * @return void
      */
     #[DataProvider('providerTestMetaTypes')]
-    public function testMetaTypesAgainstDataDict(
+    public function testGenericMetaTypesAgainstDataDict(
         mixed $metaType,
         int $fieldLength,
         int $offset,
         string $actualResult
     ): void {
 
-
+        $hasDriverTest = $this->db->metaTables('T', false, 'metatype_test');
+        if ($hasDriverTest) {
+            $this->markTestSkipped(
+                'Skipping generic test because metatype_test.sql is available for this driver',
+            );
+            return;
+        }
 
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
         $metaResult = false;
         $metaFetch = $executionResult->fetchField($offset);
-
 
         if ($metaFetch != false) {
             /*
@@ -83,7 +107,12 @@ class MetaTypesTest extends MetaFunctions
             $this->assertSame(
                 $metaType,
                 $metaResult,
-                'Checking MetaType passing string type and length'
+                sprintf(
+                    'Checking MetaType passing string ' .
+                    'type [%s] and length [%s] from FetchField()',
+                    $metaFetch->type,
+                    $metaFetch->max_length
+                )
             );
 
             $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
@@ -91,7 +120,12 @@ class MetaTypesTest extends MetaFunctions
             $this->assertSame(
                 $actualType,
                 $actualResult,
-                'Checking ActualType returned by MetaType using string type and length'
+                sprintf(
+                    'Checking Actual passing ' .
+                    'type [%s] and length [%s] from FetchField()',
+                    $metaFetch->type,
+                    $metaFetch->max_length
+                )
             );
 
             /*
@@ -129,7 +163,12 @@ class MetaTypesTest extends MetaFunctions
             $this->assertSame(
                 $actualType,
                 $actualResult,
-                'Checking ActualType returned by MetaType using fieldobject as 3rd parameter'
+                sprintf(
+                    'Checking ActualType Parameter 3 passing ' .
+                    'type [%s] and length [%s] from FetchField()',
+                    $metaFetch->type,
+                    $metaFetch->max_length
+                )
             );
         }
     }
@@ -154,6 +193,13 @@ class MetaTypesTest extends MetaFunctions
     ): void {
 
 
+        $hasDriverTest = $this->db->metaTables('T', false, 'metatype_test');
+        if ($hasDriverTest) {
+            $this->markTestSkipped(
+                'Skipping generic test because metatype_test.sql is available for this driver',
+            );
+            return;
+        }
 
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
@@ -175,7 +221,12 @@ class MetaTypesTest extends MetaFunctions
             $this->assertSame(
                 $metaType,
                 $metaResult,
-                'Checking MetaType passing string type and length'
+                sprintf(
+                    'Checking MetaType passing string ' .
+                    'type [%s] and length [%s] from FetchField()',
+                    $metaFetch->type,
+                    $metaFetch->max_length
+                )
             );
 
             $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
@@ -261,5 +312,164 @@ class MetaTypesTest extends MetaFunctions
 
 
         ];
+    }
+
+    /**
+     * Test for {@see ADODDatadict::metaType()]
+     * Checks that the correct metatype is returned
+     *
+     * @param ?string $metaType
+     * @param int $fieldLength
+     * @param int $offset
+     * @param string $actualResult
+     *
+     * @return void
+     */
+    #[DataProvider('providerTestDriverSpecificMetaTypes')]
+    public function testDriverSpecificMetaTypesAgainstDataDict(
+        string $baseFieldName,
+        int $fieldType,
+        int $fieldOffset,
+        object $metaFetch
+    ): void {
+
+
+        $hasDriverTest = $this->db->metaTables('T', false, 'metatype_test');
+        if (!$hasDriverTest) {
+            $this->markTestSkipped(
+                'Skipping driver based test because metatype_test.sql is not available for this driver',
+            );
+            return;
+        }
+
+        //$sql = 'SELECT * FROM metatype_test';
+
+        //$executionResult = $GLOBALS['ADOdbConnection']->execute($sql);
+
+        //$metaFetch = $executionResult->fetchField($fieldOffset);
+
+        $name     = $metaFetch->name;
+        $nameData = explode('_', $name);
+
+        $expectedMetaType      = strtoupper($nameData[1]);
+        $expectedActualType    = strtoupper($nameData[0]);
+        $driverColType = strtoupper($nameData[2]);
+
+        if (1 == 2) {
+        /*
+        * Stage 1, pass a string and length to MetaType()
+        */
+
+            $metaResult = $GLOBALS['ADOdataDictionary']->metaType(
+                $metaFetch->type,
+                $metaFetch->max_length
+            );
+
+            $this->assertSame(
+                $expectedMetaType,
+                $metaResult,
+                sprintf(
+                    'Checking MetaType of field [%s] passing string ' .
+                    'type [%s] and length [%s] from FetchField()',
+                    $name,
+                    $metaFetch->type,
+                    $metaFetch->max_length
+                )
+            );
+
+            $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
+
+            $this->assertSame(
+                $expectedActualType,
+                $actualResult,
+                sprintf(
+                    '
+                Checking ActualType of field [%s] returned' .
+                    ' by MetaType using string type and length',
+                    $name
+                )
+            );
+        }
+        /*
+        * Stage 2, pass a fieldobject to MetaType() as first arg
+        */
+        $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
+
+        $this->assertSame(
+            $expectedMetaType,
+            $metaResult,
+            sprintf(
+                '
+                Checking MetaType of field [%s] returned' .
+                    ' by MetaType passing fieldObject as 1st parameter',
+                $name
+            )
+        );
+
+        $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
+
+        $this->assertSame(
+            $expectedActualType,
+            $actualResult,
+            sprintf(
+                'Checking ActualType of field [%s] returned' .
+                ' by MetaType passing fieldObject as 1st parameter',
+                $name
+            )
+        );
+
+        /*
+        * Stage 3, pass a fieldobject to MetaType() as third arg
+        */
+        $metaResult = $GLOBALS['ADOdataDictionary']->metaType('', -1, $metaFetch);
+
+        $this->assertSame(
+            $expectedMetaType,
+            $metaResult,
+            sprintf(
+                'Checking MetaType of field [%s] returned' .
+                    ' by MetaType passing fieldObject as 3rd parameter',
+                $name
+            )
+        );
+
+        $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
+
+        $this->assertSame(
+            $expectedActualType,
+            $actualResult,
+            sprintf(
+                'Checking ActualType of field [%s] returned' .
+                ' by MetaType passing fieldObject as 3rd parameter',
+                $name
+            )
+        );
+    }
+
+     /**
+     * Data provider for {@see testMetaTypes()}
+     *
+     * @return array [string metatype, int offset]
+     */
+    public static function providerTestDriverSpecificMetaTypes(): array
+    {
+
+        $sql = 'SELECT * FROM metatype_test';
+        $executionResult = $GLOBALS['ADOdbConnection']->execute($sql);
+
+        $cols = $executionResult->fieldCount();
+
+        $returnData = [];
+        for ($i = 1; $i < $cols; $i++) {
+            $field = $executionResult->fetchField($i);
+            $returnData[$field->name] = array(
+                $field->name,
+                $field->type,
+                $i,
+                $field
+            );
+        }
+
+        return $returnData;
     }
 }

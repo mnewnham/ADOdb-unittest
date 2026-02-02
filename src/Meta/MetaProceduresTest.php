@@ -44,7 +44,7 @@ class MetaProceduresTest extends MetaFunctions
 
     /**
      * Tests the ADOdb Metaprocedures Function
-     * 
+     *
      * @todo Make this actually test something
      *
      * @return void
@@ -72,6 +72,5 @@ class MetaProceduresTest extends MetaFunctions
                 )
             );
         }
-
     }
 }
