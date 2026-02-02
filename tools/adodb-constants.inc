@@ -47,22 +47,33 @@ if (!defined('ADODB_FORCE_IGNORE')) {
 if (!class_exists('adoSchema')) {
     class adoSchema
     {
-        function __construct($db) {}
+        public function __construct($db)
+        {
+        }
     }
 }
 
 if (!class_exists('ADOdb_Active_Record')) {
-    class ADOdb_Active_Record{}
+    class ADOdb_Active_Record
+    {
+    }
 }
 
 if (!function_exists('ADODB_SetDatabaseAdapter')) {
-    function ADODB_SetDatabaseAdapter($db) {}
+    function ADODB_SetDatabaseAdapter($db)
+    {
+    }
 }
 
 if (!function_exists('NewDataDictionary')) {
-    function NewDataDictionary($db) {}
+    function NewDataDictionary($db)
+    {
+    }
 }
 
 if (!function_exists('newAdoConnection')) {
-    function newAdoConnection(): object { return new stdClass(); }
+    function newAdoConnection(): object
+    {
+        return new stdClass();
+    }
 }
