@@ -56,23 +56,19 @@ class MetaColumnsTest extends MetaFunctions
             $this->db->setFetchMode($fetchMode);
 
 
-            $metaTables = $this->db->metaTables('T', '', $this->testTableName);
-            list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
-
-            if ($metaTables === false) {
-                $this->fail(
-                    sprintf(
-                        '[FETCH MODE %s] metaTables did not return any table',
-                        $fetchModeName
-                    )
-                );
-                return;
-            }
-
-            $tableName = $metaTables[0];
-
-            $executionResult = $this->db->metaColumns($tableName);
+            $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+
+            $this->assertIsArray(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] ' .
+                    'Retrieving Metacolumns for table %s should have returned an array to count',
+                    $fetchModeName,
+                    $this->testTableName
+                )
+            );
+
             $this->assertSame(
                 $expectedResult,
                 count($executionResult),
@@ -100,15 +96,17 @@ class MetaColumnsTest extends MetaFunctions
 
             $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
-            if (empty($executionResult)) {
-                $this->fail(
-                    sprintf(
-                        '[FETCH MODE %s] metaColumns returned an empty array',
-                        $fetchModeName
+            $this->assertIsArray(
+                $executionResult,
+                sprintf(
+                        '[FETCH MODE %s] ' .
+                        'Retrieving Metacolumns Objects for table %s should have returned an array',
+                        $fetchModeName,
+                        $this->testTableName
                     )
-                );
-                return;
-            }
+
+            );
+
 
             foreach ($executionResult as $column => $o) {
                 $oType = get_class($o);
@@ -150,6 +148,18 @@ class MetaColumnsTest extends MetaFunctions
             $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
 
+            $this->assertIsArray(
+                $executionResult,
+                sprintf(
+                        '[FETCH MODE %s] ' .
+                        'Retrieving Metacolumns for table %s should have returned an array',
+                        $fetchModeName,
+                        $this->testTableName
+                    )
+
+            );
+
+           
             foreach ($expectedResult as $expectedField) {
                 $this->assertArrayHasKey(
                     $expectedField,
