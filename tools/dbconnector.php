@@ -21,6 +21,9 @@
 
 set_include_path(__DIR__ . '/..' . PATH_SEPARATOR . get_include_path());
 
+$unitTestToolsDirectory = __DIR__;
+
+
 require 'vendor/autoload.php';
 
 /**
@@ -271,7 +274,8 @@ $GLOBALS['ADOxmlSchema']    = new \adoSchema($db);
 $GLOBALS['TestingControl']  = $availableCredentials;
 $GLOBALS['globalTransOff']  = 0;
 
-//$db->startTrans();
+$GLOBALS['unitTestToolsDirectory'] = $unitTestToolsDirectory;
+
 
 $tableSchema = sprintf(
     '%s/../tools/DatabaseSetup/%s/table-schema.sql',
