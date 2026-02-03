@@ -58,7 +58,11 @@ class GetAssocTest extends ADOdbCoreSetup
         $this->db->setFetchMode($fetchMode);
         $this->db->startTrans();
 
-        $returnedRows = $this->db->getAssoc($sql, $bind, $forceArray, $first2Cols);
+        if ($bind) {
+            $returnedRows = $this->db->getAssoc($sql, $bind);
+        } else {
+            $returnedRows = $this->db->getAssoc($sql);
+        }
 
         $this->db->completeTrans();
 
@@ -100,7 +104,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     ORDER BY number_run_field", false
                 ],
 
-            'Bound, FETCH_NUM' =>
+            'Bound, FETCH_NUM, ASSOC_CASE_UPPER' =>
                 [ADODB_FETCH_NUM,
                      array(
                         2 => 'LINE 2',
@@ -163,14 +167,14 @@ class GetAssocTest extends ADOdbCoreSetup
                     true
                 ],
 
-                'Unbound, FETCH_ASSOC,ASSOC_CASE_UPPER,Force array false' =>
+                'Unbound, FETCH_ASSOC,ASSOC_CASE_UPPER,Force array true' =>
                 [ADODB_FETCH_ASSOC,
                     array(
-                        2 => 'LINE 2',
-                        3 => 'LINE 3',
-                        4 => 'LINE 4',
-                        5 => 'LINE 5',
-                        6 => 'LINE 6',
+                        2 => ['LINE 2'],
+                        3 => ['LINE 3'],
+                        4 => ['LINE 4'],
+                        5 => ['LINE 5'],
+                        6 => ['LINE 6'],
                     ),
                      "SELECT number_run_field,varchar_field,id
                         FROM testtable_3 
@@ -188,58 +192,94 @@ class GetAssocTest extends ADOdbCoreSetup
                 return [
             'Unbound, FETCH_ASSOC, ASSOC_CASE_LOWER' =>
                 [ADODB_FETCH_ASSOC,
-                    array(
-                        array('varchar_field' => 'LINE 2'),
-                        array('varchar_field' => 'LINE 3'),
-                        array('varchar_field' => 'LINE 4'),
-                        array('varchar_field' => 'LINE 5'),
-                        array('varchar_field' => 'LINE 6')
-                    ),
-                     "SELECT testtable_3.varchar_field 
+                    [
+                        2 => 'LINE 2',
+                        3 => 'LINE 3',
+                        4 => 'LINE 4',
+                        5 => 'LINE 5',
+                        6 => 'LINE 6'
+                    ],
+                     "SELECT number_run_field,varchar_field
                         FROM testtable_3 
                        WHERE number_run_field BETWEEN 2 AND 6
                     ORDER BY number_run_field", false],
 
-            'Bound, FETCH_NUM' =>
+            'Bound, FETCH_NUM, ASSOC_CASE_LOWER' =>
                 [ADODB_FETCH_NUM,
                     array(
-                        array('0' => 'LINE 3'),
-                        array('0' => 'LINE 4'),
-                        array('0' => 'LINE 5'),
-                        array('0' => 'LINE 6')
-                        ),
-                    "SELECT testtable_3.varchar_field 
+                        2 => 'LINE 2',
+                        3 => 'LINE 3',
+                        4 => 'LINE 4',
+                        5 => 'LINE 5',
+                        6 => 'LINE 6',
+                     ),
+                    "SELECT number_run_field,varchar_field
                        FROM testtable_3 
                       WHERE number_run_field BETWEEN $p1 AND $p2
                    ORDER BY number_run_field", $bind],
             'Bound, FETCH_BOTH' =>
                 [ADODB_FETCH_BOTH,
                     array(
-                        array(
-                            '0' => 'LINE 2',
-                            'varchar_field' => 'LINE 2'
-                        ),
-                        array(
-                            '0' => 'LINE 3',
-                            'varchar_field' => 'LINE 3'
-                        ),
-                        array(
-                            '0' => 'LINE 4',
-                            'varchar_field' => 'LINE 4'
-                        ),
-                        array(
-                            '0' => 'LINE 5',
-                            'varchar_field' => 'LINE 5'
-                        ),
-                        array(
-                            '0' => 'LINE 6',
-                            'varchar_field' => 'LINE 6'
-                        )
-                    ),
-                    "SELECT testtable_3.varchar_field 
+                        2 => 'LINE 2',
+                        3 => 'LINE 3',
+                        4 => 'LINE 4',
+                        5 => 'LINE 5',
+                        6 => 'LINE 6',
+                     ),
+                    "SELECT number_run_field,varchar_field
                        FROM testtable_3 
                       WHERE number_run_field BETWEEN $p1 AND $p2
                    ORDER BY number_run_field", $bind
+                ],
+                 'Bound, FETCH_BOTH,overflow,ASSOC_CASE_LOWER' =>
+                [ADODB_FETCH_BOTH,
+                     array(
+
+                     2 => array('varchar_field' => 'LINE 2','id' => 2),
+                        3 => array('varchar_field' => 'LINE 3','id' => 3),
+                        4 => array('varchar_field' => 'LINE 4','id' => 4),
+                        5 => array('varchar_field' => 'LINE 5','id' => 5),
+                        6 => array('varchar_field' => 'LINE 6','id' => 6)
+                     ),
+                    "SELECT number_run_field,varchar_field,id
+                       FROM testtable_3 
+                      WHERE number_run_field BETWEEN $p1 AND $p2
+                   ORDER BY number_run_field", $bind
+                ],
+
+                'Unbound, FETCH_ASSOC,ASSOC_CASE_LOWER,First 2 Cols' =>
+                [ADODB_FETCH_ASSOC,
+                    array(
+                        2 => 'LINE 2',
+                        3 => 'LINE 3',
+                        4 => 'LINE 4',
+                        5 => 'LINE 5',
+                        6 => 'LINE 6',
+                    ),
+                     "SELECT number_run_field,varchar_field 
+                        FROM testtable_3 
+                       WHERE number_run_field BETWEEN 2 AND 6
+                    ORDER BY number_run_field",
+                    false,
+                    false,
+                    true
+                ],
+
+                'Unbound, FETCH_ASSOC,ASSOC_CASE_LOWER,Force array true' =>
+                [ADODB_FETCH_ASSOC,
+                    array(
+                        2 => array('varchar_field' => 'LINE 2','id' => 2),
+                        3 => array('varchar_field' => 'LINE 3','id' => 3),
+                        4 => array('varchar_field' => 'LINE 4','id' => 4),
+                        5 => array('varchar_field' => 'LINE 5','id' => 5),
+                        6 => array('varchar_field' => 'LINE 6','id' => 6)
+                     ),
+                     "SELECT number_run_field,varchar_field,id
+                        FROM testtable_3 
+                       WHERE number_run_field BETWEEN 2 AND 6
+                    ORDER BY number_run_field",
+                    false,
+                    true
                 ],
 
                 ];
