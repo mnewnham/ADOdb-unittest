@@ -102,7 +102,7 @@ class GetAllTest extends ADOdbCoreSetup
                     ORDER BY number_run_field", null
                 ],
 
-            'Bound, FETCH_NUM' =>
+            'Bound, FETCH_NUM, ASSOC_CASE_UPPER' =>
                 [ADODB_FETCH_NUM,
                     array(
                         array('0' => 'LINE 2'),
@@ -117,7 +117,7 @@ class GetAllTest extends ADOdbCoreSetup
                    ORDER BY number_run_field", $bind
                 ],
 
-            'Bound, FETCH_BOTH' =>
+            'Bound, FETCH_BOTH, ASSOC_CASE_UPPER' =>
                 [ADODB_FETCH_BOTH,
                     array(
                         array(
@@ -167,9 +167,10 @@ class GetAllTest extends ADOdbCoreSetup
                        WHERE number_run_field BETWEEN 2 AND 6
                     ORDER BY number_run_field", null],
 
-            'Bound, FETCH_NUM' =>
+            'Bound, FETCH_NUM, ASSOC_CASE_LOWER' =>
                 [ADODB_FETCH_NUM,
-                    array(
+                     array(
+                        array('0' => 'LINE 2'),
                         array('0' => 'LINE 3'),
                         array('0' => 'LINE 4'),
                         array('0' => 'LINE 5'),
@@ -178,8 +179,9 @@ class GetAllTest extends ADOdbCoreSetup
                     "SELECT testtable_3.varchar_field 
                        FROM testtable_3 
                       WHERE number_run_field BETWEEN $p1 AND $p2
-                   ORDER BY number_run_field", $bind],
-            'Bound, FETCH_BOTH' =>
+                   ORDER BY number_run_field", $bind
+                   ],
+            'Bound, FETCH_BOTH, ASSOC_CASE_LOWER' =>
                 [ADODB_FETCH_BOTH,
                     array(
                         array(
