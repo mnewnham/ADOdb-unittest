@@ -235,7 +235,7 @@ class SelectLimitTest extends ADOdbCoreSetup
                         array(),
                         "SELECT testtable_3.date_field 
                             FROM testtable_3 
-                        ORDER BY number_run_field", 1, -9, null
+                        ORDER BY number_run_field", -9, 901, null
                 ],
              ];
         }
