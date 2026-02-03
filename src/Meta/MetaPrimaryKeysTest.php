@@ -68,28 +68,30 @@ class MetaPrimaryKeysTest extends MetaFunctions
             );
 
             if (!is_array($executionResult)) {
-                return;
+                continue;
             }
 
             $this->assertCount(
                 2,
                 $executionResult,
                 sprintf(
-                    '[FETCH MODE %s] Checking Primary Key Elements Count should be 2',
-                    $fetchModeName
+                    '[FETCH MODE %s] Checking Primary Key Elements Count should be 2, got %d',
+                    $fetchModeName,
+                    count($executionResult)
                 )
             );
 
-            if (count($executionResult) != 1) {
-                return;
+            if (count($executionResult) != 2) {
+                continue;
             }
 
             $this->assertSame(
                 'id',
                 $executionResult[0],
                 sprintf(
-                    '[FETCH MODE %s] Validating the primary key is on column ID',
-                    $fetchModeName
+                    '[FETCH MODE %s] Validating the first element of the primary key is on column ID, got %s',
+                    $fetchModeName,
+                    $executionResult[0]
                 )
             );
         }
