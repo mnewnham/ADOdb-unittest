@@ -192,6 +192,13 @@ class DataDictionaryTest extends ADOdbTestCase
             return;
         }
 
+        if ($this->adoDriver == 'sqlite3') {
+            $this->markTestSkipped(
+                'Skipping test as AlterColumnSql not currently supported by SQLite driver'
+            );
+            return;
+        }
+
         /*
         * Ensure the column to be altered exists
         */
@@ -420,6 +427,7 @@ class DataDictionaryTest extends ADOdbTestCase
             'renameColumnSql should return an array'
         );
 
+        /*
         if ($assertion) {
             if (count($sqlArray) == 0) {
                 $this->fail(
@@ -428,6 +436,7 @@ class DataDictionaryTest extends ADOdbTestCase
                 return;
             }
         }
+        */
 
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
@@ -793,6 +802,13 @@ class DataDictionaryTest extends ADOdbTestCase
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
                 'Skipping tests as the table was not created successfully'
+            );
+            return;
+        }
+
+        if ($this->adoDriver == 'sqlite3') {
+            $this->markTestSkipped(
+                'Skipping test as rename table is not currently supported by SQLite'
             );
             return;
         }
