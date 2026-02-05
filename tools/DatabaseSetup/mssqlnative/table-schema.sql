@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
+DROP TABLE IF EXISTS testtable_4;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
 DROP TABLE IF EXISTS testtable_1;
@@ -59,6 +60,12 @@ CREATE TABLE testtable_3 (
 CREATE	unique index vdx31 ON testtable_3 (varchar_field);
 CREATE	unique index vdx33 ON testtable_3 (number_run_field);
 
+-- Testtable_4 is used for blob handling
+CREATE TABLE testtable_4 (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    integer_field INT DEFAULT 0,
+	blob_field VARBINARY(MAX) 
+);
 
 -- This table is used to test the quoting of table and field names
 DROP TABLE IF EXISTS [table_name];

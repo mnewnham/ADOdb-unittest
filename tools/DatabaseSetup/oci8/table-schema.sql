@@ -1,4 +1,5 @@
--- Standard format for the unit testing
+-- Oracle Databases
+-- Standard format for the unit testing 
 -- All drivers must have the same table and column structure
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
@@ -7,6 +8,7 @@
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
+DROP TABLE IF EXISTS testtable_4;
 DROP TABLE IF EXISTS testtable_3;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
@@ -18,6 +20,7 @@ DROP TABLE IF EXISTS testxmltable_1;
 DROP SEQUENCE IF EXISTS testtable_1_seq;
 DROP SEQUENCE IF EXISTS testtable_2_seq;
 DROP SEQUENCE IF EXISTS testtable_3_seq;
+DROP SEQUENCE IF EXISTS testtable_4_seq;
 DROP SEQUENCE IF EXISTS table_name_seq;
 
 
@@ -93,6 +96,21 @@ CREATE SEQUENCE testtable_3_seq
     START WITH 1;
 
 CREATE OR REPLACE TRIGGER testable_3_t BEFORE insert ON testtable_3 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_3_seq.nextval into :new.id from dual; END; ;
+
+-- testtable_4 is used to test blob data
+-- There is no data in this table
+CREATE TABLE testtable_4 (
+	id INTEGER NOT NULL,
+	integer_field SMALLINT NOT NULL,
+	blob_field BLOB
+);
+CREATE SEQUENCE testtable_4_seq
+    INCREMENT BY 1
+    START WITH 1;
+
+CREATE OR REPLACE TRIGGER testable_4_t BEFORE insert ON testtable_4 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_4_seq.nextval into :new.id from dual; END; ;
+
+
 -- This table is used to test the quoting of table and field names
 -- It uses a reserved word as the table name and column names
 DROP TABLE IF EXISTS "table_name";
