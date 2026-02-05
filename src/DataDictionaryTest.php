@@ -73,7 +73,7 @@ class DataDictionaryTest extends ADOdbTestCase
 
         $sql = "DROP TABLE IF EXISTS {$this->testTableName}";
 
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
+        list ($response,$errno,$errmsg) = $this->executeSqlString($sql, null, true);
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
