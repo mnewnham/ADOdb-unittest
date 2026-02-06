@@ -23,7 +23,11 @@ DROP SEQUENCE IF EXISTS testtable_3_seq;
 DROP SEQUENCE IF EXISTS blob_storage_table_seq;
 DROP SEQUENCE IF EXISTS table_name_seq;
 
-
+DROP TRIGGER IF EXISTS testtable_1_t;
+DROP TRIGGER IF EXISTS testtable_2_t;
+DROP TRIGGER IF EXISTS testtable_3_t;
+DROP TRIGGER IF EXISTS blob_storage_table_t;
+DROP TRIGGER IF EXISTS table_name_t;
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (
@@ -104,11 +108,13 @@ CREATE TABLE blob_storage_table (
 	integer_field SMALLINT NOT NULL,
 	blob_field BLOB
 );
+
+-- Creates an auto-increment column
 CREATE SEQUENCE blob_storage_table_seq
     INCREMENT BY 1
     START WITH 1;
 
-CREATE OR REPLACE TRIGGER testable_4_t BEFORE insert ON blob_storage_table FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select blob_storage_table_seq.nextval into :new.id from dual; END; ;
+CREATE OR REPLACE TRIGGER blob_storage_table_t BEFORE insert ON blob_storage_table FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select blob_storage_table_seq.nextval into :new.id from dual; END; ;
 
 
 -- This table is used to test the quoting of table and field names
