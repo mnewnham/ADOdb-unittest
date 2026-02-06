@@ -34,7 +34,7 @@ class BlobHandlingTest extends ADOdbTestCase
     protected ?string $testBlobFile;
 
 
-    protected string $testTableName = 'testtable_2';
+    protected string $testTableName = 'blob_storage_table';
 
 
     protected int $integerField = 9002;
@@ -64,16 +64,9 @@ class BlobHandlingTest extends ADOdbTestCase
 
         $GLOBALS['ADOdbConnection']->startTrans();
 
-        /*
-        * Find the id that matches integer_field in testtable_1
-        * We will use this to set up a foreign key in testtable_2
-        */
-        $fksql = "(SELECT id 
-                  FROM testtable_1 
-                 WHERE integer_field=9002)";
-
-        $sql = "INSERT INTO testtable_2 (integer_field, date_field,blob_field,tt_id)
-                     VALUES (9002,'2025-02-01',null,$fksql)";
+        
+        $sql = "INSERT INTO blob_storage_table (integer_field)
+                     VALUES (9002)";
 
 
         $GLOBALS['ADOdbConnection']->Execute($sql);
@@ -159,9 +152,6 @@ class BlobHandlingTest extends ADOdbTestCase
     public function testUpdateBlob(): void
     {
 
-
-
-        //$this->db->debug = false; // Disable debug output for this test
         $fd = file_get_contents($this->testBlobFile);
         $blob = $this->db->blobEncode($fd);
         list($errno, $errmsg) = $this->assertADOdbError('blobEncode()');
