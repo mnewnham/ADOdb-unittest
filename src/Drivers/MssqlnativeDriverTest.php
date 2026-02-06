@@ -10,7 +10,7 @@
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <email@email.com>
- * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @copyright 2025,2026 Mark Newnham
  * @license   MIT https://google.com
  *
  * @link https://github.com/mnewnham/adodb-unittest This projects home site
