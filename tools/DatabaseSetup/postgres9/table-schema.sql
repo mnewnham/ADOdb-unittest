@@ -39,7 +39,7 @@ CREATE TABLE testtable_2 (
     id SERIAL PRIMARY KEY,
     integer_field SMALLINT DEFAULT 0,
 	date_field DATE,
-	blob_field TEXT,
+	blob_field BYTEA,
     FOREIGN KEY (integer_field,date_field) REFERENCES testtable_1(integer_field,date_field)
 );
 -- Testtable_3 is loaded with data for testing the cache and sql functions
@@ -63,3 +63,13 @@ CREATE TABLE "table_name" (
 	"id" SERIAL PRIMARY KEY,
 	"column_name" VARCHAR(20)
 	);
+
+-- blob_storage_table is used to blob handling
+-- There is no data in this table
+DROP TABLE IF EXISTS blob_storage_table;
+
+CREATE TABLE blob_storage_table (
+    id SERIAL PRIMARY KEY,
+    integer_field SMALLINT DEFAULT 0,
+	blob_field BYTEA
+);

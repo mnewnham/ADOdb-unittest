@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
-DROP TABLE IF EXISTS testtable_4;
+DROP TABLE IF EXISTS blob_storage_table;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
 DROP TABLE IF EXISTS testtable_1;
@@ -69,8 +69,8 @@ CREATE TABLE testtable_3 (
 	UNIQUE INDEX vdx33 (number_run_field)
 ) ENGINE=INNODB;
 
--- Testtable_4 is built for blob testing
-CREATE TABLE testtable_4 (
+-- blob_storage_table is built for blob testing
+CREATE TABLE blob_storage_table (
 	id INT NOT NULL AUTO_INCREMENT,
 	integer_field INT(2) DEFAULT 0,
 	blob_field LONGBLOB,
