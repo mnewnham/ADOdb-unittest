@@ -19,9 +19,9 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\Meta;
+namespace MNewnham\ADOdbUnitTest\DataDict;
 
-use MNewnham\ADOdbUnitTest\Meta\MetaFunctions;
+use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -29,7 +29,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for for ADOdb #name#
  */
-class #name#Test extends MetaFunctions
+class #name#Test extends DataDictFunctions
 {
     /**
      * Global setup for the test class
