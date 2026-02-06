@@ -25,7 +25,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class MetaFunctionsTest
+ * Class MetaFunctions
  *
  * Test cases for for ADOdb MetaFunctions
  */
