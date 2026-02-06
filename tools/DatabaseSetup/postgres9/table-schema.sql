@@ -14,6 +14,8 @@ DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
 DROP TABLE IF EXISTS testxmltable_1;
 
+DROP TYPE IF EXISTS ENUM_FIELD_TO_KEEP_ENUM_TYPE;
+
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (
