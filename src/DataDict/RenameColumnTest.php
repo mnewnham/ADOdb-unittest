@@ -25,11 +25,11 @@ use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class DataDictRenameColumnTest
+ * Class RenameColumnTest
  *
  * Test cases for for ADOdb DataDictRenameColumn
  */
-class DataDictRenameColumnTest extends DataDictFunctions
+class RenameColumnTest extends DataDictFunctions
 {
     /**
      * Global setup for the test class

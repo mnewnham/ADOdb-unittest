@@ -49,14 +49,8 @@ class DropIndexTest extends DataDictFunctions
      *
      * @return void
      */
-    public function testdropIndexFromBasicTable(): void
+    public function testdropValidIndex(): void
     {
-        if ($this->skipFollowingTests) {
-            $this->markTestSkipped('Skipping tests as the table or column was not created successfully');
-            return;
-        }
-
-
         $sqlArray = $this->dataDictionary->dropIndexSQL(
             $this->testIndexName1,
             $this->testTableName
@@ -74,6 +68,60 @@ class DropIndexTest extends DataDictFunctions
             $metaIndexes,
             'dropIndexSQL() Using Array For Fields ' .
             'should have dropped index ' . $this->testIndexName1
+        );
+    }
+
+    /**
+     * Test attempting to drop an invalid named index
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:dropindexsql
+     *
+     * @return void
+     */
+    public function testdropInvalidIndex(): void
+    {
+        $sqlArray = $this->dataDictionary->dropIndexSQL(
+            'drop_invalid_index_name',
+            $this->testTableName
+        );
+
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
+        if ($errno > 0) {
+            return;
+        }
+
+        $this->assertSame(
+            false,
+            $result,
+            'DropIndexSql() should return false if the index to drop ' .
+            'does not exist on the specified table'
+        );
+    }
+
+    /**
+     * Test attempting to drop an invalid named index
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:dropindexsql
+     *
+     * @return void
+     */
+    public function testdropIndexFromInvalidTable(): void
+    {
+        $sqlArray = $this->dataDictionary->dropIndexSQL(
+            'drop_invalid_index_name',
+            'drop_invalid_table_name'
+        );
+
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
+        if ($errno > 0) {
+            return;
+        }
+
+        $this->assertSame(
+            false,
+            $result,
+            'DropIndexSql() should return false if the table name to drop ' .
+            'an index from does not exist'
         );
     }
 }

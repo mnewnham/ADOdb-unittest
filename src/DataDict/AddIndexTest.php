@@ -25,11 +25,11 @@ use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class DataDictAddIndexTestTest
+ * Class AddIndexTestTest
  *
  * Test cases for for ADOdb DataDictAddIndexTest
  */
-class DataDictAddIndexTest extends DataDictFunctions
+class AddIndexTest extends DataDictFunctions
 {
     /**
      * Global setup for the test class

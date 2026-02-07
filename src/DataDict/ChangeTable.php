@@ -25,11 +25,11 @@ use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class DataDictChangeTableTest
+ * Class ChangeTableTest
  *
  * Test cases for for ADOdb DataDictChangeTable
  */
-class DataDictChangeTableTest extends DataDictFunctions
+class ChangeTableTest extends DataDictFunctions
 {
     /**
      * Global setup for the test class

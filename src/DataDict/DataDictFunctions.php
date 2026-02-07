@@ -34,7 +34,7 @@ class DataDictFunctions extends ADOdbTestCase
     protected bool $skipCommentTests = false;
 
     protected string $testTableName = 'dictionary_change_test_table';
-    protected string $testIndexName1 = 'insertion_index_1';
+    protected string $testIndexName1 = 'index_to_drop';
     protected string $testIndexName2 = 'insertion_index_2';
 
     /**

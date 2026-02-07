@@ -25,11 +25,11 @@ use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class DataDictAlterColumnTest
+ * Class AlterColumnTest
  *
  * Test cases for for ADOdb DataDictAlterColumn
  */
-class DataDictAlterColumnTest extends DataDictFunctions
+class AlterColumnTest extends DataDictFunctions
 {
     /**
      * Global setup for the test class

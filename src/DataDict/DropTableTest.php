@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for Data Dictionary Drop Column functions of ADODb
+ * Tests cases for Dictionary Drop Table functions of ADODb
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -25,11 +25,11 @@ use MNewnham\ADOdbUnitTest\DataDict\DataDictFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class DataDictDropColumnTest
+ * Class DropTableTest
  *
- * Test cases for for ADOdb DataDictDropColumn
+ * Test cases for for ADOdb DataDictDropTable
  */
-class DataDictDropColumnTest extends DataDictFunctions
+class DropTableTest extends DataDictFunctions
 {
     /**
      * Global setup for the test class
@@ -43,15 +43,13 @@ class DataDictDropColumnTest extends DataDictFunctions
     }
 
     /**
-     * Test for {@see ADODConnection::dropColumnSQL()}
+     * Test for {@see ADODConnection::dropTableSQL()}
      *
-     * Written entirely by Copilot
-     *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:dropcolumnsql
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:droptablesql
      *
      * @return void
      */
-    public function testDropColumnInBasicTable(): void
+    public function testDropTable(): void
     {
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
@@ -61,40 +59,19 @@ class DataDictDropColumnTest extends DataDictFunctions
         }
 
 
-        $sqlArray = $this->dataDictionary->dropColumnSQL(
-            $this->testTableName,
-            'DROPPABLE_FIELD'
-        );
-
-        if (!is_array($sqlArray)) {
-            $this->fail(
-                'dropColumnSql() should always return an array'
-            );
-            return;
-        }
-
-        if (count($sqlArray) == 0) {
-            $this->fail(
-                'dropColumnSql() not supported by driver'
-            );
-        }
+        $sqlArray = $this->dataDictionary->dropTableSQL($this->testTableName);
 
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
             return;
         }
 
-        $metaColumns = $this->db->metaColumns($this->testTableName);
+        $hasMetaTable = $this->db->metaTables('T', false, $this->testTableName);
 
-        $this->assertArrayNotHasKey(
-            'DROPPABLE_FIELD',
-            $metaColumns,
-            'after executution of dropColumnSQL(), ' .
-            'column DROPPABLE_FIELD should no longer exist'
+
+        $this->assertFalse(
+            $hasMetaTable,
+            'Testing dropTableSQL - table should no longer exist'
         );
-
-        if (array_key_exists('DROPPABLE_FIELD', $metaColumns)) {
-            $this->skipFollowingTests = true;
-        }
     }
 }
