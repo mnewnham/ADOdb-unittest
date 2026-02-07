@@ -42,7 +42,7 @@ class DataDictAlterTableTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
-     public function testChangeTableSql(): void
+    public function testChangeTableSql(): void
     {
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
@@ -72,5 +72,4 @@ class DataDictAlterTableTest extends DataDictFunctions
             );
         }
     }
-
 }

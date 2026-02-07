@@ -42,7 +42,7 @@ class DataDictAddColumnTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
-    
+
     /**
      * Test for {@see ADODConnection::addColumnSQL()}
      *
@@ -53,7 +53,7 @@ class DataDictAddColumnTest extends DataDictFunctions
     public function testaddColumnToBasicTable(): void
     {
 
-       
+
         $flds = " 
             NEW_VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
             NEW_DATE_FIELD D NOTNULL DEFAULT '2010-01-01',

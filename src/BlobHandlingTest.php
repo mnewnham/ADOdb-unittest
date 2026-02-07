@@ -64,7 +64,7 @@ class BlobHandlingTest extends ADOdbTestCase
 
         $GLOBALS['ADOdbConnection']->startTrans();
 
-        
+
         $sql = "INSERT INTO blob_storage_table (integer_field)
                      VALUES (9002)";
 

@@ -108,7 +108,4 @@ class DataDictDuplicateColumnTest extends DataDictFunctions
             );
         }
     }
-
-
-
 }

@@ -140,5 +140,4 @@ class DataDictAddIndexTest extends DataDictFunctions
             'added index ' . $this->testIndexName1
         );
     }
-
 }

@@ -65,7 +65,7 @@ class DataDictAlterColumnTest extends DataDictFunctions
             return;
         }
 
-        
+
         $tableName = $this->testTableName;
 
         $metaColumns = $this->db->metaColumns($tableName);
@@ -182,5 +182,4 @@ class DataDictAlterColumnTest extends DataDictFunctions
             'AlterColumnSQL: Change of scale of DECIMAL_FIELD_TO_MODIFY 4 to 12'
         );
     }
-
 }

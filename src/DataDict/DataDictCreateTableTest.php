@@ -42,7 +42,7 @@ class DataDictCreateTableTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
-    
+
     /**
      * Test for {@see ADODConnection::CreateTableSQL()}
      *
@@ -73,5 +73,4 @@ class DataDictCreateTableTest extends DataDictFunctions
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
     }
-
 }

@@ -76,5 +76,4 @@ class DataDictDropIndexTest extends DataDictFunctions
             'should have dropped index ' . $this->testIndexName1
         );
     }
-
 }

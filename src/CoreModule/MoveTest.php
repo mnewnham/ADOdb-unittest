@@ -94,11 +94,9 @@ class MoveTest extends ADOdbTestCase
                 $obj->$k = $v;
             }
             $GLOBALS['expectedData'][] = $obj;
-
         }
 
         $GLOBALS['moveRecordSet'] = $db->execute($setupSql);
-
     }
 
     /**
@@ -221,7 +219,7 @@ class MoveTest extends ADOdbTestCase
         $currentRow = $this->moveRecordSet->currentRow();
 
         $this->assertSame(
-            $this->lastRecordOffset,    
+            $this->lastRecordOffset,
             $currentRow,
             'Currentrow() should retue\rn a value of lastrecord at the first record'
         );
@@ -259,7 +257,7 @@ class MoveTest extends ADOdbTestCase
         $currentRow = $this->moveRecordSet->currentRow();
 
         $this->assertSame(
-            $this->lastRecordOffset,    
+            $this->lastRecordOffset,
             $currentRow,
             'Currentrow() should retue\rn a value of lastrecord at the first record'
         );
@@ -432,8 +430,8 @@ class MoveTest extends ADOdbTestCase
 
 
         $this->assertSame(
-             serialize($this->expectedData[$this->lastRecordOffset - 1 ]),
-             serialize($row),
+            serialize($this->expectedData[$this->lastRecordOffset - 1 ]),
+            serialize($row),
             'The row should match the record of expectedData'
         );
     }
@@ -500,7 +498,6 @@ class MoveTest extends ADOdbTestCase
         );
 
         $currentRow = $this->moveRecordSet->currentRow();
-
     }
 
     /**
@@ -689,7 +686,7 @@ class MoveTest extends ADOdbTestCase
             serialize($this->expectedData[0]),
             serialize($row),
             'The row should match the first record of expected data ' .
-            'after moveFirst()' 
+            'after moveFirst()'
         );
     }
 
@@ -733,7 +730,7 @@ class MoveTest extends ADOdbTestCase
             'The row should match the last record of expectedData ' .
             'after moveLast'
         );
-        
+
 
         /*
         * Move pointer forward one, should be past last record
@@ -757,6 +754,5 @@ class MoveTest extends ADOdbTestCase
             $this->moveRecordSet->EOF,
             'moveNext() should return should set the EOF flag after moving past EOF'
         );
-
     }
 }

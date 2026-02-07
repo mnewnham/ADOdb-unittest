@@ -97,5 +97,4 @@ class DataDictDropColumnTest extends DataDictFunctions
             $this->skipFollowingTests = true;
         }
     }
-
 }
