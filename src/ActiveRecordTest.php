@@ -61,7 +61,7 @@ class ActiveRecordTest extends ADOdbTestCase
         $tableSchema = sprintf(
             '%s/../tools/DatabaseSetup/%s/active-record-schema.sql',
             dirname(__FILE__),
-            $adoDriver
+            $GLOBALS['SqlProvider']
         );
 
         $tableSql = file_get_contents($tableSchema);

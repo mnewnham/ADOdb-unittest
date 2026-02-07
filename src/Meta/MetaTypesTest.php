@@ -47,7 +47,7 @@ class MetaTypesTest extends MetaFunctions
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/metatype-test.sql',
             $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['ADOdriver']
+            $GLOBALS['SqlProvider']
         );
 
         if (!file_exists($tableSchema)) {

@@ -11,7 +11,7 @@
  * @category  Library
  * @package   ADOdb-unittest
  * @author    Mark Newnham <mnewnham@github.com>
- * @copyright 2025 Mark Newnham, Damien Regad and the ADOdb community
+ * @copyright 2025,2026 Mark Newnham
  * @license   MIT https://en.wikipedia.org/wiki/MIT_License
  *
  * @link https://github.com/mnewnham/adodb-unittest This projects home site
@@ -75,6 +75,22 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
 
     return $ok;
 }
+
+/*
+* What native mode driver provides the test
+* SQL files for the PDO drivers
+*/
+$pdoSqlProviders = [
+    'pdo-firebird' => 'firebird',
+    'pdo-ibm' => 'db2',
+    'pdo-informix' => 'pdo-informix',
+    'pdo-mssql' => 'mssqlnative',
+    'pdo-mysql' => 'mysqli',
+    'pdo-oci' => 'oci8',
+    'pdo-pgsql' => 'postgres9',
+    'pdo-sqlite' => 'sqlite3',
+    'pdo-sqlsrv' => 'mssqlnative'
+];
 
 
 $iniFile = stream_resolve_include_path('adodb-unittest.ini');
@@ -276,11 +292,15 @@ $GLOBALS['globalTransOff']  = 0;
 
 $GLOBALS['unitTestToolsDirectory'] = $unitTestToolsDirectory;
 
+$GLOBALS['SqlProvider'] = $adoDriver;
+if (substr($adoDriver, 0, 3) == 'pdo') {
+    $GLOBALS['SqlProvider'] = $pdoSqlProviders[$adoDriver]; 
+}
 
 $tableSchema = sprintf(
     '%s/../tools/DatabaseSetup/%s/table-schema.sql',
     dirname(__FILE__),
-    $adoDriver
+    $GLOBALS['SqlProvider']
 );
 
 /*

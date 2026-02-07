@@ -68,7 +68,7 @@ class ForceInsertTest extends ADOdbTestCase
         $schemaFile = sprintf(
             '%s/../tools/DatabaseSetup/%s/force-insert-test.sql',
             dirname(__FILE__),
-            $GLOBALS['ADOdriver']
+            $GLOBALS['SqlProvider']
         );
 
 
