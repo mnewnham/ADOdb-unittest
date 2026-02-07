@@ -101,5 +101,6 @@ CREATE TABLE dictionary_change_test_table (
 	droppable_field decimal(10.6) NOT NULL DEFAULT 80.111,
 	enum_field_to_keep ENUM('duplo','lego','meccano'),
 	varchar_field VARCHAR(50),
-	PRIMARY KEY(id)
+	PRIMARY KEY(id),
+	UNIQUE INDEX index_to_drop (varchar_field)
 );
