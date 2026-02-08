@@ -60,10 +60,6 @@ class DuplicateColumnTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($tableName);
 
-        if (!array_key_exists('VARCHAR_FIELD', $metaColumns)) {
-            $this->testaddColumnToBasicTable();
-        }
-
         $tableName = $this->testTableName;
 
         $flds = " 
