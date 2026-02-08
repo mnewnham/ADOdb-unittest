@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Tests cases for MetaProcedures functions of ADODb
+ * Tests case for Basic MetaProcedures functions of ADODb
+ *
+ * Just tests that basic functionality exists. For detailed
+ * testing, use the Procedures Directory
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -52,12 +55,6 @@ class MetaProceduresTest extends MetaFunctions
     public function testMetaProcedures(): void
     {
 
-        /*
-        function metaProcedures(
- optional string $namePattern=null,
- optional string $catalog=null,
- optional string $schemaPattern=null
- */
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->setFetchMode($fetchMode);
 

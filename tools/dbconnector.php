@@ -48,12 +48,29 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
 
     $filePointer = fopen($fileName, 'r');
     $executionPoint = '';
+    $accumulatorString = '';
+    $accumulatorFlag   = false;
+
     while ($filePointer && !feof($filePointer)) {
         $line = fgets($filePointer);
         $line = trim($line);
 
         if (!$line) {
             continue; // skip empty lines
+        }
+
+        if ($line == '-- READ <<'){
+            $accumulatorFlag = true;
+            continue;
+        } elseif ($line == '-- <<') {
+            $accumulatorFlag = false;
+            $line = $accumulatorString . ';';
+        }
+
+
+        if ($accumulatorFlag) {
+            $accumulatorString .= $line . ' ';
+            continue;
         }
 
         if (substr($line, 0, 2) === '--') {
@@ -162,6 +179,16 @@ if (array_key_exists('activerecord', $availableCredentials)) {
 } else {
     $GLOBALS['skipActiveRecordTests'] = 1;
 }
+
+$GLOBALS['skipStoredProcedureTests'] = 1;
+
+if (array_key_exists('storedprocedures', $availableCredentials)) {
+    $spParameters = $availableCredentials['storedprocedures'];
+    if (array_key_exists('skipTests', $spParameters)) {
+        $GLOBALS['skipStoredProcedureTests'] = $spParameters['skipTests'];
+    }
+}
+
 
 require_once $ADOdbSettings['directory'] . '/adodb.inc.php';
 require_once $ADOdbSettings['directory'] . '/adodb-xmlschema03.inc.php';
