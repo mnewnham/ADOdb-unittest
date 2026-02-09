@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS testtable_3;
 DROP TABLE IF EXISTS blob_storage_table;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
+DROP VIEW IF EXISTS testtable_1_view;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
 DROP TABLE IF EXISTS testxmltable_1;
@@ -30,19 +31,26 @@ CREATE TABLE testtable_1 (
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field BIGINT DEFAULT 0,
 );
-CREATE	unique index vdx1 ON testtable_1 (varchar_field);
-CREATE	unique index vdx2 ON testtable_1 (integer_field,date_field);
-CREATE	unique index vdx3 ON testtable_1 (number_run_field);
-CREATE	unique index tt1pk ON testtable_1 (id,integer_field);
+
+CREATE	UNIQUE INDEX vdx1 ON testtable_1 (varchar_field);
+CREATE	UNIQUE INDEX vdx2 ON testtable_1 (integer_field,date_field);
+CREATE	UNIQUE INDEX vdx3 ON testtable_1 (number_run_field);
+CREATE	UNIQUE INDEX tt1pk ON testtable_1 (id,integer_field);
+
+-- Simple View onto testtable 1
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
 
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table
 CREATE TABLE testtable_2 (
-   id INT IDENTITY(1,1) PRIMARY KEY,
-    integer_field INT DEFAULT 0,
+   id BIGINT IDENTITY(1,1) PRIMARY KEY,
+    integer_field INTEGER DEFAULT 0,
 	date_field DATE,
 	blob_field VARBINARY(MAX),
-	tt_id INTEGER NOT NULL,
+	tt_id BIGINT NOT NULL,
     FOREIGN KEY (tt_id,integer_field) REFERENCES testtable_1(id,integer_field)
 );
 
@@ -51,14 +59,14 @@ CREATE TABLE testtable_3 (
 	varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
-	integer_field INT DEFAULT 0,
+	integer_field INTEGER DEFAULT 0,
 	decimal_field DECIMAL(12,2) DEFAULT 0,
 	boolean_field BIT DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT DEFAULT 0,
 );
-CREATE	unique index vdx31 ON testtable_3 (varchar_field);
-CREATE	unique index vdx33 ON testtable_3 (number_run_field);
+CREATE UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
+CREATE UNIQUE INDEX vdx33 ON testtable_3 (number_run_field);
 
 -- blob_storage_table is used for blob handling
 CREATE TABLE blob_storage_table (

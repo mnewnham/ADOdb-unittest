@@ -7,6 +7,7 @@
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
+DROP VIEW IF EXISTS testtable_1_view;
 DROP TABLE IF EXISTS testtable_3;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
@@ -35,6 +36,13 @@ CREATE	UNIQUE INDEX vdx2 ON testtable_1 (integer_field,date_field);
 CREATE	UNIQUE INDEX vdx3 ON testtable_1 (number_run_field);
 -- testtable_2 is used to test foreign keys
 -- There is no data in this table
+
+-- Simple View onto testtable 1
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
+
 CREATE TABLE testtable_2 (
     id SERIAL PRIMARY KEY,
     integer_field SMALLINT DEFAULT 0,
