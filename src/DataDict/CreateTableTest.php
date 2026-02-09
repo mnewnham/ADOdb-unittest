@@ -60,6 +60,7 @@ class CreateTableTest extends DataDictFunctions
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
+                 NVARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
                  INTEGER_FIELD I DEFAULT 0,
                  DECIMAL_FIELD_TO_MODIFY N(8.4) DEFAULT 0 NOTNULL,
                  BOOLEAN_FIELD_TO_RENAME I NOTNULL DEFAULT 0,
