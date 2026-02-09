@@ -56,5 +56,22 @@ class DataDictFunctions extends ADOdbTestCase
     {
 
         parent::setup();
+
+        /*
+        * Refreshes the schema at the start of each process
+        */
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/dictionary-change-test-table.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        $success = readSqlIntoDatabase($this->db, $tableSchema);
+
+        if (!$success) {
+            $this->markTestSkipped(
+                'Could not load dictionary testing table schema'
+            );
+        }
     }
 }
