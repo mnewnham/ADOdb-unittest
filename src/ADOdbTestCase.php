@@ -156,6 +156,8 @@ class ADOdbTestCase extends TestCase
             $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
         }
 
+        $this->db->cachedSchemaFlush = true;
+
         $GLOBALS['testTableName']   = $this->testTableName;
         $GLOBALS['testIndexName1']  = $this->testIndexName1;
         $GLOBALS['testIndexName2']  = $this->testIndexName2;
