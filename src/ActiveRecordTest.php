@@ -59,8 +59,8 @@ class ActiveRecordTest extends ADOdbTestCase
         $db->startTrans();
 
         $tableSchema = sprintf(
-            '%s/../tools/DatabaseSetup/%s/active-record-schema.sql',
-            dirname(__FILE__),
+            '%s/DatabaseSetup/%s/active-record-schema.sql',
+            $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
 
