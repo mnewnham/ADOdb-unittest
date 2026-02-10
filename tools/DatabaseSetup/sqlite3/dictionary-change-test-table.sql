@@ -13,6 +13,7 @@ CREATE TABLE dictionary_change_test_table (
 	integer_field INT(2) DEFAULT 0,
 	decimal_field_to_modify DECIMAL(8.4) DEFAULT 0,
 	boolean_field_to_rename BOOLEAN DEFAULT 0,
+	boolean_field_to_change_default BOOLEAN DEFAULT 1,
     droppable_field decimal(10.6) NOT NULL DEFAULT 80.111,
 	varchar_field VARCHAR(50) DEFAULT '',
 	nvarchar_field NVARCHAR(50) DEFAULT '',
