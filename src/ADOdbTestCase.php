@@ -353,7 +353,7 @@ class ADOdbTestCase extends TestCase
             $errno,
             sprintf(
                 'ADOdb array execution of SQL %s%s should not return error: %d - %s',
-                implode('/', $sqlArray),
+                implode("\n", $sqlArray),
                 $params,
                 $errno,
                 $errmsg
