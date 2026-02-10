@@ -95,7 +95,14 @@ class XmlSchemaTest extends ADOdbTestCase
         * Load the first of 2 files designed to create then modify
         * a table using the XMLSchema functions
         */
-        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-create.xml', dirname(__FILE__));
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/xmlschemafile-create.xml',
+            $GLOBALS['unitTestToolsDirectory']
+        );
+
+        if (!file_exists($schemaFile)) {
+            die('NO FILE FOR File ' . $schemaFile);
+        }
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
 
@@ -163,20 +170,16 @@ class XmlSchemaTest extends ADOdbTestCase
     public function testXmlSchemaUpdate(): void
     {
 
-        /**
-         * Load the second file to test the XML Schema update
-         */
-        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-update.xml', dirname(__FILE__));
+
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/xmlschemafile-update.xml',
+            $GLOBALS['unitTestToolsDirectory']
+        );
+
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile
         );
-
-        print "
-###################################################
-START PARSING UPDATE XML SCHEMA
-###################################################
-";
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
@@ -232,17 +235,14 @@ START PARSING UPDATE XML SCHEMA
         /**
          * Load the third file to drop the XML Schema update
          */
-        $schemaFile = sprintf('%s/../tools/DatabaseSetup/xmlschemafile-drop.xml', dirname(__FILE__));
+        $schemaFile = sprintf(
+            '%s//DatabaseSetup/xmlschemafile-drop.xml',
+            $GLOBALS['unitTestToolsDirectory']
+        );
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile
         );
-
-         print "
-###################################################
-START PARSING DROP XML SCHEMA
-###################################################
-";
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');

@@ -49,7 +49,7 @@ class PrepareSpTest extends MetaFunctions
         if ($GLOBALS['skipStoredProcedureTests'] == '1') {
             return;
         }
-        return; 
+        return;
         /*
         *load Active record Table and Data into the table
         */
@@ -82,13 +82,13 @@ class PrepareSpTest extends MetaFunctions
             );
             return;
         }
-        
+
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->setFetchMode($fetchMode);
 
             $statement = $this->db->prepareSp('sp_recordset_test');
 
-            
+
 
             /*
             $this->assertIsString(
@@ -101,10 +101,7 @@ class PrepareSpTest extends MetaFunctions
             */
 
             $number = 5;
-            $success = $this->db->inParameter($statement,$number,'filter_number');
-
-            
+            $success = $this->db->inParameter($statement, $number, 'filter_number');
         }
     }
-
 }

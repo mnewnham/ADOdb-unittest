@@ -49,7 +49,7 @@ class MetaProcedureListTest extends MetaFunctions
         if ($GLOBALS['skipStoredProcedureTests'] == '1') {
             return;
         }
-        return; 
+        return;
         /*
         *load Active record Table and Data into the table
         */

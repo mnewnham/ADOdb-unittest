@@ -61,7 +61,7 @@ class ChangeTableTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
-        
+
 
         /*
         * Changes:
@@ -77,6 +77,7 @@ class ChangeTableTest extends DataDictFunctions
             NVARCHAR_FIELD C2(80) NOTNULL DEFAULT '',
             DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
             ANOTHER_INTEGER_FIELD I NOTNULL DEFAULT 0,
+            BOOLEAN_FIELD_TO_CHANGE_DEFAULT L DEFAULT 0,
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
             DECIMAL_FIELD_TO_MODIFY N(9.5) NOTNULL DEFAULT 1
             ";
@@ -139,7 +140,7 @@ class ChangeTableTest extends DataDictFunctions
         * Adds yest_another_integer_field
         * Changes decimal_field_to_modify from 8.4 to 9.5 and changes default
         */
-       
+
         $this->assertSame(
             80,
             (int)$metaColumns['VARCHAR_FIELD']->max_length,
@@ -220,7 +221,7 @@ class ChangeTableTest extends DataDictFunctions
      */
     public function testChangeTableCompleteDrops(): void
     {
-       
+
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
                 'Skipping tests as the table was not ' .
@@ -240,6 +241,7 @@ class ChangeTableTest extends DataDictFunctions
             NVARCHAR_FIELD C2(80) NOTNULL DEFAULT '',
             DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
             BOOLEAN_FIELD_TO_RENAME L DEFAULT 0 NOTNULL
+              BOOLEAN_FIELD_TO_CHANGE_DEFAULT L DEFAULT 0,
             ANOTHER_INTEGER_FIELD I NOTNULL DEFAULT 0,
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
             DECIMAL_FIELD_TO_MODIFY N(9.5) NOTNULL DEFAULT 1
@@ -272,7 +274,7 @@ class ChangeTableTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
-        
+
         /*
         * Now re-execute wth the drop flag set to true
         */
