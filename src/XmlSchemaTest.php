@@ -50,7 +50,7 @@ class XmlSchemaTest extends ADOdbTestCase
         }
 
         $GLOBALS['ADOdbConnection']->startTrans();
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
+        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
         $GLOBALS['ADOdbConnection']->completeTrans();
     }
 
@@ -129,7 +129,7 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        $table = 'testxmltable_1';
+        $table = 'xml_schema_test';
         $fields = $this->db->MetaColumns($table);
 
         $this->assertNotEmpty(
@@ -206,7 +206,7 @@ class XmlSchemaTest extends ADOdbTestCase
         /**
         * Test the update fields in the table
         */
-        $table = 'testxmltable_1';
+        $table = 'xml_schema_test';
         $fields = $this->db->MetaColumns($table);
 
 
@@ -275,7 +275,7 @@ class XmlSchemaTest extends ADOdbTestCase
         $this->assertNotContains(
             'TESTXMLTABLE_1',
             $tables,
-            'table testxmltable_1 should not be found in the database'
+            'table xml_schema_test should not be found in the database'
         );
     }
 }

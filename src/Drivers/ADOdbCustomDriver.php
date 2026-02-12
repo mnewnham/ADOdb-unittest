@@ -87,7 +87,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         }
 
         $GLOBALS['ADOdbConnection']->startTrans();
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS testxmltable_1");
+        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
         $GLOBALS['ADOdbConnection']->completeTrans();
     }
     /**
@@ -306,7 +306,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-        $table = 'testxmltable_1';
+        $table = 'xml_schema_test';
         $fields = $this->db->MetaColumns($table);
 
         $this->assertNotEmpty(
@@ -352,7 +352,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
         * Drop the JSON column so that we can re-add it again
         */
         $sqlArray = $this->dataDictionary->dropColumnSql(
-            'testxmltable_1',
+            'xml_schema_test',
             'json_field_to_add'
         );
 
@@ -402,7 +402,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
             return;
         }
 
-        $table = 'testxmltable_1';
+        $table = 'xml_schema_test';
         $fields = $this->db->MetaColumns($table);
 
         $this->assertNotEmpty(
