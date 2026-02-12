@@ -3,6 +3,9 @@
 /**
  * Tests cases for DataDictCreateTable functions of ADODb
  *
+ * This table creation stands alone. The resulting table is
+ * not used for modification tests
+ * 
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
@@ -55,23 +58,54 @@ class CreateTableTest extends DataDictFunctions
 
         $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
 
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql, null, true);
+        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
+
+        
+        $options = [
+            'MYSQL' => 'ENGINE MYISAM;'
+        ];
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
                  NVARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
+                 SMALLINT_FIELD I2 DEFAULT 0,
+                 MEDIUMINT_FIELD I4 DEFAULT 0,
+                 BIGINT_FIELD I8 DEFAULT 0,
                  INTEGER_FIELD I DEFAULT 0,
-                 DECIMAL_FIELD_TO_MODIFY N(8.4) DEFAULT 0 NOTNULL,
-                 BOOLEAN_FIELD_TO_RENAME I NOTNULL DEFAULT 0,
+                 BLOB_FIELD B,
+                 IMAGE_FIELD XL,
+                 DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
+                 BOOLEAN_FIELD B NOTNULL DEFAULT 1,
                  DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
                  ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
               ";
         $sqlArray = $this->dataDictionary->createTableSQL(
             'dictionary_creation_test_table',
-            $flds
+            $flds,
+            $options
         );
 
+        print_r($sqlArray);
+
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
+
+        $flipMetaTables = array_flip($this->db->metaTables());
+
+        $this->assertArrayHasKey(
+            'dictionary_creation_test_table',
+            $flipMetaTables,
+            'The dictionary Test Creation table should now be in the database'
+
+        );
+
+        $metaColumns = $this->db->metaColumns('dictionary_creation_test_table');
+
+        $this->assertEquals(
+            14,
+            count($metaColumns),
+            'Newly created table should have 14 columns'
+        );
+
     }
 }
