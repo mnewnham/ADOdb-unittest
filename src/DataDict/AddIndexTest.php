@@ -59,10 +59,15 @@ class AddIndexTest extends DataDictFunctions
             return;
         }
 
-
-        $sql = "DROP TABLE IF EXISTS {$this->testIndexName1}";
-
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
+        $metaIndexes = $this->dataDictionary->metaIndexes($this->testTableName);
+        if (array_key_exists('string_test_index', $metaIndexes)) {
+            $dropIndexSql = $this->dataDictionary->dropIndexSql(
+                'string_test_index',
+                $this->testTableName
+            );
+    
+            list ($response,$errno,$errmsg) = $this->executeDictionaryAction($dropIndexSql);
+        }
 
         $flds = "VARCHAR_FIELD, DATE_FIELD, INTEGER_FIELD";
         $indexOptions = array(
@@ -70,7 +75,7 @@ class AddIndexTest extends DataDictFunctions
         );
 
         $sqlArray = $this->dataDictionary->createIndexSQL(
-            $this->testIndexName1,
+            'string_test_index',
             $this->testTableName,
             $flds,
             $indexOptions
@@ -84,10 +89,10 @@ class AddIndexTest extends DataDictFunctions
         $metaIndexes = $this->db->metaIndexes($this->testTableName);
 
         $this->assertArrayHasKey(
-            $this->testIndexName1,
+            'string_test_index',
             $metaIndexes,
             'AddIndexSQL Using String For Fields should now ' .
-            'contain index ' . $this->testIndexName1
+            'contain index string_test_index'
         );
     }
 
@@ -108,6 +113,15 @@ class AddIndexTest extends DataDictFunctions
             return;
         }
 
+         $metaIndexes = $this->dataDictionary->metaIndexes($this->testTableName);
+        if (array_key_exists('array_test_index', $metaIndexes)) {
+            $dropIndexSql = $this->dataDictionary->dropIndexSql(
+                'array_test_index',
+                $this->testTableName
+            );
+            
+            list ($response,$errno,$errmsg) = $this->executeDictionaryAction($dropIndexSql);
+        }
         $flds = array(
             "DATE_FIELD",
             "INTEGER_FIELD",
@@ -118,7 +132,7 @@ class AddIndexTest extends DataDictFunctions
         );
 
         $sqlArray = $this->dataDictionary->createIndexSQL(
-            $this->testIndexName2,
+           'array_test_index',
             $this->testTableName,
             $flds,
             $indexOptions
@@ -134,10 +148,10 @@ class AddIndexTest extends DataDictFunctions
         $metaIndexes = $this->db->metaIndexes($this->testTableName);
 
         $this->assertArrayHasKey(
-            $this->testIndexName2,
+            'array_test_index',
             $metaIndexes,
             'AddIndexSQL Using Array For Fields should have ' .
-            'added index ' . $this->testIndexName1
+            'added index array_test_index'
         );
     }
 }
