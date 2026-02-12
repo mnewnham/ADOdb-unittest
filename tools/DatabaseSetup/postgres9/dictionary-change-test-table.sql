@@ -17,7 +17,10 @@ CREATE TABLE dictionary_change_test_table (
 	boolean_field_to_change_default BOOLEAN DEFAULT TRUE,
     droppable_field decimal(10,6) NOT NULL DEFAULT 80.111,
 	varchar_field VARCHAR(50) DEFAULT '',
-	nvarchar_field VARCHAR(50) DEFAULT ''
+	nvarchar_field VARCHAR(50) DEFAULT '',
+	smallint_to_expand SMALLINT,
+	xl_field BYTEA,
+
 );
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);
 

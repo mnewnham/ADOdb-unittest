@@ -15,6 +15,8 @@ CREATE TABLE dictionary_change_test_table (
 	enum_field_to_keep ENUM('duplo','lego','meccano'),
 	varchar_field VARCHAR(50),
 	nvarchar_field NVARCHAR(50),
+	smallint_to_expand SMALLINT,
+	xl_field LONGTEXT,
 	PRIMARY KEY(id),
 	UNIQUE INDEX index_to_drop (varchar_field)
 );

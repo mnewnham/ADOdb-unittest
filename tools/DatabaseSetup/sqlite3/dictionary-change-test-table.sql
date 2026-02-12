@@ -17,6 +17,8 @@ CREATE TABLE dictionary_change_test_table (
     droppable_field decimal(10.6) NOT NULL DEFAULT 80.111,
 	varchar_field VARCHAR(50) DEFAULT '',
 	nvarchar_field NVARCHAR(50) DEFAULT '',
+	smallint_to_expand I(2),
+	xl_field BLOB,
 	PRIMARY KEY(id)
 );
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);

@@ -14,6 +14,8 @@ CREATE TABLE dictionary_change_test_table (
 	droppable_field decimal(10,6) NOT NULL,
 	varchar_field VARCHAR(50),
 	nvarchar_field NVARCHAR(50),
+	smallint_to_expand SMALLINT,
+	xl_field VARBINARY(MAX),
 	
 );
 
