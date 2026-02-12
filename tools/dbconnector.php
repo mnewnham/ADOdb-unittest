@@ -199,7 +199,7 @@ require_once __DIR__ . '/../tools/adodb-constants.inc';
 global $argv;
 global $db;
 
-$adoDriver = '';
+$adoProfile = '';
 
 define('ADODB_ASSOC_CASE', $ADOdbSettings['casing']);
 
@@ -208,14 +208,14 @@ define('ADODB_ASSOC_CASE', $ADOdbSettings['casing']);
 * First try to use the active flag in the ini file because
 * Version 12 of PHPUnit does not support the unnammed parameters
 */
-foreach ($availableCredentials as $driver => $driverOptions) {
+foreach ($availableCredentials as $profile => $driverOptions) {
     if (isset($driverOptions['active']) && $driverOptions['active']) {
-        $adoDriver = $driver;
+        $adoProfile = $profile;
         break;
     }
 }
 
-if (!$adoDriver) {
+if (!$adoProfile) {
     die('unit tests must contain an active entry in the INI file');
 }
 
@@ -223,8 +223,8 @@ if (!$adoDriver) {
 * At the point we either have a driver via the active flog or the command line
 */
 
-if (!isset($availableCredentials[$adoDriver])) {
-    die('login credentials not available for driver ' . $adoDriver);
+if (!isset($availableCredentials[$adoProfile])) {
+    die('login credentials not available for driver ' . $adoProfile);
 }
 
 /*
@@ -239,6 +239,7 @@ if (is_array($iniParams)) {
 
 
 $template = array(
+    'driver'=> null,
     'dsn' => '',
     'host' => null,
     'user' => null,
@@ -251,10 +252,12 @@ $template = array(
 
 $credentials = array_merge(
     $template,
-    $availableCredentials[$adoDriver]
+    $availableCredentials[$adoProfile]
 );
 
-$loadDriver = str_replace('pdo-', 'PDO\\', $adoDriver);
+$adoDriver  = $credentials['driver'];
+
+$loadDriver = str_replace('pdo-', 'PDO\\', $credentials['driver']);
 
 $db = newAdoConnection($loadDriver);
 $db->debug = $credentials['debug'];
@@ -303,6 +306,7 @@ $casingDescriptions = [
 
 print "
 PHP Version: " . PHP_VERSION . "
+Connected to profile: $adoProfile
 Connected to driver: $adoDriver
 Casing is set to {$casingDescriptions[$ADOdbSettings['casing']]}
 ";
