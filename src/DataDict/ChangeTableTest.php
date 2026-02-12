@@ -79,7 +79,9 @@ class ChangeTableTest extends DataDictFunctions
             ANOTHER_INTEGER_FIELD I NOTNULL DEFAULT 0,
             BOOLEAN_FIELD_TO_CHANGE_DEFAULT L DEFAULT 0,
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
-            DECIMAL_FIELD_TO_MODIFY N(9.5) NOTNULL DEFAULT 1
+            DECIMAL_FIELD_TO_MODIFY N(9.5) NOTNULL DEFAULT 1,
+            SMALLINT_TO_EXPAND I4,
+            XL_FIELD XL
             ";
 
         $sqlArray = $this->dataDictionary->changeTableSQL(
