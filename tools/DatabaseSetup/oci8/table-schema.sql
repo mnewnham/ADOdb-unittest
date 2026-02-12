@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS testtable_3;
 DROP TABLE IF EXISTS testtable_2;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
-DROP TABLE IF EXISTS testxmltable_1;
+DROP TABLE IF EXISTS xml_schema_test;
 
 -- These sequences are used to auto-increment the primary keys
 DROP SEQUENCE IF EXISTS testtable_1_seq;

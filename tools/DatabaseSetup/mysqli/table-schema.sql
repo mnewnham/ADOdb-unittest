@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS blob_storage_table;
 DROP TABLE IF EXISTS testtable_2;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
-DROP TABLE IF EXISTS testxmltable_1;
+DROP TABLE IF EXISTS xml_schema_test;
 
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
