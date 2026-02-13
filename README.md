@@ -4,6 +4,9 @@ This is a standalone PHPUnit Unit Tester for the [ADOdb](https://adodb.org) data
 This is an early code release. There is no composer file. Just clone the code and use it
 #### Prerequsites
 [PHPunit version 12+](https://phpunit.org) must be installed and running for this to work. An ADOdb installation must be installed somewhere on the local file system. 
+ - The unit tester requires access to a supported database via a configured ADOdb connection. The user requires privileges to add, change and delete tables, views and procedures as well as SELECT,CREATE,UPDATE,DELETE privileges on the created tables.
+- To test the filesystem caching, write permission on the local filesystem is required
+- To test memcache caching, access to a configured memcache server is required
 #### Current Coverage
 <table>
 <tr>
