@@ -1,5 +1,5 @@
 ### ADODb Unit Tests
-This is a standalone PHPUnit Unit Tester for the [ADOdb](https://adodb.org) database abstraction layer. It runs using any supported ADOdb database and performs tests against the driver and data dictionary for the database in use. It can be easily configured to run against multiple, side-by-side installations of ADOdb. For that reason, ADOdb is not included in the composer file. It can be found at [Github](https:/github.com/adodb/adodb)
+This is a standalone PHPUnit Unit Tester for the [ADOdb](https://adodb.org) database abstraction layer. It runs using any supported ADOdb database and performs tests against the driver and data dictionary for the database in use. It can be easily configured to run against multiple, side-by-side installations of ADOdb. For that reason, ADOdb is not included in the composer file. It can be found at [Github](https:/github.com/adodb/adodb) or at [Packagist](https://packagist.org/packages/adodb/adodb-php)
 #### Installation
 This is an early code release. There is no composer file. Just clone the code and use it
 #### Prerequsites
@@ -43,6 +43,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+    <td></td>
 </tr>
 <tr>
     <th>sqlite3</th>
@@ -54,6 +55,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+     <td></td>
 </tr>
 <tr>
     <th>postgres9</th>
@@ -65,6 +67,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+     <td></td>
 </tr>
 <tr>
     <th>oci8</th>
@@ -76,6 +79,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+     <td></td>
 </tr>       
 <tr>
     <th>db2</th>
@@ -88,6 +92,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+     <td></td>
 </tr> 
  <tr>
     <th>firebird</th>
@@ -99,6 +104,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+   <td></td>
 </tr> 
  <tr>
     <th>PDO</th>
@@ -110,6 +116,7 @@ This is an early code release. There is no composer file. Just clone the code an
     <td></td>
     <td></td>
     <td></td>
+     <td></td>
 </tr> 
 </table>
 
