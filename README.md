@@ -13,12 +13,13 @@ This is an early code release. There is no composer file. Just clone the code an
     <th></th>
     <th>Core</th>
     <th>Data<br>Dictionary</th>
-    <th>MetaFunctions</th>
+    <th>Meta<br>Functions</th>
     <th>Caching</th>
     <th>Active<br>Record</th>
     <th>XmlSchema</th>
     <th>Session<br>Management</th>
     <th>Stored<br>Procedures</th>
+    <th>Driver<br>Specific<br>Tests</th>
 </tr>
 <tr>
     <th>mysqli</th>
@@ -30,53 +31,77 @@ This is an early code release. There is no composer file. Just clone the code an
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+    <td>&#x2714;</td>
 </tr>
 <tr>
     <th>mssqlnative</th>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+     <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+     <td>&#x2714;</td>
+    <td>&#x2714;</td>
     <td></td>
     <td></td>
 </tr>
 <tr>
     <th>sqlite3</th>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
     <td></td>
     <td></td>
 </tr>
 <tr>
     <th>postgres9</th>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
     <td></td>
     <td></td>
 </tr>
 <tr>
     <th>oci8</th>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
     <td></td>
     <td></td>
 </tr>       
 <tr>
     <th>db2</th>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td> 
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td></td>
+    <td></td>
+</tr> 
+ <tr>
+    <th>firebird</th>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td></td>
+    <td>&#x2714;</td>
+    <td></td>
+    <td></td>
+</tr> 
+ <tr>
+    <th>PDO</th>
     <td></td>
     <td></td>
     <td></td>
