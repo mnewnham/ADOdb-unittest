@@ -329,8 +329,8 @@ if (substr($adoDriver, 0, 3) == 'pdo') {
 }
 
 $tableSchema = sprintf(
-    '%s/../tools/DatabaseSetup/%s/table-schema.sql',
-    dirname(__FILE__),
+    '%s/DatabaseSetup/%s/table-schema.sql',
+    $GLOBALS['unitTestToolsDirectory'],
     $GLOBALS['SqlProvider']
 );
 
