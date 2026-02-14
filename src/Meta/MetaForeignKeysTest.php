@@ -50,100 +50,183 @@ class MetaForeignKeysTest extends MetaFunctions
      *
      * @return void
      */
-    public function testMetaForeignKeys(): void
-    {
+     #[DataProvider('providerTestMetaForeignKeys')]
+    public function testMetaForeignKeys(
+        int $fetchMode,
+        string $sourceTable,
+        string $expectedTableKey,
+        mixed $expectedFieldKeys,
+        bool $upperCaseKeys,
+        bool $associativeKeys,
+        string $schemaOwner
+    ): void {
 
-        global $ADODB_FETCH_MODE;
-        $originalFetchMode = $ADODB_FETCH_MODE;
+         global $ADODB_FETCH_MODE;
+         $originalFetchMode = $ADODB_FETCH_MODE;
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+         $this->db->setFetchMode($fetchMode);
+         $ADODB_FETCH_MODE = $fetchMode;
 
-            $testTable1 = 'testtable_1';
-            $testTable2 = 'testtable_2';
+         $testTable1 = 'testtable_1';
+         $testTable2 = 'testtable_2';
 
-            $executionResult = $this->db->metaForeignKeys($testTable2);
-            list($errno, $errmsg) = $this->assertADOdbError('metaForeignKeys()');
+         $executionResult = $this->db->metaForeignKeys(
+             $sourceTable,
+             $schemaOwner,
+             $upperCaseKeys,
+             $associativeKeys
+         );
 
-            $this->db->setFetchMode($originalFetchMode);
+         $this->db->setFetchMode($originalFetchMode);
 
-            if ($executionResult == false) {
-                $this->fail(
-                    sprintf(
-                        '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
-                        $fetchMode
-                    )
-                );
-                continue;
-            }
+         if ($expectedFieldKeys == false) {
+             $this->assertFalse(
+                 $executionResult,
+                 sprintf(
+                     '[FETCH MODE %s] Checking that metaForeignKeys returns ' .
+                     'false when invalid owner or table is passed',
+                     $fetchMode
+                 )
+             );
+         } else {
+             if ($executionResult == false) {
+                 $this->fail(
+                     sprintf(
+                         '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
+                         $fetchMode
+                     )
+                 );
+                 return;
+             }
 
-            $executionResult = array_change_key_case($executionResult, CASE_UPPER);
+             $this->assertArrayHasKey(
+                 $expectedTableKey,
+                 $executionResult,
+                 sprintf(
+                     "[FETCH MODE %s] Checking for foreign key for $testTable1 in $testTable2",
+                     $fetchMode
+                 )
+             );
 
-            $fkTableNames = array_flip(
-                array_change_key_case(
-                    array_keys($executionResult),
-                    CASE_UPPER
-                )
-            );
+             $fkData = $executionResult[$expectedTableKey];
 
-            $fkTableExists = $this->assertArrayHasKey(
-                strtoupper($testTable1),
-                $fkTableNames,
-                sprintf(
-                    '[FETCH MODE %s] Checking for foreign key testtable_1 in testtable_2',
-                    $fetchMode
-                )
-            );
 
-            if (!$fkTableExists) {
-                continue;
-            }
-
-            $fkData = $executionResult[strtoupper($testTable1)];
-
-            $this->assertArrayHasKey(
-                'TT_ID',
-                $fkData,
-                sprintf(
-                    '[FETCH MODE %s] Checking for foreign key field' .
-                    'TT_ID in testtable_2 foreign key testtable_1',
-                    $fetchMode
-                )
-            );
-
-            $this->assertArrayHasKey(
-                'INTEGER_FIELD',
-                $fkData,
-                sprintf(
-                    '[FETCH MODE %s] Checking for foreign key field' .
-                    'INTEGER_FIELD in testtable_2 foreign key testtable_1',
-                    $fetchMode
-                )
-            );
-        }
+             $this->assertSame(
+                 $expectedFieldKeys,
+                 $fkData,
+                 sprintf(
+                     '[FETCH MODE %s] Checking that the foreign key data matches expected values',
+                     $fetchMode
+                 )
+             );
+         }
     }
 
     /**
-     * Test for errors when a metaforeignkeys function is called on an invalid table
+     * Data provider for {@see metaForeignKeys()}
      *
-     * @return void
+     * @return array [string(getRe, array return value]
      */
-    public function testMetaForeignKeysForInvalidTable(): void
+    public static function providerTestMetaForeignKeys(): array
     {
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
-
-            $response = $this->db->metaForeignKeys('invalid_table');
-
-            $this->assertFalse(
-                $response,
-                sprintf(
-                    '[FETCH MODE %s] Checking that metaForeignKeys ' .
-                    'returns false for an invalid table',
-                    $fetchModeName
-                )
-            );
-        }
+        return [
+            'Default Behaviour, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'testtable_2',
+                'testtable_1',
+                [
+                   'tt_id' => 'id',
+                   'integer_field' => 'integer_field'
+                ],
+                false,
+                false,
+                ''
+            ],
+            'Force Upper Case Keys, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'testtable_2',
+                'TESTTABLE_1',
+                [
+                    'TT_ID' => 'ID',
+                    'INTEGER_FIELD' => 'INTEGER_FIELD'
+                ],
+                true,
+                false,
+                ''
+            ],
+            'Default Behaviour, ADODB_FETCH_NUM' => [
+                ADODB_FETCH_NUM,
+                'testtable_2',
+                'testtable_1',
+                ['tt_id=id','integer_field=integer_field'],
+                false,
+                false,
+                ''
+            ],
+            'Force Upper Case Keys, ADODB_FETCH_NUM' => [
+                ADODB_FETCH_NUM,
+                'testtable_2',
+                'TESTTABLE_1',
+                ['TT_ID=ID','INTEGER_FIELD=INTEGER_FIELD'],
+                true,
+                false,
+                ''
+            ],
+            'Force Associative From ADODB_FETCH_NUM, Lower Case Keys' => [
+                ADODB_FETCH_NUM,
+                'testtable_2',
+                'testtable_1',
+                [
+                    'tt_id' => 'id',
+                    'integer_field' => 'integer_field'
+                ],
+                false,
+                true,
+                ''
+            ],
+            'Force Associative From ADODB_FETCH_NUM, Upper Case Keys' => [
+                ADODB_FETCH_NUM,
+                'testtable_2',
+                'TESTTABLE_1',
+                [
+                    'TT_ID' => 'ID',
+                    'INTEGER_FIELD' => 'INTEGER_FIELD'
+                ],
+                true,
+                true,
+                ''
+            ],
+            'Default Behaviour, Passing OWNER, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'testtable_2',
+                'testtable_1',
+                [
+                   'tt_id' => 'id',
+                   'integer_field' => 'integer_field'
+                ],
+                false,
+                false,
+                $GLOBALS['schemaOwner']
+            ],
+            'Default Behaviour, Passing Invalid OWNER, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'testtable_2',
+                'testtable_1',
+                false,
+                false,
+                false,
+                'X' . $GLOBALS['schemaOwner']
+            ],
+            'Default Behaviour, Passing Invalid Table, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'invalide_testtable_2',
+                'testtable_1',
+                false,
+                false,
+                false,
+                ''
+            ],
+        ];
     }
 }
