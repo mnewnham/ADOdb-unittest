@@ -32,4 +32,9 @@ CREATE TABLE children (
     PRIMARY KEY (id)
 );
 
+-- Creates an auto-increment column
+CREATE SEQUENCE children_seq
+    INCREMENT BY 1
+    START WITH 1;
+
 CREATE OR REPLACE TRIGGER children_t BEFORE insert ON children FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select children_seq.nextval into :new.id from dual; END; ;
