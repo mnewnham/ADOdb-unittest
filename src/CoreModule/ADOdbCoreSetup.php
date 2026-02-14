@@ -54,14 +54,17 @@ class ADOdbCoreSetup extends ADOdbTestCase
         */
         $db->startTrans();
 
-        $table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
-        $table3Sql = file_get_contents($table3Data);
-        $t3Sql = explode(';', $table3Sql);
-        foreach ($t3Sql as $sql) {
-            if (trim($sql ?? '')) {
-                $db->execute($sql);
-            }
-        }
+       
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/table3-data.sql',
+            $GLOBALS['unitTestToolsDirectory']
+        );
+
+        /*
+        * Loads the schema based on the DB type
+        */
+
+        readSqlIntoDatabase($db, $tableSchema);
 
         $db->completeTrans();
     }

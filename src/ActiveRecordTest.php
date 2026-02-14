@@ -64,25 +64,22 @@ class ActiveRecordTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        $tableSql = file_get_contents($tableSchema);
-        $tSql = explode(';', $tableSql);
-        foreach ($tSql as $sql) {
-            if (trim($sql ?? '')) {
-                $db->execute($sql);
-            }
-        }
+        /*
+        * Loads the schema based on the DB type
+        */
 
-        $tableData = sprintf(
-            '%s/../tools/DatabaseSetup/active-record-data.sql',
-            dirname(__FILE__)
+        readSqlIntoDatabase($db, $tableSchema);
+
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/active-record-data.sql',
+            $GLOBALS['unitTestToolsDirectory']
         );
-        $tableSql = file_get_contents($tableData);
-        $tSql = explode(';', $tableSql);
-        foreach ($tSql as $sql) {
-            if (trim($sql ?? '')) {
-                $db->execute($sql);
-            }
-        }
+
+        /*
+        * Loads the schema based on the DB type
+        */
+
+        readSqlIntoDatabase($db, $tableSchema);
 
         $db->completeTrans();
     }
