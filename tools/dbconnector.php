@@ -294,6 +294,8 @@ if ($credentials['dsn']) {
     );
 }
 
+$GLOBALS['schemaOwner'] = $credentials['user'];
+
 if (!$db->isConnected()) {
     die(sprintf('%s database connection not established', $adoDriver));
 }
