@@ -175,14 +175,14 @@ class ADOdbCustomDriver extends ADOdbTestCase
         /*
         * Create a new table with the standard syntax
         */
-        $tabname = "metatype_test";
+        $tabname = "custom_metatype_test";
         $flds = " 
         COL1 I  NOTNULL AUTO PRIMARY,
         CUSTOM_JSON_COLUMN J
         ";
 
         $sqlArray = $this->dataDictionary->createTableSQL(
-            'metatype_test',
+            'custom_metatype_test',
             $flds
         );
 
@@ -190,11 +190,11 @@ class ADOdbCustomDriver extends ADOdbTestCase
 
         if ($errno > 0) {
             $this->fail(
-                'Error creating table holding custom meta type'
+                'Error creating table custom_metatype_test holding custom meta type'
             );
         }
 
-        $metaColumns = $this->db->metaColumns('metatype_test');
+        $metaColumns = $this->db->metaColumns('custom_metatype_test');
 
         $this->assertArrayHasKey(
             'CUSTOM_JSON_COLUMN',
@@ -211,13 +211,13 @@ class ADOdbCustomDriver extends ADOdbTestCase
     public function testChangeTableWithCustomMetaType(): void
     {
 
-        $tabname = "metatype_test";
+        $tabname = "custom_metatype_test";
         $flds = " 
         ADDITIONAL_JSON_COLUMN J
         ";
 
         $sqlArray = $this->dataDictionary->changeTableSQL(
-            'metatype_test',
+            'custom_metatype_test',
             $flds
         );
 
@@ -236,7 +236,7 @@ class ADOdbCustomDriver extends ADOdbTestCase
             );
         }
 
-        $metaColumns = $this->db->metaColumns('metatype_test');
+        $metaColumns = $this->db->metaColumns('custom_metatype_test');
 
 
         $this->assertArrayHasKey(
@@ -272,8 +272,8 @@ class ADOdbCustomDriver extends ADOdbTestCase
         * using the XMLSchema functions
         */
         $schemaFile = sprintf(
-            '%s/../tools/DatabaseSetup/xmlschemafile-metatype.xml',
-            dirname(__FILE__)
+            '%s/DatabaseSetup/xmlschemafile-metatype.xml',
+            $GLOBALS['unitTestToolsDirectory']
         );
 
 
