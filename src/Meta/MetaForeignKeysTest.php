@@ -58,7 +58,7 @@ class MetaForeignKeysTest extends MetaFunctions
         mixed $expectedFieldKeys,
         bool $upperCaseKeys,
         bool $associativeKeys,
-        string $schemaOwner
+        ?string $schemaOwner
     ): void {
 
          global $ADODB_FETCH_MODE;
