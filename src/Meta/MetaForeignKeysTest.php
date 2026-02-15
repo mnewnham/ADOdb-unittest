@@ -40,6 +40,28 @@ class MetaForeignKeysTest extends MetaFunctions
     {
 
         parent::setUpBeforeClass();
+
+         $db        = $GLOBALS['ADOdbConnection'];
+        $adoDriver = $GLOBALS['ADOdriver'];
+
+        /*
+        * load foreign keys test schema
+        */
+        $db->startTrans();
+
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/foreign-keys-schema.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        /*
+        * Loads the schema based on the DB type
+        */
+
+        readSqlIntoDatabase($db, $tableSchema);
+
+        $db->completeTrans();
     }
 
     /**
@@ -54,8 +76,10 @@ class MetaForeignKeysTest extends MetaFunctions
     public function testMetaForeignKeys(
         int $fetchMode,
         string $sourceTable,
-        string $expectedTableKey,
-        mixed $expectedFieldKeys,
+        string $expectedFirstTableKey,
+        mixed $expectedFirstFieldKeys,
+        mixed $expectedSecondTableKey,
+        mixed $expectedSecondFieldKeys,
         bool $upperCaseKeys,
         bool $associativeKeys,
         ?string $schemaOwner
@@ -67,8 +91,8 @@ class MetaForeignKeysTest extends MetaFunctions
          $this->db->setFetchMode($fetchMode);
          $ADODB_FETCH_MODE = $fetchMode;
 
-         $testTable1 = 'testtable_1';
-         $testTable2 = 'testtable_2';
+         $testTable1 = 'foreign_key_target_1';
+         $testTable2 = 'foreign_key_source';
 
          $executionResult = $this->db->metaForeignKeys(
              $sourceTable,
@@ -77,9 +101,11 @@ class MetaForeignKeysTest extends MetaFunctions
              $associativeKeys
          );
 
+         print_r($executionResult);
+
          $this->db->setFetchMode($originalFetchMode);
 
-         if ($expectedFieldKeys == false) {
+         if ($expectedFirstFieldKeys == false) {
              $this->assertFalse(
                  $executionResult,
                  sprintf(
@@ -100,22 +126,53 @@ class MetaForeignKeysTest extends MetaFunctions
              }
 
              $this->assertArrayHasKey(
-                 $expectedTableKey,
+                 $expectedFirstTableKey,
                  $executionResult,
                  sprintf(
-                     "[FETCH MODE %s] Checking for foreign key for $testTable1 in $testTable2",
+                     "[FETCH MODE %s] Checking for first foreign key for $testTable1 in $testTable2",
                      $fetchMode
                  )
              );
 
-             $fkData = $executionResult[$expectedTableKey];
+             $fkData = $executionResult[$expectedFirstTableKey];
 
 
              $this->assertSame(
-                 $expectedFieldKeys,
+                 $expectedFirstFieldKeys,
                  $fkData,
                  sprintf(
-                     '[FETCH MODE %s] Checking that the foreign key data matches expected values',
+                     '[FETCH MODE %s] Checking that the first foreign key data matches expected values',
+                     $fetchMode
+                 )
+             );
+
+             if ($executionResult == false) {
+                 $this->fail(
+                     sprintf(
+                         '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
+                         $fetchMode
+                     )
+                 );
+                 return;
+             }
+
+             $this->assertArrayHasKey(
+                 $expectedSecondTableKey,
+                 $executionResult,
+                 sprintf(
+                     "[FETCH MODE %s] Checking for second foreign key for $testTable1 in $testTable2",
+                     $fetchMode
+                 )
+             );
+
+             $fkData = $executionResult[$expectedSecondTableKey];
+
+
+             $this->assertSame(
+                 $expectedSecondFieldKeys,
+                 $fkData,
+                 sprintf(
+                     '[FETCH MODE %s] Checking that the second foreign key data matches expected values',
                      $fetchMode
                  )
              );
@@ -133,11 +190,16 @@ class MetaForeignKeysTest extends MetaFunctions
         return [
             'Default Behaviour, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'testtable_2',
-                'testtable_1',
+                'foreign_key_source',
+                'foreign_key_target_1',
                 [
-                   'tt_id' => 'id',
-                   'integer_field' => 'integer_field'
+                   'tt_id_1' => 'id_1',
+                   'integer_field' => 'integer_field_1'
+                ],
+                'foreign_key_target_2',
+                [
+                   'tt_id_2' => 'id_2',
+                   'integer_field' => 'integer_field_2'
                 ],
                 false,
                 false,
@@ -145,11 +207,16 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Force Upper Case Keys, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'testtable_2',
-                'TESTTABLE_1',
+                'foreign_key_source',
+                'FOREIGN_KEY_TARGET_1',
                 [
-                    'TT_ID' => 'ID',
-                    'INTEGER_FIELD' => 'INTEGER_FIELD'
+                    'TT_ID_1' => 'ID_1',
+                    'INTEGER_FIELD' => 'INTEGER_FIELD_1'
+                ],
+                'FOREIGN_KEY_TARGET_2',
+                [
+                   'TT_ID_2' => 'ID_2',
+                   'INTEGER_FIELD' => 'INTEGER_FIELD_2'
                 ],
                 true,
                 false,
@@ -157,29 +224,38 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Default Behaviour, ADODB_FETCH_NUM' => [
                 ADODB_FETCH_NUM,
-                'testtable_2',
-                'testtable_1',
-                ['tt_id=id','integer_field=integer_field'],
+                'foreign_key_source',
+                'foreign_key_target_1',
+                ['tt_id_1=id_1','integer_field=integer_field_1'],
+                'foreign_key_target_2',
+                ['tt_id_2=id_2', 'integer_field=integer_field_2'],
                 false,
                 false,
                 ''
             ],
             'Force Upper Case Keys, ADODB_FETCH_NUM' => [
                 ADODB_FETCH_NUM,
-                'testtable_2',
-                'TESTTABLE_1',
-                ['TT_ID=ID','INTEGER_FIELD=INTEGER_FIELD'],
+                'foreign_key_source',
+                'FOREIGN_KEY_TARGET_1',
+                ['TT_ID_1=ID_1','INTEGER_FIELD=INTEGER_FIELD_1'],
+                'FOREIGN_KEY_TARGET_2',
+                ['TT_ID_2=ID_2', 'INTEGER_FIELD=INTEGER_FIELD_2'],
                 true,
                 false,
                 ''
             ],
             'Force Associative From ADODB_FETCH_NUM, Lower Case Keys' => [
                 ADODB_FETCH_NUM,
-                'testtable_2',
-                'testtable_1',
+                'foreign_key_source',
+                'foreign_key_target_1',
                 [
-                    'tt_id' => 'id',
-                    'integer_field' => 'integer_field'
+                    'tt_id_1' => 'id_1',
+                    'integer_field' => 'integer_field_1'
+                ],
+                 'foreign_key_target_2',
+                [
+                   'tt_id_2' => 'id_2',
+                   'integer_field' => 'integer_field_2'
                 ],
                 false,
                 true,
@@ -187,11 +263,16 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Force Associative From ADODB_FETCH_NUM, Upper Case Keys' => [
                 ADODB_FETCH_NUM,
-                'testtable_2',
-                'TESTTABLE_1',
+                'foreign_key_source',
+                'FOREIGN_KEY_TARGET_1',
                 [
-                    'TT_ID' => 'ID',
-                    'INTEGER_FIELD' => 'INTEGER_FIELD'
+                    'TT_ID_1' => 'ID_1',
+                    'INTEGER_FIELD' => 'INTEGER_FIELD_1'
+                ],
+                'FOREIGN_KEY_TARGET_2',
+                [
+                   'TT_ID_2' => 'ID_2',
+                   'INTEGER_FIELD' => 'INTEGER_FIELD_2'
                 ],
                 true,
                 true,
@@ -199,11 +280,16 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Default Behaviour, Passing OWNER, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'testtable_2',
-                'testtable_1',
+                'foreign_key_source',
+                'foreign_key_target_1',
                 [
-                   'tt_id' => 'id',
-                   'integer_field' => 'integer_field'
+                   'tt_id_1' => 'id_1',
+                   'integer_field' => 'integer_field_1'
+                ],
+                'foreign_key_target_2',
+                [
+                   'tt_id_2' => 'id_2',
+                   'integer_field' => 'integer_field_2'
                 ],
                 false,
                 false,
@@ -211,8 +297,10 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Default Behaviour, Passing Invalid OWNER, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'testtable_2',
-                'testtable_1',
+                'foreign_key_source',
+                'foreign_key_target_1',
+                false,
+                false,
                 false,
                 false,
                 false,
@@ -220,8 +308,10 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Default Behaviour, Passing Invalid Table, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'invalide_testtable_2',
-                'testtable_1',
+                'invalide_foreign_key_source',
+                'foreign_key_target_1',
+                false,
+                false,
                 false,
                 false,
                 false,

@@ -21,8 +21,7 @@ DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
 DROP TABLE IF EXISTS blob_storage_table;
--- Must drop testtable_2 before testtable_1 because of foreign key constraints
-DROP TABLE IF EXISTS testtable_2;
+
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
 DROP TABLE IF EXISTS xml_schema_test;
@@ -51,27 +50,6 @@ CREATE VIEW testtable_1_view AS
 	SELECT id,varchar_field
 	FROM testtable_1
 	WHERE varchar_field IS NOT NULL;
-
--- testtable_2 is used to test foreign keys
--- There is no data in this table
--- Currently missing support for composite foreign key tests in DB2 driver
--- This is solely because I don't know how to create a composite foreign key in DB2
-CREATE TABLE TESTTABLE_2 (
-	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-	integer_field SMALLINT NOT NULL DEFAULT 0,
-	date_field DATE DEFAULT CURRENT DATE,
-	blob_field BLOB(100M),
-	tt_id INTEGER NOT NULL,
-	PRIMARY KEY (id)
-);
-
-CREATE	UNIQUE INDEX vdx22 ON testtable_2 (integer_field,date_field);
-
-ALTER TABLE TESTTABLE_2
-FOREIGN KEY (tt_id,integer_field)
-	REFERENCES TESTTABLE_1(id,integer_field)
-		ON UPDATE NO ACTION
-		ON DELETE CASCADE;
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 CREATE TABLE testtable_3 (

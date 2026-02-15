@@ -56,28 +56,6 @@ CREATE SEQUENCE testtable_1_seq
 -- by the schema loader
 CREATE OR REPLACE TRIGGER testable_1_t BEFORE insert ON testtable_1 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_1_seq.nextval into :new.id from dual; END; ;
 
--- testtable_2 is used to test foreign keys
--- There is no data in this table
-CREATE TABLE testtable_2 (
-	id INTEGER NOT NULL,
-	integer_field SMALLINT NOT NULL,
-	date_field DATE,
-	blob_field BLOB,
-    tt_id INTEGER NOT NULL
-    
-);
-CREATE UNIQUE INDEX vdx21 ON testtable_2 (integer_field,date_field);
- 
-ALTER TABLE testtable_2 ADD CONSTRAINT vdx21
-    FOREIGN KEY (tt_id,integer_field)
-    REFERENCES testtable_1 (id,integer_field);
-
-CREATE SEQUENCE testtable_2_seq
-    INCREMENT BY 1
-    START WITH 1;
-
-CREATE OR REPLACE TRIGGER testable_2_t BEFORE insert ON testtable_2 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_2_seq.nextval into :new.id from dual; END; ;
-
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 
 CREATE TABLE testtable_3 (

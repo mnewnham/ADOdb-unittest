@@ -9,8 +9,9 @@ DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
 DROP TABLE IF EXISTS blob_storage_table;
--- Must drop testtable_2 before testtable_1 because of foreign key constraints
-DROP TABLE IF EXISTS testtable_2;
+-- Must drop foreign_key_target_2 and foreign_key_source before testtable_1 because of foreign key constraints
+DROP TABLE IF EXISTS foreign_key_target_2;
+DROP TABLE IF EXISTS foreign_key_source;
 DROP VIEW IF EXISTS testtable_1_view;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
@@ -43,16 +44,6 @@ CREATE VIEW testtable_1_view AS
 	FROM testtable_1
 	WHERE varchar_field IS NOT NULL;
 
--- testtable_2 is used to test foreign keys
--- There is no data in this table
-CREATE TABLE testtable_2 (
-   id BIGINT IDENTITY(1,1) PRIMARY KEY,
-    integer_field INTEGER DEFAULT 0,
-	date_field DATE,
-	blob_field VARBINARY(MAX),
-	tt_id BIGINT NOT NULL,
-    FOREIGN KEY (tt_id,integer_field) REFERENCES testtable_1(id,integer_field)
-);
 
 CREATE TABLE testtable_3 (
 	id INT IDENTITY(1,1) PRIMARY KEY,
