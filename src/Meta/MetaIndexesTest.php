@@ -54,18 +54,57 @@ class MetaIndexesTest extends MetaFunctions
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->setFetchMode($fetchMode);
 
-            $executionResult = $this->db->metaIndexes($this->testTableName);
+            $executionResult = $this->db->metaIndexes(
+                $this->testTableName,
+                true
+            );
             list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
 
+            $this->assertIsArray(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] Checking MetaIndexes returns an array',
+                    $fetchModeName
+                )
+            );
             $this->assertSame(
-                3,
+                4,
                 count($executionResult),
                 sprintf(
-                    'FETCH MODE %s] Checking Index Count should be 3',
+                    '[FETCH MODE %s] Checking Index Count should be 3',
                     $fetchModeName
                 )
             );
         }
+    }
+
+    /**
+     * Data provider for {@see testMetaColumns()}
+     *
+     * @return array [bool array type, array return value]
+     */
+    public static function providerTestMetaIndex(): array
+    {
+        return [
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_NUM,' => [
+                ADODB_FETCH_NUM, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_NUM' => [
+                ADODB_FETCH_NUM, true,'vdx2'
+                ],
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_ASSOC,' => [
+                ADODB_FETCH_ASSOC, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC, true,'vdx2'
+                ],
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_BOTH,' => [
+                ADODB_FETCH_BOTH, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH' => [
+                ADODB_FETCH_BOTH, true,'vdx2'
+                ],
+            ];
     }
 
     /**
@@ -78,23 +117,33 @@ class MetaIndexesTest extends MetaFunctions
      * @return void
      */
     #[DataProvider('providerTestMetaIndexUniqueness')]
-    public function testMetaIndexUniqueness($result, $indexName): void
-    {
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+    public function testMetaIndexUniqueness(
+        int $fetchMode,
+        bool $isUnique,
+        string $indexName
+    ): void {
 
-            $executionResult = $this->db->metaIndexes($this->testTableName);
-            list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
+        $this->db->setFetchMode($fetchMode);
 
-            $this->assertSame(
-                $result,
-                ($executionResult[$indexName]['unique'] == 1),
-                sprintf(
-                    '[FETCH MODE %s] Checking Index Uniqueness',
-                    $fetchModeName
-                )
-            );
-        };
+        $executionResult = $this->db->metaIndexes($this->testTableName);
+        list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
+
+        $this->assertIsArray(
+            $executionResult,
+            sprintf(
+                '[FETCH MODE %s] Checking MetaIndexes returns an array',
+                $this->testFetchModes[$fetchMode]
+            )
+        );
+
+        $this->assertSame(
+            $isUnique,
+            ($executionResult[$indexName]['unique'] == 1),
+            sprintf(
+                '[FETCH MODE %s] Checking Correctly indicates Index Uniqueness',
+                $this->testFetchModes[$fetchMode]
+            )
+        );
     }
 
     /**
@@ -105,9 +154,25 @@ class MetaIndexesTest extends MetaFunctions
     public static function providerTestMetaIndexUniqueness(): array
     {
         return [
-             'Index vdx1 is unique' => [true,'vdx1'],
-             'Index vdx2 is unique' => [true,'vdx2'],
-                ];
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_NUM,' => [
+                ADODB_FETCH_NUM, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_NUM' => [
+                ADODB_FETCH_NUM, true,'vdx2'
+                ],
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_ASSOC,' => [
+                ADODB_FETCH_ASSOC, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC, true,'vdx2'
+                ],
+             'Index vdx1 is unique, 1 element, ADODB_FETCH_BOTH,' => [
+                ADODB_FETCH_BOTH, true, 'vdx1'
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH' => [
+                ADODB_FETCH_BOTH, true,'vdx2'
+                ],
+            ];
     }
 
     /**
