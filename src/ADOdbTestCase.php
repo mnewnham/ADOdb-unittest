@@ -156,6 +156,9 @@ class ADOdbTestCase extends TestCase
             $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
         }
 
+        /*
+        * Ensure that the schema cache is flushed for each test. 
+        */
         $this->db->cachedSchemaFlush = true;
 
         $GLOBALS['testTableName']   = $this->testTableName;
@@ -259,6 +262,8 @@ class ADOdbTestCase extends TestCase
 
         $errno  = $db->errorNo();
         $errmsg = $db->errorMsg();
+
+        $errno = $errno ? $errno : 0;
 
         $db->_errorCode = 0;
         $db->_errorMsg = '';
