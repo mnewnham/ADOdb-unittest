@@ -45,31 +45,54 @@ class MetaColumnNamesTest extends MetaFunctions
     /**
      * Test for {@see ADODConnection::metaColumnNames()]
      *
-     * @param bool  $returnType
-     * @param array $expectedResult
+     * @param bool  $numericIndices      Return numeric indexes
+     * @param int   $fetchMode           The fetch mode
+     * @param array $expectedResult      What should be returned
+     * @param bool  $forcePostgresOption Use the PGSQL attnum parameter
      *
      * @return void
      */
     #[DataProvider('providerTestMetaColumnNames')]
-    public function testMetaColumnNames(bool $returnType, int $fetchMode, array $expectedResult): void
-    {
-        $this->db->setFetchMode($fetchMode);
+    public function testMetaColumnNames(
+        bool $numericIndices, 
+        int $fetchMode, 
+        array $expectedResult,
+        bool $forcePostgresOption
+        ): void {
 
+        global $ADODB_FETCH_MODE;
+        
+        $this->db->setFetchMode($fetchMode);
+        $ADODB_FETCH_MODE = $fetchMode;
         $executionResult = $this->db->metaColumnNames(
             $this->testTableName,
-            $returnType
+            $numericIndices,
+            $forcePostgresOption
         );
         list($errno, $errmsg) = $this->assertADOdbError('metaColumnNames()');
 
-        $this->assertSame(
-            $expectedResult,
-            $executionResult,
-            sprintf(
-                '[FETCH MODE: %s] Checking metaColumnNames with returnType %s',
-                $this->testFetchModes[$fetchMode],
-                $returnType ? 'true' : 'false'
-            )
-        );
+        $executionKeys = array_keys($executionResult);
+
+        if ($forcePostgresOption) {
+            $expectedCount = count($expectedResult);
+            $executionCount = count($executionKeys);
+            $this->assertSame(
+                $expectedCount,
+                $executionCount,
+                'When using the Postgres attnumn option, only the total number of keys is deteeminable'
+            );
+        } else {
+
+            $this->assertSame(
+                $expectedResult,
+                $executionKeys,
+                sprintf(
+                    '[FETCH MODE: %s] Checking Keys of returned data %s',
+                    $this->testFetchModes[$fetchMode],
+                    $numericIndices ? 'true' : 'false'
+                )
+            );
+        }
     }
 
     /**
@@ -79,39 +102,53 @@ class MetaColumnNamesTest extends MetaFunctions
      */
     public static function providerTestMetaColumnNames(): array
     {
-        return array(
-            'Returning Associative Array' => array(
+        return [
+            'Default Behavior ADODB_FETCH_ASSOC' => [
                 false,
                 ADODB_FETCH_ASSOC,
-                array (
-                    'ID' => 'id',
-                    'VARCHAR_FIELD' => 'varchar_field',
-                    'DATETIME_FIELD' => 'datetime_field',
-                    'DATE_FIELD' => 'date_field',
-                    'INTEGER_FIELD' => 'integer_field',
-                    'DECIMAL_FIELD' => 'decimal_field',
-                    'BOOLEAN_FIELD' => 'boolean_field',
-                    'EMPTY_FIELD' => 'empty_field',
-                    'NUMBER_RUN_FIELD' => 'number_run_field'
-                )
-            ),
-
-            'Returning Numeric Array' => array(
-                true,
+                [
+                    'ID',
+                    'VARCHAR_FIELD',
+                    'DATETIME_FIELD',
+                    'DATE_FIELD',
+                    'INTEGER_FIELD',
+                    'DECIMAL_FIELD',
+                    'BOOLEAN_FIELD',
+                    'EMPTY_FIELD',
+                    'NUMBER_RUN_FIELD'
+                ],
+                false
+            ],
+            'Default Behavior ADODB_FETCH_NUM' =>[
+                false,
                 ADODB_FETCH_NUM,
-                array(
-                    '0' => 'id',
-                    '1' => 'varchar_field',
-                    '2' => 'datetime_field',
-                    '3' => 'date_field',
-                    '4' => 'integer_field',
-                    '5' => 'decimal_field',
-                    '6' => 'boolean_field',
-                    '7' => 'empty_field',
-                    '8' => 'number_run_field'
-                )
-            )
-        );
+                [
+                    'ID',
+                    'VARCHAR_FIELD',
+                    'DATETIME_FIELD',
+                    'DATE_FIELD',
+                    'INTEGER_FIELD',
+                    'DECIMAL_FIELD',
+                    'BOOLEAN_FIELD',
+                    'EMPTY_FIELD',
+                    'NUMBER_RUN_FIELD'
+                ],
+                false
+        
+            ],
+            'Force Numeric Array ADODB_FETCH_ASSOC' => [
+                true,
+                ADODB_FETCH_ASSOC,
+                [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
+                false
+            ],
+            'Force Postgres Option ADODB_FETCH_ASSOC' => [
+                true,
+                ADODB_FETCH_ASSOC,
+                [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
+                true
+            ]
+        ];
     }
 
     /**
