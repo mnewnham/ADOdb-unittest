@@ -41,7 +41,7 @@ class MetaForeignKeysTest extends MetaFunctions
 
         parent::setUpBeforeClass();
 
-         $db        = $GLOBALS['ADOdbConnection'];
+        $db        = $GLOBALS['ADOdbConnection'];
         $adoDriver = $GLOBALS['ADOdriver'];
 
         /*
@@ -72,7 +72,7 @@ class MetaForeignKeysTest extends MetaFunctions
      *
      * @return void
      */
-     #[DataProvider('providerTestMetaForeignKeys')]
+    #[DataProvider('providerTestMetaForeignKeys')]
     public function testMetaForeignKeys(
         int $fetchMode,
         string $sourceTable,
@@ -85,98 +85,109 @@ class MetaForeignKeysTest extends MetaFunctions
         ?string $schemaOwner
     ): void {
 
-         global $ADODB_FETCH_MODE;
-         $originalFetchMode = $ADODB_FETCH_MODE;
+        global $ADODB_FETCH_MODE;
+        $originalFetchMode = $ADODB_FETCH_MODE;
 
-         $this->db->setFetchMode($fetchMode);
-         $ADODB_FETCH_MODE = $fetchMode;
+        $this->db->setFetchMode($fetchMode);
+        $ADODB_FETCH_MODE = $fetchMode;
+        $testTable1 = 'foreign_key_target_1';
+        $testTable2 = 'foreign_key_source';
 
-         $testTable1 = 'foreign_key_target_1';
-         $testTable2 = 'foreign_key_source';
+        $executionResult = $this->db->metaForeignKeys(
+            $sourceTable,
+            $schemaOwner,
+            $upperCaseKeys,
+            $associativeKeys
+        );
 
-         $executionResult = $this->db->metaForeignKeys(
-             $sourceTable,
-             $schemaOwner,
-             $upperCaseKeys,
-             $associativeKeys
-         );
+        // print_r($executionResult);
 
-         print_r($executionResult);
+        $this->db->setFetchMode($originalFetchMode);
 
-         $this->db->setFetchMode($originalFetchMode);
+        if ($expectedFirstFieldKeys == false && $expectedSecondTableKey === false) {
+            $this->assertFalse(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] Checking that metaForeignKeys returns ' .
+                    'false when invalid owner is passed',
+                    $fetchMode
+                )
+            );
+        } elseif (
+             $expectedFirstFieldKeys == false
+             && $expectedSecondTableKey === true
+        ) {
+            $this->assertFalse(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] Checking that metaForeignKeys returns ' .
+                    'false when invalid table is passed',
+                    $fetchMode
+                )
+            );
+        } else {
+            if ($executionResult == false) {
+                $this->fail(
+                    sprintf(
+                        '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
+                        $fetchMode
+                    )
+                );
+                return;
+            }
 
-         if ($expectedFirstFieldKeys == false) {
-             $this->assertFalse(
-                 $executionResult,
-                 sprintf(
-                     '[FETCH MODE %s] Checking that metaForeignKeys returns ' .
-                     'false when invalid owner or table is passed',
-                     $fetchMode
-                 )
-             );
-         } else {
-             if ($executionResult == false) {
-                 $this->fail(
-                     sprintf(
-                         '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
-                         $fetchMode
-                     )
-                 );
-                 return;
-             }
+            $this->assertArrayHasKey(
+                $expectedFirstTableKey,
+                $executionResult,
+                sprintf(
+                    "[FETCH MODE %s] Checking for first foreign key for $testTable1 in $testTable2",
+                    $fetchMode
+                )
+            );
 
-             $this->assertArrayHasKey(
-                 $expectedFirstTableKey,
-                 $executionResult,
-                 sprintf(
-                     "[FETCH MODE %s] Checking for first foreign key for $testTable1 in $testTable2",
-                     $fetchMode
-                 )
-             );
-
-             $fkData = $executionResult[$expectedFirstTableKey];
-
-
-             $this->assertSame(
-                 $expectedFirstFieldKeys,
-                 $fkData,
-                 sprintf(
-                     '[FETCH MODE %s] Checking that the first foreign key data matches expected values',
-                     $fetchMode
-                 )
-             );
-
-             if ($executionResult == false) {
-                 $this->fail(
-                     sprintf(
-                         '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
-                         $fetchMode
-                     )
-                 );
-                 return;
-             }
-
-             $this->assertArrayHasKey(
-                 $expectedSecondTableKey,
-                 $executionResult,
-                 sprintf(
-                     "[FETCH MODE %s] Checking for second foreign key for $testTable1 in $testTable2",
-                     $fetchMode
-                 )
-             );
-
-             $fkData = $executionResult[$expectedSecondTableKey];
+            $fkData = $executionResult[$expectedFirstTableKey];
 
 
-             $this->assertSame(
-                 $expectedSecondFieldKeys,
-                 $fkData,
-                 sprintf(
-                     '[FETCH MODE %s] Checking that the second foreign key data matches expected values',
-                     $fetchMode
-                 )
-             );
-         }
+            $this->assertSame(
+                $expectedFirstFieldKeys,
+                $fkData,
+                sprintf(
+                    '[FETCH MODE %s] Checking that the first foreign key data matches expected values',
+                    $fetchMode
+                )
+            );
+
+            if ($executionResult == false) {
+                $this->fail(
+                    sprintf(
+                        '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
+                        $fetchMode
+                    )
+                );
+                return;
+            }
+
+            $this->assertArrayHasKey(
+                $expectedSecondTableKey,
+                $executionResult,
+                sprintf(
+                    "[FETCH MODE %s] Checking for second foreign key for $testTable1 in $testTable2",
+                    $fetchMode
+                )
+            );
+
+            $fkData = $executionResult[$expectedSecondTableKey];
+
+
+            $this->assertSame(
+                $expectedSecondFieldKeys,
+                $fkData,
+                sprintf(
+                    '[FETCH MODE %s] Checking that the second foreign key data matches expected values',
+                    $fetchMode
+                )
+            );
+        }
     }
 
     /**
@@ -311,7 +322,7 @@ class MetaForeignKeysTest extends MetaFunctions
                 'invalide_foreign_key_source',
                 'foreign_key_target_1',
                 false,
-                false,
+                true,
                 false,
                 false,
                 false,
