@@ -328,6 +328,28 @@ class MetaForeignKeysTest extends MetaFunctions
                 false,
                 ''
             ],
+            'Default Behaviour, Passing valid table with no foreign keys, ADODB_FETCH_ASSOC' => [
+                ADODB_FETCH_ASSOC,
+                'foreign_key_target_1',
+                'foreign_key_target_2',
+                false,
+                true,
+                false,
+                false,
+                false,
+                ''
+            ],
+             'Default Behaviour, Passing valid table with no foreign keys, ADODB_FETCH_NUM' => [
+                ADODB_FETCH_NUM,
+                'foreign_key_target_1',
+                'foreign_key_target_2',
+                false,
+                true,
+                false,
+                false,
+                false,
+                ''
+            ],
         ];
     }
 }
