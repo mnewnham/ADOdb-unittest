@@ -294,11 +294,20 @@ if ($credentials['dsn']) {
     );
 }
 
-$GLOBALS['schemaOwner'] = $credentials['user'];
-
 if (!$db->isConnected()) {
     die(sprintf('%s database connection not established', $adoDriver));
 }
+
+switch ($credentials['driver']) {
+    case 'mysqli':
+        $GLOBALS['schemaOwner'] = $credentials['database'];
+        break;
+    
+    default:
+        $GLOBALS['schemaOwner'] = $credentials['user'];
+}
+
+
 
 $casingDescriptions = [
     0 => 'ADODB_ASSOC_CASE_LOWER',
