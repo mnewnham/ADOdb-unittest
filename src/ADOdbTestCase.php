@@ -400,6 +400,11 @@ class ADOdbTestCase extends TestCase
         return $outputArray;
     }
 
+    /**
+     * Stores the global and setFetchMode values to be tested later
+     *
+     * @return void
+     */
     protected function storeFetchModes(): void
     {
         global $ADODB_FETCH_MODE;
@@ -410,6 +415,13 @@ class ADOdbTestCase extends TestCase
         ];
     }
 
+    /**
+     * Tests the fetch modes have been correctly reset after
+     * a sub-procedure has been executed. This test is called
+     * from every meta test
+     *
+     * @return void
+     */
     protected function testFetchModes(): void
     {
         global $ADODB_FETCH_MODE;
@@ -426,7 +438,7 @@ class ADOdbTestCase extends TestCase
             $this->fetchModeStorage['global'],
             $fetchModeStorage['global'],
             sprintf(
-                'Global $ADODB_FETCH_MODE should have reverted to %s, is currently %s',
+                'Global $ADODB_FETCH_MODE should have reverted to %s, it is currently %s',
                 $testFetchModes[$this->fetchModeStorage['global']],
                 $testFetchModes[$fetchModeStorage['global']]
             )
@@ -436,7 +448,7 @@ class ADOdbTestCase extends TestCase
             $this->fetchModeStorage['set'],
             $fetchModeStorage['set'],
             sprintf(
-                'Fetch Mode via setFetchMode() should have reverted to %s, is currebtly %s',
+                'The value of $db->fetchMode should have reverted to %s, it is currently %s',
                 $testFetchModes[$this->fetchModeStorage['set']],
                 $testFetchModes[$fetchModeStorage['set']]
             )
