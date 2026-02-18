@@ -54,7 +54,8 @@ class GetMedianTest extends ADOdbCoreSetup
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->db->startTrans();
 
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $actualValue = $this->db->getMedian($table, $column, $where);
 

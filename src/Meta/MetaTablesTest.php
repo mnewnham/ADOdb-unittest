@@ -56,14 +56,18 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
                 $filterType,
                 false, //$this->db->database,
                 $mask
             );
+
             list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
+
+            $this->validateResetFetchModes();
 
             $tableExists = $executionResult && in_array(
                 strtoupper($this->testTableName),
@@ -132,7 +136,8 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
                 $filterType,
@@ -140,6 +145,8 @@ class MetaTablesTest extends MetaFunctions
                 $mask
             );
             list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
+
+            $this->validateResetFetchModes();
 
             $tableExists = $executionResult && in_array(
                 strtoupper($GLOBALS['testViewName']),
@@ -185,7 +192,6 @@ class MetaTablesTest extends MetaFunctions
             'Show both Tables & Views' => [true,false,false],
             'Show only Tables' => [false,'TABLES',false],
             'Show only Views' => [true,'VIEWS',false],
-            'Show only [T]ables' => [false,'T',false],
             'Show only [V]iews' => [true,'V',false],
             'Show only views beginning test%' => [true,false,'test%'],
             'Show only views beginning notest%' => [false,false,'notest%'],
@@ -206,7 +212,8 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
                 'T',
@@ -214,6 +221,8 @@ class MetaTablesTest extends MetaFunctions
                 $this->testTableName,
             );
             list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
+
+            $this->validateResetFetchModes();
 
             $assertionResult = $this->assertIsArray(
                 $executionResult,

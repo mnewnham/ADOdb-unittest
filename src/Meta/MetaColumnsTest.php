@@ -53,11 +53,14 @@ class MetaColumnsTest extends MetaFunctions
         $expectedResult  = 9;
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
 
             $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $executionResult,
@@ -92,10 +95,14 @@ class MetaColumnsTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+
+            $this->validateResetFetchModes();
+
             $this->assertIsArray(
                 $executionResult,
                 sprintf(
@@ -142,10 +149,13 @@ class MetaColumnsTest extends MetaFunctions
         ];
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+           //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaColumns($this->testTableName);
             list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $executionResult,
@@ -188,10 +198,13 @@ class MetaColumnsTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
 
             $response = $this->db->metaColumns('invalid_table');
+
+            $this->validateResetFetchModes();
 
             $this->assertFalse(
                 $response,

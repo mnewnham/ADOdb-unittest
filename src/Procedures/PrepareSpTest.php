@@ -84,9 +84,12 @@ class PrepareSpTest extends MetaFunctions
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $statement = $this->db->prepareSp('sp_recordset_test');
+
+            $this->validateResetFetchModes();
 
 
 

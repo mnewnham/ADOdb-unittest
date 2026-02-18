@@ -60,9 +60,21 @@ class ADOdbTestCase extends TestCase
     );
 
     protected array $testFetchModes = [
-        ADODB_FETCH_NUM   => '[1] ADODB_FETCH_NUM',
-        ADODB_FETCH_ASSOC => '[2] ADODB_FETCH_ASSOC',
-        ADODB_FETCH_BOTH  => '[3] ADODB_FETCH_BOTH'
+        '[1] GLOBAL ADODB_FETCH_NUM',
+        '[2] GLOBAL ADODB_FETCH_ASSOC',
+        '[3] GLOBAL ADODB_FETCH_BOTH',
+        '[1] $fetchMode = ADODB_FETCH_NUM',
+        '[2] $fetchMode = ADODB_FETCH_ASSOC',
+        '[3] $fetchMode = ADODB_FETCH_BOTH'
+    ];
+
+    protected array $insertedFetchModes = [
+        [1, false],
+        [2, false],
+        [3, false],
+        [1, 1],
+        [2, 2],
+        [3, 3],
     ];
 
     /**
@@ -75,6 +87,26 @@ class ADOdbTestCase extends TestCase
         'global' => false,
         'set' => false
     ];
+
+
+    /**
+     * Changes the fetch mode to the required
+     * global / fetchMode combination
+     *
+     * @param integer $modeKey
+     *
+     * @return void
+     */
+    public function insertFetchMode(int $modeKey): void
+    {
+        global $ADODB_FETCH_MODE;
+
+        $modes = $this->insertedFetchModes[$modeKey];
+        $ADODB_FETCH_MODE = $modes[0];
+        $this->db->setFetchMode($modes[1]);
+
+        $this->storeFetchModes();
+    }
 
     /**
      * Instantiates new ADOdb connection to flush every test
@@ -168,7 +200,7 @@ class ADOdbTestCase extends TestCase
         }
 
         /*
-        * Ensure that the schema cache is flushed for each test. 
+        * Ensure that the schema cache is flushed for each test.
         */
         $this->db->cachedSchemaFlush = true;
 
@@ -422,7 +454,7 @@ class ADOdbTestCase extends TestCase
      *
      * @return void
      */
-    protected function testFetchModes(): void
+    protected function validateResetFetchModes(): void
     {
         global $ADODB_FETCH_MODE;
 
@@ -454,5 +486,4 @@ class ADOdbTestCase extends TestCase
             )
         );
     }
-
 }

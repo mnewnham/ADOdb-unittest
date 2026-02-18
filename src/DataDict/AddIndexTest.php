@@ -65,7 +65,7 @@ class AddIndexTest extends DataDictFunctions
                 'string_test_index',
                 $this->testTableName
             );
-    
+
             list ($response,$errno,$errmsg) = $this->executeDictionaryAction($dropIndexSql);
         }
 
@@ -119,7 +119,7 @@ class AddIndexTest extends DataDictFunctions
                 'array_test_index',
                 $this->testTableName
             );
-            
+
             list ($response,$errno,$errmsg) = $this->executeDictionaryAction($dropIndexSql);
         }
         $flds = array(
@@ -132,7 +132,7 @@ class AddIndexTest extends DataDictFunctions
         );
 
         $sqlArray = $this->dataDictionary->createIndexSQL(
-           'array_test_index',
+            'array_test_index',
             $this->testTableName,
             $flds,
             $indexOptions

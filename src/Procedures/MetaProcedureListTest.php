@@ -89,9 +89,12 @@ class MetaProcedureListTest extends MetaFunctions
  optional string $schemaPattern=null
  */
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaProcedures();
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $response,
@@ -125,9 +128,12 @@ class MetaProcedureListTest extends MetaFunctions
  optional string $schemaPattern=null
  */
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaProcedures('sp_recordset_test');
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $response,

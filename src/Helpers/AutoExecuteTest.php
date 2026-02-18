@@ -53,8 +53,8 @@ class AutoExecuteTest extends ADOdbTestCase
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
             foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-                $this->db->setFetchMode($fetchMode);
-
+                //$this->db->setFetchMode($fetchMode);
+                 $this->insertFetchMode($fetchMode);
                 $aeVar = 'AUTOEXECUTE01' . $forceMode . $fetchMode;
 
                 $ar = array(
@@ -127,8 +127,8 @@ class AutoExecuteTest extends ADOdbTestCase
             foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
                 $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
 
-                $this->db->setFetchMode($fetchMode);
-
+                //$this->db->setFetchMode($fetchMode);
+                $this->insertFetchMode($fetchMode);
                 $ar = array(
                     'varchar_field' => $aeVar,
                     'integer_field' => 99,
@@ -212,7 +212,8 @@ class AutoExecuteTest extends ADOdbTestCase
 
             for ($forceMode = 0; $forceMode < 2; $forceMode++) {
                 foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-                    $this->db->setFetchMode($fetchMode);
+                    //$this->db->setFetchMode($fetchMode);
+                    $this->insertFetchMode($fetchMode);
 
                     $aeVar = 'AUTOEXECUTE03' . $forceMode . $fetchMode . $qfIndex;
 

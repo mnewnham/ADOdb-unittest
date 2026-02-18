@@ -92,7 +92,8 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             if ($fetchMode == ADODB_FETCH_NUM) {
                 $idField = 0;
@@ -310,7 +311,8 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetcDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             if ($fetchMode == ADODB_FETCH_NUM) {
                 $idField = 0;

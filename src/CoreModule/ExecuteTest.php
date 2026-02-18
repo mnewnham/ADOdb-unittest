@@ -48,7 +48,8 @@ class ExecuteTest extends ADOdbCoreSetup
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+           //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
             list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
             $this->assertSame(

@@ -44,12 +44,32 @@ class MetaDatabasesTest extends MetaFunctions
 
     public function testMetaDatabases(): void
     {
+
+        $baseDatabaseName = $this->db->database;
+
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            $this->db->database = $baseDatabaseName;
+
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
+
+            $this->storeFetchModes();
 
             $response = $this->db->metaDatabases();
 
-            $x = $this->assertIsArray(
+            $this->validateResetFetchModes();
+
+            $this->assertSame(
+                $baseDatabaseName,
+                $this->db->database,
+                sprintf(
+                    '[FETCH MODE %s] Checking that metaDatabases ' .
+                    'resets the value of ADOConnection::database',
+                    $fetchModeName
+                )
+            );
+
+            $this->assertIsArray(
                 $response,
                 sprintf(
                     '[FETCH MODE %s] Checking that metaDatabases ' .
@@ -58,10 +78,11 @@ class MetaDatabasesTest extends MetaFunctions
                 )
             );
 
-            $dbMatch = preg_grep('/(' . $this->db->database . ')/', $response);
+            $flipResponse = array_flip($response);
 
-            $this->assertTrue(
-                (count($dbMatch) == 1),
+            $this->assertArrayHasKey(
+                $this->db->database,
+                $flipResponse,
                 sprintf(
                     '[FETCH MODE %s] Checking that metaDatabases ' .
                     'returns the currently attached database',

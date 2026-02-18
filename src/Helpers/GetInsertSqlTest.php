@@ -54,7 +54,8 @@ class GetInsertSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $lastRecord = $this->db->getRow($sql);
@@ -152,7 +153,8 @@ class GetInsertSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $lastRecord = $this->db->getRow($sql);
@@ -234,7 +236,8 @@ class GetInsertSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $lastRecord = $this->db->getRow($sql);
@@ -326,7 +329,8 @@ class GetInsertSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $lastRecord = $this->db->getRow($sql);

@@ -54,7 +54,7 @@ class ADOdbCoreSetup extends ADOdbTestCase
         */
         $db->startTrans();
 
-       
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/table3-data.sql',
             $GLOBALS['unitTestToolsDirectory']

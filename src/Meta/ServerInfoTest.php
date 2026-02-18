@@ -54,9 +54,12 @@ class ServerInfoTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->serverInfo();
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $executionResult,

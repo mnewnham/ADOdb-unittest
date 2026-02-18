@@ -54,14 +54,14 @@ class MetaColumnNamesTest extends MetaFunctions
      */
     #[DataProvider('providerTestMetaColumnNames')]
     public function testMetaColumnNames(
-        bool $numericIndices, 
-        int $fetchMode, 
+        bool $numericIndices,
+        int $fetchMode,
         array $expectedResult,
         bool $forcePostgresOption
-        ): void {
+    ): void {
 
         global $ADODB_FETCH_MODE;
-        
+
         $this->db->setFetchMode($fetchMode);
         $ADODB_FETCH_MODE = $fetchMode;
         $executionResult = $this->db->metaColumnNames(
@@ -82,7 +82,6 @@ class MetaColumnNamesTest extends MetaFunctions
                 'When using the Postgres attnumn option, only the total number of keys is deteeminable'
             );
         } else {
-
             $this->assertSame(
                 $expectedResult,
                 $executionKeys,
@@ -119,7 +118,7 @@ class MetaColumnNamesTest extends MetaFunctions
                 ],
                 false
             ],
-            'Default Behavior ADODB_FETCH_NUM' =>[
+            'Default Behavior ADODB_FETCH_NUM' => [
                 false,
                 ADODB_FETCH_NUM,
                 [
@@ -134,7 +133,7 @@ class MetaColumnNamesTest extends MetaFunctions
                     'NUMBER_RUN_FIELD'
                 ],
                 false
-        
+
             ],
             'Force Numeric Array ADODB_FETCH_ASSOC' => [
                 true,
@@ -161,10 +160,12 @@ class MetaColumnNamesTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
-
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaColumnNames('invalid_table');
+
+            $this->validateResetFetchModes();
 
             $this->assertFalse(
                 $response,

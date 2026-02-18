@@ -121,7 +121,7 @@ class ObjectTest extends ADOdbTestCase
         */
 
         readSqlIntoDatabase($db, $tableSchema);
-        
+
         $db->completeTrans();
     }
 

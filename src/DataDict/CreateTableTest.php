@@ -5,7 +5,7 @@
  *
  * This table creation stands alone. The resulting table is
  * not used for modification tests
- * 
+ *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
  *
@@ -60,7 +60,7 @@ class CreateTableTest extends DataDictFunctions
 
         list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
 
-        
+
         $options = [
             'MYSQL' => 'ENGINE MYISAM;'
         ];
@@ -96,7 +96,6 @@ class CreateTableTest extends DataDictFunctions
             'dictionary_creation_test_table',
             $flipMetaTables,
             'The dictionary Test Creation table should now be in the database'
-
         );
 
         $metaColumns = $this->db->metaColumns('dictionary_creation_test_table');
@@ -106,6 +105,5 @@ class CreateTableTest extends DataDictFunctions
             count($metaColumns),
             'Newly created table should have 14 columns'
         );
-
     }
 }

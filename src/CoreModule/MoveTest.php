@@ -64,17 +64,17 @@ class MoveTest extends ADOdbTestCase
             *load Data into the table
             */
             $db->startTrans();
-            
+
             $tableSchema = sprintf(
                 '%s/DatabaseSetup/table3-data.sql',
-            $GLOBALS['unitTestToolsDirectory']
-        );
+                $GLOBALS['unitTestToolsDirectory']
+            );
 
         /*
         * Loads the schema based on the DB type
         */
 
-        readSqlIntoDatabase($db, $tableSchema);
+            readSqlIntoDatabase($db, $tableSchema);
 
             $db->completeTrans();
         }

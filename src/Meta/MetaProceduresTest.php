@@ -56,9 +56,11 @@ class MetaProceduresTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->setFetchMode($fetchMode);
-
+           //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
             $response = $this->db->metaProcedures();
+
+            $this->validateResetFetchModes();
 
             $this->assertIsArray(
                 $response,

@@ -9,9 +9,7 @@ DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
 DROP TABLE IF EXISTS blob_storage_table;
--- Must drop foreign_key_target_2 and foreign_key_source before testtable_1 because of foreign key constraints
-DROP TABLE IF EXISTS foreign_key_target_2;
-DROP TABLE IF EXISTS foreign_key_source;
+
 DROP VIEW IF EXISTS testtable_1_view;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
@@ -22,7 +20,7 @@ DROP SEQUENCE IF EXISTS unittest_seq;
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (
-	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	id BIGINT IDENTITY(1,1),
 	varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
@@ -31,12 +29,13 @@ CREATE TABLE testtable_1 (
 	boolean_field BIT DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field BIGINT DEFAULT 0,
+	PRIMARY KEY(id, integer_field)
 );
 
 CREATE	UNIQUE INDEX vdx1 ON testtable_1 (varchar_field);
 CREATE	UNIQUE INDEX vdx2 ON testtable_1 (integer_field,date_field);
 CREATE	UNIQUE INDEX vdx3 ON testtable_1 (number_run_field);
-CREATE	UNIQUE INDEX tt1pk ON testtable_1 (id,integer_field);
+-- CREATE	UNIQUE INDEX tt1pk ON testtable_1 (id,integer_field);
 
 -- Simple View onto testtable 1
 CREATE VIEW testtable_1_view AS 

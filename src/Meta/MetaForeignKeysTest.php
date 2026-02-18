@@ -93,6 +93,8 @@ class MetaForeignKeysTest extends MetaFunctions
         $testTable1 = 'foreign_key_target_1';
         $testTable2 = 'foreign_key_source';
 
+        $this->storeFetchModes();
+
         $executionResult = $this->db->metaForeignKeys(
             $sourceTable,
             $schemaOwner,
@@ -102,7 +104,11 @@ class MetaForeignKeysTest extends MetaFunctions
 
         // print_r($executionResult);
 
+        $this->testFetchModes();
+
         $this->db->setFetchMode($originalFetchMode);
+
+
 
         if ($expectedFirstFieldKeys == false && $expectedSecondTableKey === false) {
             $this->assertFalse(

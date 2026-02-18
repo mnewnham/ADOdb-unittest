@@ -70,7 +70,8 @@ class GetRowTest extends ADOdbCoreSetup
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->setFetchMode($fetchMode);
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
 
             $this->db->startTrans();
 
