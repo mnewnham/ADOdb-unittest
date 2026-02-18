@@ -102,9 +102,7 @@ class MetaForeignKeysTest extends MetaFunctions
             $associativeKeys
         );
 
-        // print_r($executionResult);
-
-        $this->testFetchModes();
+        $this->validateResetFetchModes();
 
         $this->db->setFetchMode($originalFetchMode);
 
