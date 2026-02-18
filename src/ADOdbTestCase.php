@@ -66,6 +66,17 @@ class ADOdbTestCase extends TestCase
     ];
 
     /**
+     * Stores the status of fetch modes for pre and post
+     * test checking
+     *
+     * @var array
+     */
+    protected array $fetchModeStorage = [
+        'global' => false,
+        'set' => false
+    ];
+
+    /**
      * Instantiates new ADOdb connection to flush every test
      *
      * @return object
@@ -388,4 +399,48 @@ class ADOdbTestCase extends TestCase
 
         return $outputArray;
     }
+
+    protected function storeFetchModes(): void
+    {
+        global $ADODB_FETCH_MODE;
+
+        $this->fetchModeStorage = [
+            'global' => $ADODB_FETCH_MODE,
+            'set' => $GLOBALS['ADOdbConnection']->fetchMode
+        ];
+    }
+
+    protected function testFetchModes(): void
+    {
+        global $ADODB_FETCH_MODE;
+
+        $testFetchModes = $this->testFetchModes;
+        $testFetchModes[false] = 'NOT SET';
+
+        $fetchModeStorage = [
+            'global' => $ADODB_FETCH_MODE,
+            'set' => $GLOBALS['ADOdbConnection']->fetchMode
+        ];
+
+        $this->assertSame(
+            $this->fetchModeStorage['global'],
+            $fetchModeStorage['global'],
+            sprintf(
+                'Global $ADODB_FETCH_MODE should have reverted to %s, is currently %s',
+                $testFetchModes[$this->fetchModeStorage['global']],
+                $testFetchModes[$fetchModeStorage['global']]
+            )
+        );
+
+        $this->assertSame(
+            $this->fetchModeStorage['set'],
+            $fetchModeStorage['set'],
+            sprintf(
+                'Fetch Mode via setFetchMode() should have reverted to %s, is currebtly %s',
+                $testFetchModes[$this->fetchModeStorage['set']],
+                $testFetchModes[$fetchModeStorage['set']]
+            )
+        );
+    }
+
 }
