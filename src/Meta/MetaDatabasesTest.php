@@ -48,9 +48,8 @@ class MetaDatabasesTest extends MetaFunctions
         $baseDatabaseName = $this->db->database;
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $this->db->database = $baseDatabaseName;
-            
+
             $this->insertFetchMode($fetchMode);
 
             $this->storeFetchModes();

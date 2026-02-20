@@ -342,11 +342,6 @@ class MetaTypesTest extends MetaFunctions
             return;
         }
 
-        //$sql = 'SELECT * FROM metatype_test';
-
-        //$executionResult = $GLOBALS['ADOdbConnection']->execute($sql);
-
-        //$metaFetch = $executionResult->fetchField($fieldOffset);
 
         $name     = $metaFetch->name;
         $nameData = explode('_', $name);
@@ -399,9 +394,8 @@ class MetaTypesTest extends MetaFunctions
             $expectedMetaType,
             $metaResult,
             sprintf(
-                '
-                Checking MetaType of field [%s] returned' .
-                    ' by MetaType passing fieldObject as 1st parameter',
+                'Checking MetaType of field [%s] returned' .
+                ' by MetaType passing fieldObject as 1st parameter',
                 $name
             )
         );

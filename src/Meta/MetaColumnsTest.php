@@ -168,7 +168,6 @@ class MetaColumnsTest extends MetaFunctions
             );
 
             if ($fetchMode == 0 || $fetchMode == 3) {
-
                 foreach ($expectedResult as $expectedKey => $expectedField) {
                     $this->assertArrayHasKey(
                         $expectedKey,
@@ -181,12 +180,8 @@ class MetaColumnsTest extends MetaFunctions
                             print_r($executionResult, true)
                         )
                     );
-
-
                 }
-
             } else {
-
                 foreach ($expectedResult as $expectedField) {
                     $this->assertArrayHasKey(
                         $expectedField,

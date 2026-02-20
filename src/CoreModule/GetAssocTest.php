@@ -50,7 +50,7 @@ class GetAssocTest extends ADOdbCoreSetup
     public function testGetAssoc(
         array $expectedValue,
         string $fields,
-        bool  $bindFlag,
+        bool $bindFlag,
         bool $forceArray,
         bool $first2Cols
     ): void {
@@ -65,7 +65,7 @@ class GetAssocTest extends ADOdbCoreSetup
         $bind = array('p1' => 2,
                       'p2' => 6
                     );
-        
+
         $boundSql = "SELECT $fields
                 FROM testtable_3 
                 WHERE number_run_field BETWEEN $p1 AND $p2
@@ -73,10 +73,10 @@ class GetAssocTest extends ADOdbCoreSetup
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->insertFetchMode($fetchMode);
-           
+
             $this->db->startTrans();
 
-            
+
             if ($bindFlag) {
                 $returnedRows = $this->db->getAssoc($boundSql, $bind, $forceArray, $first2Cols);
             } else {
@@ -111,7 +111,7 @@ class GetAssocTest extends ADOdbCoreSetup
      */
     public static function providerTestGetAssoc(): array
     {
-        
+
 
         $baseAssociativeArray =  [
             2 => 'LINE 2',
@@ -124,7 +124,7 @@ class GetAssocTest extends ADOdbCoreSetup
         $testArray = [];
 
         //forceArray / first2cols
-        
+
         return [
             'Unbound, associative key/value pair' => [
                 $baseAssociativeArray,

@@ -210,7 +210,6 @@ class GetUpdateSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            
             $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";

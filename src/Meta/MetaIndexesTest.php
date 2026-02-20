@@ -52,14 +52,13 @@ class MetaIndexesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-           
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaIndexes(
                 $this->testTableName,
                 true
             );
-            
+
             list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
 
             $this->validateResetFetchModes();
@@ -197,7 +196,6 @@ class MetaIndexesTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-           
             $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaIndexes('invalid_table');

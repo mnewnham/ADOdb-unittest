@@ -54,11 +54,10 @@ class MetaPrimaryKeysTest extends MetaFunctions
     public function testMetaPrimaryKeys(): void
     {
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaPrimaryKeys($this->testTableName);
-            
+
             list($errno, $errmsg) = $this->assertADOdbError('metaPrimaryKeys()');
 
             $this->validateResetFetchModes();
@@ -117,7 +116,6 @@ class MetaPrimaryKeysTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaPrimaryKeys('invalid_table');

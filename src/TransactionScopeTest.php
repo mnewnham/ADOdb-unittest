@@ -92,7 +92,6 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-         
             $this->insertFetchMode($fetchMode);
 
             if ($fetchMode == 0 || $fetchMode == 3) {
@@ -123,7 +122,7 @@ class TransactionScopeTest extends ADOdbTestCase
                   ORDER BY id";
 
             $baseData = $this->db->getRow($sql);
-            
+
             //list($errno, $errmsg) = $this->assertADOdbError($sql);
 
             //if ($errno > 0) {
@@ -163,7 +162,7 @@ class TransactionScopeTest extends ADOdbTestCase
             $sql = "SELECT varchar_field
                     FROM testtable_3 
                     WHERE id = {$baseData[$idField]}";
-            
+
             $preCommit = $this->db->getOne($sql);
 
             //list($errno, $errmsg) = $this->assertADOdbError($sql);
