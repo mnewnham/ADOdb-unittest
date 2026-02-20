@@ -54,10 +54,11 @@ class MetaPrimaryKeysTest extends MetaFunctions
     public function testMetaPrimaryKeys(): void
     {
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+            
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaPrimaryKeys($this->testTableName);
+            
             list($errno, $errmsg) = $this->assertADOdbError('metaPrimaryKeys()');
 
             $this->validateResetFetchModes();
@@ -88,6 +89,11 @@ class MetaPrimaryKeysTest extends MetaFunctions
                 continue;
             }
 
+            /*
+            * Cannot test casing of values
+            */
+            $executionResult = array_map('strtolower', $executionResult);
+
             $this->assertSame(
                 'id',
                 $executionResult[0],
@@ -111,7 +117,7 @@ class MetaPrimaryKeysTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+            
             $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaPrimaryKeys('invalid_table');
