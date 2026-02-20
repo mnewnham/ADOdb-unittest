@@ -65,7 +65,7 @@ id INTEGER NOT NULL,
     date_field DATE,
     integer_field SMALLINT NOT NULL,
     decimal_field NUMBER(12,2),
-    boolean_field NUMBER(1,0),
+    boolean_field NUMBER(1,0) DEFAULT 1,
     empty_field VARCHAR(240) DEFAULT '',
     number_run_field SMALLINT NOT NULL
 );
