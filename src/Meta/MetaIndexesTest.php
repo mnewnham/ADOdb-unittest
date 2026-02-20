@@ -52,13 +52,14 @@ class MetaIndexesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+           
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaIndexes(
                 $this->testTableName,
                 true
             );
+            
             list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
 
             $this->validateResetFetchModes();
@@ -139,6 +140,14 @@ class MetaIndexesTest extends MetaFunctions
             )
         );
 
+        /*
+        * Don't know the casing on the key so standardize
+        */
+        $executionResult = array_change_key_case(
+            $executionResult,
+            CASE_LOWER
+        );
+
         $this->assertSame(
             $isUnique,
             ($executionResult[$indexName]['unique'] == 1),
@@ -188,7 +197,7 @@ class MetaIndexesTest extends MetaFunctions
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+           
             $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaIndexes('invalid_table');
