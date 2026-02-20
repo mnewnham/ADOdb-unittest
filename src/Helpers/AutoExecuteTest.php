@@ -84,7 +84,7 @@ class AutoExecuteTest extends ADOdbTestCase
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
-                if ($fetchMode == ADODB_FETCH_NUM) {
+                if ($fetchMode == 0 || $fetchMode == 3) {
                     $field = 0;
                 } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                     $field = 'VARCHAR_FIELD';
@@ -165,7 +165,7 @@ class AutoExecuteTest extends ADOdbTestCase
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
-                if ($fetchMode == ADODB_FETCH_NUM) {
+                if ($fetchMode == 0 || $fetchMode == 3) {
                     $field = 0;
                 } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                     $field = 'VARCHAR_FIELD';
@@ -179,9 +179,10 @@ class AutoExecuteTest extends ADOdbTestCase
                     $aeVar,
                     $value,
                     sprintf(
-                        '[%s] updated record should have an varchar_field value %s',
+                        '[%s] updated record should have an varchar_field value %s in array %s',
                         $fetchDescription,
-                        'AUTOEXECUTE' . $forceMode . $fetchMode
+                        'AUTOEXECUTE' . $forceMode . $fetchMode,
+                        print_r($newRecord, true)
                     )
                 );
             }
@@ -259,7 +260,7 @@ class AutoExecuteTest extends ADOdbTestCase
 
                     $newRecord = $this->db->getRow($sql);
 
-                    if ($fetchMode == ADODB_FETCH_NUM) {
+                    if ($fetchMode == 0 || $fetchMode == 3) {
                         $field = 0;
                     } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                         $field = 'VARCHAR_FIELD';

@@ -99,7 +99,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'ID';
@@ -196,7 +196,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'ID';
@@ -289,7 +289,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'ID';
@@ -381,7 +381,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'ID';

@@ -48,9 +48,9 @@ class MetaDatabasesTest extends MetaFunctions
         $baseDatabaseName = $this->db->database;
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            
             $this->db->database = $baseDatabaseName;
-
-            //$this->db->setFetchMode($fetchMode);
+            
             $this->insertFetchMode($fetchMode);
 
             $this->storeFetchModes();
@@ -81,7 +81,7 @@ class MetaDatabasesTest extends MetaFunctions
             $flipResponse = array_flip($response);
 
             $this->assertArrayHasKey(
-                $this->db->database,
+                $GLOBALS['schemaOwner'],
                 $flipResponse,
                 sprintf(
                     '[FETCH MODE %s] Checking that metaDatabases ' .

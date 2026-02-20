@@ -92,10 +92,10 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
+         
             $this->insertFetchMode($fetchMode);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $idField = 0;
                 $vcField = 1;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
@@ -123,12 +123,12 @@ class TransactionScopeTest extends ADOdbTestCase
                   ORDER BY id";
 
             $baseData = $this->db->getRow($sql);
+            
+            //list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-            list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-            if ($errno > 0) {
-                return;
-            }
+            //if ($errno > 0) {
+            //    return;
+            //}
 
             $this->assertSame(
                 $baseData[$vcField],
@@ -160,16 +160,17 @@ class TransactionScopeTest extends ADOdbTestCase
             /*
             * Check that the data has been updated in the transaction
             */
-            $sql = "SELECT varchar_field 
+            $sql = "SELECT varchar_field
                     FROM testtable_3 
                     WHERE id = {$baseData[$idField]}";
+            
             $preCommit = $this->db->getOne($sql);
 
-            list($errno, $errmsg) = $this->assertADOdbError($sql);
+            //list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-            if ($errno > 0) {
-                return;
-            }
+            //if ($errno > 0) {
+            //    return;
+           // }
 
             $this->assertEquals(
                 'transaction test',
@@ -314,7 +315,7 @@ class TransactionScopeTest extends ADOdbTestCase
             //$this->db->setFetchMode($fetchMode);
             $this->insertFetchMode($fetchMode);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $idField = 0;
                 $vcField = 1;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {

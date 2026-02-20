@@ -167,22 +167,42 @@ class MetaColumnsTest extends MetaFunctions
                 )
             );
 
+            if ($fetchMode == 0 || $fetchMode == 3) {
 
-            foreach ($expectedResult as $expectedField) {
-                $this->assertArrayHasKey(
-                    $expectedField,
-                    $executionResult,
-                    sprintf(
-                        '[FETCH MODE %s] ' .
-                        'Checking for expected field %s in metaColumns return value, got %s',
-                        $fetchModeName,
+                foreach ($expectedResult as $expectedKey => $expectedField) {
+                    $this->assertArrayHasKey(
+                        $expectedKey,
+                        $executionResult,
+                        sprintf(
+                            '[FETCH MODE %s] ' .
+                            'Checking for expected key %s in metaColumns return value, got %s',
+                            $fetchModeName,
+                            $expectedField,
+                            print_r($executionResult, true)
+                        )
+                    );
+
+
+                }
+
+            } else {
+
+                foreach ($expectedResult as $expectedField) {
+                    $this->assertArrayHasKey(
                         $expectedField,
-                        print_r($executionResult, true)
-                    )
-                );
+                        $executionResult,
+                        sprintf(
+                            '[FETCH MODE %s] ' .
+                            'Checking for expected field %s in metaColumns return value, got %s',
+                            $fetchModeName,
+                            $expectedField,
+                            print_r($executionResult, true)
+                        )
+                    );
 
-                if (!isset($executionResult[$expectedField])) {
-                    continue;
+                    if (!isset($executionResult[$expectedField])) {
+                        continue;
+                    }
                 }
             }
         }

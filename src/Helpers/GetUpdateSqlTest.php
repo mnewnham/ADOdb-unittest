@@ -97,7 +97,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
             $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'VARCHAR_FIELD';
@@ -175,7 +175,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
-                if ($fetchMode == ADODB_FETCH_NUM) {
+                if ($fetchMode == 0 || $fetchMode == 3) {
                     $field = 0;
                 } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                     $field = 'VARCHAR_FIELD';
@@ -210,7 +210,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $//$this->db->setFetchMode($fetchMode);
+            
             $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
@@ -259,7 +259,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
             $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
-            if ($fetchMode == ADODB_FETCH_NUM) {
+            if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                 $field = 'VARCHAR_FIELD';
@@ -341,7 +341,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
-                if ($fetchMode == ADODB_FETCH_NUM) {
+                if ($fetchMode == 0 || $fetchMode == 3) {
                     $field = 0;
                 } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
                     $field = 'VARCHAR_FIELD';
