@@ -87,7 +87,8 @@ class GetRowTest extends ADOdbCoreSetup
 
             if ($expectedValue == 1) {
                 switch ($fetchMode) {
-                    case ADODB_FETCH_ASSOC:
+                    case 1:
+                    case 4:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $value,
@@ -99,7 +100,8 @@ class GetRowTest extends ADOdbCoreSetup
                             );
                         }
                         break;
-                    case ADODB_FETCH_NUM:
+                    case 0:
+                    case 3:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $key,
@@ -111,7 +113,8 @@ class GetRowTest extends ADOdbCoreSetup
                             );
                         }
                         break;
-                    case ADODB_FETCH_BOTH:
+                    case 2:
+                    case 5:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $value,
