@@ -79,6 +79,7 @@ class InsertIdTest extends ADOdbCoreSetup
          $counter = 1;
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
 
+            $this->db->startTrans();
             $this->insertFetchMode($fetchMode);
 
             $this->db->hasInsertID = true;
@@ -104,6 +105,7 @@ class InsertIdTest extends ADOdbCoreSetup
 
             $this->validateResetFetchModes();
 
+            $this->db->completeTrans();
             $counter++;           
         }
     }
@@ -124,6 +126,7 @@ class InsertIdTest extends ADOdbCoreSetup
        
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
 
+            $this->db->startTrans();
             $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM insert_manual WHERE id=-1";
@@ -140,13 +143,14 @@ class InsertIdTest extends ADOdbCoreSetup
                 0,
                 $insertId,
                 sprintf(
-                    '[FETCH MODE %s] No Auto increment insertid should never change',
-                    $fetchModeName
+                    '[FETCH MODE %s] No Auto increment insertid should never change from 0, currently %d',
+                    $fetchModeName,
+                    $insertId
                 )
             );
 
             $this->validateResetFetchModes();
-
+            $this->db->completeTrans();
             $manualAr['id']++;
             $counter++;           
         }
