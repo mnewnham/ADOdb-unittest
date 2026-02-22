@@ -67,15 +67,16 @@ class ChangeTableTest extends DataDictFunctions
         * Changes:
         * Length of varchar field from 50 to 80
         * changes default value of date_field from '2030-01-01' to '2010-01-01'
-        * Adds snother_integer_field
-        * Adds yest_another_integer_field
+        * date_field also exists as DATE_FIELD for metacolumns
+        * Adds another_integer_field
+        * Adds yet_another_integer_field
         * Changes decimal_field_to_modify from 8.4 to 9.5 and changes default
         */
 
         $flds = " 
             VARCHAR_FIELD C(80) NOTNULL DEFAULT '',
             NVARCHAR_FIELD C2(80) NOTNULL DEFAULT '',
-            DATE_FIELD D NOTNULL DEFAULT '2010-01-01',
+            date_field D NOTNULL DEFAULT '2010-01-01',
             ANOTHER_INTEGER_FIELD I NOTNULL DEFAULT 0,
             BOOLEAN_FIELD_TO_CHANGE_DEFAULT L DEFAULT 0,
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
