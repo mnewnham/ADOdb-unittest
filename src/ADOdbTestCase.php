@@ -189,6 +189,8 @@ class ADOdbTestCase extends TestCase
     public function setup(): void
     {
 
+        global $ADODB_FETCH_MODE;
+        
         $this->adoDriver      = $GLOBALS['ADOdriver'];
 
         if ($this->createNewConnection) {
@@ -207,6 +209,9 @@ class ADOdbTestCase extends TestCase
         $GLOBALS['testTableName']   = $this->testTableName;
         $GLOBALS['testIndexName1']  = $this->testIndexName1;
         $GLOBALS['testIndexName2']  = $this->testIndexName2;
+
+        $ADODB_FETCH_MODE = 0;
+        $this->db->fetchMode = false;
     }
 
     /**
