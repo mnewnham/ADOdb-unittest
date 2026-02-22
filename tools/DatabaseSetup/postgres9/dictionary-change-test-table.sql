@@ -19,7 +19,7 @@ CREATE TABLE dictionary_change_test_table (
 	varchar_field VARCHAR(50) DEFAULT '',
 	nvarchar_field VARCHAR(50) DEFAULT '',
 	smallint_to_expand SMALLINT,
-	xl_field BYTEA,
+	xl_field BYTEA
 
 );
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);
