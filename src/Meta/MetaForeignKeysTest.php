@@ -93,7 +93,6 @@ class MetaForeignKeysTest extends MetaFunctions
         $testTable1 = 'foreign_key_target_1';
         $testTable2 = 'foreign_key_source';
 
-        $this->storeFetchModes();
 
         $executionResult = $this->db->metaForeignKeys(
             $sourceTable,
@@ -102,7 +101,6 @@ class MetaForeignKeysTest extends MetaFunctions
             $associativeKeys
         );
 
-        $this->validateResetFetchModes();
 
         $this->db->setFetchMode($originalFetchMode);
 
@@ -126,7 +124,7 @@ class MetaForeignKeysTest extends MetaFunctions
                 sprintf(
                     '[FETCH MODE %s] Checking that metaForeignKeys returns ' .
                     'false when invalid table is passed',
-                    $fetchMode
+                    $this->testFetchModes[$fetchMode]
                 )
             );
         } else {
@@ -134,7 +132,7 @@ class MetaForeignKeysTest extends MetaFunctions
                 $this->fail(
                     sprintf(
                         '[FETCH MODE %s] metaForeignKeys did not return any foreign keys',
-                        $fetchMode
+                        $this->testFetchModes[$fetchMode]
                     )
                 );
                 return;
@@ -145,7 +143,7 @@ class MetaForeignKeysTest extends MetaFunctions
                 $executionResult,
                 sprintf(
                     "[FETCH MODE %s] Checking for first foreign key for $testTable1 in $testTable2",
-                    $fetchMode
+                   $this->testFetchModes[$fetchMode]
                 )
             );
 
