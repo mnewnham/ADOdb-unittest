@@ -2,8 +2,8 @@
 -- No data is loaded into these tables
 
 -- Must drop foreign_key_target_1 and 2 before foreign_key_source because of foreign key constraints
-DROP TABLE IF EXISTS foreign_key_target_1;
-DROP TABLE IF EXISTS foreign_key_target_2;
+DROP TABLE IF EXISTS foreign_key_target_1 CASCADE;
+DROP TABLE IF EXISTS foreign_key_target_2 CASCADE;
 DROP TABLE IF EXISTS foreign_key_source;
 
 -- Creates a first foreign reference for foreign_key_source
