@@ -396,6 +396,10 @@ class ADOdbTestCase extends TestCase
 
         $db->completeTrans();
 
+        if (!$errno) {
+            $errno = 0;
+        }
+
 
         $params = '';
         if ($bind) {
