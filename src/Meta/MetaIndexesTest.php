@@ -66,7 +66,7 @@ class MetaIndexesTest extends MetaFunctions
             $this->assertIsArray(
                 $executionResult,
                 sprintf(
-                    '[FETCH MODE %s] Checking MetaIndexes returns an array',
+                    '[FETCH MODE %s] Checking With Primary MetaIndexes returns an array',
                     $fetchModeName
                 )
             );
@@ -74,10 +74,35 @@ class MetaIndexesTest extends MetaFunctions
                 4,
                 count($executionResult),
                 sprintf(
-                    '[FETCH MODE %s] Checking Index Count should be 3',
+                    '[FETCH MODE %s] Checking With Primary Index Count should be 4',
                     $fetchModeName
                 )
             );
+
+            $executionResult = $this->db->metaIndexes(
+                $this->testTableName,
+                false
+            );
+
+            list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
+
+            $this->assertIsArray(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] Checking No Primary MetaIndexes returns an array',
+                    $fetchModeName
+                )
+            );
+            $this->assertSame(
+                3,
+                count($executionResult),
+                sprintf(
+                    '[FETCH MODE %s] Checking No Primary Index Count should be 3',
+                    $fetchModeName
+                )
+            );
+
+            $this->validateResetFetchModes();
         }
     }
 
