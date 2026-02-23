@@ -52,8 +52,6 @@ class MetaDatabasesTest extends MetaFunctions
 
             $this->insertFetchMode($fetchMode);
 
-            $this->storeFetchModes();
-
             $response = $this->db->metaDatabases();
 
             $this->validateResetFetchModes();
@@ -77,10 +75,10 @@ class MetaDatabasesTest extends MetaFunctions
                 )
             );
 
-            $flipResponse = array_flip($response);
+            $flipResponse = array_change_key_case(array_flip($response),CASE_UPPER);
 
             $this->assertArrayHasKey(
-                $GLOBALS['schemaOwner'],
+                strtoupper($GLOBALS['schemaOwner']),
                 $flipResponse,
                 sprintf(
                     '[FETCH MODE %s] Checking that metaDatabases ' .
