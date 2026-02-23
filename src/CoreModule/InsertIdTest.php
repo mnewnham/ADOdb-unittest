@@ -24,7 +24,6 @@ namespace MNewnham\ADOdbUnitTest\CoreModule;
 use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-
 /**
  * Class MetaForeignKeysTest
  *
@@ -70,7 +69,8 @@ class InsertIdTest extends ADOdbCoreSetup
      *
      * @return void
      */
-    public function testInsertAutoId(): void {
+    public function testInsertAutoId(): void
+    {
 
         $autoAr = array(
             'integer_field' => 99
@@ -78,19 +78,18 @@ class InsertIdTest extends ADOdbCoreSetup
 
          $counter = 1;
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-
             $this->db->startTrans();
             $this->insertFetchMode($fetchMode);
 
             $this->db->hasInsertID = true;
             $sql = "SELECT * FROM insert_auto WHERE id=-1";
-            $autoTemplate = $this->db->execute($sql);   
+            $autoTemplate = $this->db->execute($sql);
 
             $sql = $this->db->getInsertSql($autoTemplate, $autoAr);
 
-           
+
             $this->db->execute($sql);
-            
+
             $insertId = $this->db->insert_id();
 
             $this->assertEquals(
@@ -101,12 +100,12 @@ class InsertIdTest extends ADOdbCoreSetup
                     $fetchModeName
                 )
             );
-            
+
 
             $this->validateResetFetchModes();
 
             $this->db->completeTrans();
-            $counter++;           
+            $counter++;
         }
     }
 
@@ -115,7 +114,8 @@ class InsertIdTest extends ADOdbCoreSetup
      *
      * @return void
      */
-    public function testInsertManualId(): void {
+    public function testInsertManualId(): void
+    {
 
         $counter = 1;
 
@@ -123,22 +123,21 @@ class InsertIdTest extends ADOdbCoreSetup
             'id' => $counter,
             'integer_field' => 99
         ];
-       
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
 
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->startTrans();
             $this->insertFetchMode($fetchMode);
 
             $sql = "SELECT * FROM insert_manual WHERE id=-1";
 
             $manualTemplate = $this->db->execute($sql);
-                
+
             $sql = $this->db->getInsertSql($manualTemplate, $manualAr);
 
             $this->db->execute($sql);
 
             $insertId = $this->db->insert_id();
-            
+
             $this->assertEquals(
                 0,
                 $insertId,
@@ -152,7 +151,7 @@ class InsertIdTest extends ADOdbCoreSetup
             $this->validateResetFetchModes();
             $this->db->completeTrans();
             $manualAr['id']++;
-            $counter++;           
+            $counter++;
         }
     }
 }

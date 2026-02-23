@@ -190,7 +190,7 @@ class ADOdbTestCase extends TestCase
     {
 
         global $ADODB_FETCH_MODE;
-        
+
         $this->adoDriver      = $GLOBALS['ADOdriver'];
 
         if ($this->createNewConnection) {
