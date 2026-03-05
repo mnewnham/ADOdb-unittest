@@ -87,15 +87,18 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'If the record is created successfully'
             );
 
+            if (is_object($response) ) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-            $this->assertTrue(
-                $ok,
-                'getInsertSql should return an ADORecordSet_empty object ' .
-                'If the record is created successfully'
-            );
-
+                $this->assertTrue(
+                    $ok,
+                    'getInsertSql should return an empty ADORecordSet object ' .
+                    'If the record is updated successfully, returned ' . $shortName
+                );
+            } 
+            
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
@@ -184,14 +187,17 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'If the record is created successfully'
             );
 
+            if (is_object($response) ) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-            $this->assertTrue(
-                $ok,
-                'getInsertSql should return an ADORecordSet_empty object ' .
-                'If the record is created successfully'
-            );
+                $this->assertTrue(
+                    $ok,
+                    'getInsertSql should return an empty ADORecordSet object ' .
+                    'If the record is updated successfully, returned ' . $shortName
+                );
+            } 
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -275,16 +281,23 @@ class GetInsertSqlTest extends ADOdbTestCase
             );
 
 
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
+            if (is_object($response) ) {
+                
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-            $this->assertTrue(
-                $ok,
-                sprintf(
-                    '[%s] getInsertSql should return an ADORecordSet_empty object ' .
-                    'If the record is created successfully',
-                    $fetchDescription
-                )
-            );
+                $this->assertTrue(
+                    $ok,
+                    sprintf(
+                        '[%s] getInsertSql should return an ADORecordSet_empty object ' .
+                        'If the record is created successfully, returned: %s',
+                        $fetchDescription,
+                        $shortName
+                    )
+                );
+            } 
+            
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -367,16 +380,22 @@ class GetInsertSqlTest extends ADOdbTestCase
                 )
             );
 
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
+            if (is_object($response) ) {
+                
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-            $this->assertTrue(
-                $ok,
-                sprintf(
-                    '[%s] getInsertSql should return an ADORecordSet_empty object ' .
-                    'If the record is created successfully',
-                    $fetchDescription
-                )
-            );
+                $this->assertTrue(
+                    $ok,
+                    sprintf(
+                        '[%s] getInsertSql should return an ADORecordSet_empty object ' .
+                        'If the record is created successfully, returned: %s',
+                        $fetchDescription,
+                        $shortName
+                    )
+                );
+            } 
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);

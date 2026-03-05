@@ -115,7 +115,10 @@ class MetaColumnsTest extends MetaFunctions
 
 
             foreach ($executionResult as $column => $o) {
-                $oType = get_class($o);
+                
+                $reflection = new \ReflectionClass($o);
+                $oType = $reflection->getShortName(); 
+              
                 $this->assertSame(
                     'ADOFieldObject',
                     $oType,

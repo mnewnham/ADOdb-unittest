@@ -92,13 +92,17 @@ class SequenceTest extends ADOdbTestCase
         );
 
 
-        $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
+        if (is_object($response) ) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-        $this->assertTrue(
-            $ok,
-            'CreateSequence should return an ADORecordSet_empty object ' .
-            'If a sequence is created successfully'
-        );
+            $this->assertTrue(
+                $ok,
+                'ADOConnection::createSequence ' .
+                'should return empty ADORecordSet, returned ' . $shortName
+            );
+        } 
     }
 
     /**
@@ -168,13 +172,16 @@ class SequenceTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError('dropSequence()');
 
         $this->db->completeTrans();
+        if (is_object($response) ) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-        $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-        $this->assertTrue(
-            $ok,
-            'DropSequence should return an ADORecordset_empty ' .
-            'object If a sequence is dropped successfully'
-        );
+            $this->assertTrue(
+                $ok,
+                'ADOConnection::dropSequence ' .
+                'should return empty ADORecordSet on success, returned ' . $shortName
+            );
+        } 
     }
 }

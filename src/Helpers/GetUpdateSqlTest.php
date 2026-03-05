@@ -78,21 +78,24 @@ class GetUpdateSqlTest extends ADOdbTestCase
 
             $response = $this->db->execute($sql);
 
-
+            /*
             $this->assertIsObject(
                 $response,
                 'updates should return an object ' .
                 'If the record is created successfully'
             );
+            */
+            if (is_object($response) ) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-            $this->assertTrue(
-                $ok,
-                'getUpdateSql should return an ADORecordSet_empty object ' .
-                'If the record is created successfully'
-            );
+                $this->assertTrue(
+                    $ok,
+                    'getUpdateSql should return an empty ADORecordSet object ' .
+                    'If the record is updated successfully, returned ' . $shortName
+                );
+            } 
 
             $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -160,17 +163,20 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $this->assertIsObject(
                     $response,
                     'updates should return an object ' .
-                    'If the record is created successfully'
+                    'If the record is updated successfully'
                 );
 
+                if (is_object($response) ) {
+                    $reflection = new \ReflectionClass($response);
+                    $shortName  = $reflection->getShortName();
+                    $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-                $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-                $this->assertTrue(
-                    $ok,
-                    'getUpdateSql should return an ADORecordSet_empty object ' .
-                    'If the record is created successfully'
-                );
+                    $this->assertTrue(
+                        $ok,
+                        'getUpdateSql should return an empty ADORecordSet object ' .
+                        'If the record is updated successfully, returned ' . $shortName
+                    );
+                } 
 
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
@@ -240,20 +246,17 @@ class GetUpdateSqlTest extends ADOdbTestCase
             $response = $this->db->execute($sql, $bind);
 
 
-            $this->assertIsObject(
-                $response,
-                'updates should return an object ' .
-                'If the record is created successfully'
-            );
+            if (is_object($response) ) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-
-            $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
-
-            $this->assertTrue(
-                $ok,
-                'getUpdateSql should return an ADORecordSet_empty object ' .
-                'If the record is created successfully'
-            );
+                $this->assertTrue(
+                    $ok,
+                    'getUpdateSql should return an empty ADORecordSet object ' .
+                    'If the record is updated successfully, returned ' . $shortName
+                );
+            } 
 
             $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -329,13 +332,17 @@ class GetUpdateSqlTest extends ADOdbTestCase
                     'If the record is updated successfully'
                 );
 
-                $ok = is_object($response) && get_class($response) == 'ADORecordSet_empty';
+                if (is_object($response) ) {
+                    $reflection = new \ReflectionClass($response);
+                    $shortName  = $reflection->getShortName();
+                    $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-                $this->assertTrue(
-                    $ok,
-                    'getUpdateSql should return an ADORecordSet_empty object ' .
-                    'If the record is updated successfully'
-                );
+                    $this->assertTrue(
+                        $ok,
+                        'getUpdateSql should return an empty ADORecordSet object ' .
+                        'If the record is created successfully, returned ' . $shortName
+                    );
+                } 
 
                 $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);

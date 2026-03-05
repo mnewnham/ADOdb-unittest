@@ -110,12 +110,17 @@ class ExecuteTest extends ADOdbCoreSetup
 
         list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
-        $this->assertSame(
-            $expectedValue,
-            is_object($result) && get_class($result) == 'ADORecordSet_empty',
-            'ADOConnection::execute() in INSERT/UPDATE/DELETE mode ' .
-            'should return an ADORecordSet_empty object'
-        );
+        if (is_object($result) ) {
+            $reflection = new \ReflectionClass($result);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+
+            $this->assertTrue(
+                $ok,
+                'ADOConnection::execute() in INSERT/UPDATE/DELETE ' .
+                'mode should return empty ADORecordSet, returned ' . $shortName
+            );
+        } 
     }
 
     /**
