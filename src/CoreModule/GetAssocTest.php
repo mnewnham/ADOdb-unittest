@@ -87,10 +87,6 @@ class GetAssocTest extends ADOdbCoreSetup
 
             $this->db->completeTrans();
 
-            print "\n------------- FFFF ----\n";
-            print_r($expectedValue);
-            print_r($returnedRows);
-
             $this->assertSame(
                 $expectedValue,
                 $returnedRows,

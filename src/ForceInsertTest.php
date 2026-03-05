@@ -141,10 +141,6 @@ class ForceInsertTest extends ADOdbTestCase
 
         $insertResult = $this->db->getRow($sql);
 
-        print_r($insertResult);
-        print_r($columnValues);
-
-
         foreach ($insertResult as $index => $value) {
             if ($index == 0) {
                 continue;

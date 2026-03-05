@@ -86,8 +86,6 @@ class CreateTableTest extends DataDictFunctions
             $options
         );
 
-        print_r($sqlArray);
-
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
         $flipMetaTables = array_flip($this->db->metaTables());
