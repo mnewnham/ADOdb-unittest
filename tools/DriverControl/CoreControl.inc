@@ -17,4 +17,17 @@ class CoreControl {
 	 * @var integer
 	 */
 	public int $fetchBothManner = 0;
+
+	/*
+	* Represents how Native mode data is returned
+	*/
+	const NATIVE_IS_LOWERCASE = 0;
+	const NATIVE_IS_UPPERCASE = 1;
+
+	/**
+	 * Indicates whether native mode casing is upper or lower
+	 *
+	 * @var integer
+	 */
+	public int $nativeModeCasing = 0;
 }

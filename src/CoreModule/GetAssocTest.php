@@ -355,7 +355,11 @@ class GetAssocTest extends ADOdbCoreSetup
         ];
 
         if ($GLOBALS['DriverControl']->fetchBothManner == 1) {
-            
+            /*
+            * This switches the order of the FETCH_BOTH elements
+            * fron NUM,ASSOC,NUM,ASSOC to
+            * ASSOC, NUM, ASSOC, NUM
+            */
             $bb2A           = $baseBoth2Array;
             $baseBoth2Array = [];
             foreach ($bb2A as $key => $data) {
@@ -389,7 +393,8 @@ class GetAssocTest extends ADOdbCoreSetup
             }
         }
 
-        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER ||
+        ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_NATIVE && $GLOBALS['DriverControl']->nativeModeCasing == 1) {
              foreach($baseAssociative2Array as $key => $value) {
                 $uValue = array_change_key_case($value, CASE_UPPER);
                 $baseAssociative2Array[$key] = $uValue;
@@ -442,7 +447,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 1
             ],
 
-            'T4, Bound, overflow 3 fields, force array true first2=false' => [
+            'T4, Bound, overflow 3 fields, force array=true first2=false' => [
                 $baseNumeric3Array,
                 $baseAssociative3Array,
                 $baseBoth3Array,
@@ -452,7 +457,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 0
             ],
 
-            'T5, Unbound, No overfow, First 2 Cols' =>
+            'T5, Unbound, No overfow, First 2 Cols, Force Array=false first2Cols=true' =>
             [
                 $baseArray,
                 $baseArray,
