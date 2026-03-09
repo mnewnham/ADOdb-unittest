@@ -95,9 +95,9 @@ class ADOdbTestCase extends TestCase
      *
      * @param integer $modeKey
      *
-     * @return void
+     * @return int The actual fetch mode in play
      */
-    public function insertFetchMode(int $modeKey): void
+    public function insertFetchMode(int $modeKey): int
     {
         global $ADODB_FETCH_MODE;
 
@@ -106,6 +106,11 @@ class ADOdbTestCase extends TestCase
         $this->db->setFetchMode($modes[1]);
 
         $this->storeFetchModes();
+
+        $selfFetchMode = $this->db->fetchMode === false ? $ADODB_FETCH_MODE : $this->db->fetchMode;
+		
+        return $selfFetchMode;
+
     }
 
     /**
