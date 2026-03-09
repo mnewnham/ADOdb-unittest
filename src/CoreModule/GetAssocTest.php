@@ -354,7 +354,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 ],
         ];
 
-        if ($GLOBALS['ADOdbConnection']->fetchBothManner == 1) {
+        if ($GLOBALS['DriverControl']->fetchBothManner == 1) {
             
             $bb2A           = $baseBoth2Array;
             $baseBoth2Array = [];

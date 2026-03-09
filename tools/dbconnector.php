@@ -24,7 +24,6 @@ set_include_path(__DIR__ . '/..' . PATH_SEPARATOR . get_include_path());
 $unitTestToolsDirectory = __DIR__;
 
 
-require 'vendor/autoload.php';
 
 /**
  * Reads an external SQL file and executes its statements against the database.
@@ -189,13 +188,14 @@ if (array_key_exists('storedprocedures', $availableCredentials)) {
     }
 }
 
-
+if (file_exists($ADOdbSettings['directory'] . '/adodb-compat.php')) {
+    require_once $ADOdbSettings['directory'] . '/adodb-compat.php';
+}
 require_once $ADOdbSettings['directory'] . '/adodb.inc.php';
 require_once $ADOdbSettings['directory'] . '/adodb-xmlschema03.inc.php';
 require_once $ADOdbSettings['directory'] . $arInclude;
 
 require_once __DIR__ . '/../tools/adodb-constants.inc';
-
 global $argv;
 global $db;
 
@@ -246,7 +246,8 @@ $template = array(
     'password' => null,
     'database' => null,
     'parameters' => null,
-    'debug' => 0
+    'debug' => 0,
+    'legacy' => 0
 );
 
 
@@ -255,9 +256,24 @@ $credentials = array_merge(
     $availableCredentials[$adoProfile]
 );
 
+$pdoDriver  = '';
 $adoDriver  = $credentials['driver'];
+if (substr($adoDriver,0,3) == 'pdo') {
+    if ($credentials['legacy'] == 1) {
+        $loadDriver = 'PDO';
+        $pdoDriver  = str_replace('pdo-', '', $credentials['driver']);
+        $credentials['dsn'] = sprintf(
+            '%s:%s',
+            $pdoDriver,
+            $credentials['dsn']
+        );
+    } else {
+        $loadDriver = str_replace('pdo-', 'PDO\\', $credentials['driver']);
+    }
+} else {
+    $loadDriver = $credentials['driver'];
+}
 
-$loadDriver = str_replace('pdo-', 'PDO\\', $credentials['driver']);
 
 $db = newAdoConnection($loadDriver);
 $db->debug = $credentials['debug'];
@@ -279,6 +295,7 @@ if ($credentials['parameters']) {
 }
 
 if ($credentials['dsn']) {
+    print $credentials['dsn'];
     $db->connect(
         $credentials['dsn'],
         $credentials['user'],
@@ -366,6 +383,7 @@ readSqlIntoDatabase($db, $table3Data);
 /*
 * Set up the data dictionary
 */
+//$GLOBALS['ADOdataDictionary'] = NewDataDictionary($db, $credentials['driver']);
 $GLOBALS['ADOdataDictionary'] = NewDataDictionary($db);
 
 $ADODB_CACHE_DIR = '';
@@ -392,6 +410,7 @@ global $ADODB_CACHE_DIR;
 * The base classes for Activw record testing
 */
 if ($GLOBALS['skipActiveRecordTests'] == 0) {
+    
     $_ADODB_ACTIVE_DBS = array();
     class person extends \ADOdb_Active_Record
     {
@@ -399,12 +418,41 @@ if ($GLOBALS['skipActiveRecordTests'] == 0) {
     class child extends \ADOdb_Active_Record
     {
     }
+    
 
+    /*
+    $_ADODB_ACTIVE_DBS = array();
+    class person extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
+    {
+    }
+    class child extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
+    {
+    }
+    */
     $GLOBALS['person']   = new person(false, false, $db);
     $GLOBALS['child']    = new child('children', array('id'), $db);
 
     ADODB_SetDatabaseAdapter($db);
 }
+
+$driverControl = sprintf(
+    '%s/DriverControl/%s/DriverControl.inc',
+    $GLOBALS['unitTestToolsDirectory'],
+    $GLOBALS['SqlProvider']
+);
+
+if (file_exists($driverControl)) {
+    require_once $driverControl;
+    $GLOBALS['DriverControl'] = new \DriverControl;
+} else {
+    $driverControl = sprintf(
+        '%s/DriverControl/CoreControl.inc',
+        $GLOBALS['unitTestToolsDirectory']
+    );  
+    require_once $driverControl;
+    $GLOBALS['DriverControl'] = new \CoreControl;
+}
+
 
 /**
  * Set some global variables for the tests
