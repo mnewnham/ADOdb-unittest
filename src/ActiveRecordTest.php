@@ -110,7 +110,7 @@ class ActiveRecordTest extends ADOdbTestCase
         /*
         * Activate the active record adaptor
         */
-        //ADOdb_Active_Record::SetDatabaseAdapter($this->db);
+        //\ADOdb_Active_Record::SetDatabaseAdapter($this->db);
         ADODB_SetDatabaseAdapter($this->db);
     }
 
@@ -121,7 +121,7 @@ class ActiveRecordTest extends ADOdbTestCase
      */
     public function testGetAttributes(): void
     {
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;
 
@@ -144,7 +144,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testQuoteNames(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;//new \person();
         $person->_quoteNames = true;
@@ -168,7 +168,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testAddNewPerson(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;
 
@@ -214,7 +214,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testAddNewChild(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
 
@@ -243,7 +243,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testLoadExistingPersonById(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
         $person = $GLOBALS['person'] ;//new \person();
@@ -274,7 +274,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testLoadExistingPersonByMatch(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
         $person = $GLOBALS['person'] ;//new \person();
@@ -305,7 +305,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testLoadChildrenByRelation(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
         $person = $GLOBALS['person'] ;//new \person();
@@ -332,7 +332,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testLoadChildrenByMatch(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
         $person = $GLOBALS['person'] ;//new \person();
@@ -359,7 +359,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testWriteChildData(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;//new \person();
 
@@ -400,7 +400,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testGetActiveRecordsIntoArray(): void
     {
 
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $p1 = $this->db->param('p1');
         $p2 = $this->db->param('p2');
@@ -440,7 +440,7 @@ class ActiveRecordTest extends ADOdbTestCase
      */
     public function testFindMethod(): void
     {
-        ADODB_Active_Record::TableHasMany('persons', 'children', 'person_id');
+        \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = new $GLOBALS['person']();
 
