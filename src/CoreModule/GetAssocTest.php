@@ -75,7 +75,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             $this->db->startTrans();
@@ -102,7 +101,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 case ADODB_FETCH_BOTH:
                     $expectedValue = $expectedBothValue;
                     break;
-
             }
 
             foreach ($returnedRows as $key => $value) {
@@ -173,7 +171,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             $this->db->startTrans();
@@ -200,7 +197,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 case ADODB_FETCH_BOTH:
                     $expectedValue = $expectedBothValue;
                     break;
-
             }
 
             foreach ($returnedRows as $key => $value) {
@@ -245,7 +241,7 @@ class GetAssocTest extends ADOdbCoreSetup
             6 => 'LINE 6',
         ];
 
-        
+
         $baseNumeric2Array = [
             2 => [ '2', 'LINE 2'],
             3 => [ '3', 'LINE 3'],
@@ -255,11 +251,11 @@ class GetAssocTest extends ADOdbCoreSetup
         ];
 
         $baseAssociative2Array =  [
-            2 => ['number_run_field' => '2', 'varchar_field'=> 'LINE 2'],
-            3 => ['number_run_field' => '3', 'varchar_field'=> 'LINE 3'],
-            4 => ['number_run_field' => '4', 'varchar_field'=> 'LINE 4'],
-            5 => ['number_run_field' => '5', 'varchar_field'=> 'LINE 5'],
-            6 => ['number_run_field' => '6', 'varchar_field'=> 'LINE 6'],
+            2 => ['number_run_field' => '2', 'varchar_field' => 'LINE 2'],
+            3 => ['number_run_field' => '3', 'varchar_field' => 'LINE 3'],
+            4 => ['number_run_field' => '4', 'varchar_field' => 'LINE 4'],
+            5 => ['number_run_field' => '5', 'varchar_field' => 'LINE 5'],
+            6 => ['number_run_field' => '6', 'varchar_field' => 'LINE 6'],
         ];
 
         $baseBoth2Array = [
@@ -267,31 +263,31 @@ class GetAssocTest extends ADOdbCoreSetup
                 0 => '2',
                 'number_run_field' => '2',
                 1 => 'LINE 2',
-                'varchar_field'=> 'LINE 2'          
+                'varchar_field' => 'LINE 2'
                 ],
             3 => [
                  0 => '3',
                 'number_run_field' => '3',
                 1 => 'LINE 3',
-                'varchar_field'=> 'LINE 3'          
+                'varchar_field' => 'LINE 3'
                 ],
             4 => [
                  0 => '4',
                 'number_run_field' => '4',
                 1 => 'LINE 4',
-                'varchar_field'=> 'LINE 4'          
+                'varchar_field' => 'LINE 4'
                 ],
             5 => [
                  0 => '5',
                 'number_run_field' => '5',
                 1 => 'LINE 5',
-                'varchar_field'=> 'LINE 5'          
+                'varchar_field' => 'LINE 5'
                 ],
             6 => [
                 0 => '6',
                 'number_run_field' => '6',
                 1 => 'LINE 6',
-                'varchar_field'=> 'LINE 6'          
+                'varchar_field' => 'LINE 6'
                 ],
         ];
 
@@ -304,19 +300,19 @@ class GetAssocTest extends ADOdbCoreSetup
         ];
 
         $baseAssociative3Array =  [
-            2 => ['number_run_field' => '2', 'varchar_field'=> 'LINE 2', 'id' => '2'],
-            3 => ['number_run_field' => '3', 'varchar_field'=> 'LINE 3', 'id' => '3'],
-            4 => ['number_run_field' => '4', 'varchar_field'=> 'LINE 4', 'id' => '4'],
-            5 => ['number_run_field' => '5', 'varchar_field'=> 'LINE 5', 'id' => '5'],
-            6 => ['number_run_field' => '6', 'varchar_field'=> 'LINE 6', 'id' => '6'],
+            2 => ['number_run_field' => '2', 'varchar_field' => 'LINE 2', 'id' => '2'],
+            3 => ['number_run_field' => '3', 'varchar_field' => 'LINE 3', 'id' => '3'],
+            4 => ['number_run_field' => '4', 'varchar_field' => 'LINE 4', 'id' => '4'],
+            5 => ['number_run_field' => '5', 'varchar_field' => 'LINE 5', 'id' => '5'],
+            6 => ['number_run_field' => '6', 'varchar_field' => 'LINE 6', 'id' => '6'],
         ];
 
         $baseBoth3Array = [
             2 => [
                 0 => '2',
-                'number_run_field' => '2', 
+                'number_run_field' => '2',
                 1 => 'LINE 2',
-                'varchar_field'=> 'LINE 2',
+                'varchar_field' => 'LINE 2',
                 2 => '2',
                 'id' => '2'
                 ],
@@ -324,7 +320,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 0 => '3',
                 'number_run_field' => '3',
                 1 => 'LINE 3',
-                'varchar_field'=> 'LINE 3',
+                'varchar_field' => 'LINE 3',
                 2 => '3',
                 'id' => '3'
                 ],
@@ -332,7 +328,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 0 => '4',
                 'number_run_field' => '4',
                 1 => 'LINE 4',
-                'varchar_field'=> 'LINE 4',
+                'varchar_field' => 'LINE 4',
                 2 => '4',
                 'id' => '4',
                 ],
@@ -340,7 +336,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 0 => '5',
                 'number_run_field' => '5',
                 1 => 'LINE 5',
-                'varchar_field'=> 'LINE 5',
+                'varchar_field' => 'LINE 5',
                 2 => '5',
                 'id' => '5'
                 ],
@@ -348,7 +344,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 0 => '6',
                 'number_run_field' => '6',
                 1 => 'LINE 6',
-                'varchar_field'=> 'LINE 6',
+                'varchar_field' => 'LINE 6',
                 2 => '6',
                 'id' => '6'
                 ],
@@ -365,11 +361,11 @@ class GetAssocTest extends ADOdbCoreSetup
             foreach ($bb2A as $key => $data) {
                 $keys   = array_keys($data);
                 $values = array_values($data);
-                               
+
                 $newData     = [];
                 $outputIndex = [1, 0, 3, 2];
-                
-                foreach  ($outputIndex as $entry) {
+
+                foreach ($outputIndex as $entry) {
                     $newData[$keys[$entry]] = $values[$entry];
                 }
 
@@ -381,11 +377,11 @@ class GetAssocTest extends ADOdbCoreSetup
             foreach ($bb3A as $key => $data) {
                 $keys   = array_keys($data);
                 $values = array_values($data);
-                
+
                 $newData     = [];
                 $outputIndex = [1, 0, 3, 2, 5, 4];
-                
-                foreach  ($outputIndex as $entry) {
+
+                foreach ($outputIndex as $entry) {
                     $newData[$keys[$entry]] = $values[$entry];
                 }
 
@@ -393,29 +389,31 @@ class GetAssocTest extends ADOdbCoreSetup
             }
         }
 
-        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER ||
-        ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_NATIVE && $GLOBALS['DriverControl']->nativeModeCasing == 1) {
-             foreach($baseAssociative2Array as $key => $value) {
+        if (
+            ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER ||
+            ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_NATIVE && $GLOBALS['DriverControl']->nativeModeCasing == 1
+        ) {
+            foreach ($baseAssociative2Array as $key => $value) {
                 $uValue = array_change_key_case($value, CASE_UPPER);
                 $baseAssociative2Array[$key] = $uValue;
             }
 
-            foreach($baseAssociative3Array as $key => $value) {
+            foreach ($baseAssociative3Array as $key => $value) {
                 $uValue = array_change_key_case($value, CASE_UPPER);
                 $baseAssociative3Array[$key] = $uValue;
             }
 
-            foreach($baseBoth2Array as $key => $value) {
+            foreach ($baseBoth2Array as $key => $value) {
                 $uValue = array_change_key_case($value, CASE_UPPER);
                 $baseBoth2Array[$key] = $uValue;
             }
 
-            foreach($baseBoth3Array as $key => $value) {
+            foreach ($baseBoth3Array as $key => $value) {
                 $uValue = array_change_key_case($value, CASE_UPPER);
                 $baseBoth3Array[$key] = $uValue;
             }
         }
-       
+
         return [
             'T1, Unbound, associative key/value pair' => [
                 $baseArray,
@@ -479,7 +477,7 @@ class GetAssocTest extends ADOdbCoreSetup
             ],
 
             'T7, Unbound, 3 cols, Force array false, $force_array=false,$first2Cols=false' => [
-               
+
                 $baseNumeric3Array,
                 $baseAssociative3Array,
                 $baseBoth3Array,

@@ -143,7 +143,7 @@ class MetaForeignKeysTest extends MetaFunctions
                 $executionResult,
                 sprintf(
                     "[FETCH MODE %s] Checking for first foreign key for $testTable1 in $testTable2",
-                   $this->testFetchModes[$fetchMode]
+                    $this->testFetchModes[$fetchMode]
                 )
             );
 

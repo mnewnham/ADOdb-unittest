@@ -108,9 +108,8 @@ class ADOdbTestCase extends TestCase
         $this->storeFetchModes();
 
         $selfFetchMode = $this->db->fetchMode === false ? $ADODB_FETCH_MODE : $this->db->fetchMode;
-		
-        return $selfFetchMode;
 
+        return $selfFetchMode;
     }
 
     /**

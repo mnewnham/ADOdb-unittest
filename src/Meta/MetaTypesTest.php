@@ -64,7 +64,7 @@ class MetaTypesTest extends MetaFunctions
     public function setup(): void
     {
         parent::setup();
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/metatype-test.sql',
             $GLOBALS['unitTestToolsDirectory'],

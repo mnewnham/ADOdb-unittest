@@ -92,7 +92,7 @@ class SequenceTest extends ADOdbTestCase
         );
 
 
-        if (is_object($response) ) {
+        if (is_object($response)) {
             $reflection = new \ReflectionClass($response);
             $shortName  = $reflection->getShortName();
             $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -102,7 +102,7 @@ class SequenceTest extends ADOdbTestCase
                 'ADOConnection::createSequence ' .
                 'should return empty ADORecordSet, returned ' . $shortName
             );
-        } 
+        }
     }
 
     /**
@@ -172,7 +172,7 @@ class SequenceTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError('dropSequence()');
 
         $this->db->completeTrans();
-        if (is_object($response) ) {
+        if (is_object($response)) {
             $reflection = new \ReflectionClass($response);
             $shortName  = $reflection->getShortName();
             $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -182,6 +182,6 @@ class SequenceTest extends ADOdbTestCase
                 'ADOConnection::dropSequence ' .
                 'should return empty ADORecordSet on success, returned ' . $shortName
             );
-        } 
+        }
     }
 }

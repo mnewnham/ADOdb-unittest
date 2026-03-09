@@ -87,7 +87,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'If the record is created successfully'
             );
 
-            if (is_object($response) ) {
+            if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
                 $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -97,8 +97,8 @@ class GetInsertSqlTest extends ADOdbTestCase
                     'getInsertSql should return an empty ADORecordSet object ' .
                     'If the record is updated successfully, returned ' . $shortName
                 );
-            } 
-            
+            }
+
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
 
@@ -187,7 +187,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                 'If the record is created successfully'
             );
 
-            if (is_object($response) ) {
+            if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
                 $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -197,7 +197,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                     'getInsertSql should return an empty ADORecordSet object ' .
                     'If the record is updated successfully, returned ' . $shortName
                 );
-            } 
+            }
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -281,8 +281,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             );
 
 
-            if (is_object($response) ) {
-                
+            if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
                 $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -296,8 +295,8 @@ class GetInsertSqlTest extends ADOdbTestCase
                         $shortName
                     )
                 );
-            } 
-            
+            }
+
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);
@@ -380,8 +379,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                 )
             );
 
-            if (is_object($response) ) {
-                
+            if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
                 $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -395,7 +393,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                         $shortName
                     )
                 );
-            } 
+            }
 
             $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
             $newRecord = $this->db->getRow($sql);

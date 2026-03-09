@@ -53,7 +53,6 @@ class AutoExecuteTest extends ADOdbTestCase
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
             foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-       
                  $this->insertFetchMode($fetchMode);
                 $aeVar = 'AUTOEXECUTE01' . $forceMode . $fetchMode;
 
@@ -65,25 +64,25 @@ class AutoExecuteTest extends ADOdbTestCase
 
                 $response = $this->db->autoExecute($this->testTableName, $ar, 'INSERT');
 
-                if (is_object($response) ) {
+                if (is_object($response)) {
                     $reflection = new \ReflectionClass($response);
                     $shortName  = $reflection->getShortName();
                     $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
                     $this->assertTrue(
                         $ok,
-                            sprintf(
+                        sprintf(
                             '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                            'an empty ADORecordSet Object If the record is updated successfully',
+                                'an empty ADORecordSet Object If the record is updated successfully',
                             $forceMode,
                             $fetchDescription
                         )
                     );
                 } else {
                     $this->fail(
-                            sprintf(
+                        sprintf(
                             '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                            'an empty ADORecordSet Object If the record is updated successfully',
+                                'an empty ADORecordSet Object If the record is updated successfully',
                             $forceMode,
                             $fetchDescription
                         )
@@ -154,25 +153,25 @@ class AutoExecuteTest extends ADOdbTestCase
 
 
 
-                if (is_object($response) ) {
+                if (is_object($response)) {
                     $reflection = new \ReflectionClass($response);
                     $shortName  = $reflection->getShortName();
                     $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
                     $this->assertTrue(
                         $ok,
-                            sprintf(
+                        sprintf(
                             '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                            'an empty ADORecordSet Object If the record is updated successfully',
+                                'an empty ADORecordSet Object If the record is updated successfully',
                             $forceMode,
                             $fetchDescription
                         )
                     );
                 } else {
                     $this->fail(
-                            sprintf(
+                        sprintf(
                             '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                            'an empty ADORecordSet Object If the record is updated successfully',
+                                'an empty ADORecordSet Object If the record is updated successfully',
                             $forceMode,
                             $fetchDescription
                         )
@@ -218,8 +217,8 @@ class AutoExecuteTest extends ADOdbTestCase
 
         global $ADODB_QUOTE_FIELDNAMES;
 
-        $qfArray =[
-            true, false, 'BRACKETS', 'UPPER', 'LOWER' 
+        $qfArray = [
+            true, false, 'BRACKETS', 'UPPER', 'LOWER'
             ];
 
         foreach ($qfArray as $qfIndex => $qfValue) {
@@ -233,7 +232,6 @@ class AutoExecuteTest extends ADOdbTestCase
             $this->db->debug = true;
             for ($forceMode = 0; $forceMode < 2; $forceMode++) {
                 foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-                  
                     $this->insertFetchMode($fetchMode);
 
                     $aeVar = 'AUTOEXECUTE03' . $forceMode . $fetchMode . $qfIndex;
@@ -279,25 +277,25 @@ class AutoExecuteTest extends ADOdbTestCase
                     );
                     */
 
-                    if (is_object($response) ) {
+                    if (is_object($response)) {
                         $reflection = new \ReflectionClass($response);
                         $shortName  = $reflection->getShortName();
                         $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
                         $this->assertTrue(
                             $ok,
-                             sprintf(
+                            sprintf(
                                 '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
+                                 'an empty ADORecordSet Object If the record is updated successfully',
                                 $forceMode,
                                 $fetchDescription
                             )
                         );
                     } else {
                         $this->fail(
-                             sprintf(
+                            sprintf(
                                 '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
+                                 'an empty ADORecordSet Object If the record is updated successfully',
                                 $forceMode,
                                 $fetchDescription
                             )

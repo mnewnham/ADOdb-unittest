@@ -110,7 +110,7 @@ class ExecuteTest extends ADOdbCoreSetup
 
         list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
-        if (is_object($result) ) {
+        if (is_object($result)) {
             $reflection = new \ReflectionClass($result);
             $shortName  = $reflection->getShortName();
             $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -120,7 +120,7 @@ class ExecuteTest extends ADOdbCoreSetup
                 'ADOConnection::execute() in INSERT/UPDATE/DELETE ' .
                 'mode should return empty ADORecordSet, returned ' . $shortName
             );
-        } 
+        }
     }
 
     /**

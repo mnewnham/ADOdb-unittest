@@ -75,7 +75,7 @@ class MetaDatabasesTest extends MetaFunctions
                 )
             );
 
-            $flipResponse = array_change_key_case(array_flip($response),CASE_UPPER);
+            $flipResponse = array_change_key_case(array_flip($response), CASE_UPPER);
 
             $this->assertArrayHasKey(
                 strtoupper($GLOBALS['schemaOwner']),

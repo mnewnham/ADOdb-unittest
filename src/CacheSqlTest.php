@@ -258,7 +258,7 @@ class CacheSqlTest extends ADOdbTestCase
 
         list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
 
-        if (is_object($result) ) {
+        if (is_object($result)) {
             $reflection = new \ReflectionClass($result);
             $shortName  = $reflection->getShortName();
             $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -268,7 +268,7 @@ class CacheSqlTest extends ADOdbTestCase
                 'ADOConnection::execute() in INSERT/UPDATE/DELETE ' .
                 'mode should return an empty ADORecordSet object, returned ' . $shortName
             );
-        } 
+        }
     }
 
     /**

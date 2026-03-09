@@ -42,14 +42,12 @@ class GenericMetaTypesTest extends MetaFunctions
     {
 
         parent::setUpBeforeClass();
-
-
     }
 
     public function setup(): void
     {
         parent::setup();
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/metatype-test.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -81,7 +79,7 @@ class GenericMetaTypesTest extends MetaFunctions
         string $actualResult
     ): void {
 
-        
+
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
@@ -182,7 +180,7 @@ class GenericMetaTypesTest extends MetaFunctions
         string $actualResult
     ): void {
 
-        
+
         $sql = 'SELECT * FROM ' . $this->testTableName;
         list ($executionResult, $errno, $errmsg) = $this->executeSqlString($sql);
 
@@ -190,7 +188,6 @@ class GenericMetaTypesTest extends MetaFunctions
         $metaFetch = $executionResult->fetchField($offset);
 
         if ($metaFetch != false) {
-      
             $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
 
             $this->assertSame(
@@ -198,7 +195,6 @@ class GenericMetaTypesTest extends MetaFunctions
                 $actualResult,
                 'Checking ActualType returned by MetaType using fieldobject as 1st parameter'
             );
-
         }
     }
 
@@ -231,7 +227,6 @@ class GenericMetaTypesTest extends MetaFunctions
 
 
         if ($metaFetch != false) {
-            
             if (!$this->db->metaObject) {
                 /*
                 * Stage 1, pass a string and length to MetaType()
@@ -261,7 +256,6 @@ class GenericMetaTypesTest extends MetaFunctions
                     $actualResult,
                     'Checking ActualType returned by MetaType using string type and length'
                 );
-
             }
             /*
             * Stage 2, pass a fieldobject to MetaType() as first arg
@@ -339,5 +333,4 @@ class GenericMetaTypesTest extends MetaFunctions
 
         ];
     }
-
 }
