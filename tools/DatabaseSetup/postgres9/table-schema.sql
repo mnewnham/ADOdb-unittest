@@ -60,7 +60,7 @@ CREATE TABLE testtable_3 (
 	decimal_field decimal(12,2) DEFAULT 0.0,
 	boolean_field BOOLEAN,
 	empty_field VARCHAR(240) DEFAULT '',
-	number_run_field SMALLINT DEFAULT 0
+	number_run_field INTEGER DEFAULT 0
 );
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
 CREATE UNIQUE INDEX vdx33 ON testtable_3 (number_run_field);
