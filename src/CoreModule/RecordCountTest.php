@@ -27,9 +27,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class AffectedRowsCount
  *
- * Test cases for for ADOdb affected_row()s
+ * Test cases for for ADOdb recordCount
  */
-class AffectedRowsTest extends ADOdbCoreSetup
+class RecordCountTest extends ADOdbCoreSetup
 {
     /**
      * Global setup for the test class
@@ -82,20 +82,19 @@ class AffectedRowsTest extends ADOdbCoreSetup
      *
      * @return void
      */
-    public function testUpdateAffectedRowsWithoutBind(): void
+    public function testRecordCountWithoutBind(): void
     {
 
         $this->db->startTrans();
      
-        $SQL = "UPDATE insert_auto 
-                   SET integer_field=50
+        $SQL = "SELECT * FROM insert_auto 
                  WHERE id<51";
-        $this->db->execute($SQL);
+        $result = $this->db->execute($SQL);
 
         $this->assertEquals(
             50,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 100 from update'
+            $result->recordCount(),
+            'RecordCount shoud return 50 from base SELECT'
         );
 
         $this->db->completeTrans();
@@ -106,7 +105,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
      *
      * @return void
      */
-    public function testUpdateAffectedRowsWithBind(): void
+    public function testRecordCountWithBind(): void
     {
 
        
@@ -116,15 +115,14 @@ class AffectedRowsTest extends ADOdbCoreSetup
 
         $bind = ['p1' => 50];
 
-        $SQL = "UPDATE insert_auto 
-                   SET integer_field=50
+        $SQL = "SELECT * FROM insert_auto 
                  WHERE id>$p1";
-        $this->db->execute($SQL,$bind);
+        $result = $this->db->selectLimit($SQL,10,-1,$bind);
 
         $this->assertEquals(
-            50,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 100 from update'
+            10,
+            $result->recordCount(),
+              'RecordCount shoud return 50 from SELECTLIMIT'
         );
 
         $this->db->completeTrans();
@@ -135,7 +133,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
      *
      * @return void
      */
-    public function testSelectAffectedRowsValue(): void
+    public function testSelectWithPoRecordCount(): void
     {
 
        
@@ -144,59 +142,14 @@ class AffectedRowsTest extends ADOdbCoreSetup
         $SQL = "SELECT * 
                   FROM insert_auto 
                  WHERE id<51";
-        $this->db->execute($SQL);
+        $result = $this->db->execute($SQL);
 
         $this->assertEquals(
-            0,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 0 for a select statement'
+            50,
+            $result->po_recordcount(),
+            'po_recordcount should return 100 rows for a select statement'
         );
 
-        $this->db->completeTrans();
-    }
-
-    /**
-     * Test successfully deleting rows
-     *
-     * @return void
-     */
-    public function testDeleteAffectedRows(): void
-    {
-
-       
-        $this->db->startTrans();
-     
-        $SQL = "DELETE FROM insert_auto";
-        $this->db->execute($SQL);
-
-        $this->assertEquals(
-            100,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 100 from deletion'
-        );
-        
-        $this->db->completeTrans();
-    }
-
-    /**
-     * Test deletion count against an empty table
-     *
-     * @return void
-     */
-    public function testDeleteAffectedRowsAgain(): void
-    {
-
-        $this->db->startTrans();
-     
-        $SQL = "DELETE FROM insert_auto";
-        $this->db->execute($SQL);
-
-        $this->assertEquals(
-            0,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 0 from deletion of empty table'
-        );
-        
         $this->db->completeTrans();
     }
 }
