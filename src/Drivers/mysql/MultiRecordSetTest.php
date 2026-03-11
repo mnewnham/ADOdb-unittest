@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Tests cases for the mysqli driver of ADOdb.
- * Try to write database-agnostic tests where possible.
+ * Test the multi recordset stored procedure feature of the mysqli driver of ADOdb.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -20,26 +19,17 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\Drivers;
+namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
 
-use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
-use PHPUnit\Framework\Attributes\DataProvider;
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+
 /**
- * Class MysqliDriverTest
+ * Class MultiRecordSetTest
  *
- * Test cases for for the MySQLi native driver
+ * Test cases for for the MySQLi multi-recordset feature
  */
-class MysqliDriverTest extends ADOdbCustomDriver
+class MultiRecordSetTest extends ADOdbTestCase
 {
-     /**
-     * The DB Physical identifier must be set in the
-     * overload class
-     *
-     * @example MYSQLI_TYPE_JSON
-     * @var     mixed $physicalType
-     */
-    protected mixed $physicalType = MYSQLI_TYPE_JSON;
-
     /**
      * Set up the test environment
      *
@@ -57,14 +47,16 @@ class MysqliDriverTest extends ADOdbCustomDriver
             );
         }
 
-        $this->physicalType = MYSQLI_TYPE_JSON;
-        $this->columnType   = 'JSON';
     }
 
-    //#[DataProvider('providerMultiQueryWithStoredProcedure')]
+    /**
+     * Tests the multiQuery, stored procedure feature
+     *
+     * @return void
+     */
     public function testMultiQueryWithStoredProcedure(): void
     {
-        //$this->db->multiQuery = true;
+        $this->db->multiQuery = true;
 
         $row1_1 = ['a','b','c'];
         $row1_2 = ['row1_1' => 'a', 'row1_2' => 'b', 'row1_3' => 'c'];
@@ -117,9 +109,6 @@ class MysqliDriverTest extends ADOdbCustomDriver
             ADODB_FETCH_BOTH => $row3_3,
         ];
 
-
-
-        
         $loadProcedure = sprintf(
             '%s/DatabaseSetup/%s/mysqli-multiquery-test.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -144,7 +133,6 @@ class MysqliDriverTest extends ADOdbCustomDriver
                 )
             );
             
-            //print_r($row);
             $re->nextRecordSet();
             $row = $re->fetchRow();
             
@@ -157,10 +145,8 @@ class MysqliDriverTest extends ADOdbCustomDriver
                 )
             );
             
-            //print_r($row);
             $re->nextRecordSet();
             $row = $re->fetchRow();
-            //print_r($row);
             
             $this->assertSame(
                 $row3[$absoluteMode],
@@ -175,99 +161,4 @@ class MysqliDriverTest extends ADOdbCustomDriver
         }
 
     }
-
-    
-    /**
-     * Data provider for {@see testMultiQueryWithStoredProcedure()}
-     *
-     * @return array [int fetchmode, array expected result, string sql, ?array bind]
-     */
-
-    public static function providerMultiQueryWithStoredProcedure(): array
-    {
-
-    }
-    /*
-    DOFetchObj Object
-(
-    [0] => a
-    [1] => b
-    [2] => c
-)
-ADOFetchObj Object
-(
-    [0] => 123
-    [1] => 234
-)
-ADOFetchObj Object
-(
-    [0] => 1
-    [1] => 
-    [2] => 3
-    [3] => 
-)
-------------------------------------------------------------------------------
-mysqli: DROP PROCEDURE IF EXISTS adodb_test_multi_recordsets
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-mysqli: CREATE PROCEDURE adodb_test_multi_recordsets() LANGUAGE SQL NOT DETERMINISTIC SQL SECURITY DEFINER BEGIN SELECT "a" row1_1, "b" row1_2, "c" row1_3; SELECT "123" row2_1, "234" row2_2; SELECT 1 row3_1, null row3_2, 3 row3_3, '' row3_4; END; 
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-mysqli: CALL adodb_test_multi_recordsets()
-------------------------------------------------------------------------------
-ADOFetchObj Object
-(
-    [row1_1] => a
-    [row1_2] => b
-    [row1_3] => c
-)
-ADOFetchObj Object
-(
-    [row2_1] => 123
-    [row2_2] => 234
-)
-ADOFetchObj Object
-(
-    [row3_1] => 1
-    [row3_2] => 
-    [row3_3] => 3
-    [row3_4] => 
-)
-------------------------------------------------------------------------------
-mysqli: DROP PROCEDURE IF EXISTS adodb_test_multi_recordsets
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-mysqli: CREATE PROCEDURE adodb_test_multi_recordsets() LANGUAGE SQL NOT DETERMINISTIC SQL SECURITY DEFINER BEGIN SELECT "a" row1_1, "b" row1_2, "c" row1_3; SELECT "123" row2_1, "234" row2_2; SELECT 1 row3_1, null row3_2, 3 row3_3, '' row3_4; END; 
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-mysqli: CALL adodb_test_multi_recordsets()
-------------------------------------------------------------------------------
-ADOFetchObj Object
-(
-    [0] => a
-    [row1_1] => a
-    [1] => b
-    [row1_2] => b
-    [2] => c
-    [row1_3] => c
-)
-ADOFetchObj Object
-(
-    [0] => 123
-    [row2_1] => 123
-    [1] => 234
-    [row2_2] => 234
-)
-ADOFetchObj Object
-(
-    [0] => 1
-    [row3_1] => 1
-    [1] => 
-    [row3_2] => 
-    [2] => 3
-    [row3_3] => 3
-    [3] => 
-    [row3_4] => 
-)
-    */
 }

@@ -22,14 +22,14 @@
 
 namespace MNewnham\ADOdbUnitTest\Drivers;
 
-use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
  * Class Sqlite3DriverTest
  *
  * Test cases for the ADOdb Sqlite3 Driver
  */
-class Sqlite3DriverTest extends ADOdbCustomDriver
+class Sqlite3DriverTest extends ADOdbTestCase
 {
     /**
      * The DB Physical identifier must be set in the

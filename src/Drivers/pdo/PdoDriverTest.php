@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Tests cases for the OCI driver of ADOdb.
+ * Tests cases for the PDO driver of ADOdb.
+ * the driver specific test, e.g. pdo-sqlite, pdo-mysql, etc are also run
  * Try to write database-agnostic tests where possible.
+ * This test does not support the legacy PDO drivers
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -22,14 +24,14 @@
 
 namespace MNewnham\ADOdbUnitTest\Drivers;
 
-use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class OCI8DriverTest
+ * Class PdoDriverTest
  *
- * Test cases for the ADOdb OCI8 Driver
+ * Test cases for the ADOdb PDO Drivers
  */
-class Oci8DriverTest extends ADOdbCustomDriver
+class PdoDriverTest extends ADOdbTestCase
 {
     /**
      * Set up the test environment
@@ -41,11 +43,20 @@ class Oci8DriverTest extends ADOdbCustomDriver
 
         parent::setup();
 
-        if ($this->adoDriver !== 'oci8') {
+        if (substr($this->adoDriver, 0, 3) !== 'pdo') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the Oracle oci8 driver'
+                'This test is only applicable for PDO drivers'
             );
         }
+    }
+
+    /**
+     * Tear down the test environment
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
     }
 }

@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Tests cases for the PDO driver of ADOdb.
- * the driver specific test, e.g. pdo-sqlite, pdo-mysql, etc are also run
+ * Tests cases for the postgreSQL driver of ADOdb.
  * Try to write database-agnostic tests where possible.
- * This test does not support the legacy PDO drivers
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -24,14 +22,14 @@
 
 namespace MNewnham\ADOdbUnitTest\Drivers;
 
-use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
+use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class PdoDriverTest
+ * Class Postgres9DriverTest
  *
- * Test cases for the ADOdb PDO Drivers
+ * Test cases for the ADOdb Postgres9 Driver
  */
-class PdoDriverTest extends ADOdbCustomDriver
+class Postgres9DriverTest extends ADOdbTestCase
 {
     /**
      * Set up the test environment
@@ -43,10 +41,10 @@ class PdoDriverTest extends ADOdbCustomDriver
 
         parent::setup();
 
-        if (substr($this->adoDriver, 0, 3) !== 'pdo') {
+        if ($this->adoDriver !== 'postgres9') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for PDO drivers'
+                'This test is only applicable for the postgres9 driver'
             );
         }
     }

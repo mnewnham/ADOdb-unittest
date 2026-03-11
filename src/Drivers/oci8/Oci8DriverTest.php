@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for the firebird/interbase driver of ADOdb.
+ * Tests cases for the OCI driver of ADOdb.
  * Try to write database-agnostic tests where possible.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
@@ -25,11 +25,11 @@ namespace MNewnham\ADOdbUnitTest\Drivers;
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
 /**
- * Class FirebirdDriverTest
+ * Class OCI8DriverTest
  *
- * Test cases for the ADOdb firebird Driver
+ * Test cases for the ADOdb OCI8 Driver
  */
-class FirebirdDriverTest extends ADOdbTestCase
+class Oci8DriverTest extends ADOdbTestCase
 {
     /**
      * Set up the test environment
@@ -41,10 +41,10 @@ class FirebirdDriverTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'firebird') {
+        if ($this->adoDriver !== 'oci8') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the firebird driver'
+                'This test is only applicable for the Oracle oci8 driver'
             );
         }
     }

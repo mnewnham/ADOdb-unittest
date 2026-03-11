@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for the postgreSQL driver of ADOdb.
+ * Tests cases for the mysqli driver of ADOdb.
  * Try to write database-agnostic tests where possible.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
@@ -20,17 +20,26 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\Drivers;
+namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
 
-use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomDriver;
-
+use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomMetaTypes;
+use PHPUnit\Framework\Attributes\DataProvider;
 /**
- * Class Postgres9DriverTest
+ * Class MysqliDriverTest
  *
- * Test cases for the ADOdb Postgres9 Driver
+ * Test cases for for the MySQLi native driver
  */
-class Postgres9DriverTest extends ADOdbCustomDriver
+class CustomMetaTypeTest extends ADOdbCustomMetaTypes
 {
+     /**
+     * The DB Physical identifier must be set in the
+     * overload class
+     *
+     * @example MYSQLI_TYPE_JSON
+     * @var     mixed $physicalType
+     */
+    protected mixed $physicalType = MYSQLI_TYPE_JSON;
+
     /**
      * Set up the test environment
      *
@@ -41,20 +50,14 @@ class Postgres9DriverTest extends ADOdbCustomDriver
 
         parent::setup();
 
-        if ($this->adoDriver !== 'postgres9') {
+        if ($this->adoDriver !== 'mysqli') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the postgres9 driver'
+                'This test is only applicable for the mysqli driver'
             );
         }
-    }
 
-    /**
-     * Tear down the test environment
-     *
-     * @return void
-     */
-    public function tearDown(): void
-    {
+        $this->physicalType = MYSQLI_TYPE_JSON;
+        $this->columnType   = 'JSON';
     }
 }
