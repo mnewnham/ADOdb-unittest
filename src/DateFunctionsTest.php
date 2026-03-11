@@ -305,14 +305,25 @@ class DateFunctionsTest extends ADOdbTestCase
                 $baseData = $this->db->getRow($sql);
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-                $expected = date($format, strtotime($baseData['DATE_FIELD']));
+                switch(ADODB_ASSOC_CASE) {
+                    case ADODB_ASSOC_CASE_UPPER:
+                        $ifld = 'ID';
+                        $dfld = 'DATE_FIELD';
+                        break;
+                    case ADODB_ASSOC_CASE_LOWER:
+                        $ifld = 'id';
+                        $dfld = 'date_field';
+                        break;
+                }
+
+                $expected = date($format, strtotime($baseData[$dfld]));
 
                 $sql = sprintf(
                     "SELECT %s 
                    FROM testtable_3
                     WHERE id=%s",
                     $this->db->sqlDate($format, 'date_field'),
-                    $baseData['ID']
+                    $baseData[$ifld]
                 );
 
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
