@@ -153,6 +153,7 @@ if (array_key_exists('xmlschema', $availableCredentials)) {
 
 $arTypeLoad = 'record';
 $GLOBALS['skipActiveRecordTests'] = 0;
+global $ADODB_QUOTE_FIELDNAMES;
 
 if (array_key_exists('activerecord', $availableCredentials)) {
     if (

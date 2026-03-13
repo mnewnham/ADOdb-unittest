@@ -93,6 +93,8 @@ class ActiveRecordTest extends ADOdbTestCase
     {
 
         global $_ADODB_ACTIVE_DBS;
+        global $ADODB_QUOTE_FIELDNAMES;
+
         $_ADODB_ACTIVE_DBS = array();
         if ($GLOBALS['skipActiveRecordTests'] == 1) {
             $this->skipFollowingTests = true;
@@ -107,6 +109,16 @@ class ActiveRecordTest extends ADOdbTestCase
             );
         }
         parent::setup();
+
+        if (array_key_exists(
+            'quotefieldnames', 
+            $GLOBALS['TestingControl']['activerecord']
+            )
+        ) {
+            $ADODB_QUOTE_FIELDNAMES = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
+        } else {
+            $ADODB_QUOTE_FIELDNAMES = false;
+        }
         /*
         * Activate the active record adaptor
         */
@@ -147,7 +159,7 @@ class ActiveRecordTest extends ADOdbTestCase
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;//new \person();
-        $person->_quoteNames = true;
+        $person->_quoteNames = 'LOWER';
 
         $person->load('id=1');
 
@@ -168,10 +180,12 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testAddNewPerson(): void
     {
 
+        global $ADODB_QUOTE_FIELDNAMES;
+
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
         $person = $GLOBALS['person'] ;
-
+        $person->_quoteNanes = $ADODB_QUOTE_FIELDNAMES = 'LOWER';
         unset($person->id);
         $person->name_first  = 'SHEILA';
         $person->name_last   = 'BROVLOWSKI';
@@ -213,13 +227,15 @@ class ActiveRecordTest extends ADOdbTestCase
      */
     public function testAddNewChild(): void
     {
+        global $ADODB_QUOTE_FIELDNAMES;
 
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
 
 
-        $child = $GLOBALS['child'] ;//new \child();
 
+        $child = $GLOBALS['child'] ;//new \child();
+        $child->_quoteNanes = $ADODB_QUOTE_FIELDNAMES = 'LOWER';
         unset($child->id);
 
         $child->person_id   = 3;
