@@ -4,6 +4,7 @@
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
 
+DROP VIEW IF EXISTS testtable_1_view;
 -- insertion_table will be built by createTable tests
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
@@ -55,6 +56,11 @@ CREATE SEQUENCE testtable_1_seq
 -- the procedure to be created in Oracle. It will be stripped
 -- by the schema loader
 CREATE OR REPLACE TRIGGER testable_1_t BEFORE insert ON testtable_1 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_1_seq.nextval into :new.id from dual; END; ;
+
+CREATE VIEW testtable_1_view AS 
+	SELECT id,varchar_field
+	FROM testtable_1
+	WHERE varchar_field IS NOT NULL;
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 
