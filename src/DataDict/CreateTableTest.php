@@ -88,10 +88,13 @@ class CreateTableTest extends DataDictFunctions
 
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
-        $flipMetaTables = array_flip($this->db->metaTables());
+        $flipMetaTables = array_change_key_case(
+            array_flip($this->db->metaTables()),
+            CASE_UPPER
+        );
 
         $this->assertArrayHasKey(
-            'dictionary_creation_test_table',
+            'DICTIONARY_CREATION_TEST_TABLE',
             $flipMetaTables,
             'The dictionary Test Creation table should now be in the database'
         );

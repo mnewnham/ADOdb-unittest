@@ -86,10 +86,13 @@ class AddIndexTest extends DataDictFunctions
             return;
         }
 
-        $metaIndexes = $this->db->metaIndexes($this->testTableName);
+        $metaIndexes = array_change_key_case(
+            $this->db->metaIndexes($this->testTableName),
+            CASE_UPPER
+        );
 
         $this->assertArrayHasKey(
-            'string_test_index',
+            'STRING_TEST_INDEX',
             $metaIndexes,
             'AddIndexSQL Using String For Fields should now ' .
             'contain index string_test_index'
@@ -145,10 +148,13 @@ class AddIndexTest extends DataDictFunctions
 
         $GLOBALS['baseTestsComplete'] = 2;
 
-        $metaIndexes = $this->db->metaIndexes($this->testTableName);
+        $metaIndexes = array_change_key_case(
+            $this->db->metaIndexes($this->testTableName),
+            CASE_UPPER
+        );
 
         $this->assertArrayHasKey(
-            'array_test_index',
+            'ARRAY_TEST_INDEX',
             $metaIndexes,
             'AddIndexSQL Using Array For Fields should have ' .
             'added index array_test_index'
