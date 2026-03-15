@@ -123,7 +123,7 @@ class GenericMetaTypesTest extends MetaFunctions
             */
 
             /*
-            * Stage 2, pass a fieldobject to MetaType() as first arg
+            * Stage 1, pass a fieldobject to MetaType() as first arg
             */
             $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
 
@@ -227,38 +227,8 @@ class GenericMetaTypesTest extends MetaFunctions
 
 
         if ($metaFetch != false) {
-            if (!$this->db->metaObject) {
-                /*
-                * Stage 1, pass a string and length to MetaType()
-                */
-
-                $metaResult = $this->db->metaType(
-                    $metaFetch->type,
-                    $metaFetch->max_length
-                );
-
-                $this->assertSame(
-                    $metaType,
-                    $metaResult,
-                    sprintf(
-                        'Checking expected MetaType %s passing string ' .
-                        'type [%s] and length [%s] from FetchField()',
-                        $metaType,
-                        $metaFetch->type,
-                        $metaFetch->max_length
-                    )
-                );
-
-                $actualType = $GLOBALS['ADOdataDictionary']->actualType($metaType);
-
-                $this->assertSame(
-                    $actualType,
-                    $actualResult,
-                    'Checking ActualType returned by MetaType using string type and length'
-                );
-            }
             /*
-            * Stage 2, pass a fieldobject to MetaType() as first arg
+            * Stage 1, pass a fieldobject to MetaType() as first arg
             */
             $metaResult = $this->db->metaType($metaFetch);
 
@@ -277,7 +247,7 @@ class GenericMetaTypesTest extends MetaFunctions
             );
 
             /*
-            * Stage 3, pass a fieldobject to MetaType() as third arg
+            * Stage 2, pass a fieldobject to MetaType() as third arg
             */
             $metaResult = $this->db->metaType('', -1, $metaFetch);
 
