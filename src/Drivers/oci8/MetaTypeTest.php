@@ -24,16 +24,16 @@ namespace MNewnham\ADOdbUnitTest\Drivers\oci8;
 
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbStandardMetaTypes;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class MetaTypeTest
  *
  * Metatype Test cases for for the Oracle native driver
- * 
+ *
  * @see tools/Drivers/oci8/ColumnTypes.inc
  */
 class MetaTypeTest extends ADOdbStandardMetaTypes
 {
-    
     /**
      * Set up the test environment
      *
@@ -50,7 +50,5 @@ class MetaTypeTest extends ADOdbStandardMetaTypes
                 'This test is only applicable for the oci8 driver'
             );
         }
-
     }
-
 }

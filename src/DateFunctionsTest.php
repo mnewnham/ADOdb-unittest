@@ -305,7 +305,7 @@ class DateFunctionsTest extends ADOdbTestCase
                 $baseData = $this->db->getRow($sql);
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-                switch(ADODB_ASSOC_CASE) {
+                switch (ADODB_ASSOC_CASE) {
                     case ADODB_ASSOC_CASE_UPPER:
                         $ifld = 'ID';
                         $dfld = 'DATE_FIELD';

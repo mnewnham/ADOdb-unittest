@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class ADOdbStringQuoting extends ADOdbTestCase
 {
-    
     /**
      * The original string value to manipulate
      *

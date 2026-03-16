@@ -69,7 +69,7 @@ class RecordCountTest extends ADOdbCoreSetup
             'integer_field' => 99
         );
 
-        for ($i=1;$i<=100;$i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $sql = $db->getInsertSql($autoTemplate, $autoAr);
             $db->execute($sql);
         }
@@ -86,7 +86,7 @@ class RecordCountTest extends ADOdbCoreSetup
     {
 
         $this->db->startTrans();
-     
+
         $SQL = "SELECT * FROM insert_auto 
                  WHERE id<51";
         $result = $this->db->execute($SQL);
@@ -108,21 +108,21 @@ class RecordCountTest extends ADOdbCoreSetup
     public function testRecordCountWithBind(): void
     {
 
-       
+
         $this->db->startTrans();
-     
+
         $p1 = $this->db->param('p1');
 
         $bind = ['p1' => 50];
 
         $SQL = "SELECT * FROM insert_auto 
                  WHERE id>$p1";
-        $result = $this->db->selectLimit($SQL,10,-1,$bind);
+        $result = $this->db->selectLimit($SQL, 10, -1, $bind);
 
         $this->assertEquals(
             10,
             $result->recordCount(),
-              'RecordCount shoud return 50 from SELECTLIMIT'
+            'RecordCount shoud return 50 from SELECTLIMIT'
         );
 
         $this->db->completeTrans();
@@ -136,9 +136,9 @@ class RecordCountTest extends ADOdbCoreSetup
     public function testSelectWithPoRecordCount(): void
     {
 
-       
+
         $this->db->startTrans();
-     
+
         $SQL = "SELECT * 
                   FROM insert_auto 
                  WHERE id<51";

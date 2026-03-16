@@ -76,7 +76,7 @@ class InsertIdTest extends ADOdbCoreSetup
             'integer_field' => 99
         );
 
-         $counter = 1;
+        $counter = 1;
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $this->db->startTrans();
             $this->insertFetchMode($fetchMode);
@@ -142,7 +142,7 @@ class InsertIdTest extends ADOdbCoreSetup
                 0,
                 $insertId,
                 sprintf(
-                    '[FETCH MODE %s] No Auto increment insertid should never change from 0, currently %d',
+                    '[FETCH MODE %s] No Auto increment: insertid should never change from 0, currently %d',
                     $fetchModeName,
                     $insertId
                 )

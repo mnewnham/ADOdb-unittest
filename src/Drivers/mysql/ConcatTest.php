@@ -24,6 +24,7 @@ namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
 
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbStringConcatenation;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class MysqliDriverTest
  *
@@ -31,8 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ConcatTest extends ADOdbStringConcatenation
 {
-     
-
     /**
      * How the driver formats the concatenated data;
      *
@@ -56,8 +55,5 @@ class ConcatTest extends ADOdbStringConcatenation
                 'This test is only applicable for the mysqli driver'
             );
         }
-
     }
-
-
 }

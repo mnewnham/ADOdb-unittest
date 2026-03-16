@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class IfNullTest extends ADOdbTestCase
 {
-
     /**
      * Test for {@see ADODConnection::ifNull()}
      *

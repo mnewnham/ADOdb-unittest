@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ADOdbStandardMetaTypes extends MetaFunctions
 {
-    
     /**
      * Constants defining the maximum acceptable
      * calues for signed variables of each integer
@@ -47,22 +46,22 @@ class ADOdbStandardMetaTypes extends MetaFunctions
     * db     - The native database data type. There should be one for every supported native tyoe
     * meta   - The ADOdb metatype that should be returned by metaType()
     * output - The value returned by actualType() when the metaType is passed()
-    * build  - A column definition to pass in to the table building function fot testing 
+    * build  - A column definition to pass in to the table building function fot testing
     *
     * @var array
     */
     public array $databaseFieldsDefinition = [
         [
-            'db' => '', 
-            'meta' => '', 
+            'db' => '',
+            'meta' => '',
             'output' => '',
             'build' => ''
         ]
     ];
 
-    
+
     /**
-     * A database specific create table statement that wraps the 
+     * A database specific create table statement that wraps the
      * build statements above
      *
      * @var string
@@ -83,10 +82,10 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         parent::setUpBeforeClass();
 
          $columnTypesFile = sprintf(
-            '%s/DriverControl/%s/ColumnTypes.inc',
-            $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['SqlProvider']
-        );
+             '%s/DriverControl/%s/ColumnTypes.inc',
+             $GLOBALS['unitTestToolsDirectory'],
+             $GLOBALS['SqlProvider']
+         );
 
         if (!file_exists($columnTypesFile)) {
             return;
@@ -94,23 +93,24 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         require_once $columnTypesFile;
 
-        $columnTypes = new \columnTypes;
+        $columnTypes = new \columnTypes();
 
         $createTableWrapper = $columnTypes->createTableWrapper;
         $buildArray = $columnTypes->databaseFieldsDefinition;
 
         $columnStrings = [];
-        foreach( $buildArray as $key => $data) {
-            $columnStrings[] = sprintf("
+        foreach ($buildArray as $key => $data) {
+            $columnStrings[] = sprintf(
+                "
             field_%d %s",
-            $key,
-            $data['build']
+                $key,
+                $data['build']
             );
         }
 
-        $columnString = implode(',',$columnStrings);
+        $columnString = implode(',', $columnStrings);
 
-        
+
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute('DROP TABLE IF EXISTS metatype_test');
         $GLOBALS['ADOdbConnection']->completeTrans();
@@ -120,7 +120,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute($sql);
         $GLOBALS['ADOdbConnection']->completeTrans();
-
     }
 
     public function setup(): void
@@ -139,10 +138,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         require_once $columnTypesFile;
 
-        $columnTypes = new \columnTypes;
+        $columnTypes = new \columnTypes();
 
         $this->databaseFieldsDefinition = $columnTypes->databaseFieldsDefinition;
-        
     }
 
     /**
@@ -173,7 +171,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $fieldArray = explode('_', $name);
         $nameData = $this->databaseFieldsDefinition[$fieldArray[1]];
 
-        
+
 
         $expectedActualType    = $nameData['output'];
         //$expectedSize          = $nameData[1];
@@ -183,7 +181,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         if (strcasecmp($expectedMetaType, 'typex') == 0) {
             $expectedMetaType =  $GLOBALS['ADOdataDictionary']->typeX;
-        } else if (strcasecmp($expectedMetaType, 'typexl') == 0) {
+        } elseif (strcasecmp($expectedMetaType, 'typexl') == 0) {
             $expectedMetaType =  $GLOBALS['ADOdataDictionary']->typeXL;
         }
         //if ($expectedSize) {
@@ -247,7 +245,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             $expectedActualType,
             $actualResult,
             sprintf(
-                'Checking ActualType of field [%s] derived from DB ' . 
+                'Checking ActualType of field [%s] derived from DB ' .
                 'type [%s] using MetaType [%s] returned' .
                 ' by MetaType passing fieldObject as 1st parameter
                 %s',
@@ -299,8 +297,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             return [[
                 '',
                 '',
-                0, 
-                new \stdClass
+                0,
+                new \stdClass()
             ]];
         }
         $sql = 'SELECT * FROM metatype_test';
@@ -326,8 +324,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      * Checks that a maximum I1 value can be inserted into the database
      *
      * @return void
-     */    
-    public function testI1ValueInsertions(): void {
+     */
+    public function testI1ValueInsertions(): void
+    {
 
         $fields = [];
 
@@ -345,7 +344,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-       
+
 
         $sql = $this->db->getInsertSql($template, $fields);
 
@@ -356,15 +355,16 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $this->assertIsObject(
             $result,
             'A Maximum value I1 Integer value should have been inserted'
-        );    
+        );
     }
 
     /**
      * Checks that a maximum I2 value can be inserted
      *
      * @return void
-     */    
-    public function testI2ValueInsertions(): void {
+     */
+    public function testI2ValueInsertions(): void
+    {
 
         $fields = [];
 
@@ -382,7 +382,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-       
+
         $sql = $this->db->getInsertSql($template, $fields);
 
         $this->db->startTrans();
@@ -392,7 +392,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $this->assertIsObject(
             $result,
             'A Maximum value I2 Integer value should have been inserted'
-        );    
+        );
     }
 
     /**
@@ -400,8 +400,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      *
      *
      * @return void
-     */    
-    public function testI4ValueInsertions(): void {
+     */
+    public function testI4ValueInsertions(): void
+    {
 
         $fields = [];
 
@@ -419,7 +420,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-       
+
         $sql = $this->db->getInsertSql($template, $fields);
 
         $this->db->startTrans();
@@ -429,7 +430,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $this->assertIsObject(
             $result,
             'A Maximum value I4 Integer value should have been inserted'
-        );    
+        );
     }
 
     /**
@@ -437,8 +438,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      *
      *
      * @return void
-     */    
-    public function testIValueInsertions(): void {
+     */
+    public function testIValueInsertions(): void
+    {
 
         $fields = [];
 
@@ -456,7 +458,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-       
+
         $sql = $this->db->getInsertSql($template, $fields);
 
         $this->db->startTrans();
@@ -466,7 +468,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $this->assertIsObject(
             $result,
             'A Maximum value I Integer value should have been inserted'
-        );    
+        );
     }
 
     /**
@@ -474,8 +476,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      *
      *
      * @return void
-     */    
-    public function testI8ValueInsertions(): void {
+     */
+    public function testI8ValueInsertions(): void
+    {
 
         $fields = [];
 
@@ -493,7 +496,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-       
+
         $sql = $this->db->getInsertSql($template, $fields);
 
         $this->db->startTrans();
@@ -503,6 +506,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $this->assertIsObject(
             $result,
             'A Maximum value I8 Integer value should have been inserted'
-        );    
+        );
     }
 }

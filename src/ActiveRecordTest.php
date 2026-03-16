@@ -110,9 +110,10 @@ class ActiveRecordTest extends ADOdbTestCase
         }
         parent::setup();
 
-        if (array_key_exists(
-            'quotefieldnames', 
-            $GLOBALS['TestingControl']['activerecord']
+        if (
+            array_key_exists(
+                'quotefieldnames',
+                $GLOBALS['TestingControl']['activerecord']
             )
         ) {
             $ADODB_QUOTE_FIELDNAMES = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];

@@ -31,8 +31,6 @@ use MNewnham\ADOdbUnitTest\Drivers\ADOdbStringQuoting;
  */
 class QuotingTest extends ADOdbStringQuoting
 {
-     
-
     /**
      * The expected result from the qstr test which has
      * database-specific escaping. This is a reasonable default
@@ -57,8 +55,5 @@ class QuotingTest extends ADOdbStringQuoting
                 'This test is only applicable for the mysqli driver'
             );
         }
-
     }
-
-
 }

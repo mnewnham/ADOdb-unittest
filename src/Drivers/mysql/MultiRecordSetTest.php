@@ -46,7 +46,6 @@ class MultiRecordSetTest extends ADOdbTestCase
                 'This test is only applicable for the mysqli driver'
             );
         }
-
     }
 
     /**
@@ -68,7 +67,7 @@ class MultiRecordSetTest extends ADOdbTestCase
             2 => 'c',
             'row1_3' => 'c'
             ];
-                
+
         $row1 = [
             ADODB_FETCH_NUM => $row1_1,
             ADODB_FETCH_ASSOC => $row1_2,
@@ -83,7 +82,7 @@ class MultiRecordSetTest extends ADOdbTestCase
             1 => '234',
             'row2_2' => '234'
             ];
-                
+
         $row2 = [
             ADODB_FETCH_NUM => $row2_1,
             ADODB_FETCH_ASSOC => $row2_2,
@@ -102,7 +101,7 @@ class MultiRecordSetTest extends ADOdbTestCase
             3 => '',
             'row3_4' => ''
         ];
-                
+
         $row3 = [
             ADODB_FETCH_NUM => $row3_1,
             ADODB_FETCH_ASSOC => $row3_2,
@@ -118,12 +117,11 @@ class MultiRecordSetTest extends ADOdbTestCase
         readSqlIntoDatabase($this->db, $loadProcedure);
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-
             $absoluteMode = $this->insertFetchMode($fetchMode);
-            
+
             $re = $this->db->execute('CALL adodb_test_multi_recordsets()');
             $row = $re->fetchRow();
-            
+
             $this->assertSame(
                 $row1[$absoluteMode],
                 $row,
@@ -132,10 +130,10 @@ class MultiRecordSetTest extends ADOdbTestCase
                     $fetchDescription
                 )
             );
-            
+
             $re->nextRecordSet();
             $row = $re->fetchRow();
-            
+
             $this->assertSame(
                 $row2[$absoluteMode],
                 $row,
@@ -144,10 +142,10 @@ class MultiRecordSetTest extends ADOdbTestCase
                     $fetchDescription
                 )
             );
-            
+
             $re->nextRecordSet();
             $row = $re->fetchRow();
-            
+
             $this->assertSame(
                 $row3[$absoluteMode],
                 $row,
@@ -156,9 +154,8 @@ class MultiRecordSetTest extends ADOdbTestCase
                     $fetchDescription
                 )
             );
-            
+
             $re->close();
         }
-
     }
 }

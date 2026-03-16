@@ -24,6 +24,7 @@ namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
 
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbCustomMetaTypes;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class MysqliDriverTest
  *

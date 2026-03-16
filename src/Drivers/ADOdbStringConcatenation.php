@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class ADOdbStringConcatenation extends ADOdbTestCase
 {
-
     /**
      * How the driver formats the concatenated data;
      *

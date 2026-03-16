@@ -69,7 +69,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
             'integer_field' => 99
         );
 
-        for ($i=1;$i<=100;$i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $sql = $db->getInsertSql($autoTemplate, $autoAr);
             $db->execute($sql);
         }
@@ -86,7 +86,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
     {
 
         $this->db->startTrans();
-     
+
         $SQL = "UPDATE insert_auto 
                    SET integer_field=50
                  WHERE id<51";
@@ -109,9 +109,9 @@ class AffectedRowsTest extends ADOdbCoreSetup
     public function testUpdateAffectedRowsWithBind(): void
     {
 
-       
+
         $this->db->startTrans();
-     
+
         $p1 = $this->db->param('p1');
 
         $bind = ['p1' => 50];
@@ -119,7 +119,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
         $SQL = "UPDATE insert_auto 
                    SET integer_field=50
                  WHERE id>$p1";
-        $this->db->execute($SQL,$bind);
+        $this->db->execute($SQL, $bind);
 
         $this->assertEquals(
             50,
@@ -138,9 +138,9 @@ class AffectedRowsTest extends ADOdbCoreSetup
     public function testSelectAffectedRowsValue(): void
     {
 
-       
+
         $this->db->startTrans();
-     
+
         $SQL = "SELECT * 
                   FROM insert_auto 
                  WHERE id<51";
@@ -163,9 +163,9 @@ class AffectedRowsTest extends ADOdbCoreSetup
     public function testDeleteAffectedRows(): void
     {
 
-       
+
         $this->db->startTrans();
-     
+
         $SQL = "DELETE FROM insert_auto";
         $this->db->execute($SQL);
 
@@ -174,7 +174,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
             $this->db->affected_rows(),
             'Affected_rows shoud return 100 from deletion'
         );
-        
+
         $this->db->completeTrans();
     }
 
@@ -187,7 +187,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
     {
 
         $this->db->startTrans();
-     
+
         $SQL = "DELETE FROM insert_auto";
         $this->db->execute($SQL);
 
@@ -196,7 +196,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
             $this->db->affected_rows(),
             'Affected_rows shoud return 0 from deletion of empty table'
         );
-        
+
         $this->db->completeTrans();
     }
 }
