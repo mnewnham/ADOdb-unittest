@@ -62,16 +62,28 @@ class BlobHandlingTest extends ADOdbTestCase
             return;
         }
 
-        $GLOBALS['ADOdbConnection']->startTrans();
+        
+        $db = $GLOBALS['ADOdbConnection'];
+        /*
+        * Load the table to test data length tests
+        */
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/%s/blob-storage-test.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
 
 
-        $sql = "INSERT INTO blob_storage_table (integer_field)
+        $db->startTrans();
+        $ok = readSqlIntoDatabase($db, $schemaFile);
+        $db->completeTrans();
+        
+         $sql = "INSERT INTO blob_storage_table (integer_field)
                      VALUES (9002)";
-
-
-        $GLOBALS['ADOdbConnection']->Execute($sql);
-
-        $GLOBALS['ADOdbConnection']->completeTrans();
+                     
+        $db->startTrans();
+        $db->Execute($sql);
+        $db->completeTrans();
     }
 
 
