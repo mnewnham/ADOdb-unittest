@@ -70,6 +70,16 @@ class AlterColumnTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($tableName);
 
+    $metaColumns = $this->db->metaColumns($tableName);
+
+    $this->assertSame(
+        '0',
+        $metaColumns['INTEGER_FIELD']->default_value,
+        'AltercolumnSql should start with a default of 0 ' .
+        'for INTEGER_FIELD'
+    );
+
+
         $flds = " 
             VARCHAR_FIELD VARCHAR(120)
             ";
@@ -109,9 +119,9 @@ class AlterColumnTest extends DataDictFunctions
             'length of VARCHAR_FIELD to from 50 to 120'
         );
 
+        $this->db->debug = true;
         $flds = " 
-            INTEGER_FIELD I8 NOTNULL DEFAULT 1
-            ";
+            INTEGER_FIELD I8 NOTNULL DEFAULT 1";
 
         $sqlArray = $this->dataDictionary->alterColumnSQL(
             $tableName,
@@ -145,7 +155,7 @@ class AlterColumnTest extends DataDictFunctions
         */
 
          $flds = " 
-            DECIMAL_FIELD_TO_MODIFY N(16.12) NOTNULL
+            DECIMAL_FIELD_TO_MODIFY N(16.12) NOTNULL 
             ";
 
         $sqlArray = $this->dataDictionary->alterColumnSQL(
