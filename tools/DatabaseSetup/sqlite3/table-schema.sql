@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
-DROP TABLE IF EXISTS blob_storage_table;
+
 
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
@@ -57,13 +57,6 @@ CREATE TABLE testtable_3 (
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
 CREATE UNIQUE INDEX vdx33 ON testtable_3 (number_run_field);
 
--- blob_storage_table is built for blob testing
-CREATE TABLE blob_storage_table (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	integer_field INT(2) DEFAULT 0,
-	blob_field BLOB,
-	varchar_field VARCHAR(20)
-);
 
 -- This table is used to test the quoting of table and field names
 DROP TABLE IF EXISTS 'table_name';

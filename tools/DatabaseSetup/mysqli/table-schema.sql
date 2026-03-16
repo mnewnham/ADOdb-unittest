@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
-DROP TABLE IF EXISTS blob_storage_table;
 
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
@@ -58,14 +57,6 @@ CREATE TABLE testtable_3 (
 	UNIQUE INDEX vdx33 (number_run_field)
 ) ENGINE=INNODB;
 
--- blob_storage_table is built for blob testing
-CREATE TABLE blob_storage_table (
-	id INT NOT NULL AUTO_INCREMENT,
-	integer_field INT(2) DEFAULT 0,
-	blob_field LONGBLOB,
-	varchar_field VARCHAR(20),
-	PRIMARY KEY(id)
-);
 
 -- This table is used to test the quoting of table and field names
 -- It uses a reserved word as the table name and column names
