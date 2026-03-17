@@ -64,11 +64,4 @@ CREATE TABLE testtable_3 (
 );
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
 CREATE UNIQUE INDEX vdx33 ON testtable_3 (number_run_field);
--- This table is used to test the quoting of table and field names
--- It uses a reserved word as the table name and column names
-DROP TABLE IF EXISTS "table_name";
-CREATE TABLE "table_name" (
-	"id" SERIAL PRIMARY KEY,
-	"column_name" VARCHAR(20)
-	);
 

@@ -40,6 +40,35 @@ class VariablesTest extends ADOdbTestCase
     protected string $testTableName = 'table_name';
     protected string $testIdColumnName = 'ID';
 
+    
+    /**
+     * Global setup for the test class
+     *
+     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+
+        $db = $GLOBALS['ADOdbConnection'];
+        /*
+        * Load the table to test data length tests
+        */
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/%s/reserved-words-test.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        $db->startTrans();
+        $db->execute('DROP TABLE IF EXISTS table_name');
+        $db->completeTrans();
+
+        $db->startTrans();
+        $ok = readSqlIntoDatabase($db, $schemaFile);
+        $db->completeTrans();
+    }
+    
+    
     /**
      * Tests if the isConnected method works
      *

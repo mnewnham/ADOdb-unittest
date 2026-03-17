@@ -99,12 +99,3 @@ CREATE SEQUENCE blob_storage_table_seq
     START WITH 1;
 
 CREATE OR REPLACE TRIGGER blob_storage_table_t BEFORE insert ON blob_storage_table FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select blob_storage_table_seq.nextval into :new.id from dual; END; ;
-
-
--- This table is used to test the quoting of table and field names
--- It uses a reserved word as the table name and column names
-DROP TABLE IF EXISTS "table_name";
-CREATE TABLE "table_name" (
-	"id" INTEGER NOT NULL,
-	"column_name" VARCHAR(20)
-);
