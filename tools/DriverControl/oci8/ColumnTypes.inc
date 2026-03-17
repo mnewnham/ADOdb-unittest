@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test data definitions for the mysqli driver of ADOdb.
+ * Test data definitions for the oci8 driver of ADOdb.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -22,7 +22,7 @@
 /**
  * Class columnTypes
  *
- * Metatype Test cases for for the MySQLi native driver
+ * Metatype Test cases for for the Oracle native driver
  */
 class columnTypes
 {
