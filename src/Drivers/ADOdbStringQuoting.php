@@ -147,6 +147,7 @@ class ADOdbStringQuoting extends ADOdbTestCase
         * insert the string into the empty_field column
         * and see if it fails to insert or not.
         */
+        $this->db->param(false);
         $p1 = $this->db->param('p1');
         $bind = array(
             'p1' => $this->db->addQ($this->qStrInboundValue)

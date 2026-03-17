@@ -79,6 +79,7 @@ class GetOneTest extends ADOdbCoreSetup
      */
     public static function providerTestGetOne(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 9);
 

@@ -155,6 +155,7 @@ class CacheSqlTest extends ADOdbTestCase
     public static function providerTestSelectCacheExecute(): array
     {
 
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 1);
         return [
@@ -278,6 +279,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestNonSelectCacheExecute(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
         return [
@@ -382,6 +384,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestCacheGetOne(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
 
@@ -489,6 +492,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestCacheGetCol(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
         return [
@@ -651,6 +655,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestCacheGetRow(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array(
             'p1' => 'LINE 11'
@@ -776,6 +781,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestCacheGetAll(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');
         $bind = array('p1' => 2,
@@ -962,6 +968,7 @@ class CacheSqlTest extends ADOdbTestCase
      */
     public static function providerTestCacheSelectLimit(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
 
         $bind = array(

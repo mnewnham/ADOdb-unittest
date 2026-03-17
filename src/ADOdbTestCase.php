@@ -254,7 +254,7 @@ class ADOdbTestCase extends TestCase
             $result = $db->execute($sql);
         }
 
-        $errno  = $db->errorNo() ? $db->errno() : 0;
+        $errno  = $db->errorNo() ? $db->errorNo() : 0;
         $errmsg = $db->errorMsg();
 
 

@@ -419,6 +419,7 @@ class ActiveRecordTest extends ADOdbTestCase
 
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
+        $this->db->param(false);
         $p1 = $this->db->param('p1');
         $p2 = $this->db->param('p2');
         $bind = array(

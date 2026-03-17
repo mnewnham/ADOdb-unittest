@@ -100,6 +100,13 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $columnStrings = [];
         foreach ($buildArray as $key => $data) {
+            if (!$data['build']) {
+                /*
+                * Reverse test only
+                */
+                continue;
+            }
+
             $columnStrings[] = sprintf(
                 "
             field_%d %s",

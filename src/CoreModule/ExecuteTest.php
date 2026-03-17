@@ -48,7 +48,6 @@ class ExecuteTest extends ADOdbCoreSetup
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-           //$this->db->setFetchMode($fetchMode);
             $this->insertFetchMode($fetchMode);
             list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
@@ -70,6 +69,8 @@ class ExecuteTest extends ADOdbCoreSetup
      */
     public static function providerTestSelectExecute(): array
     {
+
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
         return [
@@ -130,6 +131,9 @@ class ExecuteTest extends ADOdbCoreSetup
      */
     public static function providerTestNonSelectExecute(): array
     {
+
+        //print_r($GLOBALS['ADOdbConnection']); 
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 1');
         return [

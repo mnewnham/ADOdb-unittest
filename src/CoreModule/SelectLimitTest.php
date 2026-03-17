@@ -92,6 +92,7 @@ class SelectLimitTest extends ADOdbCoreSetup
      */
     public static function providerTestSelectLimit(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
 
         $bind = array(

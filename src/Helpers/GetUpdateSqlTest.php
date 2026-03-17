@@ -221,6 +221,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
             $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
             $lastId = $this->db->getOne($sql);
 
+            $this->db->param(false);
             $p1 = $this->db->param('p1');
             $bind = [
                 'p1' => $lastId
@@ -301,6 +302,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
                 $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
                 $lastId = $this->db->getOne($sql);
 
+                $this->db->param(false);
                 $p1 = $this->db->param('p1');
                 $bind = [
                     'p1' => $lastId
