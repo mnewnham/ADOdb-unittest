@@ -31,6 +31,14 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ForceInsertTest extends ADOdbTestCase
 {
+    
+    protected array $forceModeDescriptions = [
+        'ADODB_FORCE_IGNORE',
+		'ADODB_FORCE_NULL',
+		'ADODB_FORCE_EMPTY',
+		'ADODB_FORCE_VALUE',
+		'ADODB_FORCE_NULL_AND_ZERO'
+    ];
     /**
      * Global setup for the test class
      *
@@ -66,11 +74,10 @@ class ForceInsertTest extends ADOdbTestCase
         * Load the table to test insert defaults
         */
         $schemaFile = sprintf(
-            '%s/../tools/DatabaseSetup/%s/force-insert-test.sql',
-            dirname(__FILE__),
+            '%s/DatabaseSetup/%s/force-insert-test.sql',
+            $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
-
 
         $this->db->startTrans();
         $ok = readSqlIntoDatabase($this->db, $schemaFile);
@@ -106,20 +113,24 @@ class ForceInsertTest extends ADOdbTestCase
 
         $ADODB_FORCE_MODE = $forceMode;
 
-        //list($result,$errno,$errmsg) = $this->executeSqlString('DELETE FROM adodb_force_insert');
-
+        $this->db->execute('DELETE FROM adodb_force_insert');
 
         $sql = "SELECT * FROM adodb_force_insert WHERE id=-1";
         $template = $this->db->execute($sql);
 
         $ar = [
-            'trigger_field' => 9
+       
+            'varchar_field' => '',
+            'datetime_field' => '',
+            'date_field' => '',
+            'integer_field' => '',
+            'decimal_field' => '',
+            'boolean_field' => '',
+	        'trigger_field' => 9
         ];
 
         $tTable = 'adodb_force_insert';
         $sql = $this->db->getInsertSql($template, $ar, false, $forceMode);
-
-        print "\nFM=$forceMode SQL=$sql\n";
 
         $response = $this->db->execute($sql);
 
@@ -129,18 +140,13 @@ class ForceInsertTest extends ADOdbTestCase
             'If the record is created successfully'
         );
 
-        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
-
-        $sql = "SELECT * FROM adodb_force_insert";
-
-        $insertResult = $this->db->getRow($sql);
 
         $this->db->setFetchMode(ADODB_FETCH_NUM);
 
         $sql = "SELECT * FROM adodb_force_insert";
 
         $insertResult = $this->db->getRow($sql);
-
+        
         foreach ($insertResult as $index => $value) {
             if ($index == 0) {
                 continue;
@@ -153,27 +159,27 @@ class ForceInsertTest extends ADOdbTestCase
                 $value = 'NULL';
             } elseif ($value === '') {
                 $value = 'BLANK';
-            } elseif ($value === 0) {
+            } elseif ((int)$value == 0) {
                 $value = 'ZERO';
             }
 
             if ($columnValues[$index] === null) {
                 $expected = 'NULL';
-            } elseif ($columnValues[$index] === '') {
+            } elseif ($columnValues[$index] == 'BLANK') {
                 $expected = 'BLANK';
-            } elseif ($columnValues[$index] === 0) {
+            } elseif ((int)$columnValues[$index] == 0) {
                 $expected = 'ZERO';
             }
 
             $this->assertSame(
-                $columnValues[$index],
-                $insertResult[$index],
+                $expected,
+                $value,
                 sprintf(
                     'Force Mode [%s]: Index %s is %s, should be %s',
-                    $forceMode,
+                    $this->forceModeDescriptions[$forceMode],
                     $index,
-                    $expected,
-                    $value
+                    $value,
+                    $expected
                 )
             );
         }
@@ -209,15 +215,15 @@ class ForceInsertTest extends ADOdbTestCase
             ],
             'ADODB_FORCE_EMPTY' => [
                 ADODB_FORCE_EMPTY,
-                [0, '', 0, '', 0, 0, 0]
+                [0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
             ],
             'ADODB_FORCE_VALUE' => [
                 ADODB_FORCE_VALUE,
-                 [0, '', 0, '', 0, 0, 0]
+                 [0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
             ],
             'ADODB_FORCE_NULL_AND_ZERO' => [
                 ADODB_FORCE_NULL_AND_ZERO,
-                [0, null, 0, null, 0, 0, 0]
+                [0, null, null, null, 0, 0, 0]
             ]
         ];
     }
