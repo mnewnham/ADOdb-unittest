@@ -32,6 +32,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class BlobHandlingTest extends ADOdbTestCase
 {
     protected ?string $testBlobFile;
+    
+    protected string $oid;
 
 
     protected string $testTableName = 'blob_storage_table';
@@ -62,13 +64,13 @@ class BlobHandlingTest extends ADOdbTestCase
             return;
         }
 
-        
+            
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
         */
         $schemaFile = sprintf(
-            '%s/DatabaseSetup/%s/blob-storage-test.sql',
+            '%s/DatabaseSetup/%s/blob-storage-table.sql',
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
@@ -77,12 +79,18 @@ class BlobHandlingTest extends ADOdbTestCase
         $db->startTrans();
         $ok = readSqlIntoDatabase($db, $schemaFile);
         $db->completeTrans();
+
         
-         $sql = "INSERT INTO blob_storage_table (integer_field)
-                     VALUES (9002)";
-                     
+        
         $db->startTrans();
+        $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9002)";
         $db->Execute($sql);
+        $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9003)";
+        $db->Execute($sql);
+
+
+
+
         $db->completeTrans();
     }
 
@@ -105,11 +113,11 @@ class BlobHandlingTest extends ADOdbTestCase
         }
 
         $this->testBlobFile = $GLOBALS['TestingControl']['blob']['testBlob'];
-
+  
         if (!$this->testBlobFile) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'Blob sets will be skipped'
+                'Blob tests will be skipped'
             );
         }
 
@@ -119,8 +127,8 @@ class BlobHandlingTest extends ADOdbTestCase
                 'The testBlob file does not exist: ' . $this->testBlobFile
             );
         }
+        
     }
-
 
     /**
      * Test for {@see updateBlob}
@@ -136,9 +144,7 @@ class BlobHandlingTest extends ADOdbTestCase
             return;
         }
 
-
         $fd   = file_get_contents($this->testBlobFile);
-
 
         $this->db->startTrans();
         $blob = $this->db->blobEncode($fd);
@@ -164,9 +170,7 @@ class BlobHandlingTest extends ADOdbTestCase
     public function testUpdateBlob(): void
     {
 
-        $fd = file_get_contents($this->testBlobFile);
-        $blob = $this->db->blobEncode($fd);
-        list($errno, $errmsg) = $this->assertADOdbError('blobEncode()');
+        $blob = file_get_contents($this->testBlobFile);
 
         $this->db->startTrans();
 
@@ -174,7 +178,7 @@ class BlobHandlingTest extends ADOdbTestCase
             $this->testTableName,
             'blob_field',
             $blob,
-            'integer_field=' . $this->integerField
+            'integer_field=9002'
         );
 
         list($errno, $errmsg) = $this->assertADOdbError('updateBlob()');
@@ -184,6 +188,62 @@ class BlobHandlingTest extends ADOdbTestCase
         $this->assertTrue(
             $result,
             'updateBlob() should return true on success'
+        );
+    }
+
+     /**
+     * Test for {@see blobDecode} after BlobEncode
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:blobDecode
+     *
+     * @return void
+     */
+    public function testBlobDecode(): void
+    {
+
+        if ($this->skipFollowingTests) {
+            return;
+        }
+
+        $newFileArray = explode('.', $this->testBlobFile);
+        $extension = array_pop($newFileArray);
+        $newFile = implode('.', $newFileArray) . '-decoded.' . $extension;
+
+        $SQL = "SELECT blob_field 
+                  FROM {$this->testTableName} 
+                 WHERE integer_field=9002";
+
+
+        $blobSelect = $this->db->getOne($SQL);
+
+        list($errno, $errmsg) = $this->assertADOdbError($SQL);
+
+        $blob = $this->db->blobDecode($blobSelect);
+        
+        list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
+
+        file_put_contents(
+            $newFile,
+            $blob
+        );
+
+        $this->assertFileExists(
+            $newFile,
+            'The blob file should have been written to ' . $newFile
+        );
+
+        /*
+        * Do some filesystem checks
+        */
+        $originalFileSize = filesize($this->testBlobFile);
+        $decodedFileSize  = filesize($newFile);
+
+
+        $this->assertSame(
+            $originalFileSize,
+            $decodedFileSize,
+            'Blob Decoded file size after uploading via ' .
+            'blobEncode() should match the original file size'
         );
     }
 
@@ -211,7 +271,7 @@ class BlobHandlingTest extends ADOdbTestCase
             $this->testTableName,
             'blob_field',
             $this->testBlobFile,
-            'integer_field=' . $this->integerField
+            'integer_field=9003'
         );
 
         list($errno, $errmsg) = $this->assertADOdbError('updateBlobFile()');
@@ -220,10 +280,9 @@ class BlobHandlingTest extends ADOdbTestCase
 
         $this->assertTrue(
             $result,
-            'updateBlob should return true on success'
+            'updateBlobFile should return true on success'
         );
     }
-
 
     /**
      * Test for {@see blobDecode}
@@ -232,7 +291,7 @@ class BlobHandlingTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testBlobDecode(): void
+    public function testBlobDecodeFile(): void
     {
 
         if ($this->skipFollowingTests) {
@@ -241,33 +300,16 @@ class BlobHandlingTest extends ADOdbTestCase
 
         $newFileArray = explode('.', $this->testBlobFile);
         $extension = array_pop($newFileArray);
-        $newFile = implode('.', $newFileArray) . '-decoded' . $extension;
-
-
-        $SQL = "SELECT LENGTH(blob_field) 
-                  FROM  {$this->testTableName} 
-                 WHERE integer_field={$this->integerField}";
-
-        $blobLength = $this->db->getOne($SQL);
-        list($errno, $errmsg) = $this->assertADOdbError($SQL);
-
-        $this->assertGreaterThan(
-            0,
-            $blobLength,
-            'The blob field should contain data'
-        );
-
+        $newFile = implode('.', $newFileArray) . '-file-decoded.' . $extension;
 
         $SQL = "SELECT blob_field 
                   FROM {$this->testTableName} 
-                 WHERE integer_field={$this->integerField}";
-
+                 WHERE integer_field=9003";
 
         $blobSelect = $this->db->getOne($SQL);
 
-        list($errno, $errmsg) = $this->assertADOdbError($SQL);
-
         $blob = $this->db->blobDecode($blobSelect);
+
         list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
 
         file_put_contents(
@@ -290,7 +332,8 @@ class BlobHandlingTest extends ADOdbTestCase
         $this->assertSame(
             $originalFileSize,
             $decodedFileSize,
-            'Blob Decoded file size should match the original file size'
+            'Blob Decoded file size after uploading via ' .
+            'blobEncodeFile() should match the original file size'
         );
     }
 }

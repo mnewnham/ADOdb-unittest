@@ -5,5 +5,7 @@ DROP TABLE IF EXISTS blob_storage_table;
 CREATE TABLE blob_storage_table (
     id SERIAL PRIMARY KEY,
     integer_field SMALLINT DEFAULT 0,
-	blob_field BYTEA
+	blob_field BYTEA,
+    clob_field TEXT,
+    varchar_field VARCHAR(20)
 );
