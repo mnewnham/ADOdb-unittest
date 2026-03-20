@@ -41,6 +41,7 @@ class columnTypes
        // ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'BINARY(10)'],
         //['db' => 'VARBINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'VARBINARY(10)'],
         ['db' => 'TEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'TEXT'],
+        ['db' => 'BLOB', 'meta' => 'XL', 'output' => 'BLOB', 'build' => 'BYTEA'],
 
         ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
         //['db' => 'NVARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR(10)'],
