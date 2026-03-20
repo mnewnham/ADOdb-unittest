@@ -173,11 +173,14 @@ active=1
 </table>
 
 #### Blob Section 
-This section must be defined with the path name of a binary file, such as a jpeg file that can be used for read-write testing. If you use a very large size file, it may measurably slow down the test. If set to false, all blob tests are skipped.
+This section must be defined with the path names of 2 files: 
+1. A binary file to test BLOB handling, such as a jpeg file that can be used for read-write testing. If you use a very large size file, it may measurably slow down the test. If set to false or the file name is invalid, all BLOB tests are skipped.
+2. A Plain text file to test CLOB handling. If set to false or the file name is invalid, all CLOB tests are skipped 
 
 ````
 [blob]
 testBlob=c:/temp/someJpeg.jpg
+testClob=c:/temp/someBigTextFile.txt
 ````
 #### XMLschema Section 
 This section must be explicitly enabled in the configuration file, with the skipXmlTests value set to 0, otherwise all tests in the section are skipped. Setting the value to 1 will also skip the tests.
