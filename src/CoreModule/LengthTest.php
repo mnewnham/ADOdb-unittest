@@ -29,7 +29,6 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
  */
 class LengthTest extends ADOdbTestCase
 {
-
     /**
      * Global setup for the test class
      *
@@ -63,16 +62,15 @@ class LengthTest extends ADOdbTestCase
      */
     public function testFieldLength(): void
     {
-        
+
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            
             $absoluteMode = $this->insertFetchMode($fetchMode);
 
             $metaColumns = $this->db->metaColumns('length_test');
 
             $lengthColumns = [];
 
-            foreach($metaColumns as $col => $data) {
+            foreach ($metaColumns as $col => $data) {
                 $metaType = $this->db->metaType($data->type);
                 if (!in_array($metaType, ['C','C2','X','B','XL'])) {
                     continue;
@@ -84,7 +82,7 @@ class LengthTest extends ADOdbTestCase
                 );
             }
 
-            $lengthString = implode(',',$lengthColumns);
+            $lengthString = implode(',', $lengthColumns);
 
 
             $sql = "SELECT $lengthString
@@ -97,14 +95,14 @@ class LengthTest extends ADOdbTestCase
             $numericRow = [];
 
             if ($absoluteMode == ADODB_FETCH_BOTH) {
-                $numericRow = array_filter($row, function($value, $key){
+                $numericRow = array_filter($row, function ($value, $key) {
                     return is_numeric($key);
-                },ARRAY_FILTER_USE_BOTH);
+                }, ARRAY_FILTER_USE_BOTH);
             } else {
                 $numericRow = array_values($row);
             }
 
-            foreach($numericRow as $k => $v) {
+            foreach ($numericRow as $k => $v) {
                 $this->assertEquals(
                     20,
                     (int)$v,
@@ -115,8 +113,7 @@ class LengthTest extends ADOdbTestCase
                     )
                 );
             }
-        }    
-
+        }
     }
 
     /**
@@ -128,16 +125,15 @@ class LengthTest extends ADOdbTestCase
      */
     public function testFieldValue(): void
     {
-        
+
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            
             $absoluteMode = $this->insertFetchMode($fetchMode);
 
             $metaColumns = $this->db->metaColumns('length_test');
 
             $valueColumns = [];
 
-            foreach($metaColumns as $col => $data) {
+            foreach ($metaColumns as $col => $data) {
                 $metaType = $this->db->metaType($data->type);
                 if (!in_array($metaType, ['C','C2','X','XL'])) {
                     continue;
@@ -148,7 +144,7 @@ class LengthTest extends ADOdbTestCase
                 );
             }
 
-            $valueString = implode(',',$valueColumns);
+            $valueString = implode(',', $valueColumns);
 
 
             $sql = "SELECT $valueString
@@ -161,14 +157,14 @@ class LengthTest extends ADOdbTestCase
             $numericRow = [];
 
             if ($absoluteMode == ADODB_FETCH_BOTH) {
-                $numericRow = array_filter($row, function($value, $key){
+                $numericRow = array_filter($row, function ($value, $key) {
                     return is_numeric($key);
-                },ARRAY_FILTER_USE_BOTH);
+                }, ARRAY_FILTER_USE_BOTH);
             } else {
                 $numericRow = array_values($row);
             }
 
-            foreach($numericRow as $k => $v) {
+            foreach ($numericRow as $k => $v) {
                 $this->assertEquals(
                     'TEST567890TEST567890',
                     $v,
@@ -179,7 +175,6 @@ class LengthTest extends ADOdbTestCase
                     )
                 );
             }
-        }    
-
+        }
     }
 }

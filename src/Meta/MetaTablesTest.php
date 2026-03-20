@@ -212,7 +212,6 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-  
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
@@ -260,7 +259,7 @@ class MetaTablesTest extends MetaFunctions
         }
     }
 
-    
+
     /**
      * Test for {@see ADODConnection::metaTables()]
      *
@@ -272,7 +271,6 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-  
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
@@ -295,4 +293,3 @@ class MetaTablesTest extends MetaFunctions
         }
     }
 }
-

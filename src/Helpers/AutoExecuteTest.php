@@ -229,7 +229,6 @@ class AutoExecuteTest extends ADOdbTestCase
 
             $where = "id=$lastId";
 
-            $this->db->debug = true;
             for ($forceMode = 0; $forceMode < 2; $forceMode++) {
                 foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
                     $this->insertFetchMode($fetchMode);
@@ -332,7 +331,6 @@ class AutoExecuteTest extends ADOdbTestCase
                     );
                 }
             }
-            $this->db->debug = false;
         }
     }
 }

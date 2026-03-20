@@ -32,7 +32,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class BlobHandlingTest extends ADOdbTestCase
 {
     protected ?string $testBlobFile;
-    
+
     protected string $oid;
 
 
@@ -64,7 +64,7 @@ class BlobHandlingTest extends ADOdbTestCase
             return;
         }
 
-            
+
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
@@ -80,8 +80,8 @@ class BlobHandlingTest extends ADOdbTestCase
         $ok = readSqlIntoDatabase($db, $schemaFile);
         $db->completeTrans();
 
-        
-        
+
+
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9002)";
         $db->Execute($sql);
@@ -113,7 +113,7 @@ class BlobHandlingTest extends ADOdbTestCase
         }
 
         $this->testBlobFile = $GLOBALS['TestingControl']['blob']['testBlob'];
-  
+
         if (!$this->testBlobFile) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
@@ -127,7 +127,6 @@ class BlobHandlingTest extends ADOdbTestCase
                 'The testBlob file does not exist: ' . $this->testBlobFile
             );
         }
-        
     }
 
     /**
@@ -219,7 +218,7 @@ class BlobHandlingTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($SQL);
 
         $blob = $this->db->blobDecode($blobSelect);
-        
+
         list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
 
         file_put_contents(

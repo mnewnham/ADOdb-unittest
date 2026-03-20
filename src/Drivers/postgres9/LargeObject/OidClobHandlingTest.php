@@ -26,7 +26,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 /**
  * Class ClobHandlingTest
  *
- * Test cases for for Text Large Object 
+ * Test cases for for Text Large Object
  */
 class OidClobHandlingTest extends ADOdbTestCase
 {
@@ -54,7 +54,7 @@ class OidClobHandlingTest extends ADOdbTestCase
             return;
         }
 
-            
+
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
@@ -103,7 +103,7 @@ class OidClobHandlingTest extends ADOdbTestCase
                 'Clob sets will be skipped'
             );
         }
-      
+
         if (!file_exists($this->testClobFile)) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
@@ -123,7 +123,7 @@ class OidClobHandlingTest extends ADOdbTestCase
     {
 
         $clob = file_get_contents($this->testClobFile);
-        
+
         $this->db->startTrans();
 
         $result = $this->db->updateBlob(
@@ -171,7 +171,7 @@ class OidClobHandlingTest extends ADOdbTestCase
 
         list($errno, $errmsg) = $this->assertADOdbError($SQL);
 
-        $clob = $this->db->blobDecode($clobSelect, $maxsize=false, $hastrans=true, $blobtype='CLOB,OID');
+        $clob = $this->db->blobDecode($clobSelect, $maxsize = false, $hastrans = true, $blobtype = 'CLOB,OID');
         list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
 
         file_put_contents(
@@ -262,7 +262,7 @@ class OidClobHandlingTest extends ADOdbTestCase
 
         list($errno, $errmsg) = $this->assertADOdbError($SQL);
 
-         $clob = $this->db->blobDecode($clobSelect, $maxsize=false, $hastrans=true, $blobtype='CLOB,OID');
+         $clob = $this->db->blobDecode($clobSelect, $maxsize = false, $hastrans = true, $blobtype = 'CLOB,OID');
 
         list($errno, $errmsg) = $this->assertADOdbError('clobDecode()');
 

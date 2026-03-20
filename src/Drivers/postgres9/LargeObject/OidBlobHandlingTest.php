@@ -23,7 +23,6 @@ namespace MNewnham\ADOdbUnitTest\Drivers\postgres9\LargeObject;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
-
 /**
  * Class BlobHandlingTest
  *
@@ -32,7 +31,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 class OidBlobHandlingTest extends ADOdbTestCase
 {
     protected ?string $testBlobFile;
-    
+
     protected string $oid;
 
 
@@ -64,7 +63,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
             return;
         }
 
-            
+
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
@@ -80,8 +79,8 @@ class OidBlobHandlingTest extends ADOdbTestCase
         $ok = readSqlIntoDatabase($db, $schemaFile);
         $db->completeTrans();
 
-        
-        
+
+
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9202)";
         $db->Execute($sql);
@@ -110,7 +109,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
         }
 
         $this->testBlobFile = $GLOBALS['TestingControl']['blob']['testBlob'];
-  
+
         if (!$this->testBlobFile) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
@@ -124,7 +123,6 @@ class OidBlobHandlingTest extends ADOdbTestCase
                 'The testBlob file does not exist: ' . $this->testBlobFile
             );
         }
-        
     }
 
     /**
@@ -218,8 +216,8 @@ class OidBlobHandlingTest extends ADOdbTestCase
 
         $blob = $this->db->blobDecode($blobSelect);
 
-        
-        
+
+
         list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
 
         file_put_contents(

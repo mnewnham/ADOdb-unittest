@@ -31,13 +31,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ForceInsertTest extends ADOdbTestCase
 {
-    
     protected array $forceModeDescriptions = [
         'ADODB_FORCE_IGNORE',
-		'ADODB_FORCE_NULL',
-		'ADODB_FORCE_EMPTY',
-		'ADODB_FORCE_VALUE',
-		'ADODB_FORCE_NULL_AND_ZERO'
+        'ADODB_FORCE_NULL',
+        'ADODB_FORCE_EMPTY',
+        'ADODB_FORCE_VALUE',
+        'ADODB_FORCE_NULL_AND_ZERO'
     ];
     /**
      * Global setup for the test class
@@ -119,14 +118,14 @@ class ForceInsertTest extends ADOdbTestCase
         $template = $this->db->execute($sql);
 
         $ar = [
-       
+
             'varchar_field' => '',
             'datetime_field' => '',
             'date_field' => '',
             'integer_field' => '',
             'decimal_field' => '',
             'boolean_field' => '',
-	        'trigger_field' => 9
+            'trigger_field' => 9
         ];
 
         $tTable = 'adodb_force_insert';
@@ -146,7 +145,7 @@ class ForceInsertTest extends ADOdbTestCase
         $sql = "SELECT * FROM adodb_force_insert";
 
         $insertResult = $this->db->getRow($sql);
-        
+
         foreach ($insertResult as $index => $value) {
             if ($index == 0) {
                 continue;

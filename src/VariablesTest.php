@@ -40,7 +40,7 @@ class VariablesTest extends ADOdbTestCase
     protected string $testTableName = 'table_name';
     protected string $testIdColumnName = 'ID';
 
-    
+
     /**
      * Global setup for the test class
      *
@@ -67,8 +67,8 @@ class VariablesTest extends ADOdbTestCase
         $ok = readSqlIntoDatabase($db, $schemaFile);
         $db->completeTrans();
     }
-    
-    
+
+
     /**
      * Tests if the isConnected method works
      *
