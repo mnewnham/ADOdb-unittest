@@ -11,5 +11,6 @@ CREATE TABLE adodb_force_insert (
 	integer_field INT(4),
 	decimal_field DECIMAL(12.2),
 	boolean_field BOOLEAN,
-	trigger_field INT(2)
-);
+	trigger_field TINYINT,
+	PRIMARY KEY (id)
+) ENGINE=INNODB;
