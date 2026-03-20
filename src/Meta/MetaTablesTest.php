@@ -212,7 +212,7 @@ class MetaTablesTest extends MetaFunctions
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+  
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
@@ -259,4 +259,40 @@ class MetaTablesTest extends MetaFunctions
             }
         }
     }
+
+    
+    /**
+     * Test for {@see ADODConnection::metaTables()]
+     *
+     * Checks that an invalid table name returns false
+     *
+     * @return void
+     */
+    public function testNoMatchMetaTables(): void
+    {
+
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+  
+            $this->insertFetchMode($fetchMode);
+
+            $executionResult = $this->db->metaTables(
+                'T',
+                false, //$this->db->database,
+                'invalid_search_name'
+            );
+
+            list($errno, $errmsg) = $this->assertADOdbError('metaTables()');
+
+            $this->validateResetFetchModes();
+
+            $assertionResult = $this->assertFalse(
+                $executionResult,
+                sprintf(
+                    '[FETCH MODE %s] metaTables should return false when an invalid table match occurs',
+                    $fetchModeName
+                )
+            );
+        }
+    }
 }
+
