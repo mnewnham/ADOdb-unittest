@@ -66,7 +66,11 @@ class DataDictFunctions extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
+        $this->db->startTrans();
+
         $success = readSqlIntoDatabase($this->db, $tableSchema);
+
+        $this->db->completeTrans();
 
         if (!$success) {
             $this->markTestSkipped(
