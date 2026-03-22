@@ -30,4 +30,18 @@ class CoreControl
      * @var integer
      */
     public int $nativeModeCasing = 0;
+
+    /**
+     * What additional data is required for column comments
+     *
+     * @var string
+     */
+    public string $columnCommentDefinitions = '';
+
+    /**
+     * Does the DB support ENUM natively
+     *
+     * @var boolean
+     */
+    public bool $hasNativeEnum = false;
 }
