@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS custom_metatype_test;
 
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
+-- Comment on index vdx1 is read by the index comment test
+
 CREATE TABLE testtable_1 (
 	id INT NOT NULL AUTO_INCREMENT,
 	varchar_field VARCHAR(20),
@@ -30,7 +32,7 @@ CREATE TABLE testtable_1 (
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
 	PRIMARY KEY(id,integer_field),
-	UNIQUE INDEX vdx1 (varchar_field),
+	UNIQUE INDEX vdx1 (varchar_field) COMMENT '1234567890',
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
 ) ENGINE=INNODB;
