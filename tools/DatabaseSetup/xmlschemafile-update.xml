@@ -35,11 +35,11 @@
         <field name="blob_field" type="B"></field>
         <field name="xl_field" type="XL"></field>
         <field name="date_field_to_add" type="D"><DEFDATE/></field>
-        <field name="date_field_to_keep" type="D"><DEFDATE/></field>
+        <field name="date_field_to_keep" type="D"><DEFDATE/><comment>MODIFIED DATE FIELD COMMENT</comment></field>
         <field name="date_hard_default_change" type="D">
             <default value='2027-01-01'/>
         </field>
-        <field name="timestamp_field_to_add" type="T"><DEFTIMESTAMP/></field>
+        <field name="timestamp_field_to_add" type="T"><DEFTIMESTAMP/><comment>TIMESTAMP FIELD COMMENT</comment></field>
         <field name="timestamp_field_to_keep" type="T"><DEFTIMESTAMP/></field>
         <field name="unsigned_integer_field" type="I4">
             <UNSIGNED/>

@@ -51,6 +51,7 @@ class XmlSchemaTest extends ADOdbTestCase
 
         $GLOBALS['ADOdbConnection']->startTrans();
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
+        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS XML_SCHEMA_TEST");
         $GLOBALS['ADOdbConnection']->completeTrans();
     }
 
@@ -160,6 +161,64 @@ class XmlSchemaTest extends ADOdbTestCase
             $fields,
             'Field "decimal_fields" not found in the table'
         );
+
+        if (property_exists($this->dataDictionary, 'hasTableComments') && $this->dataDictionary->hasTableComments) {
+
+            $sql =  $this->dataDictionary->getTableCommentSql(
+                'xml_schema_test'
+            );
+            if ($sql !== null) { 
+                
+                $tableComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'XML SCHEMA COMMENT',
+                    $tableComment,
+                    'Table comment should have been assigned at XML schema creation'
+                );
+            }
+        }
+
+        
+        if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
+            $sql =  $this->dataDictionary->getColumnCommentSql(
+               'xml_schema_test',
+                'date_field_to_keep'
+            );
+            if ($sql !== null) { 
+                
+                $columnComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'DATE FIELD COMMENT',
+                    $columnComment,
+                    'Column comment should have been assigned at creation'
+                );
+            }
+        }
+
+        if (property_exists($this->dataDictionary, 'hasIndexComments') && $this->dataDictionary->hasIndexComments) {
+            $sql =  $this->dataDictionary->getIndexCommentSql(
+                'xml_schema_test',
+                'droppable_index'
+            );
+            if ($sql !== null) { 
+                
+                $indexComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'DROPPABLE INDEX COMMENT',
+                    $indexComment,
+                    'Index comment should have been assigned at creation'
+                );
+            } 
+        } else {
+            $this->markTestIncomplete(
+                'No index comment support for driver'
+            );
+        }
+
+        
     }
 
     /**
@@ -222,8 +281,24 @@ class XmlSchemaTest extends ADOdbTestCase
             $fields,
             'Field "varchar_field_to_add" should now be found in the table'
         );
-    }
 
+        if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
+            $sql =  $this->dataDictionary->getColumnCommentSql(
+               'xml_schema_test',
+                'date_field_to_keep'
+            );
+            if ($sql !== null) { 
+                
+                $columnComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'MODIFIED DATE FIELD COMMENT',
+                    $columnComment,
+                    'Column comment should have been assigned at creation'
+                );
+            }
+        }
+    }
     /**
      * Tests dropping the Schema using XML
      *

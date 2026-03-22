@@ -71,7 +71,8 @@ class AddIndexTest extends DataDictFunctions
 
         $flds = "VARCHAR_FIELD, DATE_FIELD, INTEGER_FIELD";
         $indexOptions = array(
-            'UNIQUE'
+            'UNIQUE',
+            'COMMENT' => 'THIS IS AN INDEX COMMENT'
         );
 
         $sqlArray = $this->dataDictionary->createIndexSQL(
@@ -97,6 +98,23 @@ class AddIndexTest extends DataDictFunctions
             'AddIndexSQL Using String For Fields should now ' .
             'contain index string_test_index'
         );
+
+        if (property_exists($this->dataDictionary, 'hasIndexComments') && $this->dataDictionary->hasIndexComments) {
+            $sql =  $this->dataDictionary->getIndexCommentSql(
+                $this->testTableName,
+                'string_test_index'
+            );
+            if ($sql !== null) { 
+                
+                $indexComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'THIS IS AN INDEX COMMENT',
+                    $indexComment,
+                    'Index comment should have been assigned at creation'
+                );
+            }
+        }
     }
 
     /**

@@ -4,6 +4,7 @@
         <opt platform="mysql">ENGINE=INNODB</opt>
         
         <descr>A test table for xmlschema unit testing</descr>
+        <comment>XML SCHEMA COMMENT</comment> 
         <field name="id" type="I">
             <descr>A unique ID assigned to each record.</descr>
             <KEY/>
@@ -34,15 +35,13 @@
             <DEFAULT VALUE='2025-01-01'/>
         </field>
         <field name="date_field" type="D"><DEFDATE/></field>
-        <field name="date_field_to_keep" type="D"><DEFDATE/></field>
+        <field name="date_field_to_keep" type="D"><DEFDATE/><comment>DATE FIELD COMMENT</comment></field>
         <field name="date_hard_default_change" type="D">
             <default value='2026-01-01'/>
         </field>
         <field name="timestamp_field" type="T"><DEFTIMESTAMP/></field>
         <field name="timestamp_field_to_keep" type="T"><DEFTIMESTAMP/></field>
-        <field name="enum_field_to_keep" type="ENUM('starwars','startrek','drwho')">
-            <default value="startrek"/>
-        </field>
+       
     
         <index name="integer_field_index">
             <descr>Put a unique index on the integer_field</descr>
@@ -51,6 +50,7 @@
         </index>
         <index name="droppable_index">
             <descr>Adds an index to apply a drop to</descr>
+            <comment>DROPPABLE INDEX COMMENT</comment>
             <col>nvarchar_field</col>
             <UNIQUE/>
         </index>

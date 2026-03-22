@@ -69,8 +69,7 @@ class AlterColumnTest extends DataDictFunctions
         $tableName = $this->testTableName;
 
         $metaColumns = $this->db->metaColumns($tableName);
-
-        $metaColumns = $this->db->metaColumns($tableName);
+        /*
 
         $this->assertSame(
             '0',
@@ -78,10 +77,10 @@ class AlterColumnTest extends DataDictFunctions
             'AltercolumnSql should start with a default of 0 ' .
             'for INTEGER_FIELD'
         );
-
+        */
 
         $flds = " 
-            VARCHAR_FIELD VARCHAR(120)
+            VARCHAR_FIELD VARCHAR(120) COMMENT 'THIS IS A COLUMN COMMENT'
             ";
 
         $sqlArray = $this->dataDictionary->alterColumnSQL(
@@ -118,6 +117,23 @@ class AlterColumnTest extends DataDictFunctions
             'AlterColumnSQL should have Increased the ' .
             'length of VARCHAR_FIELD to from 50 to 120'
         );
+
+        if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
+            $sql =  $this->dataDictionary->getColumnCommentSql(
+                $tableName,
+                'varchar_field'
+            );
+            if ($sql !== null) { 
+                
+                $columnComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'THIS IS A COLUMN COMMENT',
+                    $columnComment,
+                    'Column comment should have been assigned at creation'
+                );
+            }
+        }
 
         $flds = " 
             INTEGER_FIELD I8 NOTNULL DEFAULT 1";

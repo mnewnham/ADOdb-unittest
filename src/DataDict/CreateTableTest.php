@@ -58,11 +58,14 @@ class CreateTableTest extends DataDictFunctions
 
         $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
 
-        list ($response,$errno,$errmsg) = $this->executeSqlString($sql);
+        $this->db->startTrans();
+        $this->db->execute($sql);
+        $this->db->completeTrans();
 
 
         $options = [
-            'MYSQL' => 'ENGINE MYISAM;'
+            'MYSQL' => "ENGINE MYISAM",
+            'COMMENT' => 'TABLE COMMENT'
         ];
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
@@ -74,12 +77,16 @@ class CreateTableTest extends DataDictFunctions
                  BIGINT_FIELD I8 DEFAULT 0,
                  INTEGER_FIELD I DEFAULT 0,
                  BLOB_FIELD B,
-                 IMAGE_FIELD XL,
+                 CLOB_FIELD X,
                  DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
                  BOOLEAN_FIELD B NOTNULL DEFAULT 1,
                  DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
-                 ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
               ";
+
+        if ($GLOBALS['DriverControl']->hasNativeEnum) {
+            $flds .= " ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
+            ";
+        }
         $sqlArray = $this->dataDictionary->createTableSQL(
             'dictionary_creation_test_table',
             $flds,
@@ -101,10 +108,33 @@ class CreateTableTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns('dictionary_creation_test_table');
 
+        if ($GLOBALS['DriverControl']->hasNativeEnum) {
+            $columnCount = 14;
+        } else {
+            $columnCount = 13;
+        }
+
         $this->assertEquals(
-            14,
+            $columnCount,
             count($metaColumns),
-            'Newly created table should have 14 columns'
+            'Newly created table should have ' . $columnCount . ' columns'
         );
+
+        if (property_exists($this->dataDictionary, 'hasTableComments') && $this->dataDictionary->hasTableComments) {
+
+            $sql =  $this->dataDictionary->getTableCommentSql(
+                'dictionary_creation_test_table'
+            );
+            if ($sql !== null) { 
+                
+                $tableComment = $this->db->getOne($sql);
+           
+                $this->assertSame(
+                    'TABLE COMMENT',
+                    $tableComment,
+                    'Table comment should have been assigned at creation'
+                );
+            }
+        }
     }
 }
