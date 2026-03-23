@@ -102,6 +102,75 @@ class MetaIndexesTest extends MetaFunctions
                 )
             );
 
+            $executionResult = array_change_key_case($executionResult, CASE_UPPER);
+
+            /*
+            [VDX2] => Array
+        (
+            [unique] => 1
+            [columns] => Array
+                (
+                    [0] => INTEGER_FIELD
+                    [1] => DATE_FIELD
+                )
+
+            [primary] => 0
+        )
+            */
+            $this->assertArrayHasKey(
+                'VDX2',
+                $executionResult,
+                'MetaIndexes should return index VDX2'
+            );
+
+            $vdx2 = $executionResult['VDX2'];
+           
+            $this->assertArrayHasKey(
+                'unique',
+                $vdx2,
+                'MetaIndexes key should have "unique" element'
+            );
+
+             $this->assertArrayHasKey(
+                'columns',
+                $vdx2,
+                'MetaIndexes key should have "columns" element'
+            );
+
+             $this->assertArrayHasKey(
+                'primary',
+                $vdx2,
+                'MetaIndexes key should have "primary" element'
+            );
+
+            $this->assertSame(
+                1,
+                $vdx2['unique'],
+                'MetaIndexes unique key should be "1"'
+            );
+
+            $columns = [
+                'INTEGER_FIELD',
+                'DATE_FIELD'
+            ];
+
+             $this->assertSame(
+                $columns,
+                $vdx2['columns'],
+                'MetaIndexes index vdx2 should have 2 columns'
+            );
+
+            $this->assertSame(
+                0,
+                $vdx2['primary'],
+                'MetaIndexes primary key should be "0"'
+            );
+
+
+
+
+
+
             $this->validateResetFetchModes();
         }
     }
