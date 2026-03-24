@@ -53,6 +53,7 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
     while ($filePointer && !feof($filePointer)) {
         $line = fgets($filePointer);
         $line = trim($line);
+        
 
         if (!$line) {
             continue; // skip empty lines
@@ -63,12 +64,14 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
             continue;
         } elseif ($line == '-- <<') {
             $accumulatorFlag = false;
+            
             $line = $accumulatorString . ';';
+            $line = str_replace('<NL>', "\n", $line);
         }
 
 
         if ($accumulatorFlag) {
-            $accumulatorString .= $line . ' ';
+            $accumulatorString .= $line . '<NL>';
             continue;
         }
 
@@ -79,6 +82,7 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
         $executionPoint .= $line;
         if (preg_match('/;$/', $line)) {
             $executionPoint = trim($executionPoint, ';');
+   
             if ($executionPoint) {
                 $ok = $db->execute($executionPoint);
             }
