@@ -91,22 +91,10 @@ Easiest installed from Packagist as this will add PHPUnit as well, otherwise dow
     <td>&#x2714;</td>
     <td></td>
     <td></td>
+    <td>&#x2714;</td>
     <td></td>
-     <td></td>
 </tr> 
- <tr>
-    <th>firebird</th>
-    <td>&#x2714;</td>
-    <td>&#x2714;</td>
-    <td>&#x2714;</td>
-    <td>&#x2714;</td>
-    <td></td>
-    <td>&#x2714;</td>
-    <td></td>
-    <td></td>
-   <td></td>
-</tr> 
- <tr>
+<tr>
     <th>PDO</th>
     <td></td>
     <td></td>
