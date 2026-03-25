@@ -44,4 +44,19 @@ class CoreControl
      * @var boolean
      */
     public bool $hasNativeEnum = false;
+
+    
+    /**
+     * If required, what is the stored procedure IN parameter type
+     *
+     * @var mixed
+     */
+    public mixed $inParameterType = false;
+
+    /**
+     * If required, what is the stored procedure OUT parameter type
+     *
+     * @var mixed
+     */
+    public mixed $outParameterType = false;
 }

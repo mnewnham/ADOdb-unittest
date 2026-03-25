@@ -14,4 +14,19 @@ class DriverControl extends \CoreControl
      * @var integer
      */
     public int $nativeModeCasing = 1;
+
+        
+    /**
+     * If required, what is the stored procedure IN parameter type
+     *
+     * @var mixed
+     */
+    public mixed $inParameterType = OCI_B_INT;
+
+    /**
+     * If required, what is the stored procedure OUT parameter type
+     *
+     * @var mixed
+     */
+    public mixed $outParameterType = OCI_B_CURSOR;
 }
