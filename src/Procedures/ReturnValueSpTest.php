@@ -115,7 +115,13 @@ class ReturnValueSpTest extends MetaFunctions
 
             $parameterValue = 5;
             $parameterName = 'filter_number';
-            $success = $this->db->inParameter($statement, $parameterValue, $parameterName);
+            $success = $this->db->inParameter(
+                $statement, 
+                $parameterValue, 
+                $parameterName,
+                10,
+                $GLOBALS['DriverControl']->inParameterType
+                );
 
             $this->assertTrue(
                 $success,

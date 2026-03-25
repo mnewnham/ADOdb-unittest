@@ -116,7 +116,13 @@ class ResultSetSpTest extends MetaFunctions
 
             $parameterValue = 5;
             $parameterName = 'filter_number';
-            $success = $this->db->inParameter($statement, $parameterValue, $parameterName);
+            $success = $this->db->inParameter(
+                $statement, 
+                $parameterValue, 
+                $parameterName,
+                10,
+                $GLOBALS['DriverControl']->inParameterType
+                );
 
             $this->assertTrue(
                 $success,
@@ -125,6 +131,19 @@ class ResultSetSpTest extends MetaFunctions
                     $fetchModeName
                 )
             );
+
+            if ($GLOBALS['DriverControl']->outParameterType) {
+
+                $parameterValue = null;
+                $parameterName = 'C1';
+                $success = $this->db->outParameter(
+                $statement, 
+                $parameterValue, 
+                $parameterName,
+                -1,
+                $GLOBALS['DriverControl']->outParameterType
+                );
+            }
 
             $result = $this->db->execute($statement);
 
