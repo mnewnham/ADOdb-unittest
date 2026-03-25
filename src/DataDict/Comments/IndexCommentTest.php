@@ -44,7 +44,7 @@ class IndexCommentTest extends DataDictFunctions
 
         parent::setUpBeforeClass();
         if ($GLOBALS['ADOdriver'] == 'mysqli') {
-            $GLOBALS['commentText'] = '1234567890';
+            $GLOBALS['iCommentText'] = '1234567890';
         } else {
             $GLOBALS['iCommentText'] = md5(time());
         }
