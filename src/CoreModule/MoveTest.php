@@ -124,9 +124,98 @@ class MoveTest extends ADOdbTestCase
     }
 
     /**
+     * Test for {@see ADODConnection::moveNext() when iteration moves
+     * pointer off end of set]
+     *
+     * @return void
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:moveNext
+     */
+    public function testMoveFrom8to5to9First(): void
+    {
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(8);
+        $this->assertTrue(
+            $success,
+            'move(8) should sucessfully move to the 8th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[8]),
+            serialize($row),
+            'The row should match the 8th record of expectedData ' .
+            'after move(8)'
+        );
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(5);
+        $this->assertTrue(
+            $success,
+            'move(8) should sucessfully move to the 5th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[5]),
+            serialize($row),
+            'The row should match the 5th record of expectedData ' .
+            'after move(5)'
+        );
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(9);
+        $this->assertTrue(
+            $success,
+            'move(9) should sucessfully move to the 9th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[9]),
+            serialize($row),
+            'The row should match the 9th record of expectedData ' .
+            'after move(9)'
+        );
+
+         /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->moveNext();
+        $this->assertTrue(
+            $success,
+            'moveNext should sucessfully move to the 10th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[10]),
+            serialize($row),
+            'The row should match the 10th record of expectedData ' .
+            'after moveNext()'
+        );
+
+    }
+
+    /**
      * Test for {@see ADODConnection::move()]
      *
-     * @return void0
+     * @return void
      *
      *  *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:move
@@ -192,7 +281,10 @@ class MoveTest extends ADOdbTestCase
 
         $this->assertTrue(
             $success,
-            'move([lastno]) should sucessfully move to the last record in the set'
+            sprintf(
+                'move(%s) should sucessfully move to the last record in the set',
+                $this->lastRecordOffset
+            )
         );
 
         $row = $this->moveRecordSet->fetchObj();
@@ -550,7 +642,13 @@ class MoveTest extends ADOdbTestCase
         /*
         * Start at beginning of recordset for test
         */
-        $this->moveRecordSet->move(0);
+        $success = $this->moveRecordSet->move(0);
+
+        $this->assertTrue(
+            $success,
+            'move(0) before moveNext() should sucessfully move to the first record in ' .
+            ' the set'
+        );
 
         /*
         * Move pointer to record 1
@@ -756,5 +854,75 @@ class MoveTest extends ADOdbTestCase
             $this->moveRecordSet->EOF,
             'moveNext() should return should set the EOF flag after moving past EOF'
         );
+    }
+
+    /**
+     * Test for {@see ADODConnection::moveNext() when iteration moves
+     * pointer off end of set]
+     *
+     * @return void
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:moveNext
+     */
+    public function testMoveFrom8to5to9Last(): void
+    {
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(8);
+        $this->assertTrue(
+            $success,
+            'move(8) should sucessfully move to the 8th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[8]),
+            serialize($row),
+            'The row should match the 8th record of expectedData ' .
+            'after move(8)'
+        );
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(5);
+        $this->assertTrue(
+            $success,
+            'move(8) should sucessfully move to the 5th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[5]),
+            serialize($row),
+            'The row should match the 5th record of expectedData ' .
+            'after move(5)'
+        );
+
+        /*
+        * Move to the second to last offset
+        */
+        $success = $this->moveRecordSet->move(9);
+        $this->assertTrue(
+            $success,
+            'move(9) should sucessfully move to the 9th record in ' .
+            ' the set'
+        );
+
+        $row = $this->moveRecordSet->fetchObj();
+       
+        $this->assertSame(
+            serialize($this->expectedData[9]),
+            serialize($row),
+            'The row should match the 5th record of expectedData ' .
+            'after move(9)'
+        );
+
     }
 }
