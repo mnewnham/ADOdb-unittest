@@ -505,4 +505,24 @@ class ADOdbTestCase extends TestCase
             )
         );
     }
+
+
+    /**
+     * Global provider of fetch modes for iteration
+     * Set calling program to use int $fetchMode, string $fetchDescription
+     *
+     * @return array
+     */
+    public static function globalProviderFetchModes() : array {
+
+        return [
+            [0, '[1] GLOBAL ADODB_FETCH_NUM'],
+            [1, '[2] GLOBAL ADODB_FETCH_ASSOC'],
+            [2, '[3] GLOBAL ADODB_FETCH_BOTH'],
+            [3, '[1] $fetchMode = ADODB_FETCH_NUM'],
+            [4, '[2] $fetchMode = ADODB_FETCH_ASSOC'],
+            [5, '[3] $fetchMode = ADODB_FETCH_BOTH']
+        ];
+    }
+
 }
