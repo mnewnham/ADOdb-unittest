@@ -65,9 +65,16 @@ class OidClobHandlingTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        $db->startTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        $db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
 
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9102)";
@@ -87,6 +94,13 @@ class OidClobHandlingTest extends ADOdbTestCase
     {
 
         parent::setup();
+
+        if ($this->adoDriver !== 'postgres9') {
+            $this->skipFollowingTests = true;
+            $this->markTestSkipped(
+                'This test is only applicable for the postgres9 driver'
+            );
+        }
 
         if (!array_key_exists('testClob', $GLOBALS['TestingControl']['blob'])) {
             $this->skipFollowingTests = true;

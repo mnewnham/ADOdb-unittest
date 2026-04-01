@@ -46,10 +46,10 @@ CREATE	UNIQUE INDEX vdx3 ON testtable_1 (number_run_field);
 
 
 -- Simple View onto testtable 1
-CREATE VIEW testtable_1_view AS 
-	SELECT id,varchar_field
-	FROM testtable_1
-	WHERE varchar_field IS NOT NULL;
+--CREATE VIEW testtable_1_view AS 
+--	SELECT id,varchar_field
+--	FROM testtable_1
+--	WHERE varchar_field IS NOT NULL;
 
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 CREATE TABLE testtable_3 (
