@@ -32,11 +32,33 @@ class CoreControl
     public int $nativeModeCasing = 0;
 
     /**
+     * Do updates to the data dictionary require transactional scope
+     *
+     * @var boolean
+     */
+    public bool $dictionaryRequireTransactions = true;
+
+
+    /**
+     * Do updates to comments require transactional scope
+     *
+     * @var boolean
+     */
+    public bool $commentsRequireTransactions = true;
+
+    /**
      * What additional data is required for column comments
      *
      * @var string
      */
     public string $columnCommentDefinitions = '';
+
+    /**
+     * Does the driver support index comments
+     *
+     * @var boolean
+     */
+    public bool $supportsIndexComments = true;
 
     /**
      * Does the DB support ENUM natively
@@ -59,4 +81,13 @@ class CoreControl
      * @var mixed
      */
     public mixed $outParameterType = false;
+
+    /**
+     * For methods that test for ownersip, what is the schema owner
+     *
+     * @var mixed
+     */
+    public mixed $schemaOwner = false;
+
+
 }
