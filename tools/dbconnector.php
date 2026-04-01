@@ -43,6 +43,10 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
         die('Schema ' . $fileName . ' file for unit testing not found');
     }
 
+    if ($db->debug) {
+        print "LOAD TEST SQL: " . $fileName . "\n";
+    }
+
     $ok = false;
 
     $filePointer = fopen($fileName, 'r');
@@ -54,9 +58,13 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
         $line = fgets($filePointer);
         $line = trim($line);
         
-
         if (!$line) {
             continue; // skip empty lines
+        }
+
+        if ($db->debug && substr($line,0,8) == '-- PRINT') {
+            print '### ' . substr($line,9) . "\n";
+            continue;
         }
 
         if ($line == '-- READ <<'){
@@ -67,8 +75,8 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
             
             $line = $accumulatorString . ';';
             $line = str_replace('<NL>', "\n", $line);
+            $accumulatorString = '';
         }
-
 
         if ($accumulatorFlag) {
             $accumulatorString .= $line . '<NL>';
@@ -358,9 +366,11 @@ $GLOBALS['globalTransOff']  = 0;
 
 $GLOBALS['unitTestToolsDirectory'] = $unitTestToolsDirectory;
 
-$GLOBALS['SqlProvider'] = $adoDriver;
+$GLOBALS['SqlProvider']     = $adoDriver;
+$GLOBALS['ControlProvider'] = $adoDriver;
 if (substr($adoDriver, 0, 3) == 'pdo') {
     $GLOBALS['SqlProvider'] = $pdoSqlProviders[$adoDriver]; 
+    $GLOBALS['ControlProvider'] = str_replace('-', '/', $adoDriver); 
 }
 
 $tableSchema = sprintf(
@@ -377,11 +387,30 @@ readSqlIntoDatabase($db, $tableSchema);
 
 
 /*
-* Reads common format data and nserts it into the database
+*load Data into the table, checking for driver specific loader
 */
-$table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
+$db->startTrans();
 
-readSqlIntoDatabase($db, $table3Data);
+$tableSchema = sprintf(
+    '%s/DatabaseSetup/%s/table3-data.sql',
+    $GLOBALS['unitTestToolsDirectory'],
+    $GLOBALS['SqlProvider']
+);
+
+if (!file_exists($tableSchema)) {
+
+    $tableSchema = sprintf(
+        '%s/DatabaseSetup/table3-data.sql',
+        $GLOBALS['unitTestToolsDirectory']
+    );
+}
+
+/*
+* Loads the schema based on the DB type
+*/
+readSqlIntoDatabase($db, $tableSchema);
+
+$db->completeTrans();
 
 
 
@@ -440,10 +469,12 @@ if ($GLOBALS['skipActiveRecordTests'] == 0) {
     ADODB_SetDatabaseAdapter($db);
 }
 
+
+
 $driverControl = sprintf(
     '%s/DriverControl/%s/DriverControl.inc',
     $GLOBALS['unitTestToolsDirectory'],
-    $GLOBALS['SqlProvider']
+    $GLOBALS['ControlProvider']
 );
 
 if (file_exists($driverControl)) {
@@ -457,6 +488,9 @@ if (file_exists($driverControl)) {
     require_once $driverControl;
     $GLOBALS['DriverControl'] = new \CoreControl;
 }
+
+print "Driver Control File: $driverControl
+";
 
 
 /**

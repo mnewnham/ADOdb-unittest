@@ -47,8 +47,7 @@ class InsertIdTest extends ADOdbCoreSetup
         /*
         * load foreign keys test schema
         */
-        $db->startTrans();
-
+        
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/insert-id-schema.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -61,7 +60,7 @@ class InsertIdTest extends ADOdbCoreSetup
 
         readSqlIntoDatabase($db, $tableSchema);
 
-        $db->completeTrans();
+        
     }
 
     /**

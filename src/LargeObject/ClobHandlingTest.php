@@ -65,9 +65,15 @@ class ClobHandlingTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        $db->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        $db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
 
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9002)";

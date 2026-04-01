@@ -381,13 +381,16 @@ class ADOdbTestCase extends TestCase
      */
     public function executeDictionaryAction(
         array $sqlArray,
-        ?array $bind = null
+        ?array $bind = null,
+        $transactions=true
     ): array {
 
         $db = $this->db;
         $dictionary = $this->dataDictionary;
-
-        $db->startTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
 
         if ($bind) {
             $result = $dictionary->executeSqlArray($sqlArray, $bind);
@@ -398,8 +401,10 @@ class ADOdbTestCase extends TestCase
         $errno  = $db->errorNo();
         $errmsg = $db->errorMsg();
 
-        $db->completeTrans();
-
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
+        
         if (!$errno) {
             $errno = 0;
         }

@@ -166,11 +166,6 @@ class MetaIndexesTest extends MetaFunctions
                 'MetaIndexes primary key should be "0"'
             );
 
-
-
-
-
-
             $this->validateResetFetchModes();
         }
     }
@@ -182,24 +177,29 @@ class MetaIndexesTest extends MetaFunctions
      */
     public static function providerTestMetaIndex(): array
     {
+        $owner = $GLOBALS['DriverControl']->schemaOwner;
+
         return [
              'Index vdx1 is unique, 1 element, ADODB_FETCH_NUM,' => [
-                ADODB_FETCH_NUM, true, 'vdx1'
+                ADODB_FETCH_NUM, true, 'vdx1', false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_NUM' => [
-                ADODB_FETCH_NUM, true,'vdx2'
+                ADODB_FETCH_NUM, true,'vdx2', false
                 ],
              'Index vdx1 is unique, 1 element, ADODB_FETCH_ASSOC,' => [
-                ADODB_FETCH_ASSOC, true, 'vdx1'
+                ADODB_FETCH_ASSOC, true, 'vdx1', false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_ASSOC' => [
-                ADODB_FETCH_ASSOC, true,'vdx2'
+                ADODB_FETCH_ASSOC, true,'vdx2', false
                 ],
              'Index vdx1 is unique, 1 element, ADODB_FETCH_BOTH,' => [
-                ADODB_FETCH_BOTH, true, 'vdx1'
+                ADODB_FETCH_BOTH, true, 'vdx1', false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH' => [
-                ADODB_FETCH_BOTH, true,'vdx2'
+                ADODB_FETCH_BOTH, true,'vdx2', false
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH, Owned by me' => [
+                ADODB_FETCH_BOTH, true,'vdx2', $owner
                 ],
             ];
     }
@@ -217,12 +217,13 @@ class MetaIndexesTest extends MetaFunctions
     public function testMetaIndexUniqueness(
         int $fetchMode,
         bool $isUnique,
-        string $indexName
+        string $indexName,
+        mixed $owner
     ): void {
 
         $this->db->setFetchMode($fetchMode);
 
-        $executionResult = $this->db->metaIndexes($this->testTableName);
+        $executionResult = $this->db->metaIndexes($this->testTableName, false, $owner);
         list($errno, $errmsg) = $this->assertADOdbError('metaIndexes()');
 
         $this->assertIsArray(
@@ -258,24 +259,28 @@ class MetaIndexesTest extends MetaFunctions
      */
     public static function providerTestMetaIndexUniqueness(): array
     {
+         $owner = $GLOBALS['DriverControl']->schemaOwner;
         return [
              'Index vdx1 is unique, 1 element, ADODB_FETCH_NUM,' => [
-                ADODB_FETCH_NUM, true, 'vdx1'
+                ADODB_FETCH_NUM, true, 'vdx1',false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_NUM' => [
-                ADODB_FETCH_NUM, true,'vdx2'
+                ADODB_FETCH_NUM, true,'vdx2', false
                 ],
              'Index vdx1 is unique, 1 element, ADODB_FETCH_ASSOC,' => [
-                ADODB_FETCH_ASSOC, true, 'vdx1'
+                ADODB_FETCH_ASSOC, true, 'vdx1', false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_ASSOC' => [
-                ADODB_FETCH_ASSOC, true,'vdx2'
+                ADODB_FETCH_ASSOC, true,'vdx2', false
                 ],
              'Index vdx1 is unique, 1 element, ADODB_FETCH_BOTH,' => [
-                ADODB_FETCH_BOTH, true, 'vdx1'
+                ADODB_FETCH_BOTH, true, 'vdx1', false
                 ],
              'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH' => [
-                ADODB_FETCH_BOTH, true,'vdx2'
+                ADODB_FETCH_BOTH, true,'vdx2', false
+                ],
+             'Index vdx2 is unique, 2 elements, ADODB_FETCH_BOTH, Belongs to me' => [
+                ADODB_FETCH_BOTH, true,'vdx2', $owner
                 ],
             ];
     }

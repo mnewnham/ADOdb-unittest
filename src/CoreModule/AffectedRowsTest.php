@@ -44,7 +44,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
         /*
         * load simple insertion schema
         */
-        $db->startTrans();
+        //$db->startTrans();
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/insert-id-schema.sql',
@@ -58,7 +58,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
 
         readSqlIntoDatabase($db, $tableSchema);
 
-        $db->completeTrans();
+       // $db->completeTrans();
 
         $db->startTrans();
 

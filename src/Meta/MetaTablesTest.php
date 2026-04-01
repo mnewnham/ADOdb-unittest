@@ -52,7 +52,11 @@ class MetaTablesTest extends MetaFunctions
      * @return void
      */
     #[DataProvider('providerTestMetaTablesForTable')]
-    public function testMetaTablesForTable(bool $includesTable1, mixed $filterType, mixed $mask): void
+    public function testMetaTablesForTable(
+        bool $includesTable1, 
+        mixed $filterType, 
+        mixed $mask,
+        mixed $schema): void
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
@@ -61,7 +65,7 @@ class MetaTablesTest extends MetaFunctions
 
             $executionResult = $this->db->metaTables(
                 $filterType,
-                false, //$this->db->database,
+                $schema,
                 $mask
             );
 
@@ -108,18 +112,22 @@ class MetaTablesTest extends MetaFunctions
      */
     public static function providerTestMetaTablesForTable(): array
     {
-        return [
-            'Show both Tables & Views' => [true,false,false],
-            'Show only Tables' => [true,'TABLES',false],
-            'Show only Views' => [false,'VIEWS',false],
-            'Show only [T]ables' => [true,'T',false],
-            'Show only [V]iews' => [false,'V',false],
-            'Show only tables beginning test%' => [true,false,'test%'],
-            'Show only tables beginning notest%' => [false,false,'notest%'],
-            'Show only tables matching testtable_1' => [true,'TABLES','testtable_1'],
-            'Show both tables and views matching testtable_1%' => [true,false,'testtable_1%'],
+        $schema = $GLOBALS['DriverControl']->schemaOwner;
 
-           ];
+        return [
+            'Show both Tables & Views' => [true,false,false,false],
+            'Show only Tables' => [true,'TABLES',false,false],
+            'Show only Tables In My Schema' => [true,'TABLES',false,$schema],
+            'Show only Views' => [false,'VIEWS',false,false],
+            'Show only [T]ables' => [true,'T',false, false],
+            'Show only [V]iews' => [false,'V',false, false],
+            'Show only [V]iews in my schema' => [false,'V',false, $schema],
+            'Show only tables beginning test%' => [true,false,'test%', false],
+            'Show only tables beginning notest%' => [false,false,'notest%', false],
+            'Show only tables matching testtable_1' => [true,'TABLES','testtable_1', false],
+            'Show both tables and views matching testtable_1% in my schema' => [true,false,'testtable_1%', $schema],
+
+        ];
     }
 
     /**

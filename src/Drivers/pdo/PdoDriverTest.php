@@ -25,6 +25,7 @@
 namespace MNewnham\ADOdbUnitTest\Drivers;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class PdoDriverTest
@@ -58,5 +59,135 @@ class PdoDriverTest extends ADOdbTestCase
      */
     public function tearDown(): void
     {
+    }
+
+    /**
+     * Test for {@see ADODB_pdo#containsQuestionMarkPlaceholder)
+     *
+     */
+    #[DataProvider('providerContainsQuestionMarkPlaceholder')]
+    public function testContainsQuestionMarkPlaceholder($result, $sql): void
+    {
+        $method = new \ReflectionMethod($this->db, 'containsQuestionMarkPlaceholder');
+      
+        //$pdoDriver = new ADODB_pdo();
+        $this->assertSame($result, $method->invoke($this->db, $sql));
+    }
+
+    /**
+     * Data provider for {@see testContainsQuestionMarkPlaceholder()}
+     *
+     * @return array [result, SQL statement]
+     */
+    public static function providerContainsQuestionMarkPlaceholder(): array
+    {
+        return [
+            [true, 'SELECT * FROM employees WHERE emp_no = ?;'],
+            [true, 'SELECT * FROM employees WHERE emp_no = ?'],
+            [true, 'SELECT * FROM employees WHERE emp_no=?'],
+            [true, 'SELECT * FROM employees WHERE emp_no>?'],
+            [true, 'SELECT * FROM employees WHERE emp_no<?'],
+            [true, 'SELECT * FROM employees WHERE emp_no>=?'],
+            [true, 'SELECT * FROM employees WHERE emp_no<=?'],
+            [true, 'SELECT * FROM employees WHERE emp_no<>?'],
+            [true, 'SELECT * FROM employees WHERE emp_no!=?'],
+            [true, 'SELECT * FROM employees WHERE emp_no IN (?)'],
+            [true, 'SELECT * FROM employees WHERE emp_no=`?` OR emp_no=?'],
+            [true, 'UPDATE employees SET emp_name=? WHERE emp_no=?'],
+
+            [false, 'SELECT * FROM employees'],
+            [false, 'SELECT * FROM employees WHERE emp_no=`?`'],
+            [false, 'SELECT * FROM employees WHERE emp_no=??'],
+            [false, 'SELECT * FROM employees WHERE emp_no=:emp_no'],
+        ];
+    }
+
+    /**
+     * Test for {@see ADODB_pdo#conformToBindParameterStyle)
+     *
+     */
+     #[DataProvider('providerConformToBindParameterStyle')]
+    public function testConformToBindParameterStyle(
+        $expected, 
+        $inputarr, 
+        $bindParameterStyle, 
+        $sql): void {
+
+        $method = new \ReflectionMethod($this->db, 'conformToBindParameterStyle');
+        
+
+        $this->db->bindParameterStyle = $bindParameterStyle;
+        $this->assertSame($expected, $method->invoke($this->db, $sql ?? '', $inputarr));
+    }
+
+    /**
+     * Data provider for {@see testConformToBindParameterStyle()}
+     *
+     * @return array [expected, inputarr, bindParameterStyle, SQL statement]
+     */
+    public static function providerConformToBindParameterStyle(): array
+    {
+        return [
+            [
+                [1, 2, 3],
+                [1, 2, 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_QUESTION_MARKS,
+                null
+            ],
+            [
+                [1, 2, 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_QUESTION_MARKS,
+                null
+            ],
+            [
+                [1, 2, 3],
+                [1, 2, 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_NAMED_PARAMETERS,
+                null
+            ],
+            [
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_NAMED_PARAMETERS,
+                null
+            ],
+            [
+                [1, 2, 3],
+                [1, 2, 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_BOTH,
+                'SELECT * FROM employees WHERE emp_no = ?'
+            ],
+            [
+                [1, 2, 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_BOTH,
+                'SELECT * FROM employees WHERE emp_no = ?'
+            ],
+            [
+                [1, 2, 3],
+                [1, 2, 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_BOTH,
+                'SELECT * FROM employees WHERE emp_no = :id'
+            ],
+            [
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                $GLOBALS['ADOdbConnection']::BIND_USE_BOTH,
+                'SELECT * FROM employees WHERE emp_no = :id'
+            ],
+            [
+                [1, 2, 3],
+                [1, 2, 3],
+                9999,   // Incorrect values result in default behavior.
+                null
+            ],
+            [
+                [1, 2, 3],
+                ['a' => 1, 'b' => 2, 'c' => 3],
+                9999,   // Incorrect values result in default behavior.
+                null
+            ],
+        ];
     }
 }

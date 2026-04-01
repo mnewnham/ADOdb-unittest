@@ -96,9 +96,15 @@ class ColumnCommentTest extends DataDictFunctions
             )
         );            
  
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
         $this->db->execute($sql);
-        $this->db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
     }
 
@@ -171,9 +177,15 @@ class ColumnCommentTest extends DataDictFunctions
             )
         );            
  
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
         $this->db->execute($sql);
-        $this->db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
     }
 

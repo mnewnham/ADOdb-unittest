@@ -75,10 +75,15 @@ class BlobHandlingTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-
-        $db->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        $db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
 
 
 

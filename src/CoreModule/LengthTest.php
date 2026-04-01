@@ -48,9 +48,37 @@ class LengthTest extends ADOdbTestCase
         );
 
 
-        $db->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        $db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
+
+        /*
+        * Load the table to test data length tests
+        */
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/%s/length-test-data.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        if (file_exists($schemaFile)) {
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+                $db->startTrans();
+            }
+            
+            $ok = readSqlIntoDatabase($db, $schemaFile);
+            
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+                $db->completeTrans();
+            }
+        }
     }
 
     /**
@@ -82,6 +110,13 @@ class LengthTest extends ADOdbTestCase
                 );
             }
 
+            if (count($lengthColumns) == 0) {
+                $this->markTestSkipped( 
+                    'No Character fields available for length test'
+                );
+                return;
+            }
+
             $lengthString = implode(',', $lengthColumns);
 
 
@@ -89,7 +124,14 @@ class LengthTest extends ADOdbTestCase
                       FROM length_test 
                  WHERE id=1";
 
+        
             $row = $this->db->getRow($sql);
+            if (!$row) {
+                $this->markTestSkipped(
+                    'No test row available'
+                );
+                return;
+            }
             list($errno, $errmsg) = $this->assertADOdbError($sql);
 
             $numericRow = [];

@@ -46,9 +46,15 @@ class ForceInsertTest extends ADOdbTestCase
     public static function setUpBeforeClass(): void
     {
 
-        $GLOBALS['ADOdbConnection']->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $GLOBALS['ADOdbConnection']->startTrans();
+        }
+        
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS force_insert_test");
-        $GLOBALS['ADOdbConnection']->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $GLOBALS['ADOdbConnection']->completeTrans();
+        }
     }
 
     /**
@@ -78,9 +84,17 @@ class ForceInsertTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        $this->db->startTrans();
-        $ok = readSqlIntoDatabase($this->db, $schemaFile);
-        $this->db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $this->db->startTrans();
+        }
+        
+        $ok = readSqlIntoDatabase($GLOBALS['ADOdbConnection'], $schemaFile);
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $this->db->completeTrans();
+        }
+
         $this->assertIsObject(
             $ok,
             'Force Schema Creation File parsing failed'

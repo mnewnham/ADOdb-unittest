@@ -58,10 +58,17 @@ class CreateTableTest extends DataDictFunctions
 
         $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
 
-        $this->db->startTrans();
-        $this->db->execute($sql);
-        $this->db->completeTrans();
 
+
+       if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->startTrans();
+        }
+
+        $this->db->execute($sql);
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
         $options = [
             'MYSQL' => "ENGINE MYISAM",

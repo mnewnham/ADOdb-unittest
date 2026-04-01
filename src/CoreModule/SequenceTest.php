@@ -47,21 +47,30 @@ class SequenceTest extends ADOdbTestCase
             return;
         }
 
-        /*
-        *load Data into the table
+       /*
+        *load Data into the table, checking for driver specific loader
         */
         $db->startTrans();
-
+        
         $tableSchema = sprintf(
-            '%s/DatabaseSetup/table3-data.sql',
-            $GLOBALS['unitTestToolsDirectory']
+            '%s/DatabaseSetup/%s/table3-data.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
         );
+
+        if (!file_exists($tableSchema)) {
+
+            $tableSchema = sprintf(
+                '%s/DatabaseSetup/table3-data.sql',
+                $GLOBALS['unitTestToolsDirectory']
+            );
+        }
 
         /*
         * Loads the schema based on the DB type
         */
-
         readSqlIntoDatabase($db, $tableSchema);
+        
         $db->completeTrans();
     }
 
@@ -76,11 +85,15 @@ class SequenceTest extends ADOdbTestCase
     public function testCreateSequence(): void
     {
 
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $this->db->startTrans();
+        }
+        
         $response = $this->db->CreateSequence('unittest_seq', 50);
 
-
-        $this->db->completeTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $this->db->completeTrans();
+        }
 
         list($errno, $errmsg) = $this->assertADOdbError('createSequenceSql()');
 
@@ -166,12 +179,12 @@ class SequenceTest extends ADOdbTestCase
      */
     public function testDropSequence(): void
     {
-        $this->db->startTrans();
+        //$this->db->startTrans();
         $response = $this->db->DropSequence('unittest_seq');
 
         list($errno, $errmsg) = $this->assertADOdbError('dropSequence()');
 
-        $this->db->completeTrans();
+        //$this->db->completeTrans();
         if (is_object($response)) {
             $reflection = new \ReflectionClass($response);
             $shortName  = $reflection->getShortName();

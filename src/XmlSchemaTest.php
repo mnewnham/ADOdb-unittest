@@ -49,10 +49,16 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        $GLOBALS['ADOdbConnection']->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $GLOBALS['ADOdbConnection']->startTrans();
+        }
+
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS XML_SCHEMA_TEST");
-        $GLOBALS['ADOdbConnection']->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $GLOBALS['ADOdbConnection']->completeTrans();
+        }
     }
 
     /**

@@ -54,6 +54,13 @@ class IndexCommentTest extends DataDictFunctions
 
         parent::setup();
 
+        if (!$GLOBALS['DriverControl']->supportsIndexComments) {
+            $this->markTestSkipped(
+                'This Database does not support setting Index Comments'
+            );
+            $this->skipFollowingTests = true;
+            return;
+        }
         if (!method_exists($this->dataDictionary, 'setIndexCommentSql')) {
             $this->markTestSkipped(
                 'This version of ADOdb does not support setting Index Comments'
@@ -91,15 +98,22 @@ class IndexCommentTest extends DataDictFunctions
         $this->assertIsInt(
             strpos($sql,$GLOBALS['iCommentText']),
             sprintf(
-                'The returned SQL [%s] should be "A%s"', 
+                'The returned SQL [%s] should be "%s"', 
                 $sql,
                 $GLOBALS['iCommentText']
             )
         );            
  
-        $this->db->startTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
         $this->db->execute($sql);
-        $this->db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
     }
 
@@ -174,7 +188,16 @@ class IndexCommentTest extends DataDictFunctions
         $this->db->startTrans();
         $this->db->execute($sql);
         $this->db->completeTrans();
+        
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
+        $this->db->execute($sql);
 
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
     }
 
     /**
@@ -205,9 +228,9 @@ class IndexCommentTest extends DataDictFunctions
         $this->assertADOdbError($sql);
 
         $this->assertSame(
-            $GLOBALS['iCommentText'],
+            'A' . $GLOBALS['iCommentText'],
             $indexComment,
-            'The index comment should be ' . $GLOBALS['iCommentText']
+            'The index comment should now be ' . $GLOBALS['iCommentText']
         );
 
     }

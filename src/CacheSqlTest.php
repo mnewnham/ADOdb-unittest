@@ -61,20 +61,29 @@ class CacheSqlTest extends ADOdbTestCase
         }
 
         /*
-        *load Data into the table
+        *load Data into the table, checking for driver specific loader
         */
-
         $db->startTrans();
+        
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/table3-data.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
 
-        $table3Data = sprintf('%s/../tools/DatabaseSetup/table3-data.sql', dirname(__FILE__));
-        $table3Sql = file_get_contents($table3Data);
-        $t3Sql = explode(';', $table3Sql);
-        foreach ($t3Sql as $sql) {
-            if (trim($sql ?? '')) {
-                $db->execute($sql);
-            }
+        if (!file_exists($tableSchema)) {
+
+            $tableSchema = sprintf(
+                '%s/DatabaseSetup/table3-data.sql',
+                $GLOBALS['unitTestToolsDirectory']
+            );
         }
 
+        /*
+        * Loads the schema based on the DB type
+        */
+        readSqlIntoDatabase($db, $tableSchema);
+        
         $db->completeTrans();
     }
 

@@ -84,9 +84,15 @@ class TableCommentTest extends DataDictFunctions
             sprintf('The returned SQL [%s] should contain "1234567890', $sql)
         );            
         
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
         $this->db->execute($sql);
-        $this->db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
     }
 
@@ -146,9 +152,15 @@ class TableCommentTest extends DataDictFunctions
             sprintf('The returned SQL [%s] should contain "2345678901', $sql)
         );            
         
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->startTrans();
+        }
+        
         $this->db->execute($sql);
-        $this->db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
     }
 

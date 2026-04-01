@@ -59,7 +59,12 @@ class AddIndexTest extends DataDictFunctions
             return;
         }
 
+        print "\n-------------------------- GETS INDEX ----------------
+        ";
+        
         $metaIndexes = $this->dataDictionary->metaIndexes($this->testTableName);
+        print_r($metaIndexes);
+
         if (array_key_exists('string_test_index', $metaIndexes)) {
             $dropIndexSql = $this->dataDictionary->dropIndexSql(
                 'string_test_index',
