@@ -31,6 +31,42 @@ class AutoExecuteTest extends ADOdbTestCase
 {
     protected string $testTableName = 'testtable_3';
 
+    
+    /**
+     * Set up the test environment first time
+     *
+     * @return void
+     */
+    public static function setupBeforeClass(): void
+    {
+        $db        = $GLOBALS['ADOdbConnection'];
+
+        /*
+        *load Data into the table, checking for driver specific loader
+        */
+         
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/autoexecute-schema.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        /*
+        * Loads the schema based on the DB type
+        */
+        readSqlIntoDatabase($db, $tableSchema);
+        
+         
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
+    }
+    
+    
     /**
      * Set up the test environment
      *
@@ -62,7 +98,7 @@ class AutoExecuteTest extends ADOdbTestCase
                     'number_run_field' => 5001 + $fetchMode + (10 * $forceMode)
                 );
 
-                $response = $this->db->autoExecute($this->testTableName, $ar, 'INSERT');
+                $response = $this->db->autoExecute('autoexecute', $ar, 'INSERT');
 
                 if (is_object($response)) {
                     $reflection = new \ReflectionClass($response);
@@ -89,7 +125,7 @@ class AutoExecuteTest extends ADOdbTestCase
                     );
                 }
 
-                $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
+                $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
                 if ($fetchMode == 0 || $fetchMode == 3) {
@@ -126,7 +162,7 @@ class AutoExecuteTest extends ADOdbTestCase
     public function testAutoExecuteUpdate(): void
     {
 
-        $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
+        $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
         $lastId = $this->db->getOne($sql);
 
         $where = "id=$lastId";
@@ -144,7 +180,7 @@ class AutoExecuteTest extends ADOdbTestCase
                 );
 
                 $response = $this->db->autoExecute(
-                    $this->testTableName,
+                    'autoexecute',
                     $ar,
                     'UPDATE',
                     $where,
@@ -178,7 +214,7 @@ class AutoExecuteTest extends ADOdbTestCase
                     );
                 }
 
-                $sql = "SELECT varchar_field,integer_field FROM {$this->testTableName} ORDER BY id DESC";
+                $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
                 $newRecord = $this->db->getRow($sql);
 
                 if ($fetchMode == 0 || $fetchMode == 3) {
@@ -224,7 +260,7 @@ class AutoExecuteTest extends ADOdbTestCase
         foreach ($qfArray as $qfIndex => $qfValue) {
             $ADODB_QUOTE_FIELDNAMES = $qfIndex;
 
-            $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
+            $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
             $lastId = $this->db->getOne($sql);
 
             $where = "id=$lastId";
@@ -244,7 +280,7 @@ class AutoExecuteTest extends ADOdbTestCase
                     );
 
                     $response = $this->db->autoExecute(
-                        $this->testTableName,
+                        'autoexecute',
                         $ar,
                         'UPDATE',
                         $where,
@@ -303,7 +339,7 @@ class AutoExecuteTest extends ADOdbTestCase
 
 
                     $sql = "SELECT varchar_field,integer_field 
-                            FROM {$this->testTableName} 
+                            FROM autoexecute
                         ORDER BY id DESC";
 
 

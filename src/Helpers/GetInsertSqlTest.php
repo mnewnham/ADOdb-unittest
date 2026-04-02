@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\Helpers;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class GetInsertSqlTest
@@ -32,6 +33,41 @@ class GetInsertSqlTest extends ADOdbTestCase
 {
     protected string $testTableName = 'testtable_3';
 
+    /**
+     * Set up the test environment first time
+     *
+     * @return void
+     */
+    public static function setupBeforeClass(): void
+    {
+        $db        = $GLOBALS['ADOdbConnection'];
+
+        /*
+        *load Data into the table, checking for driver specific loader
+        */
+         
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->startTrans();
+        }
+        
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/autoexecute-schema.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        /*
+        * Loads the schema based on the DB type
+        */
+        readSqlIntoDatabase($db, $tableSchema);
+        
+         
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            $db->completeTrans();
+        }
+    }
+    
+    
     /**
      * Set up the test environment
      *
@@ -50,75 +86,76 @@ class GetInsertSqlTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testGetInsertSqlWithObjectAndValidArray(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testGetInsertSqlWithObjectAndValidArray(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $lastRecord = $this->db->getRow($sql);
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $lastRecord = $this->db->getRow($sql);
 
-            $sql = "SELECT * FROM {$this->testTableName} WHERE id=-1";
+        $sql = "SELECT * FROM autoexecute WHERE id=-1";
 
-            list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
+        list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
-            $ar = array(
-                'varchar_field' => $this->db->qStr("GETINSERTSQL'0") . $fetchMode,
-                'integer_field' => 99,
-                'number_run_field' => 3001 + $fetchMode,
-                'datetime_field' => time(),
-                'date_field' => date('Y-m-d')
+        $ar = array(
+            'varchar_field' => "GETINSERTSQL'0", //$this->db->qStr("GETINSERTSQL'0") . $fetchMode,
+            'integer_field' => 99,
+            'number_run_field' => 3001 + $fetchMode,
+            'date_field' => date('Y-m-d')
+        );
+
+        /*
+        * This should create a record populated with default values and the
+        * next available id
+        */
+        $sql = $this->db->getInsertSql($template, $ar);
+
+        $response = $this->db->execute($sql);
+
+        $this->assertIsObject(
+            $response,
+            'insertion should return an object ' .
+            'If the record is created successfully'
+        );
+
+        if (is_object($response)) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+
+            $this->assertTrue(
+                $ok,
+                'getInsertSql should return an empty ADORecordSet object ' .
+                'If the record is updated successfully, returned ' . $shortName
             );
+        }
 
-            /*
-            * This should create a record populated with default values and the
-            * next available id
-            */
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $newRecord = $this->db->getRow($sql);
 
-            $sql = $this->db->getInsertSql($template, $ar);
+        if ($absoluteFetchMode == ADODB_FETCH_NUM) {
+            $field = 0;
+        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $field = 'ID';
+        } else {
+            $field = 'id';
+        }
 
-            $response = $this->db->execute($sql);
+        $this->assertArrayHasKey(
+            $field,
+            $newRecord,
+            sprintf(
+                '[%s] New record should have an field index %s',
+                $fetchDescription,
+                $field
+            )
+        );
 
-            $this->assertIsObject(
-                $response,
-                'insertion should return an object ' .
-                'If the record is created successfully'
-            );
-
-            if (is_object($response)) {
-                $reflection = new \ReflectionClass($response);
-                $shortName  = $reflection->getShortName();
-                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
-
-                $this->assertTrue(
-                    $ok,
-                    'getInsertSql should return an empty ADORecordSet object ' .
-                    'If the record is updated successfully, returned ' . $shortName
-                );
-            }
-
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
-
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                $field = 0;
-            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                $field = 'ID';
-            } else {
-                $field = 'id';
-            }
-
-            $this->assertArrayHasKey(
-                $field,
-                $newRecord,
-                sprintf(
-                    '[%s] New record should have an field index %s',
-                    $fetchDescription,
-                    $field
-                )
-            );
+        if (count($lastRecord) > 0) {
 
             $this->assertNotEquals(
                 $lastRecord[$field],
@@ -129,20 +166,8 @@ class GetInsertSqlTest extends ADOdbTestCase
                 )
             );
 
-
-
-            /*
-            id INT NOT NULL AUTO_INCREMENT,
-            varchar_field VARCHAR(20),
-            datetime_field DATETIME,
-            date_field DATE,
-            integer_field INT(2) DEFAULT 0,
-            decimal_field decimal(12.2) DEFAULT 0,
-            boolean_field BOOLEAN DEFAULT 0,
-            empty_field VARCHAR(240) DEFAULT '',
-            number_run_field INT(4) DEFAULT 0,
-            */
         }
+
     }
 
     /**
@@ -152,83 +177,85 @@ class GetInsertSqlTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testGetInsertSqlWithStringAndValidArray(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testGetInsertSqlWithStringAndValidArray(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $this->insertFetchMode($fetchMode);
 
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $lastRecord = $this->db->getRow($sql);
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $lastRecord = $this->db->getRow($sql);
 
 
 
-            $ar = array(
-                'varchar_field' => 'GETINSERTSQL\'1' . $fetchMode,
-                'integer_field' => 98,
-                'number_run_field' => 3011 + $fetchMode,
-                'datetime_field' => time(),
-                'date_field' => date('Y-m-d')
-            );
+        $ar = array(
+            'varchar_field' => 'GETINSERTSQL\'1' . $fetchMode,
+            'integer_field' => 98,
+            'number_run_field' => 3011 + $fetchMode,
+            'date_field' => date('Y-m-d')
+        );
 
-            /*
-            * This should create a record populated with default values and the
-            * next available id
-            */
+        /*
+        * This should create a record populated with default values and the
+        * next available id
+        */
 
-            $sql = $this->db->getInsertSql($this->testTableName, $ar);
+        $tableName = 'autoexecute';
 
-            $response = $this->db->execute($sql);
+        $sql = $this->db->getInsertSql($tableName, $ar);
 
-            $this->assertIsObject(
-                $response,
-                'insertion should return an object ' .
-                'If the record is created successfully'
-            );
+        $response = $this->db->execute($sql);
 
-            if (is_object($response)) {
-                $reflection = new \ReflectionClass($response);
-                $shortName  = $reflection->getShortName();
-                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+        $this->assertIsObject(
+            $response,
+            'insertion should return an object ' .
+            'If the record is created successfully'
+        );
 
-                $this->assertTrue(
-                    $ok,
-                    'getInsertSql should return an empty ADORecordSet object ' .
-                    'If the record is updated successfully, returned ' . $shortName
-                );
-            }
+        if (is_object($response)) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
-
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                $field = 0;
-            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                $field = 'ID';
-            } else {
-                $field = 'id';
-            }
-
-            $this->assertArrayHasKey(
-                $field,
-                $newRecord,
-                sprintf(
-                    '[%s] New record should have an field index %s',
-                    $fetchDescription,
-                    $field
-                )
-            );
-
-            $this->assertNotEquals(
-                $lastRecord[$field],
-                $newRecord[$field],
-                sprintf(
-                    '[%s] getInsertSQL() should have advanced id counter',
-                    $fetchDescription
-                )
+            $this->assertTrue(
+                $ok,
+                'getInsertSql should return an empty ADORecordSet object ' .
+                'If the record is updated successfully, returned ' . $shortName
             );
         }
+
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $newRecord = $this->db->getRow($sql);
+
+        if ($fetchMode == 0 || $fetchMode == 3) {
+            $field = 0;
+        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $field = 'ID';
+        } else {
+            $field = 'id';
+        }
+
+        $this->assertArrayHasKey(
+            $field,
+            $newRecord,
+            sprintf(
+                '[%s] New record should have an field index %s',
+                $fetchDescription,
+                $field
+            )
+        );
+
+        $this->assertNotEquals(
+            $lastRecord[$field],
+            $newRecord[$field],
+            sprintf(
+                '[%s] getInsertSQL() should have advanced id counter',
+                $fetchDescription
+            )
+        );
+
     }
 
     /**
@@ -238,96 +265,97 @@ class GetInsertSqlTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testGetInsertSqlWithObjectAndInvalidArray(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testGetInsertSqlWithObjectAndInvalidArray(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+    
+        $this->insertFetchMode($fetchMode);
 
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $lastRecord = $this->db->getRow($sql);
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $lastRecord = $this->db->getRow($sql);
 
-            $sql = "SELECT * FROM {$this->testTableName} WHERE id=-1";
+        $sql = "SELECT * FROM autoexecute WHERE id=-1";
 
-            list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
+        list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
-            $ar = array(
-                'varchar_field' => 'GETINSERTSQL\'2' . $fetchMode,
-                'integer_field' => 99,
-                'number_run_field' => 3021 + $fetchMode,
-                'some_invalid_field' => 'ABC123',
-                'datetime_field' => time(),
-                'date_field' => date('Y-m-d')
-            );
+        $ar = array(
+            'varchar_field' => 'GETINSERTSQL\'2' . $fetchMode,
+            'integer_field' => 99,
+            'number_run_field' => 3021 + $fetchMode,
+            'some_invalid_field' => 'ABC123',
+            'datetime_field' => time(),
+            'date_field' => date('Y-m-d')
+        );
 
-            /*
-            * This should create a record populated with default values and the
-            * next available id
-            */
+        /*
+        * This should create a record populated with default values and the
+        * next available id
+        */
 
-            $sql = $this->db->getInsertSql($template, $ar);
+        $sql = $this->db->getInsertSql($template, $ar);
 
-            $response = $this->db->execute($sql);
+        $response = $this->db->execute($sql);
 
-            $this->assertIsObject(
-                $response,
+        $this->assertIsObject(
+            $response,
+            sprintf(
+                '[%s] insertion should return an object ' .
+                'If the invalid fields are discarded and ' .
+                'the record is created successfully',
+                $fetchDescription
+            )
+        );
+
+
+        if (is_object($response)) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+
+            $this->assertTrue(
+                $ok,
                 sprintf(
-                    '[%s] insertion should return an object ' .
-                    'If the invalid fields are discarded and ' .
-                    'the record is created successfully',
-                    $fetchDescription
-                )
-            );
-
-
-            if (is_object($response)) {
-                $reflection = new \ReflectionClass($response);
-                $shortName  = $reflection->getShortName();
-                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
-
-                $this->assertTrue(
-                    $ok,
-                    sprintf(
-                        '[%s] getInsertSql should return an ADORecordSet_empty object ' .
-                        'If the record is created successfully, returned: %s',
-                        $fetchDescription,
-                        $shortName
-                    )
-                );
-            }
-
-
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
-
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                $field = 0;
-            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                $field = 'ID';
-            } else {
-                $field = 'id';
-            }
-
-            $this->assertArrayHasKey(
-                $field,
-                $newRecord,
-                sprintf(
-                    '[%s] New record should have an field index %s',
+                    '[%s] getInsertSql should return an ADORecordSet_empty object ' .
+                    'If the record is created successfully, returned: %s',
                     $fetchDescription,
-                    $field
-                )
-            );
-
-            $this->assertNotEquals(
-                $lastRecord[$field],
-                $newRecord[$field],
-                sprintf(
-                    '[%s] getInsertSQL() should have advanced id counter',
-                    $fetchDescription
+                    $shortName
                 )
             );
         }
+
+
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $newRecord = $this->db->getRow($sql);
+
+        if ($fetchMode == 0 || $fetchMode == 3) {
+            $field = 0;
+        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $field = 'ID';
+        } else {
+            $field = 'id';
+        }
+
+        $this->assertArrayHasKey(
+            $field,
+            $newRecord,
+            sprintf(
+                '[%s] New record should have an field index %s',
+                $fetchDescription,
+                $field
+            )
+        );
+
+        $this->assertNotEquals(
+            $lastRecord[$field],
+            $newRecord[$field],
+            sprintf(
+                '[%s] getInsertSQL() should have advanced id counter',
+                $fetchDescription
+            )
+        );
     }
 
     /**
@@ -337,93 +365,94 @@ class GetInsertSqlTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testGetInsertSqlWithStringAndInvalidArray(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testGetInsertSqlWithStringAndInvalidArray(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+    
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $this->insertFetchMode($fetchMode);
 
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $lastRecord = $this->db->getRow($sql);
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $lastRecord = $this->db->getRow($sql);
 
-            $sql = "SELECT * FROM {$this->testTableName} WHERE id=-1";
+        $sql = "SELECT * FROM autoexecute WHERE id=-1";
 
-            list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
+        list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
-            $ar = array(
-                'varchar_field' => 'GETINSERTSQL\'4' . $fetchMode,
-                'integer_field' => 99,
-                'number_run_field' => 3041 + $fetchMode,
-                'some_invalid_field' => 'ABC123',
-                'datetime_field' => time(),
-                'date_field' => date('Y-m-d')
-            );
+        $ar = array(
+            'varchar_field' => 'GETINSERTSQL\'4' . $fetchMode,
+            'integer_field' => 99,
+            'number_run_field' => 3041 + $fetchMode,
+            'some_invalid_field' => 'ABC123',
+            'datetime_field' => time(),
+            'date_field' => date('Y-m-d')
+        );
 
-            /*
-            * This should create a record populated with default values and the
-            * next available id
-            */
+        /*
+        * This should create a record populated with default values and the
+        * next available id
+        */
 
-            $sql = $this->db->getInsertSql($template, $ar);
+        $sql = $this->db->getInsertSql($template, $ar);
 
-            $response = $this->db->execute($sql);
+        $response = $this->db->execute($sql);
 
-            $this->assertIsObject(
-                $response,
+        $this->assertIsObject(
+            $response,
+            sprintf(
+                '[%s] insertion should return an object ' .
+                'If the invalid fields are discarded and ' .
+                'the record is created successfully',
+                $fetchDescription
+            )
+        );
+
+        if (is_object($response)) {
+            $reflection = new \ReflectionClass($response);
+            $shortName  = $reflection->getShortName();
+            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+
+            $this->assertTrue(
+                $ok,
                 sprintf(
-                    '[%s] insertion should return an object ' .
-                    'If the invalid fields are discarded and ' .
-                    'the record is created successfully',
-                    $fetchDescription
-                )
-            );
-
-            if (is_object($response)) {
-                $reflection = new \ReflectionClass($response);
-                $shortName  = $reflection->getShortName();
-                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
-
-                $this->assertTrue(
-                    $ok,
-                    sprintf(
-                        '[%s] getInsertSql should return an ADORecordSet_empty object ' .
-                        'If the record is created successfully, returned: %s',
-                        $fetchDescription,
-                        $shortName
-                    )
-                );
-            }
-
-            $sql = "SELECT * FROM {$this->testTableName} ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
-
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                $field = 0;
-            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                $field = 'ID';
-            } else {
-                $field = 'id';
-            }
-
-            $this->assertArrayHasKey(
-                $field,
-                $newRecord,
-                sprintf(
-                    '[%s] New record should have an field index %s',
+                    '[%s] getInsertSql should return an ADORecordSet_empty object ' .
+                    'If the record is created successfully, returned: %s',
                     $fetchDescription,
-                    $field
-                )
-            );
-
-            $this->assertNotEquals(
-                $lastRecord[$field],
-                $newRecord[$field],
-                sprintf(
-                    '[%s] getInsertSQL() should have advanced id counter',
-                    $fetchDescription
+                    $shortName
                 )
             );
         }
+
+        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $newRecord = $this->db->getRow($sql);
+
+        if ($fetchMode == 0 || $fetchMode == 3) {
+            $field = 0;
+        } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $field = 'ID';
+        } else {
+            $field = 'id';
+        }
+
+        $this->assertArrayHasKey(
+            $field,
+            $newRecord,
+            sprintf(
+                '[%s] New record should have an field index %s',
+                $fetchDescription,
+                $field
+            )
+        );
+
+        $this->assertNotEquals(
+            $lastRecord[$field],
+            $newRecord[$field],
+            sprintf(
+                '[%s] getInsertSQL() should have advanced id counter',
+                $fetchDescription
+            )
+        );
     }
 }
