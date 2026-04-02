@@ -40,7 +40,6 @@ class FieldCountTest extends ADOdbCoreSetup
     {
 
         $db        = $GLOBALS['ADOdbConnection'];
-
     }
 
     /**
@@ -52,8 +51,8 @@ class FieldCountTest extends ADOdbCoreSetup
     public function testFieldCountWithoutBind(
         int $fetchMode,
         string $fetchDescription
-    ): void{
-           
+    ): void {
+
         $this->insertFetchMode($fetchMode);
 
         $SQL = "SELECT * FROM testtable_1 WHERE id=-1";
@@ -62,7 +61,7 @@ class FieldCountTest extends ADOdbCoreSetup
         $this->assertEquals(
             9,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount shoud return 9 with no bind usage',$fetchDescription)
+            sprintf('[FETCH %s] FieldCount shoud return 9 with no bind usage', $fetchDescription)
         );
     }
 
@@ -75,9 +74,9 @@ class FieldCountTest extends ADOdbCoreSetup
     public function testFieldCountWithBind(
         int $fetchMode,
         string $fetchDescription
-    ): void{
-    
-      
+    ): void {
+
+
         $this->insertFetchMode($fetchMode);
 
         $p1 = $this->db->param('p1');
@@ -85,14 +84,12 @@ class FieldCountTest extends ADOdbCoreSetup
         $bind = ['p1' => -1];
 
         $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
-        $result = $this->db->execute($SQL,$bind);
-    
+        $result = $this->db->execute($SQL, $bind);
+
         $this->assertEquals(
             9,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount shoud return 9 with bind usage',$fetchDescription)
+            sprintf('[FETCH %s] FieldCount shoud return 9 with bind usage', $fetchDescription)
         );
-        
-
     }
 }

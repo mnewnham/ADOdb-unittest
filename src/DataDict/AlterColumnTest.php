@@ -123,10 +123,9 @@ class AlterColumnTest extends DataDictFunctions
                 $tableName,
                 'varchar_field'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'THIS IS A COLUMN COMMENT',
                     $columnComment,

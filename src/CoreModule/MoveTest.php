@@ -64,7 +64,7 @@ class MoveTest extends ADOdbTestCase
             *load Data into the table, checking for driver specific loader
             */
             $db->startTrans();
-            
+
             $tableSchema = sprintf(
                 '%s/DatabaseSetup/%s/table3-data.sql',
                 $GLOBALS['unitTestToolsDirectory'],
@@ -72,7 +72,6 @@ class MoveTest extends ADOdbTestCase
             );
 
             if (!file_exists($tableSchema)) {
-
                 $tableSchema = sprintf(
                     '%s/DatabaseSetup/table3-data.sql',
                     $GLOBALS['unitTestToolsDirectory']
@@ -83,7 +82,7 @@ class MoveTest extends ADOdbTestCase
             * Loads the schema based on the DB type
             */
             readSqlIntoDatabase($db, $tableSchema);
-            
+
             $db->completeTrans();
         }
 
@@ -153,7 +152,7 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[8]),
             serialize($row),
@@ -172,7 +171,7 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[5]),
             serialize($row),
@@ -191,7 +190,7 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[9]),
             serialize($row),
@@ -210,14 +209,13 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[10]),
             serialize($row),
             'The row should match the 10th record of expectedData ' .
             'after moveNext()'
         );
-
     }
 
     /**
@@ -886,7 +884,7 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[8]),
             serialize($row),
@@ -905,7 +903,7 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[5]),
             serialize($row),
@@ -924,13 +922,12 @@ class MoveTest extends ADOdbTestCase
         );
 
         $row = $this->moveRecordSet->fetchObj();
-       
+
         $this->assertSame(
             serialize($this->expectedData[9]),
             serialize($row),
             'The row should match the 5th record of expectedData ' .
             'after move(9)'
         );
-
     }
 }

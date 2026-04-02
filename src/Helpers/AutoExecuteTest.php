@@ -31,7 +31,7 @@ class AutoExecuteTest extends ADOdbTestCase
 {
     protected string $testTableName = 'testtable_3';
 
-    
+
     /**
      * Set up the test environment first time
      *
@@ -44,11 +44,11 @@ class AutoExecuteTest extends ADOdbTestCase
         /*
         *load Data into the table, checking for driver specific loader
         */
-         
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/autoexecute-schema.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -59,14 +59,14 @@ class AutoExecuteTest extends ADOdbTestCase
         * Loads the schema based on the DB type
         */
         readSqlIntoDatabase($db, $tableSchema);
-        
-         
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
     }
-    
-    
+
+
     /**
      * Set up the test environment
      *

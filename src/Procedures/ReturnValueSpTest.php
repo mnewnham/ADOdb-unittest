@@ -58,7 +58,7 @@ class ReturnValueSpTest extends MetaFunctions
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
-      
+
         readSqlIntoDatabase($db, $tableSchema);
 
         $db->completeTrans();
@@ -82,18 +82,17 @@ class ReturnValueSpTest extends MetaFunctions
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-   
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             $statement = $this->db->prepareSp('sp_output_test');
 
              $this->assertIsArray(
-                $statement,
-                sprintf(
-                    '[FETCH %s] prepareSp should return an array of attachment information',
-                    $fetchModeName
-                )
-            );
+                 $statement,
+                 sprintf(
+                     '[FETCH %s] prepareSp should return an array of attachment information',
+                     $fetchModeName
+                 )
+             );
 
             $this->assertIsString(
                 $statement[0],
@@ -116,12 +115,12 @@ class ReturnValueSpTest extends MetaFunctions
             $parameterValue = 5;
             $parameterName = 'filter_number';
             $success = $this->db->inParameter(
-                $statement, 
-                $parameterValue, 
+                $statement,
+                $parameterValue,
                 $parameterName,
                 10,
                 $GLOBALS['DriverControl']->inParameterType
-                );
+            );
 
             $this->assertTrue(
                 $success,
@@ -158,7 +157,6 @@ class ReturnValueSpTest extends MetaFunctions
                     $fetchModeName
                 )
             );
-
         }
     }
 }

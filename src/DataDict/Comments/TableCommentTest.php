@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class TableCommentTest extends DataDictFunctions
 {
-
     protected $commentTable = 'testtable_1';
     /**
      * Global setup for the test class
@@ -44,7 +43,8 @@ class TableCommentTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
-    public function setup(): void {
+    public function setup(): void
+    {
 
         parent::setup();
 
@@ -55,7 +55,6 @@ class TableCommentTest extends DataDictFunctions
             $this->skipFollowingTests = true;
             return;
         }
-
     }
 
 
@@ -73,27 +72,26 @@ class TableCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setTableCommentSql() not supported by driver'    
+                'setTableCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,'1234567890'),
+            strpos($sql, '1234567890'),
             sprintf('The returned SQL [%s] should contain "1234567890', $sql)
-        );            
-        
+        );
+
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->completeTrans();
         }
-
     }
 
     /**
@@ -110,12 +108,12 @@ class TableCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getTableCommentSql() not supported by driver'    
+                'getTableCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $tableComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -125,7 +123,6 @@ class TableCommentTest extends DataDictFunctions
             $tableComment,
             'The table comment should be 123456789'
         );
-
     }
     /**
      * Test for {@see ADODConnection::setTableCommentSql()}
@@ -141,27 +138,26 @@ class TableCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setTableCommentSql() not supported by driver'    
+                'setTableCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,'2345678901'),
+            strpos($sql, '2345678901'),
             sprintf('The returned SQL [%s] should contain "2345678901', $sql)
-        );            
-        
+        );
+
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->completeTrans();
         }
-
     }
 
     /**
@@ -178,12 +174,12 @@ class TableCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getTableCommentSql() not supported by driver'    
+                'getTableCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $tableComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -193,6 +189,5 @@ class TableCommentTest extends DataDictFunctions
             $tableComment,
             'The table comment should now be 2345678901'
         );
-
     }
 }

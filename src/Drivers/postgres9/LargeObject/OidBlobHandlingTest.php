@@ -23,6 +23,7 @@ namespace MNewnham\ADOdbUnitTest\Drivers\postgres9\LargeObject;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use  MNewnham\ADOdbUnitTest\Drivers\postgres9\Postgres9DriverTest;
+
 /**
  * Class BlobHandlingTest
  *
@@ -75,14 +76,14 @@ class OidBlobHandlingTest extends ADOdbTestCase
         );
 
 
-        
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-        
+
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
 
@@ -108,7 +109,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
 
         parent::setup();
 
-         if ($this->adoDriver !== 'postgres9') {
+        if ($this->adoDriver !== 'postgres9') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
                 'This test is only applicable for the postgres9 driver'

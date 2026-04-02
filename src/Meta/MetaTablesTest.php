@@ -53,11 +53,11 @@ class MetaTablesTest extends MetaFunctions
      */
     #[DataProvider('providerTestMetaTablesForTable')]
     public function testMetaTablesForTable(
-        bool $includesTable1, 
-        mixed $filterType, 
+        bool $includesTable1,
+        mixed $filterType,
         mixed $mask,
-        mixed $schema): void
-    {
+        mixed $schema
+    ): void {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             //$this->db->setFetchMode($fetchMode);

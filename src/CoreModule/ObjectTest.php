@@ -106,12 +106,12 @@ class ObjectTest extends ADOdbTestCase
             return;
         }
 
-       
+
         /*
         *load Data into the table, checking for driver specific loader
         */
         $db->startTrans();
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/table3-data.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -119,7 +119,6 @@ class ObjectTest extends ADOdbTestCase
         );
 
         if (!file_exists($tableSchema)) {
-
             $tableSchema = sprintf(
                 '%s/DatabaseSetup/table3-data.sql',
                 $GLOBALS['unitTestToolsDirectory']
@@ -130,9 +129,8 @@ class ObjectTest extends ADOdbTestCase
         * Loads the schema based on the DB type
         */
         readSqlIntoDatabase($db, $tableSchema);
-        
+
         $db->completeTrans();
-        
     }
 
     /**

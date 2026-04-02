@@ -31,18 +31,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class FetchFieldTest extends ADOdbCoreSetup
 {
-    
-
     protected $tt1Fields = [
         'id',
-	    'varchar_field',
-	    'datetime_field',
-	    'date_field',
-	    'integer_field',
-	    'decimal_field',
-	    'boolean_field',
+        'varchar_field',
+        'datetime_field',
+        'date_field',
+        'integer_field',
+        'decimal_field',
+        'boolean_field',
         'empty_field',
-	    'number_run_field'
+        'number_run_field'
     ];
 
     /**
@@ -54,7 +52,6 @@ class FetchFieldTest extends ADOdbCoreSetup
     {
 
         $db        = $GLOBALS['ADOdbConnection'];
-
     }
 
     /**
@@ -68,7 +65,7 @@ class FetchFieldTest extends ADOdbCoreSetup
         string $fetchDescription
     ): void {
 
-        
+
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
@@ -80,10 +77,10 @@ class FetchFieldTest extends ADOdbCoreSetup
         $this->assertEquals(
             9,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and invalid id',$fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and invalid id', $fetchDescription)
         );
 
-        for ($i=0;$i<$result->fieldCount();$i++) {
+        for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
 
             $this->assertIsObject(
@@ -108,10 +105,10 @@ class FetchFieldTest extends ADOdbCoreSetup
             $this->assertEquals(
                 $fieldObject->name,
                 $this->tt1Fields[$i],
-                    sprintf(
+                sprintf(
                     '[FETCH %s] Expected field name with no bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
-                        $this->tt1Fields[$i],
+                    $this->tt1Fields[$i],
                     $i,
                     $fieldObject->name,
                 )
@@ -129,7 +126,7 @@ class FetchFieldTest extends ADOdbCoreSetup
         int $fetchMode,
         string $fetchDescription
     ): void {
-      
+
         $this->insertFetchMode($fetchMode);
 
         $p1 = $this->db->param('p1');
@@ -137,15 +134,15 @@ class FetchFieldTest extends ADOdbCoreSetup
         $bind = ['p1' => -1];
 
         $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
-        $result = $this->db->execute($SQL,$bind);
+        $result = $this->db->execute($SQL, $bind);
 
         $this->assertEquals(
             9,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with bind usage and invalid id',$fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 9 with bind usage and invalid id', $fetchDescription)
         );
 
-        for ($i=0;$i<$result->fieldCount();$i++) {
+        for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
 
             $this->assertIsObject(
@@ -170,16 +167,15 @@ class FetchFieldTest extends ADOdbCoreSetup
             $this->assertEquals(
                 $fieldObject->name,
                 $this->tt1Fields[$i],
-                    sprintf(
+                sprintf(
                     '[FETCH %s] Expected field name with bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
-                        $this->tt1Fields[$i],
+                    $this->tt1Fields[$i],
                     $i,
                     $fieldObject->name,
                 )
             );
         }
-
     }
 
 
@@ -194,7 +190,7 @@ class FetchFieldTest extends ADOdbCoreSetup
         string $fetchDescription
     ): void {
 
-                  
+
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT id FROM testtable_1 ORDER BY id DESC";
@@ -206,10 +202,10 @@ class FetchFieldTest extends ADOdbCoreSetup
         $this->assertEquals(
             9,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and valid id',$fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and valid id', $fetchDescription)
         );
 
-        for ($i=0;$i<$result->fieldCount();$i++) {
+        for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
 
             $this->assertIsObject(
@@ -234,16 +230,15 @@ class FetchFieldTest extends ADOdbCoreSetup
             $this->assertEquals(
                 $fieldObject->name,
                 $this->tt1Fields[$i],
-                    sprintf(
+                sprintf(
                     '[FETCH %s] Expected field name with no bind usage and valid id %s at position %d, found %s',
                     $fetchDescription,
-                        $this->tt1Fields[$i],
+                    $this->tt1Fields[$i],
                     $i,
                     $fieldObject->name,
                 )
             );
         }
-
     }
 
     /**
@@ -257,61 +252,57 @@ class FetchFieldTest extends ADOdbCoreSetup
         string $fetchDescription
     ): void {
 
-        $this->insertFetchMode($fetchMode);
+         $this->insertFetchMode($fetchMode);
 
-        $sql = "SELECT id FROM testtable_1 ORDER BY id DESC";
-        $lastId = $this->db->getOne($sql);
+         $sql = "SELECT id FROM testtable_1 ORDER BY id DESC";
+         $lastId = $this->db->getOne($sql);
 
-        $p1 = $this->db->param('p1');
+         $p1 = $this->db->param('p1');
 
-        $bind = ['p1' => $lastId];
+         $bind = ['p1' => $lastId];
 
-        $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
-        $result = $this->db->execute($SQL,$bind);
+         $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
+         $result = $this->db->execute($SQL, $bind);
 
-        $this->assertEquals(
-            9,
-            $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with bind usage and valid id',$fetchDescription)
-        );
+         $this->assertEquals(
+             9,
+             $result->fieldCount(),
+             sprintf('[FETCH %s] FieldCount should return 9 with bind usage and valid id', $fetchDescription)
+         );
 
-        for ($i=0;$i<$result->fieldCount();$i++) {
-            $fieldObject = $result->fetchField($i);
+         for ($i = 0; $i < $result->fieldCount(); $i++) {
+             $fieldObject = $result->fetchField($i);
 
-            $this->assertIsObject(
-                $fieldObject,
-                sprintf(
-                    '[FETCH %s] Fetch of field %s with bind usage of valid id should return an object',
-                    $fetchDescription,
-                    $i
-                )
-            );
+             $this->assertIsObject(
+                 $fieldObject,
+                 sprintf(
+                     '[FETCH %s] Fetch of field %s with bind usage of valid id should return an object',
+                     $fetchDescription,
+                     $i
+                 )
+             );
 
-            $this->assertInstanceOf(
-                'ADOFieldObject',
-                $fieldObject,
-                sprintf(
-                    '[FETCH %s] Fetch of field %s with bind usage of valid id should return an ADOField object',
-                    $fetchDescription,
-                    $i
-                )
-            );
+             $this->assertInstanceOf(
+                 'ADOFieldObject',
+                 $fieldObject,
+                 sprintf(
+                     '[FETCH %s] Fetch of field %s with bind usage of valid id should return an ADOField object',
+                     $fetchDescription,
+                     $i
+                 )
+             );
 
-            $this->assertEquals(
-                $fieldObject->name,
-                $this->tt1Fields[$i],
-                    sprintf(
-                    '[FETCH %s] Expected field name with bind usage and valid id %s at position %d, found %s',
-                    $fetchDescription,
-                        $this->tt1Fields[$i],
-                    $i,
-                    $fieldObject->name,
-                )
-            );
-        }
-
+             $this->assertEquals(
+                 $fieldObject->name,
+                 $this->tt1Fields[$i],
+                 sprintf(
+                     '[FETCH %s] Expected field name with bind usage and valid id %s at position %d, found %s',
+                     $fetchDescription,
+                     $this->tt1Fields[$i],
+                     $i,
+                     $fieldObject->name,
+                 )
+             );
+         }
     }
-
-    
-
 }

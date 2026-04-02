@@ -117,26 +117,25 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $columnString = implode(',', $columnStrings);
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->startTrans();
         }
         $GLOBALS['ADOdbConnection']->execute('DROP TABLE IF EXISTS metatype_test');
-        
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->completeTrans();
         }
 
         $sql = sprintf($createTableWrapper, $columnString);
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->startTrans();
         }
 
         $GLOBALS['ADOdbConnection']->execute($sql);
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->completeTrans();
         }
-
     }
 
     public function setup(): void

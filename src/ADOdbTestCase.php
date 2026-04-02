@@ -382,12 +382,12 @@ class ADOdbTestCase extends TestCase
     public function executeDictionaryAction(
         array $sqlArray,
         ?array $bind = null,
-        $transactions=true
+        $transactions = true
     ): array {
 
         $db = $this->db;
         $dictionary = $this->dataDictionary;
-        
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
@@ -404,7 +404,7 @@ class ADOdbTestCase extends TestCase
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
-        
+
         if (!$errno) {
             $errno = 0;
         }
@@ -513,7 +513,8 @@ class ADOdbTestCase extends TestCase
      *
      * @return array
      */
-    public static function globalProviderFetchModes() : array {
+    public static function globalProviderFetchModes(): array
+    {
 
         return [
             [0, '[1] GLOBAL ADODB_FETCH_NUM'],
@@ -524,5 +525,4 @@ class ADOdbTestCase extends TestCase
             [5, '[3] $fetchMode = ADODB_FETCH_BOTH']
         ];
     }
-
 }

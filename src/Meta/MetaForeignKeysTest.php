@@ -47,7 +47,7 @@ class MetaForeignKeysTest extends MetaFunctions
         /*
         * load foreign keys test schema
         */
-        
+
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/foreign-keys-schema.sql',
@@ -60,8 +60,6 @@ class MetaForeignKeysTest extends MetaFunctions
         */
 
         readSqlIntoDatabase($db, $tableSchema);
-
-        
     }
 
     /**

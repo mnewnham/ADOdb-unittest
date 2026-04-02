@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ColumnCommentTest extends DataDictFunctions
 {
-
     protected string $commentTable  = 'testtable_1';
     protected string $commentColumn = 'varchar_field';
 
@@ -48,7 +47,8 @@ class ColumnCommentTest extends DataDictFunctions
         $GLOBALS['commentText'] = md5(time());
     }
 
-    public function setup(): void {
+    public function setup(): void
+    {
 
         parent::setup();
 
@@ -81,31 +81,30 @@ class ColumnCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setColumnCommentSql() not supported by driver'    
+                'setColumnCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,$GLOBALS['commentText']),
+            strpos($sql, $GLOBALS['commentText']),
             sprintf(
-                'The returned SQL [%s] should contain "%s', 
-                $sql, 
+                'The returned SQL [%s] should contain "%s',
+                $sql,
                 $GLOBALS['commentText']
             )
-        );            
- 
+        );
+
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->completeTrans();
         }
-
     }
 
     /**
@@ -125,12 +124,12 @@ class ColumnCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getColumnCommentSql() not supported by driver'    
+                'getColumnCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $columnComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -140,7 +139,6 @@ class ColumnCommentTest extends DataDictFunctions
             $columnComment,
             'The column comment should be ' . $GLOBALS['commentText']
         );
-
     }
 
     /**
@@ -162,31 +160,30 @@ class ColumnCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setColumnCommentSql() not supported by driver'    
+                'setColumnCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,$GLOBALS['commentText']),
+            strpos($sql, $GLOBALS['commentText']),
             sprintf(
-                'The returned SQL [%s] should contain "%s', 
-                $sql, 
+                'The returned SQL [%s] should contain "%s',
+                $sql,
                 'A' . $GLOBALS['commentText']
             )
-        );            
- 
+        );
+
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->completeTrans();
         }
-
     }
 
     /**
@@ -206,12 +203,12 @@ class ColumnCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getColumnCommentSql() not supported by driver'    
+                'getColumnCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $columnComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -221,6 +218,5 @@ class ColumnCommentTest extends DataDictFunctions
             $columnComment,
             'The column comment should be A' . $GLOBALS['commentText']
         );
-
     }
 }

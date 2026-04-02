@@ -48,7 +48,7 @@ class ResultSetSpTest extends MetaFunctions
         if ($GLOBALS['skipStoredProcedureTests'] == '1') {
             return;
         }
-       
+
         /*
         * Load Result Set Stored Procedure into DB
         */
@@ -83,18 +83,17 @@ class ResultSetSpTest extends MetaFunctions
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-   
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             $statement = $this->db->prepareSp('sp_recordset_test');
 
              $this->assertIsArray(
-                $statement,
-                sprintf(
-                    '[FETCH %s] prepareSp should return an array of attachment information',
-                    $fetchModeName
-                )
-            );
+                 $statement,
+                 sprintf(
+                     '[FETCH %s] prepareSp should return an array of attachment information',
+                     $fetchModeName
+                 )
+             );
 
             $this->assertIsString(
                 $statement[0],
@@ -117,12 +116,12 @@ class ResultSetSpTest extends MetaFunctions
             $parameterValue = 5;
             $parameterName = 'filter_number';
             $success = $this->db->inParameter(
-                $statement, 
-                $parameterValue, 
+                $statement,
+                $parameterValue,
                 $parameterName,
                 10,
                 $GLOBALS['DriverControl']->inParameterType
-                );
+            );
 
             $this->assertTrue(
                 $success,
@@ -133,15 +132,14 @@ class ResultSetSpTest extends MetaFunctions
             );
 
             if ($GLOBALS['DriverControl']->outParameterType) {
-
                 $parameterValue = null;
                 $parameterName = 'C1';
                 $success = $this->db->outParameter(
-                $statement, 
-                $parameterValue, 
-                $parameterName,
-                -1,
-                $GLOBALS['DriverControl']->outParameterType
+                    $statement,
+                    $parameterValue,
+                    $parameterName,
+                    -1,
+                    $GLOBALS['DriverControl']->outParameterType
                 );
             }
 

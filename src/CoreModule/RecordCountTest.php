@@ -44,7 +44,7 @@ class RecordCountTest extends ADOdbCoreSetup
         /*
         * load simple insertion schema
         */
-        
+
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/insert-id-schema.sql',
@@ -58,7 +58,7 @@ class RecordCountTest extends ADOdbCoreSetup
 
         readSqlIntoDatabase($db, $tableSchema);
 
-        
+
 
         $db->startTrans();
 

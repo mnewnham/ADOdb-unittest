@@ -49,14 +49,14 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->startTrans();
         }
 
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
         $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS XML_SCHEMA_TEST");
-        
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->completeTrans();
         }
     }
@@ -169,14 +169,12 @@ class XmlSchemaTest extends ADOdbTestCase
         );
 
         if (property_exists($this->dataDictionary, 'hasTableComments') && $this->dataDictionary->hasTableComments) {
-
             $sql =  $this->dataDictionary->getTableCommentSql(
                 'xml_schema_test'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $tableComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'XML SCHEMA COMMENT',
                     $tableComment,
@@ -185,16 +183,15 @@ class XmlSchemaTest extends ADOdbTestCase
             }
         }
 
-        
+
         if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
             $sql =  $this->dataDictionary->getColumnCommentSql(
-               'xml_schema_test',
+                'xml_schema_test',
                 'date_field_to_keep'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'DATE FIELD COMMENT',
                     $columnComment,
@@ -208,23 +205,20 @@ class XmlSchemaTest extends ADOdbTestCase
                 'xml_schema_test',
                 'droppable_index'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $indexComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'DROPPABLE INDEX COMMENT',
                     $indexComment,
                     'Index comment should have been assigned at creation'
                 );
-            } 
+            }
         } else {
             $this->markTestIncomplete(
                 'No index comment support for driver'
             );
         }
-
-        
     }
 
     /**
@@ -290,13 +284,12 @@ class XmlSchemaTest extends ADOdbTestCase
 
         if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
             $sql =  $this->dataDictionary->getColumnCommentSql(
-               'xml_schema_test',
+                'xml_schema_test',
                 'date_field_to_keep'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'MODIFIED DATE FIELD COMMENT',
                     $columnComment,

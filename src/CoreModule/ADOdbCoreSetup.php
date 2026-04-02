@@ -53,7 +53,7 @@ class ADOdbCoreSetup extends ADOdbTestCase
         *load Data into the table, checking for driver specific loader
         */
         $db->startTrans();
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/table3-data.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -61,7 +61,6 @@ class ADOdbCoreSetup extends ADOdbTestCase
         );
 
         if (!file_exists($tableSchema)) {
-
             $tableSchema = sprintf(
                 '%s/DatabaseSetup/table3-data.sql',
                 $GLOBALS['unitTestToolsDirectory']
@@ -72,7 +71,7 @@ class ADOdbCoreSetup extends ADOdbTestCase
         * Loads the schema based on the DB type
         */
         readSqlIntoDatabase($db, $tableSchema);
-        
+
         $db->completeTrans();
     }
 }

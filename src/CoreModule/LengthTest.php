@@ -48,13 +48,13 @@ class LengthTest extends ADOdbTestCase
         );
 
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-        
+
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
 
@@ -68,14 +68,13 @@ class LengthTest extends ADOdbTestCase
         );
 
         if (file_exists($schemaFile)) {
-
-            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->startTrans();
             }
-            
+
             $ok = readSqlIntoDatabase($db, $schemaFile);
-            
-            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
         }
@@ -111,7 +110,7 @@ class LengthTest extends ADOdbTestCase
             }
 
             if (count($lengthColumns) == 0) {
-                $this->markTestSkipped( 
+                $this->markTestSkipped(
                     'No Character fields available for length test'
                 );
                 return;
@@ -124,7 +123,7 @@ class LengthTest extends ADOdbTestCase
                       FROM length_test 
                  WHERE id=1";
 
-        
+
             $row = $this->db->getRow($sql);
             if (!$row) {
                 $this->markTestSkipped(

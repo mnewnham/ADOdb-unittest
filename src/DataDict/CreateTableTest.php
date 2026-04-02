@@ -60,7 +60,7 @@ class CreateTableTest extends DataDictFunctions
 
 
 
-       if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->startTrans();
         }
 
@@ -128,14 +128,12 @@ class CreateTableTest extends DataDictFunctions
         );
 
         if (property_exists($this->dataDictionary, 'hasTableComments') && $this->dataDictionary->hasTableComments) {
-
             $sql =  $this->dataDictionary->getTableCommentSql(
                 'dictionary_creation_test_table'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $tableComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'TABLE COMMENT',
                     $tableComment,

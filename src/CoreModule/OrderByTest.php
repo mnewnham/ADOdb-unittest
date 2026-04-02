@@ -30,9 +30,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Base Class for custom driver tests
  */
 
-class OrderByTest extends ADOdbTestCase {
-
-
+class OrderByTest extends ADOdbTestCase
+{
     /**
      * Test for {@see ADODConnection::orderBy()}
      *
@@ -42,8 +41,8 @@ class OrderByTest extends ADOdbTestCase {
      */
     #[DataProvider('providerStripOrderBy')]
     public function testStripOrderBy($sql, $stripped): void
-	{
-		$this->assertSame($stripped, adodb_strip_order_by($sql));
+    {
+        $this->assertSame($stripped, adodb_strip_order_by($sql));
     }
 
     /**
@@ -52,91 +51,92 @@ class OrderByTest extends ADOdbTestCase {
      * @return array [int fetchmode, string number_run column, string date column]
      */
     /**
-	 * Data provider for {@see testStripOrderBy()}
-	 *
-	 * @return array [SQL statement, SQL with ORDER BY clause stripped]
-	 */
-	public static function providerStripOrderBy(): array
-	{
-		return [
-			'No order by clause' => [
-				"SELECT name FROM table",
-				"SELECT name FROM table"
-			],
-			'Simple order by clause' => [
-				"SELECT name FROM table ORDER BY name",
-				"SELECT name FROM table"
-			],
-			'Order by clause descending' => [
-				"SELECT name FROM table ORDER BY name DESC",
-				"SELECT name FROM table"
-			],
-			'Order by clause with limit' => [
-				"SELECT name FROM table ORDER BY name LIMIT 5",
-				"SELECT name FROM table LIMIT 5"
-			],
-			'Ordered Subquery with outer order by' => [
-				"SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name) ORDER BY name DESC",
-				"SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)"
-			],
-			'Ordered Subquery without outer order by' => [
-				"SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)",
-				"SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)"
-			],
-		];
-	}
+     * Data provider for {@see testStripOrderBy()}
+     *
+     * @return array [SQL statement, SQL with ORDER BY clause stripped]
+     */
+    public static function providerStripOrderBy(): array
+    {
+        return [
+            'No order by clause' => [
+                "SELECT name FROM table",
+                "SELECT name FROM table"
+            ],
+            'Simple order by clause' => [
+                "SELECT name FROM table ORDER BY name",
+                "SELECT name FROM table"
+            ],
+            'Order by clause descending' => [
+                "SELECT name FROM table ORDER BY name DESC",
+                "SELECT name FROM table"
+            ],
+            'Order by clause with limit' => [
+                "SELECT name FROM table ORDER BY name LIMIT 5",
+                "SELECT name FROM table LIMIT 5"
+            ],
+            'Ordered Subquery with outer order by' => [
+                "SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name) ORDER BY name DESC",
+                "SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)"
+            ],
+            'Ordered Subquery without outer order by' => [
+                "SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)",
+                "SELECT * FROM table WHERE name IN (SELECT TOP 5 name FROM table_b ORDER by name)"
+            ],
+        ];
+    }
 
-	/**
-	 * Test for {@see _adodb_quote_fieldname()}
-	 *
-	 * @dataProvider quoteProvider
-	 */
+    /**
+     * Test for {@see _adodb_quote_fieldname()}
+     *
+     * @dataProvider quoteProvider
+     */
     #[DataProvider('quoteProvider')]
-	public function testQuoteFieldNames(
-        mixed $method, 
-		string $field, 
-		string $expected) : void {
+    public function testQuoteFieldNames(
+        mixed $method,
+        string $field,
+        string $expected
+    ): void {
 
-		global $ADODB_QUOTE_FIELDNAMES;
-		$ADODB_QUOTE_FIELDNAMES = $method;
-		$this->assertSame(
-            $expected, 
+        global $ADODB_QUOTE_FIELDNAMES;
+        $ADODB_QUOTE_FIELDNAMES = $method;
+        $this->assertSame(
+            $expected,
             _adodb_quote_fieldname($this->db, $field)
         );
-	}
+    }
 
-	/**
-	 * Data provider for {@see testQuoteFieldNames()}
-	 * @return array
-	 */
-	public static function quoteProvider()
-	{
-		$FIELD = sprintf(
-			"%sFIELD%s", 
-			$GLOBALS['ADOdbConnection']->nameQuote,
-			$GLOBALS['ADOdbConnection']->nameQuote
-		);
+    /**
+     * Data provider for {@see testQuoteFieldNames()}
+     * @return array
+     */
+    public static function quoteProvider()
+    {
+        $FIELD = sprintf(
+            "%sFIELD%s",
+            $GLOBALS['ADOdbConnection']->nameQuote,
+            $GLOBALS['ADOdbConnection']->nameQuote
+        );
 
-		$field = strtolower($FIELD);
+        $field = strtolower($FIELD);
 
-		$Field = str_replace('f', 'F', $field);
+        $Field = str_replace('f', 'F', $field);
 
-		$FIELDNAME = sprintf(
-			"%sFIELD NAME%s", 
-			$GLOBALS['ADOdbConnection']->nameQuote,
-			$GLOBALS['ADOdbConnection']->nameQuote
-		);
-		$fieldname = strtolower($FIELD);
+        $FIELDNAME = sprintf(
+            "%sFIELD NAME%s",
+            $GLOBALS['ADOdbConnection']->nameQuote,
+            $GLOBALS['ADOdbConnection']->nameQuote
+        );
+        $fieldname = strtolower($FIELD);
 
-		return [
-			'No quoting, single-word field name' => [false, 'Field', 'FIELD'],
-			'No quoting, field name with space' => [false, 'Field Name', "$FIELDNAME"],
-			'Quoting `true`' => [true, 'Field', $FIELD],
-			'Quoting `UPPER`' => ['UPPER', 'Field', $FIELD],
-			'Quoting `LOWER`' => ['LOWER', 'Field', $field],
-			'Quoting `NATIVE`' => ['NATIVE', 'Field', $Field],
-			'Quoting `BRACKETS`' => ['BRACKETS', 'Field', '[FIELD]'],
-			'Unknown value defaults to UPPER' => ['XXX', 'Field', $FIELD],
-		];
-	}
+        return [
+            'No quoting, single-word field name' => [false, 'Field', 'FIELD'],
+            'No quoting, field name with space' => [false, 'Field Name', "$FIELDNAME"],
+            'Quoting `true`' => [true, 'Field', $FIELD],
+            'Quoting `UPPER`' => ['UPPER', 'Field', $FIELD],
+            'Quoting `LOWER`' => ['LOWER', 'Field', $field],
+            'Quoting `NATIVE`' => ['NATIVE', 'Field', $Field],
+            'Quoting `BRACKETS`' => ['BRACKETS', 'Field', '[FIELD]'],
+            'Unknown value defaults to UPPER' => ['XXX', 'Field', $FIELD],
+        ];
+    }
 }

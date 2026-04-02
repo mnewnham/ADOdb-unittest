@@ -51,7 +51,7 @@ class SequenceTest extends ADOdbTestCase
         *load Data into the table, checking for driver specific loader
         */
         $db->startTrans();
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/table3-data.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -59,7 +59,6 @@ class SequenceTest extends ADOdbTestCase
         );
 
         if (!file_exists($tableSchema)) {
-
             $tableSchema = sprintf(
                 '%s/DatabaseSetup/table3-data.sql',
                 $GLOBALS['unitTestToolsDirectory']
@@ -70,7 +69,7 @@ class SequenceTest extends ADOdbTestCase
         * Loads the schema based on the DB type
         */
         readSqlIntoDatabase($db, $tableSchema);
-        
+
         $db->completeTrans();
     }
 
@@ -85,13 +84,13 @@ class SequenceTest extends ADOdbTestCase
     public function testCreateSequence(): void
     {
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $response = $this->db->CreateSequence('unittest_seq', 50);
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->completeTrans();
         }
 

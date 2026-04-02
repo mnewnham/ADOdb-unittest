@@ -58,7 +58,7 @@ class AddIndexTest extends DataDictFunctions
             );
             return;
         }
- 
+
         $metaIndexes = $this->dataDictionary->metaIndexes($this->testTableName);
 
         if (array_key_exists('string_test_index', $metaIndexes)) {
@@ -105,10 +105,9 @@ class AddIndexTest extends DataDictFunctions
                 $this->testTableName,
                 'string_test_index'
             );
-            if ($sql !== null) { 
-                
+            if ($sql !== null) {
                 $indexComment = $this->db->getOne($sql);
-           
+
                 $this->assertSame(
                     'THIS IS AN INDEX COMMENT',
                     $indexComment,

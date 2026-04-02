@@ -45,11 +45,11 @@ class GetInsertSqlTest extends ADOdbTestCase
         /*
         *load Data into the table, checking for driver specific loader
         */
-         
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-        
+
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/autoexecute-schema.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -60,14 +60,14 @@ class GetInsertSqlTest extends ADOdbTestCase
         * Loads the schema based on the DB type
         */
         readSqlIntoDatabase($db, $tableSchema);
-        
-         
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions){
+
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
     }
-    
-    
+
+
     /**
      * Set up the test environment
      *
@@ -156,7 +156,6 @@ class GetInsertSqlTest extends ADOdbTestCase
         );
 
         if (count($lastRecord) > 0) {
-
             $this->assertNotEquals(
                 $lastRecord[$field],
                 $newRecord[$field],
@@ -165,9 +164,7 @@ class GetInsertSqlTest extends ADOdbTestCase
                     $fetchDescription
                 )
             );
-
         }
-
     }
 
     /**
@@ -255,7 +252,6 @@ class GetInsertSqlTest extends ADOdbTestCase
                 $fetchDescription
             )
         );
-
     }
 
     /**
@@ -271,7 +267,7 @@ class GetInsertSqlTest extends ADOdbTestCase
         string $fetchDescription
     ): void {
 
-    
+
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
@@ -370,7 +366,7 @@ class GetInsertSqlTest extends ADOdbTestCase
         int $fetchMode,
         string $fetchDescription
     ): void {
-    
+
 
         $this->insertFetchMode($fetchMode);
 

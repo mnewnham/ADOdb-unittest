@@ -49,9 +49,9 @@ class MetaProcedureListTest extends MetaFunctions
         if ($GLOBALS['skipStoredProcedureTests'] == '1') {
             return;
         }
-        
+
         /*
-        * load Stored Procedures into class 
+        * load Stored Procedures into class
         */
         $db->startTrans();
 
@@ -93,10 +93,10 @@ class MetaProcedureListTest extends MetaFunctions
             $this->insertFetchMode($fetchMode);
 
             $response = $this->db->metaProcedures();
-                   
+
             $this->validateResetFetchModes();
 
-             if ($response == false) {
+            if ($response == false) {
                 $this->markTestSkipped(
                     'No support for stored procedures'
                 );

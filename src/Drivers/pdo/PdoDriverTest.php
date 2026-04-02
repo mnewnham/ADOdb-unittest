@@ -69,7 +69,7 @@ class PdoDriverTest extends ADOdbTestCase
     public function testContainsQuestionMarkPlaceholder($result, $sql): void
     {
         $method = new \ReflectionMethod($this->db, 'containsQuestionMarkPlaceholder');
-      
+
         //$pdoDriver = new ADODB_pdo();
         $this->assertSame($result, $method->invoke($this->db, $sql));
     }
@@ -108,16 +108,17 @@ class PdoDriverTest extends ADOdbTestCase
      */
      #[DataProvider('providerConformToBindParameterStyle')]
     public function testConformToBindParameterStyle(
-        $expected, 
-        $inputarr, 
-        $bindParameterStyle, 
-        $sql): void {
+        $expected,
+        $inputarr,
+        $bindParameterStyle,
+        $sql
+    ): void {
 
-        $method = new \ReflectionMethod($this->db, 'conformToBindParameterStyle');
-        
+         $method = new \ReflectionMethod($this->db, 'conformToBindParameterStyle');
 
-        $this->db->bindParameterStyle = $bindParameterStyle;
-        $this->assertSame($expected, $method->invoke($this->db, $sql ?? '', $inputarr));
+
+         $this->db->bindParameterStyle = $bindParameterStyle;
+         $this->assertSame($expected, $method->invoke($this->db, $sql ?? '', $inputarr));
     }
 
     /**

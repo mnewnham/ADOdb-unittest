@@ -124,7 +124,7 @@ class MetaIndexesTest extends MetaFunctions
             );
 
             $vdx2 = $executionResult['VDX2'];
-           
+
             $this->assertArrayHasKey(
                 'unique',
                 $vdx2,
@@ -132,16 +132,16 @@ class MetaIndexesTest extends MetaFunctions
             );
 
              $this->assertArrayHasKey(
-                'columns',
-                $vdx2,
-                'MetaIndexes key should have "columns" element'
-            );
+                 'columns',
+                 $vdx2,
+                 'MetaIndexes key should have "columns" element'
+             );
 
              $this->assertArrayHasKey(
-                'primary',
-                $vdx2,
-                'MetaIndexes key should have "primary" element'
-            );
+                 'primary',
+                 $vdx2,
+                 'MetaIndexes key should have "primary" element'
+             );
 
             $this->assertSame(
                 1,
@@ -155,10 +155,10 @@ class MetaIndexesTest extends MetaFunctions
             ];
 
              $this->assertSame(
-                $columns,
-                $vdx2['columns'],
-                'MetaIndexes index vdx2 should have 2 columns'
-            );
+                 $columns,
+                 $vdx2['columns'],
+                 'MetaIndexes index vdx2 should have 2 columns'
+             );
 
             $this->assertSame(
                 0,

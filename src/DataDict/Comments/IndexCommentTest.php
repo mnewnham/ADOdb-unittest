@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class IndexCommentTest extends DataDictFunctions
 {
-
     protected $commentTable  = 'testtable_1';
     protected $commentIndex  = 'vdx1';
     /**
@@ -50,7 +49,8 @@ class IndexCommentTest extends DataDictFunctions
         }
     }
 
-    public function setup(): void {
+    public function setup(): void
+    {
 
         parent::setup();
 
@@ -68,7 +68,6 @@ class IndexCommentTest extends DataDictFunctions
             $this->skipFollowingTests = true;
             return;
         }
-
     }
 
     /**
@@ -89,32 +88,31 @@ class IndexCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setIndexCommentSql() not supported by driver'    
+                'setIndexCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,$GLOBALS['iCommentText']),
+            strpos($sql, $GLOBALS['iCommentText']),
             sprintf(
-                'The returned SQL [%s] should be "%s"', 
+                'The returned SQL [%s] should be "%s"',
                 $sql,
                 $GLOBALS['iCommentText']
             )
-        );            
- 
+        );
+
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->completeTrans();
         }
-
     }
 
     /**
@@ -134,12 +132,12 @@ class IndexCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getIndexCommentSql() not supported by driver'    
+                'getIndexCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $indexComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -149,7 +147,6 @@ class IndexCommentTest extends DataDictFunctions
             $indexComment,
             'The index comment should be ' . $GLOBALS['iCommentText']
         );
-
     }
 
     /**
@@ -170,29 +167,29 @@ class IndexCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'setIndexCommentSql() not supported by driver'    
+                'setIndexCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
 
         $this->assertIsInt(
-            strpos($sql,'A' . $GLOBALS['iCommentText']),
+            strpos($sql, 'A' . $GLOBALS['iCommentText']),
             sprintf(
                 'The returned SQL [%s] should contain "A%s',
                 $sql,
                 $GLOBALS['iCommentText']
             )
-        );            
- 
+        );
+
         $this->db->startTrans();
         $this->db->execute($sql);
         $this->db->completeTrans();
-        
+
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
             $this->db->startTrans();
         }
-        
+
         $this->db->execute($sql);
 
         if ($GLOBALS['DriverControl']->commentsRequireTransactions) {
@@ -217,12 +214,12 @@ class IndexCommentTest extends DataDictFunctions
 
         if ($sql === null) {
             $this->markTestSkipped(
-                'getIndexCommentSql() not supported by driver'    
+                'getIndexCommentSql() not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
         }
-        
+
         $indexComment = $this->db->getOne($sql);
 
         $this->assertADOdbError($sql);
@@ -232,6 +229,5 @@ class IndexCommentTest extends DataDictFunctions
             $indexComment,
             'The index comment should now be ' . $GLOBALS['iCommentText']
         );
-
     }
 }
