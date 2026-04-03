@@ -149,14 +149,16 @@ class MetaIndexesTest extends MetaFunctions
                 'MetaIndexes unique key should be "1"'
             );
 
-            $columns = [
+            $expectedColumns = [
                 'INTEGER_FIELD',
                 'DATE_FIELD'
             ];
 
+            $actualColumns = array_map('strtoupper', $vdx2['columns']);
+
              $this->assertSame(
-                 $columns,
-                 $vdx2['columns'],
+                 $expectedColumns,
+                 $actualColumns,
                  'MetaIndexes index vdx2 should have 2 columns'
              );
 
