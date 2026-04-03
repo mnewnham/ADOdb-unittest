@@ -186,4 +186,134 @@ class ADOdbStringQuoting extends ADOdbTestCase
             'set back to normal after retrieval from DB'
         );
     }
+
+    /**
+     * Test for {@see ADODConnection::qstr()}
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:qstr
+     *
+     * @return void
+     */
+    public function testSendNullToQstr(): void
+    {
+        /*
+        * Blank out the empty_field column first to ensure that
+        * the total number of rows updated is correct
+        */
+        $SQL = "UPDATE testtable_3 SET empty_field = null";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
+
+        if ($errno > 0) {
+            return;
+        }
+
+        $qStrInboundValue = $this->db->qstr(null);
+
+        /*
+        * Check that the escaping is correct
+        */
+        $this->assertSame(
+            $qStrInboundValue,
+            "'$this->qStrExpectedResult'",
+            'The qstr() method should escape the inbound string correctly'
+        );
+
+
+
+        $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
+
+        if ($errno > 0) {
+            return;
+        }
+
+        $expectedValue = 11;
+        $actualValue = $this->getAffectedRows();
+
+        list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
+
+
+        // We should have updated 11 rows
+        $this->assertSame(
+            $expectedValue,
+            $actualValue,
+            'All rows should have been updated with the test string'
+        );
+
+        // Now we will check the value in the empty_field column
+        $sql = "SELECT empty_field FROM testtable_3";
+
+        $this->db->startTrans();
+        $returnValue = $this->db->getOne($sql);
+
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->db->CompleteTrans();
+        if ($errno > 0) {
+            return;
+        }
+
+        $this->assertSame(
+            $this->qStrInboundValue,
+            $returnValue,
+            'Qstr should have returned a string with the apostrophe ' .
+            'set back to normal after retrieval from DB'
+        );
+    }
+
+    /**
+     * Test for {@see ADODConnection::addq()}
+     *
+     * @link   https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:addq
+     * @return void
+     */
+    public function testSendNullToAddq(): void
+    {
+
+        /*
+        * The expected result is db dependent, so we will
+        * insert the string into the empty_field column
+        * and see if it fails to insert or not.
+        */
+        $this->db->param(false);
+        $p1 = $this->db->param('p1');
+        $bind = array(
+            'p1' => $this->db->addQ(null)
+        );
+
+        $sql = "UPDATE testtable_3 SET empty_field = $p1";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($sql, $bind);
+
+        if ($errno > 0) {
+            return;
+        }
+
+        $affectedRows =  $this->getAffectedRows();
+
+        list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
+
+        // We should have updated 11 rows
+        $this->assertSame(
+            11,
+            $affectedRows,
+            'All rows should have been updated with the test string'
+        );
+
+        // Now we will check the value in the empty_field column
+        $sql = "SELECT empty_field FROM testtable_3";
+
+        $returnValue = $this->db->getOne($sql);
+
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->assertSame(
+            $this->qStrInboundValue,
+            $returnValue,
+            'addQ should have returned a string with the apostrophe ' .
+            'set back to normal after retrieval from DB'
+        );
+    }
 }
