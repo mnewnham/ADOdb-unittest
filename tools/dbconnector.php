@@ -331,7 +331,6 @@ if (!$db->isConnected()) {
 switch ($credentials['driver']) {
     case 'mysqli':
     case 'mssqlnative':
-    case 'db2':
         $GLOBALS['schemaOwner'] = $db->database;
         break;
     
