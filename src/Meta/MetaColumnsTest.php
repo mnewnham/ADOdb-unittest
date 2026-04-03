@@ -48,41 +48,41 @@ class MetaColumnsTest extends MetaFunctions
      *
      * @return void
      */
-    public function testMetaColumnCount(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testMetaColumnCount(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+
         $expectedResult  = 9;
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $this->insertFetchMode($fetchMode);
 
+        $executionResult = $this->db->metaColumns($this->testTableName);
+        list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
 
-            $executionResult = $this->db->metaColumns($this->testTableName);
-            list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+        $this->validateResetFetchModes();
 
-            $this->validateResetFetchModes();
+        $this->assertIsArray(
+            $executionResult,
+            sprintf(
+                '[FETCH MODE %s] ' .
+                'Retrieving Metacolumns for table %s should have returned an array to count',
+                $fetchDescription,
+                $this->testTableName
+            )
+        );
 
-            $this->assertIsArray(
-                $executionResult,
-                sprintf(
-                    '[FETCH MODE %s] ' .
-                    'Retrieving Metacolumns for table %s should have returned an array to count',
-                    $fetchModeName,
-                    $this->testTableName
-                )
-            );
-
-            $this->assertSame(
+        $this->assertSame(
+            $expectedResult,
+            count($executionResult),
+            sprintf(
+                '[FETCH MODE %s] Checking Column Count, expected %d, got %d',
+                $fetchDescription,
                 $expectedResult,
-                count($executionResult),
-                sprintf(
-                    '[FETCH MODE %s] Checking Column Count, expected %d, got %d',
-                    $fetchModeName,
-                    $expectedResult,
-                    count($executionResult)
-                )
-            );
-        }
+                count($executionResult)
+            )
+        );
     }
 
     /**
@@ -91,44 +91,44 @@ class MetaColumnsTest extends MetaFunctions
      *
      * @return void
      */
-    public function testMetaColumnObjects(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testMetaColumnObjects(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $this->insertFetchMode($fetchMode);
 
-            $executionResult = $this->db->metaColumns($this->testTableName);
-            list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+        $executionResult = $this->db->metaColumns($this->testTableName);
+        list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
 
-            $this->validateResetFetchModes();
+        $this->validateResetFetchModes();
 
-            $this->assertIsArray(
-                $executionResult,
+        $this->assertIsArray(
+            $executionResult,
+            sprintf(
+                '[FETCH MODE %s] ' .
+                    'Retrieving Metacolumns Objects for table %s should have returned an array',
+                $fetchDescription,
+                $this->testTableName
+            )
+        );
+
+
+        foreach ($executionResult as $column => $o) {
+            $reflection = new \ReflectionClass($o);
+            $oType = $reflection->getShortName();
+
+            $this->assertSame(
+                'ADOFieldObject',
+                $oType,
                 sprintf(
-                    '[FETCH MODE %s] ' .
-                        'Retrieving Metacolumns Objects for table %s should have returned an array',
-                    $fetchModeName,
-                    $this->testTableName
+                    '[FETCH MODE %s] metaColumns should return ' .
+                    'an ADOFieldObject object for column %s',
+                    $fetchDescription,
+                    $column
                 )
             );
-
-
-            foreach ($executionResult as $column => $o) {
-                $reflection = new \ReflectionClass($o);
-                $oType = $reflection->getShortName();
-
-                $this->assertSame(
-                    'ADOFieldObject',
-                    $oType,
-                    sprintf(
-                        '[FETCH MODE %s] metaColumns should return ' .
-                        'an ADOFieldObject object for column %s',
-                        $fetchModeName,
-                        $column
-                    )
-                );
-            }
         }
     }
 
@@ -137,8 +137,12 @@ class MetaColumnsTest extends MetaFunctions
      *
      * Checks that the returned columns match the expected ones
      */
-    public function testMetaColumns(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testMetaColumns(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+
         $expectedResult = [
             '0' => 'ID',
             '1' => 'VARCHAR_FIELD',
@@ -150,56 +154,53 @@ class MetaColumnsTest extends MetaFunctions
             '7' => 'EMPTY_FIELD'
         ];
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-           //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
-            $executionResult = $this->db->metaColumns($this->testTableName);
-            list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
+        $executionResult = $this->db->metaColumns($this->testTableName);
+        list($errno, $errmsg) = $this->assertADOdbError('metaColumns()');
 
-            $this->validateResetFetchModes();
+        $this->validateResetFetchModes();
 
-            $this->assertIsArray(
-                $executionResult,
-                sprintf(
-                    '[FETCH MODE %s] ' .
-                        'Retrieving Metacolumns for table %s should have returned an array',
-                    $fetchModeName,
-                    $this->testTableName
-                )
-            );
+        $this->assertIsArray(
+            $executionResult,
+            sprintf(
+                '[FETCH MODE %s] ' .
+                    'Retrieving Metacolumns for table %s should have returned an array',
+                $fetchDescription,
+                $this->testTableName
+            )
+        );
 
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                foreach ($expectedResult as $expectedKey => $expectedField) {
-                    $this->assertArrayHasKey(
-                        $expectedKey,
-                        $executionResult,
-                        sprintf(
-                            '[FETCH MODE %s] ' .
-                            'Checking for expected key %s in metaColumns return value, got %s',
-                            $fetchModeName,
-                            $expectedField,
-                            print_r($executionResult, true)
-                        )
-                    );
-                }
-            } else {
-                foreach ($expectedResult as $expectedField) {
-                    $this->assertArrayHasKey(
+        if ($absoluteFetchMode == ADODB_FETCH_NUM) {
+            foreach ($expectedResult as $expectedKey => $expectedField) {
+                $this->assertArrayHasKey(
+                    $expectedKey,
+                    $executionResult,
+                    sprintf(
+                        '[FETCH MODE %s] ' .
+                        'Checking for expected key %s in metaColumns return value, got %s',
+                        $fetchDescription,
                         $expectedField,
-                        $executionResult,
-                        sprintf(
-                            '[FETCH MODE %s] ' .
-                            'Checking for expected field %s in metaColumns return value, got %s',
-                            $fetchModeName,
-                            $expectedField,
-                            print_r($executionResult, true)
-                        )
-                    );
+                        print_r($executionResult, true)
+                    )
+                );
+            }
+        } else {
+            foreach ($expectedResult as $expectedField) {
+                $this->assertArrayHasKey(
+                    $expectedField,
+                    $executionResult,
+                    sprintf(
+                        '[FETCH MODE %s] ' .
+                        'Checking for expected field %s in metaColumns return value, got %s',
+                        $fetchDescription,
+                        $expectedField,
+                        print_r($executionResult, true)
+                    )
+                );
 
-                    if (!isset($executionResult[$expectedField])) {
-                        continue;
-                    }
+                if (!isset($executionResult[$expectedField])) {
+                    continue;
                 }
             }
         }
@@ -210,27 +211,25 @@ class MetaColumnsTest extends MetaFunctions
      *
      * @return void
      */
-    public function testMetaColumnsForInvalidTable(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testMetaColumnsForInvalidTable(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
+        $this->insertFetchMode($fetchMode);
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
-            $this->insertFetchMode($fetchMode);
+        $response = $this->db->metaColumns('invalid_table');
 
+        $this->validateResetFetchModes();
 
-            $response = $this->db->metaColumns('invalid_table');
-
-            $this->validateResetFetchModes();
-
-            $this->assertFalse(
-                $response,
-                sprintf(
-                    '[FETCH MODE %s] Checking that metaColumns returns ' .
-                    'false for an invalid table',
-                    $fetchModeName
-                )
-            );
-        }
+        $this->assertFalse(
+            $response,
+            sprintf(
+                '[FETCH MODE %s] Checking that metaColumns returns ' .
+                'false for an invalid table',
+                $fetchDescription
+            )
+        );
     }
 }

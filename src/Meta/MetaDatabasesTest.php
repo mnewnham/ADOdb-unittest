@@ -42,50 +42,50 @@ class MetaDatabasesTest extends MetaFunctions
         parent::setUpBeforeClass();
     }
 
-    public function testMetaDatabases(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testMetaDatabases(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+
 
         $baseDatabaseName = $this->db->database;
 
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->database = $baseDatabaseName;
+        $this->insertFetchMode($fetchMode);
 
-            $this->insertFetchMode($fetchMode);
+        $response = $this->db->metaDatabases();
 
-            $response = $this->db->metaDatabases();
+        $this->validateResetFetchModes();
 
-            $this->validateResetFetchModes();
+        $this->assertSame(
+            $baseDatabaseName,
+            $this->db->database,
+            sprintf(
+                '[FETCH MODE %s] Checking that metaDatabases ' .
+                'resets the value of ADOConnection::database',
+                $fetchDescription
+            )
+        );
 
-            $this->assertSame(
-                $baseDatabaseName,
-                $this->db->database,
-                sprintf(
-                    '[FETCH MODE %s] Checking that metaDatabases ' .
-                    'resets the value of ADOConnection::database',
-                    $fetchModeName
-                )
-            );
+        $this->assertIsArray(
+            $response,
+            sprintf(
+                '[FETCH MODE %s] Checking that metaDatabases ' .
+                'returns an array of attached databases',
+                $fetchDescription
+            )
+        );
 
-            $this->assertIsArray(
-                $response,
-                sprintf(
-                    '[FETCH MODE %s] Checking that metaDatabases ' .
-                    'returns an array of attached databases',
-                    $fetchModeName
-                )
-            );
+        $flipResponse = array_change_key_case(array_flip($response), CASE_UPPER);
 
-            $flipResponse = array_change_key_case(array_flip($response), CASE_UPPER);
-
-            $this->assertArrayHasKey(
-                strtoupper($GLOBALS['schemaOwner']),
-                $flipResponse,
-                sprintf(
-                    '[FETCH MODE %s] Checking that metaDatabases ' .
-                    'returns the currently attached database',
-                    $fetchModeName
-                )
-            );
-        }
+        $this->assertArrayHasKey(
+            strtoupper($baseDatabaseName ?? ''),
+            $flipResponse,
+            sprintf(
+                '[FETCH MODE %s] Checking that metaDatabases ' .
+                'returns the currently attached database',
+                $fetchDescription
+            )
+        );
     }
 }

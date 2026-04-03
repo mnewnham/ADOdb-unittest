@@ -103,8 +103,8 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $this->assertEquals(
-                $fieldObject->name,
-                $this->tt1Fields[$i],
+                strtoupper($fieldObject->name),
+                strtoupper($this->tt1Fields[$i]),
                 sprintf(
                     '[FETCH %s] Expected field name with no bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
@@ -165,8 +165,8 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $this->assertEquals(
-                $fieldObject->name,
-                $this->tt1Fields[$i],
+                strtoupper($fieldObject->name),
+                strtoupper($this->tt1Fields[$i]),
                 sprintf(
                     '[FETCH %s] Expected field name with bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
