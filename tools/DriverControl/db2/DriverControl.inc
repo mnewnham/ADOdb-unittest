@@ -24,4 +24,8 @@ class DriverControl extends \CoreControl
      * @var integer
      */
     public int $nativeModeCasing = 1;
+
+    public function __construct(){
+        $this->schemaOwner = $GLOBALS['schemaOwner'];
+    }
 }
