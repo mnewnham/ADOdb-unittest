@@ -201,7 +201,6 @@ class LengthTest extends ADOdbTestCase
 
         $row = $this->db->getRow($sql);
 
-        print_r($row);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $numericRow = [];
