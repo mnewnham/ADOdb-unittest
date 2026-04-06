@@ -68,10 +68,10 @@ class FetchFieldTest extends ADOdbCoreSetup
 
         $this->insertFetchMode($fetchMode);
 
-        $sql = "SELECT id FROM {$this->testTableName} ORDER BY id DESC";
+        $sql = "SELECT id FROM testtable_3 ORDER BY id DESC";
         $lastId = $this->db->getOne($sql);
 
-        $SQL = "SELECT * FROM testtable_1 WHERE id=-1";
+        $SQL = "SELECT * FROM testtable_3 WHERE id=-1";
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(
@@ -133,7 +133,7 @@ class FetchFieldTest extends ADOdbCoreSetup
 
         $bind = ['p1' => -1];
 
-        $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
+        $SQL = "SELECT * FROM testtable_3 WHERE id=$p1";
         $result = $this->db->execute($SQL, $bind);
 
         $this->assertEquals(
@@ -193,10 +193,19 @@ class FetchFieldTest extends ADOdbCoreSetup
 
         $this->insertFetchMode($fetchMode);
 
-        $sql = "SELECT id FROM testtable_1 ORDER BY id DESC";
+        $sql = "SELECT id FROM testtable_3 ORDER BY id DESC";
         $lastId = $this->db->getOne($sql);
 
-        $SQL = "SELECT * FROM testtable_1 WHERE id=$lastId";
+        if (!$lastId) {
+            
+            $this->fail(
+                'Could not find valid record from testtable_3'
+            );
+
+            return;
+
+        }
+        $SQL = "SELECT * FROM testtable_3 WHERE id=$lastId";
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(
@@ -254,14 +263,14 @@ class FetchFieldTest extends ADOdbCoreSetup
 
          $this->insertFetchMode($fetchMode);
 
-         $sql = "SELECT id FROM testtable_1 ORDER BY id DESC";
+         $sql = "SELECT id FROM testtable_3 ORDER BY id DESC";
          $lastId = $this->db->getOne($sql);
 
          $p1 = $this->db->param('p1');
 
          $bind = ['p1' => $lastId];
 
-         $SQL = "SELECT * FROM testtable_1 WHERE id=$p1";
+         $SQL = "SELECT * FROM testtable_3 WHERE id=$p1";
          $result = $this->db->execute($SQL, $bind);
 
          $this->assertEquals(
