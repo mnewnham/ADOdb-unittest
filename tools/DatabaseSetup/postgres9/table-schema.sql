@@ -20,7 +20,7 @@ DROP TYPE IF EXISTS ENUM_FIELD_TO_KEEP_ENUM_TYPE;
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (
-	id SERIAL PRIMARY KEY,
+	id SERIAL,
 	varchar_field VARCHAR(20),
 	datetime_field TIME,
 	date_field DATE,
@@ -28,7 +28,8 @@ CREATE TABLE testtable_1 (
 	decimal_field decimal(12,2) DEFAULT 0.0,
 	boolean_field BOOLEAN,
 	empty_field VARCHAR(240) DEFAULT '',
-	number_run_field SMALLINT DEFAULT 0
+	number_run_field SMALLINT DEFAULT 0,
+	PRIMARY KEY(id, integer_field)
 );
 
 CREATE	UNIQUE INDEX vdx1 ON testtable_1 (varchar_field);
