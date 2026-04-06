@@ -462,8 +462,17 @@ if ($GLOBALS['skipActiveRecordTests'] == 0) {
     {
     }
     */
+    $quoteOperator = false;
+    if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
+            $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
+    }
+    print "Active Record Quoting is set to: $quoteOperator
+    ";
+    global $ADODB_QUOTE_FIELDNAMES;
+    $ADODB_QUOTE_FIELDNAMES = $quoteOperator;
     $GLOBALS['person']   = new person(false, false, $db);
     $GLOBALS['child']    = new child('children', array('id'), $db);
+    $GLOBALS['QuoteOperator'] = $quoteOperator;
 
     ADODB_SetDatabaseAdapter($db);
 }
