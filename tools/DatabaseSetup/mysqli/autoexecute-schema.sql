@@ -8,6 +8,6 @@ CREATE TABLE autoexecute (
 	decimal_field decimal(12.2) DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
-	PRIMARY KEY(id),
+	PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
