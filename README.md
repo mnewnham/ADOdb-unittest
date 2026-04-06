@@ -67,7 +67,7 @@ Easiest installed from Packagist as this will add PHPUnit as well, otherwise dow
     <td>&#x2714;</td>
     <td></td>
     <td></td>
-     <td></td>
+    <td>&#x2714;</td>
 </tr>
 <tr>
     <th>oci8</th>
@@ -79,7 +79,7 @@ Easiest installed from Packagist as this will add PHPUnit as well, otherwise dow
     <td>&#x2714;</td>
     <td></td>
     <td></td>
-     <td></td>
+    <td>&#x2714;</td>
 </tr>       
 <tr>
     <th>db2</th>
@@ -96,12 +96,12 @@ Easiest installed from Packagist as this will add PHPUnit as well, otherwise dow
 </tr> 
 <tr>
     <th>PDO</th>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+   <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td>
+    <td>&#x2714;</td> 
+    <td>&#x2714;</td>
     <td></td>
     <td></td>
      <td></td>
@@ -190,6 +190,7 @@ skipDbCreation=0
 [activerecord]
 skipTests=0
 extended=0
+quotefieldnames=false|UPPER|LOWER|BRACKETS
 ````
 To test active-recordx.inc.php, set the extended flag to 1
 
