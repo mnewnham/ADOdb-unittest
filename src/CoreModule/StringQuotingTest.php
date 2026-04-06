@@ -29,7 +29,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Base Class for custom driver tests
  */
 
-class ADOdbStringQuoting extends ADOdbTestCase
+class StringQuotingTest extends ADOdbTestCase
 {
     /**
      * The original string value to manipulate
@@ -44,7 +44,7 @@ class ADOdbStringQuoting extends ADOdbTestCase
      *
      * @var     string $qStrExpectedResult
      */
-    protected string $qStrExpectedResult = "Famed author James O\\'Sullivan";
+    protected string $qStrExpectedResult = "";
 
     /**
      * Set up the test environment
@@ -55,6 +55,7 @@ class ADOdbStringQuoting extends ADOdbTestCase
     {
 
         parent::setup();
+        $this->qStrExpectedResult = $GLOBALS['DriverControl']->qStrExpectedResult;
     }
 
     /**
@@ -215,7 +216,7 @@ class ADOdbStringQuoting extends ADOdbTestCase
         */
         $this->assertSame(
             $qStrInboundValue,
-            "'$this->qStrExpectedResult'",
+            "''",
             'The qstr() method should escape the inbound string correctly'
         );
 

@@ -90,4 +90,12 @@ class CoreControl
     public mixed $schemaOwner = false;
 
 
+    /**
+     * What the qstr process should return as a quoted string
+     *
+     * @var string
+     */
+    public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
+
+
 }

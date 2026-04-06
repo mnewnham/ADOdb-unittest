@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for the mysqli driver of ADOdb.
+ * Tests cases for the db2 driver of ADOdb.
  * Try to write database-agnostic tests where possible.
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
@@ -20,14 +20,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
+namespace MNewnham\ADOdbUnitTest\Drivers\db2;
 
 use MNewnham\ADOdbUnitTest\Drivers\ADOdbStringQuoting;
 
 /**
  * Class MysqliDriverTest
  *
- * Test cases for for the MySQLi native driver
+ * Test cases for for the Postgres9 native driver
  */
 class QuotingTest extends ADOdbStringQuoting
 {
@@ -49,10 +49,10 @@ class QuotingTest extends ADOdbStringQuoting
 
         parent::setup();
 
-        if ($this->adoDriver !== 'mysqli') {
+        if ($this->adoDriver !== 'db2') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the mysqli driver'
+                'This test is only applicable for the db2 driver'
             );
         }
     }
