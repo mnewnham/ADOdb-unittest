@@ -13,7 +13,8 @@ CREATE TABLE persons (
     id INTEGER NOT NULL,
     name_first VARCHAR(100) NOT NULL,
     name_last VARCHAR(100) NOT NULL,
-    birth_date DATE NOT NULL
+    birth_date DATE NOT NULL,
+    PRIMARY KEY (id)
 );
 
 -- Creates an auto-increment column
