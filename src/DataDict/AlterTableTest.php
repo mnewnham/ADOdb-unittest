@@ -55,9 +55,13 @@ class AlterTableTest extends DataDictFunctions
                 BOOLEAN_FIELD I NOTNULL DEFAULT 0,
                 DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
                 BLOB_FIELD B,
-                LONG_FIELD XL,
-                ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers'
-        ";
+                LONG_FIELD XL";
+
+        if ($GLOBALS['DriverControl']->hasNativeEnum) {
+            $flds .= ",
+            ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers''
+            ";
+        }
 
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName,
