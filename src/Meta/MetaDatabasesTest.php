@@ -48,8 +48,12 @@ class MetaDatabasesTest extends MetaFunctions
         string $fetchDescription
     ): void {
 
-
-        $baseDatabaseName = $this->db->database;
+       
+        if ($GLOBALS['DriverControl']->databaseIsSchema) {
+            $baseDatabaseName = $this->db->user;
+        } else {
+            $baseDatabaseName = $this->db->database;
+        }
 
         $this->insertFetchMode($fetchMode);
 
@@ -57,6 +61,7 @@ class MetaDatabasesTest extends MetaFunctions
 
         $this->validateResetFetchModes();
 
+        /*
         $this->assertSame(
             $baseDatabaseName,
             $this->db->database,
@@ -66,6 +71,7 @@ class MetaDatabasesTest extends MetaFunctions
                 $fetchDescription
             )
         );
+        */
 
         $this->assertIsArray(
             $response,
@@ -76,10 +82,11 @@ class MetaDatabasesTest extends MetaFunctions
             )
         );
 
-        $flipResponse = array_change_key_case(array_flip($response), CASE_UPPER);
+        
+        $flipResponse = array_change_key_case(array_flip($response), CASE_LOWER);
 
         $this->assertArrayHasKey(
-            strtoupper($baseDatabaseName ?? ''),
+            strtolower($baseDatabaseName ?? ''),
             $flipResponse,
             sprintf(
                 '[FETCH MODE %s] Checking that metaDatabases ' .

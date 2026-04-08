@@ -83,12 +83,18 @@ class CoreControl
     public mixed $outParameterType = false;
 
     /**
-     * For methods that test for ownersip, what is the schema owner
+     * For methods that test for ownership, what is the schema owner
      *
      * @var mixed
      */
     public mixed $schemaOwner = false;
 
+    /**
+     * For methods that test for databases, use schema instead
+     *
+     * @var mixed
+     */
+    public bool $databaseIsSchema = false;
 
     /**
      * What the qstr process should return as a quoted string

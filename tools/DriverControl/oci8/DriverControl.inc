@@ -29,4 +29,11 @@ class DriverControl extends \CoreControl
      * @var mixed
      */
     public mixed $outParameterType = OCI_B_CURSOR;
+
+    /**
+     * For methods that test for databases, use schema instead
+     *
+     * @var mixed
+     */
+    public bool $databaseIsSchema = true;
 }
