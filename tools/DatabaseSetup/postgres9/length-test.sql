@@ -9,4 +9,4 @@ id INTEGER NOT NULL,
     text_field TEXT  
 );
 
-INSERT INTO length_test (id, text_field) VALUES (1, 'TEST567890TEST567890');
+INSERT INTO length_test (id, text_field, char_field, varchar_field) VALUES (1, 'TEST567890TEST567890', 'TEST567890TEST567890','TEST567890TEST567890');

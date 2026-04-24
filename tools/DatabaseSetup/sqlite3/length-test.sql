@@ -8,5 +8,3 @@ id INTEGER NOT NULL,
     varchar_field VARCHAR(30) DEFAULT 'TEST567890TEST567890',
     text_field TEXT  
 );
-
-INSERT INTO length_test (id, text_field) VALUES (1, 'TEST567890TEST567890');

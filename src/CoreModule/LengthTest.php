@@ -47,13 +47,12 @@ class LengthTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-
+       
         $ok = readSqlIntoDatabase($db, $schemaFile);
-
+        
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
@@ -62,21 +61,23 @@ class LengthTest extends ADOdbTestCase
         * Load the table to test data length tests
         */
         $schemaFile = sprintf(
-            '%s/DatabaseSetup/%s/length-test-data.sql',
+            '%s/DatabaseSetup/length-test-data.sql',
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
 
         if (file_exists($schemaFile)) {
-            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-                $db->startTrans();
-            }
+            
+            $db->startTrans(); 
+            $ok = readSqlIntoDatabase($db, $schemaFile); 
+            $db->completeTrans();
+            
+        }
 
-            $ok = readSqlIntoDatabase($db, $schemaFile);
-
-            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-                $db->completeTrans();
-            }
+        if ($GLOBALS['ADOdriver'] == 'mysqli') {        
+            $db->startTrans();
+            $db->updateClob('length_test','text_field','TEST567890TEST567890','id=1');
+            $db->completeTrans();
         }
     }
 
@@ -95,12 +96,13 @@ class LengthTest extends ADOdbTestCase
 
         $absoluteMode = $this->insertFetchMode($fetchMode);
 
+
         $metaColumns = $this->db->metaColumns('length_test');
 
         $lengthColumns = [];
 
         foreach ($metaColumns as $col => $data) {
-            $metaType = $this->db->metaType($data->type);
+            $metaType = $this->db->metaType($data);
             if (!in_array($metaType, ['C','C2','X','B','XL'])) {
                 continue;
             }
@@ -125,7 +127,7 @@ class LengthTest extends ADOdbTestCase
                     FROM length_test 
                 WHERE id=1";
 
-
+       
         $row = $this->db->getRow($sql);
         if (!$row) {
             $this->markTestSkipped(
@@ -133,6 +135,7 @@ class LengthTest extends ADOdbTestCase
             );
             return;
         }
+       
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $numericRow = [];
@@ -178,7 +181,7 @@ class LengthTest extends ADOdbTestCase
         $valueColumns = [];
 
         foreach ($metaColumns as $col => $data) {
-            $metaType = $this->db->metaType($data->type);
+            $metaType = $this->db->metaType($data);
             if (!in_array($metaType, ['C','C2','X','XL'])) {
                 continue;
             }
@@ -194,10 +197,10 @@ class LengthTest extends ADOdbTestCase
                     FROM length_test 
                 WHERE id=1";
 
-        print "
-        $fetchDescription $sql
-        -----------------------------------
-        ";
+       // print "
+        //$fetchDescription $sql
+        //-----------------------------------
+        //";
 
         $row = $this->db->getRow($sql);
 
