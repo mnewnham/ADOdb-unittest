@@ -36,11 +36,11 @@ class columnTypes
     * @var array
     */
     public array $databaseFieldsDefinition = [
-        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
-        ['db' => 'VARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR2(10)'],
-        ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
-        ['db' => 'NVARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR2(10)'],
-        ['db' => 'NVARCHAR2', 'meta' => 'TYPEX', 'output' => 'TYPEX', 'build' => 'NVARCHAR2(1000)'],
+        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'CHAR(10)'],
+        ['db' => 'VARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'VARCHAR2(10)'],
+        ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'NCHAR(10)'],
+        ['db' => 'NVARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'NVARCHAR2(10)'],
+        ['db' => 'NVARCHAR2', 'meta' => 'X', 'output' => 'TYPEX', 'build' => 'NVARCHAR2(1000)'],
 
         ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
         ['db' => 'DATE', 'meta' => 'T', 'output' => 'DATE', 'build' => 'DATE'],
@@ -50,12 +50,13 @@ class columnTypes
         ['db' => 'NCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'NCLOB'],
         ['db' => 'BFILE', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'BFILE'],
        
-        ['db' => 'LONG', 'meta' => 'TYPEX', 'output' => 'VARCHAR(4000)', 'build' => 'LONG'],
-        ['db' => 'LONGRAW', 'meta' => 'TYPEX', 'output' =>'VARCHAR(4000)', 'build' => 'RAW(1000)'],
+        ['db' => 'LONG', 'meta' => 'X', 'output' => 'VARCHAR(4000)', 'build' => 'LONG'],
+       // ['db' => 'RAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'RAW(1000)'],
+       // ['db' => 'LONGRAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'LONG RAW'],
 
 
         ['db' => 'NUMBER(1)', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
-        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'NUMBER(1)'],
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
         
         ['db' => 'NUMBER(3)', 'meta' => 'I1', 'output' => 'NUMBER(3)', 'build' => 'NUMBER(3)'],
         ['db' => 'NUMBER(5)', 'meta' => 'I2', 'output' => 'NUMBER(5)', 'build' => 'NUMBER(5)'],

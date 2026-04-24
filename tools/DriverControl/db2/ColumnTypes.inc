@@ -36,42 +36,25 @@ class columnTypes
     * @var array
     */
     public array $databaseFieldsDefinition = [
-        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
-        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
-       // ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
-      //  ['db' => 'NVARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR2(10)'],
-      //  ['db' => 'NVARCHAR2', 'meta' => 'TYPEX', 'output' => 'TYPEX', 'build' => 'NVARCHAR2(1000)'],
-
-       ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'BINARY', 'build' => 'BINARY'],
-        ['db' => 'VARBINARY(30)', 'meta' => 'C2', 'output' => 'VARBINARY', 'build' => 'VARBINARY(30)'],
-
-        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
-        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
-
-         ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],
-       
-        ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'],
-        ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],
-        ['db' => 'DBCLOB', 'meta' => 'XL', 'output' => 'DBCLOB', 'build' => 'DBCLOB'],
-       
-        //['db' => 'LONG', 'meta' => 'TYPEX', 'output' => 'VARCHAR(4000)', 'build' => 'LONG'],
-        //['db' => 'LONGRAW', 'meta' => 'TYPEX', 'output' =>'VARCHAR(4000)', 'build' => 'RAW(1000)'],
-
-
-        //['db' => 'NUMBER(1)', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
-        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'],
-        
-       // ['db' => 'NUMBER(3)', 'meta' => 'I1', 'output' => 'NUMBER(3)', 'build' => 'NUMBER(3)'],
-        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
-        //['db' => 'NUMBER(10)', 'meta' => 'I4', 'output' => 'NUMBER(10)', 'build' => 'NUMBER(10)'],
-        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
-        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'],
-
-        ['db' => 'DECIMAL(16,2)', 'meta' => 'N', 'output' => 'DECIMAL', 'build' => 'DECIMAL(16,2)'],
-   
-        ['db' => 'REAL', 'meta' => 'R', 'output' => 'REAL', 'build' => 'REAL'],
-        ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'FLOAT,', 'build' => 'FLOAT' ]
-        //['db' => 'DECFLOAT', 'meta' => 'F', 'output' => 'FLOAT,', 'build' => 'DECFLOAT' 
+        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],              //0
+        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],        //1
+        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(1)'],        //1
+        ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'BINARY', 'build' => 'BINARY'],         //2
+        ['db' => 'VARBINARY(30)', 'meta' => 'C2', 'output' => 'BINARY', 'build' => 'VARBINARY(30)'], //3
+        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'], //4
+        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'], //5
+        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],  //6
+        ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'], //7
+        ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],  //8
+        ['db' => 'DBCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'DBCLOB'],  //9
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'], //10
+        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'], //11
+        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'], //12
+        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'], //13
+        ['db' => 'DECIMAL(5,3)', 'meta' => 'N', 'output' => 'DECIMAL', 'build' => 'DECIMAL(6,3)'], //14
+        ['db' => 'DECIMAL(16,2)', 'meta' => 'N', 'output' => 'DECIMAL', 'build' => 'DECIMAL(16,2)'], //14
+        ['db' => 'REAL', 'meta' => 'R', 'output' => 'REAL', 'build' => 'REAL'], //15
+        ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'FLOAT', 'build' => 'FLOAT' ] //16
     ];
 
     /**
