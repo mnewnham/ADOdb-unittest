@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\CoreModule;
+namespace MNewnham\ADOdbUnitTest\CoreModule\Objects;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 
@@ -28,7 +28,7 @@ use MNewnham\ADOdbUnitTest\ADOdbTestCase;
  *
  * Test cases for for ADOdb MetaFunctions
  */
-class ObjectTest extends ADOdbTestCase
+class TestObjectHandling extends ADOdbTestCase
 {
     protected ?array $comparison       = null;
     protected ?array $comparisonLcKeys = null;
@@ -142,7 +142,7 @@ class ObjectTest extends ADOdbTestCase
      */
     public function testFetchFirstObj(): void
     {
-
+        
         /*
         * Must put the record pointer in place first
         */
@@ -185,7 +185,7 @@ class ObjectTest extends ADOdbTestCase
     {
 
         $nextObject = $this->fetchRecordSet->fetchObj();
-
+       
         $this->assertEquals(
             $this->comparison[0][$this->idKey],
             $nextObject->id,
