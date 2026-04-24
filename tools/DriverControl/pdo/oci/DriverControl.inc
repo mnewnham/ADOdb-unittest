@@ -21,14 +21,14 @@ class DriverControl extends \CoreControl
      *
      * @var mixed
      */
-    public mixed $inParameterType = OCI_B_INT;
+    //public mixed $inParameterType = OCI_B_INT;
 
     /**
      * If required, what is the stored procedure OUT parameter type
      *
      * @var mixed
      */
-    public mixed $outParameterType = OCI_B_CURSOR;
+    //public mixed $outParameterType = OCI_B_CURSOR;
 
     /**
      * For methods that test for databases, use schema instead
@@ -43,26 +43,4 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $supportsIndexComments = false;
-
-     /**
-     * Does the DB support ENUM natively
-     *
-     * @var boolean
-     */
-    public bool $hasNativeEnum = false;
-
-     /**
-     * What the qstr process should return as a quoted string
-     *
-     * @var string
-     */
-    public string $qStrExpectedResult = "Famed author James O''Sullivan";
-
-    /**
-     * A wrapper to allow the execution of date statements
-     *
-     * @var string
-     */
-    public $dateMethodExecutor = 'SELECT %s AS result FROM dual';
-
 }
