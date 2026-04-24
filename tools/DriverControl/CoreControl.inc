@@ -103,5 +103,11 @@ class CoreControl
      */
     public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
 
+    /**
+     * A wrapper to allow the execution of date statements
+     *
+     * @var string
+     */
+    public $dateMethodExecutor = 'SELECT %s';
 
 }
