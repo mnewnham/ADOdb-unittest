@@ -91,6 +91,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             return;
         }
 
+        print "Source Column Types From: $columnTypesFile
+        ";
+
         require_once $columnTypesFile;
 
         $columnTypes = new \columnTypes();
@@ -195,10 +198,10 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $driverColType         = $nameData['db'];
 
 
-        if (strcasecmp($expectedMetaType, 'typex') == 0) {
-            $expectedMetaType =  $GLOBALS['ADOdataDictionary']->typeX;
-        } elseif (strcasecmp($expectedMetaType, 'typexl') == 0) {
-            $expectedMetaType =  $GLOBALS['ADOdataDictionary']->typeXL;
+        if (strcasecmp($expectedActualType, 'typex') == 0) {
+            $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeX;
+        } elseif (strcasecmp($expectedActualType, 'typexl') == 0) {
+            $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeXL;
         }
         //if ($expectedSize) {
         //    $expectedActualType .= sprintf('(%s)', $expectedSize);
@@ -361,10 +364,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
 
-
         $sql = $this->db->getInsertSql($template, $fields);
 
-        $this->db->startTrans();
+          $this->db->startTrans();
         $result = $this->db->execute($sql);
         $this->db->completeTrans(false);
 
