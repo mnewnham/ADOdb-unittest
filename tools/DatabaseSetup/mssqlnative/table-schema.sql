@@ -4,6 +4,8 @@
 -- but this is native inserts so the column types may differ across databases
 
 -- insertion_table will be built by createTable tests
+DROP TABLE IF EXISTS insert_auto;
+DROP TABLE IF EXISTS insert_manual;
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 

@@ -1,6 +1,18 @@
 -- This table is used to test changes to columns via dictionary
 -- functions. not used by createTableSql
 -- Reprocessed for each test to provide a standard baseline
+DROP TABLE IF EXISTS dictionary_change_test_table;
+DROP TABLE IF EXISTS dt_foreign_key_target_1;
+
+
+-- Creates a first foreign reference for foreign_key_source
+CREATE TABLE dt_foreign_key_target_1 (
+	id_1 INTEGER IDENTITY(1,1) PRIMARY KEY,
+    integer_field_1 INTEGER
+);
+
+-- Must provide a qualifying index to match the fk definition
+CREATE UNIQUE INDEX dt_fk1_proxy ON dt_foreign_key_target_1 (integer_field_1);
 
 DROP TABLE IF EXISTS dictionary_change_test_table;
 
@@ -8,6 +20,7 @@ CREATE TABLE dictionary_change_test_table (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	date_field DATE NOT NULL,
 	integer_field INT DEFAULT 0,
+	droppable_integer_field INT DEFAULT 0,
 	decimal_field_to_modify DECIMAL(8,4) NOT NULL DEFAULT 0,
 	boolean_field_to_rename BIT DEFAULT 0 NOT NULL,
 	boolean_field_to_change_default BIT NOT NULL,
@@ -16,7 +29,7 @@ CREATE TABLE dictionary_change_test_table (
 	nvarchar_field NVARCHAR(50),
 	smallint_to_expand SMALLINT,
 	xl_field VARBINARY(MAX),
-	
+	FOREIGN KEY (droppable_integer_field) REFERENCES dt_foreign_key_target_1(integer_field_1),
 );
 
 ALTER TABLE dictionary_change_test_table ADD CONSTRAINT df_date_field DEFAULT N'2030-01-01' FOR date_field;
@@ -24,4 +37,5 @@ ALTER TABLE dictionary_change_test_table ADD CONSTRAINT df_boolean_field_to_chan
 ALTER TABLE dictionary_change_test_table ADD CONSTRAINT df_droppable_field DEFAULT  80.111 FOR droppable_field;
 
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);
+CREATE INDEX droppable_field_index ON dictionary_change_test_table (droppable_field);
 

@@ -303,6 +303,10 @@ if ($credentials['parameters']) {
             $scp[1] = (int)$scp[1];
         }
 
+        if ($scp[0] == 'bind-paramater-style'){
+            continue;
+        }
+
         $db->setConnectionParameter($scp[0], $scp[1]);
     }
 }
@@ -445,36 +449,8 @@ global $ADODB_CACHE_DIR;
 if ($GLOBALS['skipActiveRecordTests'] == 0) {
     
     $_ADODB_ACTIVE_DBS = array();
-    class person extends \ADOdb_Active_Record
-    {
-    }
-    class child extends \ADOdb_Active_Record
-    {
-    }
-    
-
-    /*
-    $_ADODB_ACTIVE_DBS = array();
-    class person extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
-    {
-    }
-    class child extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
-    {
-    }
-    */
-    $quoteOperator = false;
-    if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
-            $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
-    }
-    print "Active Record Quoting is set to: $quoteOperator
-    ";
-    global $ADODB_QUOTE_FIELDNAMES;
-    $ADODB_QUOTE_FIELDNAMES = $quoteOperator;
-    $GLOBALS['person']   = new person(false, false, $db);
-    $GLOBALS['child']    = new child('children', array('id'), $db);
-    $GLOBALS['QuoteOperator'] = $quoteOperator;
-
-    ADODB_SetDatabaseAdapter($db);
+    class person extends \ADOdb_Active_Record {}
+    class child extends \ADOdb_Active_Record {}
 }
 
 

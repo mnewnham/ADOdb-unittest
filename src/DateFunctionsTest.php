@@ -142,10 +142,14 @@ class DateFunctionsTest extends ADOdbTestCase
         $dbTs = $this->db->dbTimestamp($now);
         list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
 
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $dbTs
+        );
 
         $this->assertSame(
             "'$now'",
-            $dbTs,
+            $this->db->getOne($sql),
             'dbTimestamp should return a quoted timestamp'
         );
     }
@@ -164,6 +168,7 @@ class DateFunctionsTest extends ADOdbTestCase
         $bts = $this->db->bindTimestamp($now);
         list($errno, $errmsg) = $this->assertADOdbError('bindTimestamp()');
 
+        $now = sprintf("'%s'", $now);
         $this->assertSame(
             $now,
             $bts,
@@ -425,7 +430,10 @@ class DateFunctionsTest extends ADOdbTestCase
         $now      = time();
         $nowStamp = date('Y-m-d H:i:s', $now);
 
-        $sql = sprintf('SELECT %s', $this->db->unixTimestamp($nowStamp));
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->unixTimestamp($nowStamp)
+        );
 
         list($errno, $errmsg) = $this->assertADOdbError('unixTimestamp()');
 
@@ -453,9 +461,15 @@ class DateFunctionsTest extends ADOdbTestCase
         $offset = 7;
         $nowStamp = date('Y-m-d', strtotime('today +7 days'));
 
-        $sql = "SELECT " . $this->db->offsetDate($offset);
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offset)
+        );
+
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+        
         $od = $this->db->getOne($sql);
+                
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertSame(
@@ -467,7 +481,13 @@ class DateFunctionsTest extends ADOdbTestCase
         $offset = -7;
         $nowStamp = date('Y-m-d', strtotime('today -7 days'));
 
-        $sql = "SELECT " . $this->db->offsetDate($offset);
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offset)
+        );
+
+        
+        
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -486,7 +506,11 @@ class DateFunctionsTest extends ADOdbTestCase
 
         $nowStamp = date('Y-m-d', strtotime('now + 36 hours'));
 
-        $sql = "SELECT " . $this->db->offsetDate($offset, date('Y-m-d H:i'));
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offset, date('Y-m-d H:i'))
+        );      
+
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -541,8 +565,11 @@ class DateFunctionsTest extends ADOdbTestCase
 
         $offsetHours = sprintf('%d/24', $offset * 24); // Convert days to hours
 
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offsetHours)
+        );
 
-        $sql = "SELECT " . $this->db->offsetDate($offsetHours);
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);

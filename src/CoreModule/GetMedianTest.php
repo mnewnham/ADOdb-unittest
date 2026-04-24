@@ -52,7 +52,7 @@ class GetMedianTest extends ADOdbCoreSetup
 
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            $this->db->startTrans();
+           
 
             //$this->db->setFetchMode($fetchMode);
             $this->insertFetchMode($fetchMode);
@@ -64,12 +64,14 @@ class GetMedianTest extends ADOdbCoreSetup
             }
 
             list($errno,$errmsg) = $this->assertADOdbError('getMedian()');
-            $this->db->completeTrans();
-
+           
             $this->assertSame(
                 $expectedValue,
                 $actualValue,
-                sprintf('[%s] Test of getMedian()', $fetchDescription)
+                sprintf(
+                    '[%s] Test of getMedian()',
+                    $fetchDescription
+                )
             );
         }
     }

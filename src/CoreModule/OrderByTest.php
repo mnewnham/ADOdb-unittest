@@ -99,9 +99,60 @@ class OrderByTest extends ADOdbTestCase
 
         global $ADODB_QUOTE_FIELDNAMES;
         $ADODB_QUOTE_FIELDNAMES = $method;
+
+        if (property_exists($GLOBALS['ADOdbConnection'], 'quoteCharacters')) {
+            
+            /*
+            * Test new quoting feature
+            */
+
+            $saveQuoteChars = $GLOBALS['ADOdbConnection']->quoteCharacters;
+            $saveCasing     = $GLOBALS['ADOdbConnection']->fieldCasing;
+
+            switch($method){
+                case 'UPPER':
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                break;
+                case 'LOWER':
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                break;
+                case 'BRACKETS':
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                $GLOBALS['ADOdbConnection']->quoteCharacters = [ '[', ']'];
+                break;
+                case 'NATIVE':
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                break;
+                case false:
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
+                $GLOBALS['ADOdbConnection']->autoQuoting = false;
+                break;
+                case ($method === true):
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                break;
+                default:
+                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                
+            }
+        }
+      
+        $quotedField = _adodb_quote_fieldname($GLOBALS['ADOdbConnection'], $field);
+
+        /*
+        * Reset to default
+        */
+        $GLOBALS['ADOdbConnection']->quoteCharacters = $saveQuoteChars;
+        $GLOBALS['ADOdbConnection']->fieldCasing = $saveCasing;
+
         $this->assertSame(
             $expected,
-            _adodb_quote_fieldname($this->db, $field)
+            $quotedField
         );
     }
 
@@ -111,32 +162,72 @@ class OrderByTest extends ADOdbTestCase
      */
     public static function quoteProvider()
     {
-        $FIELD = sprintf(
-            "%sFIELD%s",
-            $GLOBALS['ADOdbConnection']->nameQuote,
-            $GLOBALS['ADOdbConnection']->nameQuote
-        );
 
-        $field = strtolower($FIELD);
+        if (property_exists($GLOBALS['ADOdbConnection'], 'quoteCharacters')) {
+            /*
+            * Tests the new quoting system
+            */
+            $FIELD = sprintf(
+                "%sFIELD%s",
+                $GLOBALS['ADOdbConnection']->quoteCharacters[0],
+                $GLOBALS['ADOdbConnection']->quoteCharacters[1]
+            );
 
-        $Field = str_replace('f', 'F', $field);
+            $field = strtolower($FIELD);
 
-        $FIELDNAME = sprintf(
-            "%sFIELD NAME%s",
-            $GLOBALS['ADOdbConnection']->nameQuote,
-            $GLOBALS['ADOdbConnection']->nameQuote
-        );
-        $fieldname = strtolower($FIELD);
+            $Field = str_replace('f', 'F', $field);
 
-        return [
-            'No quoting, single-word field name' => [false, 'Field', 'FIELD'],
-            'No quoting, field name with space' => [false, 'Field Name', "$FIELDNAME"],
-            'Quoting `true`' => [true, 'Field', $FIELD],
-            'Quoting `UPPER`' => ['UPPER', 'Field', $FIELD],
-            'Quoting `LOWER`' => ['LOWER', 'Field', $field],
-            'Quoting `NATIVE`' => ['NATIVE', 'Field', $Field],
-            'Quoting `BRACKETS`' => ['BRACKETS', 'Field', '[FIELD]'],
-            'Unknown value defaults to UPPER' => ['XXX', 'Field', $FIELD],
-        ];
+            $FIELDNAME = sprintf(
+                "%sFIELD NAME%s",
+                $GLOBALS['ADOdbConnection']->quoteCharacters[0],
+                $GLOBALS['ADOdbConnection']->quoteCharacters[1]
+            );
+            $fieldname = strtolower($FIELD);
+
+            return [
+                'No quoting, no casing single-word field name' => [false, 'Field', 'Field'],
+                'No quoting, no casing field name with space' => [false, 'Field Name', 'Field Name'],
+                'Quoting `true` = uppercasing + quotes' => [true, 'Field', $FIELD],
+                'Quoting `UPPER` = uppercasing + quotes' => ['UPPER', 'Field', $FIELD],
+                'Quoting `LOWER` = lowercasing + quotes' => ['LOWER', 'Field', $field],
+                'Quoting `NATIVE` = nativecasing + quotes' => ['NATIVE', 'Field', $Field],
+                'Quoting `BRACKETS` = uppercasing + brackets' => ['BRACKETS', 'Field', '[FIELD]'],
+                'Unknown value defaults to UPPER = uppercasing + quotes' => ['XXX', 'Field', $FIELD],
+            ];
+        } else {
+            /*
+            * Test the legacy system
+            */
+            
+            $FIELD = sprintf(
+                "%sFIELD%s",
+                $GLOBALS['ADOdbConnection']->nameQuote,
+                $GLOBALS['ADOdbConnection']->nameQuote
+            );
+
+            $field = strtolower($FIELD);
+
+            $Field = str_replace('f', 'F', $field);
+
+            $FIELDNAME = sprintf(
+                "%sFIELD NAME%s",
+                $GLOBALS['ADOdbConnection']->nameQuote,
+                $GLOBALS['ADOdbConnection']->nameQuote
+            );
+            $fieldname = strtolower($FIELD);
+        
+
+            return [
+                'No quoting, single-word field name' => [false, 'Field', 'FIELD'],
+                'No quoting, field name with space' => [false, 'Field Name', "$FIELDNAME"],
+                'Quoting `true`' => [true, 'Field', $FIELD],
+                'Quoting `UPPER`' => ['UPPER', 'Field', $FIELD],
+                'Quoting `LOWER`' => ['LOWER', 'Field', $field],
+                'Quoting `NATIVE`' => ['NATIVE', 'Field', $Field],
+                'Quoting `BRACKETS`' => ['BRACKETS', 'Field', '[FIELD]'],
+                'Unknown value defaults to UPPER' => ['XXX', 'Field', $FIELD],
+            ];
+        }
+        
     }
 }

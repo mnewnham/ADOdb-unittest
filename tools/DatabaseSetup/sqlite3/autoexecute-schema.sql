@@ -1,9 +1,9 @@
 -- Standard format for testing autoexecute based functions
 -- used by all the test in /Helpers
 
-DROP TABLE IF EXISTS testtable_1;
+DROP TABLE IF EXISTS autoexecute;
 
-CREATE TABLE testtable_1 (
+CREATE TABLE autoexecute (
 	id INTEGER,
 	varchar_field VARCHAR(20),
 	date_field DATE,

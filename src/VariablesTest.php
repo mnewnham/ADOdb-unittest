@@ -37,7 +37,7 @@ class VariablesTest extends ADOdbTestCase
 
     protected bool $skipFollowingTests = false;
 
-    protected string $testTableName = 'table_name';
+    protected string $testTableName = 'select';
     protected string $testIdColumnName = 'ID';
 
 
@@ -60,7 +60,11 @@ class VariablesTest extends ADOdbTestCase
         );
 
         $db->startTrans();
-        $db->execute('DROP TABLE IF EXISTS table_name');
+        $db->execute(sprintf(
+            'DROP TABLE IF EXISTS %s',
+            _adodb_quote_fieldname($db, 'select')
+            )
+        );
         $db->completeTrans();
 
         $db->startTrans();
@@ -104,15 +108,13 @@ class VariablesTest extends ADOdbTestCase
         * Fetch a template row from the table
         */
 
-        $quotedTable = sprintf(
-            '%s%s%s',
-            $this->db->nameQuote,
-            $this->testTableName,
-            $this->db->nameQuote
+        $sql = sprintf(
+            "SELECT * FROM %s WHERE %s=-1",
+            _adodb_quote_fieldname($this->db, $this->testTableName),
+            _adodb_quote_fieldname($this->db, $this->testIdColumnName)
         );
 
-
-        $sql = "SELECT * FROM $quotedTable WHERE {$this->testIdColumnName}=-1";
+        print $sql;
 
         list($template, $errno, $errmsg) = $this->executeSqlString($sql);
 
@@ -125,6 +127,7 @@ class VariablesTest extends ADOdbTestCase
             $template,
             $ar
         );
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         list($response, $errno, $errmsg) = $this->executeSqlString($sql);
@@ -137,7 +140,12 @@ class VariablesTest extends ADOdbTestCase
             'Data insertion should not succeed using Unquoted field and table names'
         );
 
-        $count = $this->db->getOne("SELECT COUNT(*) FROM $quotedTable");
+        $sql = sprintf(
+            "SELECT COUNT(*) FROM",
+            _adodb_quote_fieldname($this->db, $this->testTableName)
+        );
+
+        $count = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
@@ -194,7 +202,10 @@ class VariablesTest extends ADOdbTestCase
         /*
         * Fetch a template row from the table
         */
-        $sql = "SELECT * FROM {$this->testTableName}";
+        $sql = sprintf(
+            "SELECT * FROM %s",
+            _adodb_quote_fieldname($this->db, $this->testTableName)
+        );
 
         $testRow = $this->db->getRow($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);

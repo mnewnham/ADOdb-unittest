@@ -45,6 +45,7 @@ class ActiveRecordTest extends ADOdbTestCase
     public static function setupBeforeClass(): void
     {
 
+        global $_ADODB_ACTIVE_DBS;
 
         $db        = $GLOBALS['ADOdbConnection'];
         $adoDriver = $GLOBALS['ADOdriver'];
@@ -82,6 +83,32 @@ class ActiveRecordTest extends ADOdbTestCase
         readSqlIntoDatabase($db, $tableSchema);
 
         $db->completeTrans();
+
+
+        
+
+        /*
+        $_ADODB_ACTIVE_DBS = array();
+        class person extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
+        {
+        }
+        class child extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
+        {
+        }
+        */
+        $quoteOperator = false;
+        if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
+                $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
+        }
+        print "Active Record Quoting is set to: $quoteOperator
+    ";
+        global $ADODB_QUOTE_FIELDNAMES;
+        $ADODB_QUOTE_FIELDNAMES = $quoteOperator;
+        $GLOBALS['person']   = new \person(false, false, $db);
+        $GLOBALS['child']    = new \child('children', array('id'), $db);
+        $GLOBALS['QuoteOperator'] = $quoteOperator;
+
+        ADODB_SetDatabaseAdapter($db);
     }
 
     /**
@@ -93,9 +120,9 @@ class ActiveRecordTest extends ADOdbTestCase
     {
 
         global $_ADODB_ACTIVE_DBS;
-        global $ADODB_QUOTE_FIELDNAMES;
+        //global $ADODB_QUOTE_FIELDNAMES;
 
-        $ADODB_QUOTE_FIELDNAMES = $GLOBALS['QuoteOperator'];
+        //$ADODB_QUOTE_FIELDNAMES = $GLOBALS['QuoteOperator'];
 
         $_ADODB_ACTIVE_DBS = array();
         if ($GLOBALS['skipActiveRecordTests'] == 1) {
@@ -105,10 +132,11 @@ class ActiveRecordTest extends ADOdbTestCase
             );
         }
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $this->skipFollowingTests = true;
-            $this->markTestSkipped(
-                'ActiveRecord tests cannot be run if ADODB_ASSOC_CASE is UPPER'
-            );
+            $this->personColumns = array_map('strtoupper', $this->personColumns);
+            //$this->skipFollowingTests = true;
+            //$this->markTestSkipped(
+            //    'ActiveRecord tests cannot be run if ADODB_ASSOC_CASE is UPPER'
+            //);
         }
 
         if ($GLOBALS['TestingControl']['activerecord']['extended']) {
@@ -138,7 +166,7 @@ class ActiveRecordTest extends ADOdbTestCase
         $person = $GLOBALS['person'] ;
 
         $attributes = $person->getAttributeNames();
-
+  
         foreach ($this->personColumns as $column) {
             $ok = in_array($column, $attributes);
             $this->assertTrue(
@@ -346,16 +374,18 @@ class ActiveRecordTest extends ADOdbTestCase
 
         $person->load("id=3");
 
+        
         $person->LoadRelations(
             'children',
             "name_first LIKE 'S%' ORDER BY id"
         );
-
+       
         $this->assertEquals(
             1,
             sizeof($person->children),
             'Relations of Person should match 1 loaded child'
         );
+
     }
 
     /**
@@ -366,8 +396,10 @@ class ActiveRecordTest extends ADOdbTestCase
     public function testWriteChildData(): void
     {
 
+
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
+  
         $person = $GLOBALS['person'] ;//new \person();
 
         $person->load("id=1");
@@ -395,7 +427,7 @@ class ActiveRecordTest extends ADOdbTestCase
             'children',
             "id=1"
         );
-
+    
         $this->assertEquals(
             'STAN',
             $person->children[0]->name_first,

@@ -55,10 +55,42 @@ class RecordCountTest extends ADOdbCoreSetup
         /*
         * Loads the schema based on the DB type
         */
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
 
         readSqlIntoDatabase($db, $tableSchema);
 
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
 
+    }
+
+    public function setup(): void
+    {
+        parent::setup();
+    
+        $db = $this->db;
+
+        $tableSchema = sprintf(
+            '%s/DatabaseSetup/%s/insert-id-schema.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        /*
+        * Loads the schema based on the DB type
+        */
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
+
+        readSqlIntoDatabase($db, $tableSchema);
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
 
         $db->startTrans();
 
@@ -137,11 +169,9 @@ class RecordCountTest extends ADOdbCoreSetup
     {
 
 
-        $this->db->startTrans();
-
         $SQL = "SELECT * 
-                  FROM insert_auto 
-                 WHERE id<51";
+                  FROM insert_auto
+                  WHERE id<51";
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(

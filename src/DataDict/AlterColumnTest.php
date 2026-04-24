@@ -194,14 +194,14 @@ class AlterColumnTest extends DataDictFunctions
         );
 
         $this->assertSame(
-            '16',
-            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->max_length,
+            16,
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->precision,
             'AlterColumnSQL: maxlength of DECIMAL_FIELD_TO_MODIFY' .
             'should have changed from 8 to 16'
         );
 
         $this->assertSame(
-            '12',
+            12,
             $metaColumns['DECIMAL_FIELD_TO_MODIFY']->scale,
             'AlterColumnSQL: Change of scale of DECIMAL_FIELD_TO_MODIFY 4 to 12'
         );

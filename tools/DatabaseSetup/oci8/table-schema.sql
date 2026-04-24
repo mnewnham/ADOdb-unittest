@@ -4,6 +4,8 @@
 -- so that all tests run the same way
 -- but this is native inserts so the column types may differ across databases
 
+ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD';
+
 DROP VIEW IF EXISTS testtable_1_view;
 -- insertion_table will be built by createTable tests
 DROP TABLE IF EXISTS insertion_table;
@@ -16,6 +18,9 @@ DROP TABLE IF EXISTS testtable_2;
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
 DROP TABLE IF EXISTS xml_schema_test;
+DROP INDEX IF EXISTS integer_field_index;
+DROP INDEX IF EXISTS droppable_index;
+
 
 -- These sequences are used to auto-increment the primary keys
 DROP SEQUENCE IF EXISTS testtable_1_seq;
@@ -23,6 +28,7 @@ DROP SEQUENCE IF EXISTS testtable_2_seq;
 DROP SEQUENCE IF EXISTS testtable_3_seq;
 
 DROP SEQUENCE IF EXISTS table_name_seq;
+DROP SEQUENCE IF EXISTS SEQ_XML_SCHEMA_TEST;
 
 DROP TRIGGER IF EXISTS testtable_1_t;
 DROP TRIGGER IF EXISTS testtable_2_t;
@@ -83,4 +89,5 @@ CREATE SEQUENCE testtable_3_seq
     INCREMENT BY 1
     START WITH 1;
 
+-- This needs trailing " ;" to trigger the procedure load function
 CREATE OR REPLACE TRIGGER testable_3_t BEFORE insert ON testtable_3 FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select testtable_3_seq.nextval into :new.id from dual; END; ;

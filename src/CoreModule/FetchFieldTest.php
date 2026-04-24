@@ -54,6 +54,14 @@ class FetchFieldTest extends ADOdbCoreSetup
         $db        = $GLOBALS['ADOdbConnection'];
     }
 
+    public function setup(): void
+    {
+        parent::setup();
+        if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+            $this->tt1Fields = array_map('strtoupper', $this->tt1Fields);
+        }
+    }
+
     /**
      * Test fetchField against an unbound statement
      *
@@ -64,7 +72,6 @@ class FetchFieldTest extends ADOdbCoreSetup
         int $fetchMode,
         string $fetchDescription
     ): void {
-
 
         $this->insertFetchMode($fetchMode);
 
@@ -103,8 +110,8 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $this->assertEquals(
-                strtoupper($fieldObject->name),
-                strtoupper($this->tt1Fields[$i]),
+                $this->tt1Fields[$i],
+                $fieldObject->name,
                 sprintf(
                     '[FETCH %s] Expected field name with no bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
@@ -165,8 +172,8 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $this->assertEquals(
-                strtoupper($fieldObject->name),
-                strtoupper($this->tt1Fields[$i]),
+                $fieldObject->name,
+                $this->tt1Fields[$i],
                 sprintf(
                     '[FETCH %s] Expected field name with bind usage and invalid id %s at position %d, found %s',
                     $fetchDescription,
@@ -237,10 +244,10 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $this->assertEquals(
-                $fieldObject->name,
                 $this->tt1Fields[$i],
+                $fieldObject->name,
                 sprintf(
-                    '[FETCH %s] Expected field name with no bind usage and valid id %s at position %d, found %s',
+                    '[FETCH %s] Expected field name [%s] at position [%d], got [%s]',
                     $fetchDescription,
                     $this->tt1Fields[$i],
                     $i,

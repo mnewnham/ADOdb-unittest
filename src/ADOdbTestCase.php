@@ -380,13 +380,17 @@ class ADOdbTestCase extends TestCase
      * @return array
      */
     public function executeDictionaryAction(
-        array $sqlArray,
+        mixed $sqlArray,
         ?array $bind = null,
         $transactions = true
     ): array {
 
         $db = $this->db;
         $dictionary = $this->dataDictionary;
+
+        if (!is_array($sqlArray)) {
+            return array(false,-1,'Array not passed to method');    
+        }
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();

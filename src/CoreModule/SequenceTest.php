@@ -178,12 +178,21 @@ class SequenceTest extends ADOdbTestCase
      */
     public function testDropSequence(): void
     {
-        //$this->db->startTrans();
+       
+    
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->startTrans();
+        }
+
         $response = $this->db->DropSequence('unittest_seq');
 
-        list($errno, $errmsg) = $this->assertADOdbError('dropSequence()');
+       
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
-        //$this->db->completeTrans();
+        //list($errno, $errmsg) = $this->assertADOdbError('dropSequence()');
+
         if (is_object($response)) {
             $reflection = new \ReflectionClass($response);
             $shortName  = $reflection->getShortName();

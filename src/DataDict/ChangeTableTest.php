@@ -61,8 +61,6 @@ class ChangeTableTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
-
-
         /*
         * Changes:
         * Length of varchar field from 50 to 80
@@ -146,30 +144,33 @@ class ChangeTableTest extends DataDictFunctions
 
         $this->assertSame(
             80,
-            (int)$metaColumns['VARCHAR_FIELD']->max_length,
+            $metaColumns['VARCHAR_FIELD']->max_length,
             '[changeTableSql] VARCHAR_FIELD should have increased length from 50 to 80'
         );
+
+        $dbdate = $this->db->dbDate('2010-01-01');
+
         $this->assertSame(
-            '2010-01-01',
+            $dbdate,
             $metaColumns['DATE_FIELD']->default_value,
             '[changeTableSql] DATE_FIELD should have changed default from 2030-01-01 to 2010-01-01'
         );
 
         $this->assertSame(
             9,
-            (int)$metaColumns['DECIMAL_FIELD_TO_MODIFY']->max_length,
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->precision,
             '[changeTableSql] DECIMAL_FIELD_TO_MODIFY should have changed max length from 8 to 9'
         );
 
         $this->assertSame(
             5,
-            (int)$metaColumns['DECIMAL_FIELD_TO_MODIFY']->scale,
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->scale,
             '[changeTableSql] DECIMAL_FIELD_TO_MODIFY should have changed max length from 4 to 5'
         );
 
         $this->assertSame(
-            1,
-            (int)$metaColumns['DECIMAL_FIELD_TO_MODIFY']->default_value,
+            '1',
+            $metaColumns['DECIMAL_FIELD_TO_MODIFY']->default_value,
             '[changeTableSql] DECIMAL_FIELD_TO_MODIFY should have changed default from 0 to 1'
         );
 

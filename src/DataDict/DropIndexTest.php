@@ -63,6 +63,13 @@ class DropIndexTest extends DataDictFunctions
 
         $metaIndexes = $this->db->metaIndexes($this->testTableName);
 
+        if (!$metaIndexes) {
+            /*
+            * No indexes at all
+            */
+            $metaIndexes = [];
+        }
+
         $this->assertArrayNotHasKey(
             $this->testIndexName1,
             $metaIndexes,

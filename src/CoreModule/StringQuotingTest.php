@@ -56,6 +56,7 @@ class StringQuotingTest extends ADOdbTestCase
 
         parent::setup();
         $this->qStrExpectedResult = $GLOBALS['DriverControl']->qStrExpectedResult;
+   
     }
 
     /**
@@ -181,7 +182,7 @@ class StringQuotingTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertSame(
-            $this->qStrInboundValue,
+            $GLOBALS['DriverControl']->qStrExpectedResult,
             $returnValue,
             'addQ should have returned a string with the apostrophe ' .
             'set back to normal after retrieval from DB'
@@ -203,14 +204,14 @@ class StringQuotingTest extends ADOdbTestCase
         */
         $SQL = "UPDATE testtable_3 SET empty_field = null";
 
-        list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
-
-        if ($errno > 0) {
-            return;
-        }
-
+        $this->db->startTrans();
+        
+        $this->db->execute($SQL);
+        
+        $this->db->completeTrans();
+  
         $qStrInboundValue = $this->db->qstr(null);
-
+       
         /*
         * Check that the escaping is correct
         */
@@ -219,8 +220,6 @@ class StringQuotingTest extends ADOdbTestCase
             "''",
             'The qstr() method should escape the inbound string correctly'
         );
-
-
 
         $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
 
@@ -256,9 +255,10 @@ class StringQuotingTest extends ADOdbTestCase
             return;
         }
 
+
         $this->assertSame(
-            $this->qStrInboundValue,
-            $returnValue,
+            $qStrInboundValue,
+            "'$returnValue'",
             'Qstr should have returned a string with the apostrophe ' .
             'set back to normal after retrieval from DB'
         );
@@ -303,6 +303,8 @@ class StringQuotingTest extends ADOdbTestCase
             'All rows should have been updated with the test string'
         );
 
+        $qStrInboundValue = $this->db->qstr(null);
+
         // Now we will check the value in the empty_field column
         $sql = "SELECT empty_field FROM testtable_3";
 
@@ -311,8 +313,8 @@ class StringQuotingTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertSame(
-            $this->qStrInboundValue,
-            $returnValue,
+            $qStrInboundValue,
+            "'$returnValue'",
             'addQ should have returned a string with the apostrophe ' .
             'set back to normal after retrieval from DB'
         );

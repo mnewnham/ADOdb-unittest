@@ -49,8 +49,7 @@ class SelectLimitTest extends ADOdbCoreSetup
     {
         $this->db->setFetchMode($fetchMode);
 
-        $this->db->startTrans();
-
+        
         if ($bind) {
             $result = $this->db->selectLimit($sql, $count, $offset, $bind);
         } else {
@@ -59,7 +58,6 @@ class SelectLimitTest extends ADOdbCoreSetup
 
         list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
-        $this->db->completeTrans();
         $returnedRows = array();
 
         foreach ($result as $index => $row) {

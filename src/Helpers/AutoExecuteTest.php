@@ -22,6 +22,7 @@
 namespace MNewnham\ADOdbUnitTest\Helpers;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoExecuteTest
@@ -84,71 +85,78 @@ class AutoExecuteTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testAutoExecuteInsert(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testAutoExecuteInsert(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+
+        $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
-            foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-                 $this->insertFetchMode($fetchMode);
-                $aeVar = 'AUTOEXECUTE01' . $forceMode . $fetchMode;
+            
+            $aeVar = 'AUTOEXECUTE01' . $forceMode . $fetchMode;
 
-                $ar = array(
-                    'varchar_field' => $aeVar,
-                    'integer_field' => 99,
-                    'number_run_field' => 5001 + $fetchMode + (10 * $forceMode)
-                );
+            $ar = array(
+                'varchar_field' => $aeVar,
+                'integer_field' => 99,
+                'number_run_field' => 5001 + $fetchMode + (10 * $forceMode)
+            );
 
-                $response = $this->db->autoExecute('autoexecute', $ar, 'INSERT');
+            $this->db->startTrans();
 
-                if (is_object($response)) {
-                    $reflection = new \ReflectionClass($response);
-                    $shortName  = $reflection->getShortName();
-                    $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+            $response = $this->db->autoExecute('autoexecute', $ar, 'INSERT');
 
-                    $this->assertTrue(
-                        $ok,
-                        sprintf(
-                            '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
-                            $forceMode,
-                            $fetchDescription
-                        )
-                    );
-                } else {
-                    $this->fail(
-                        sprintf(
-                            '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
-                            $forceMode,
-                            $fetchDescription
-                        )
-                    );
-                }
+            $this->db->completeTrans();
 
-                $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-                $newRecord = $this->db->getRow($sql);
+            if (is_object($response)) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-                if ($fetchMode == 0 || $fetchMode == 3) {
-                    $field = 0;
-                } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                    $field = 'VARCHAR_FIELD';
-                } else {
-                    $field = 'varchar_field';
-                }
-
-                $value = $newRecord[$field];
-
-                $this->assertSame(
-                    $aeVar,
-                    $value,
+                $this->assertTrue(
+                    $ok,
                     sprintf(
-                        '[%s] updated record should have an varchar_field value %s in array %s',
-                        $fetchDescription,
-                        'AUTOEXECUTE01' . $forceMode . $fetchMode,
-                        print_r($newRecord, true)
+                        '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
+                            'an empty ADORecordSet Object If the record is updated successfully',
+                        $forceMode,
+                        $fetchDescription
+                    )
+                );
+            } else {
+                $this->fail(
+                    sprintf(
+                        '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
+                            'an empty ADORecordSet Object If the record is updated successfully',
+                        $forceMode,
+                        $fetchDescription
                     )
                 );
             }
+
+            $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+            $newRecord = $this->db->getRow($sql);
+
+            if ($fetchMode == 0 || $fetchMode == 3) {
+                $field = 0;
+            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+                $field = 'VARCHAR_FIELD';
+            } else {
+                $field = 'varchar_field';
+            }
+
+            $value = $newRecord[$field];
+
+            $this->assertSame(
+                $aeVar,
+                $value,
+                sprintf(
+                    '[%s] updated record should have an varchar_field value %s in array %s',
+                    $fetchDescription,
+                    'AUTOEXECUTE01' . $forceMode . $fetchMode,
+                    print_r($newRecord, true)
+                )
+            );
         }
     }
 
@@ -159,8 +167,11 @@ class AutoExecuteTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testAutoExecuteUpdate(): void
-    {
+    #[DataProvider('globalProviderFetchModes')]
+    public function testAutoExecuteUpdate(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
 
         $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
         $lastId = $this->db->getOne($sql);
@@ -168,76 +179,78 @@ class AutoExecuteTest extends ADOdbTestCase
         $where = "id=$lastId";
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
-            foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-                $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
+           
+            $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
 
-                //$this->db->setFetchMode($fetchMode);
-                $this->insertFetchMode($fetchMode);
-                $ar = array(
-                    'varchar_field' => $aeVar,
-                    'integer_field' => 99,
-                    'number_run_field' => 7001 + $fetchMode + (10 * ($forceMode + 1))
-                );
+            //$this->db->setFetchMode($fetchMode);
+            $this->insertFetchMode($fetchMode);
+            $ar = array(
+                'varchar_field' => $aeVar,
+                'integer_field' => 99,
+                'number_run_field' => 7001 + $fetchMode + (10 * ($forceMode + 1))
+            );
 
-                $response = $this->db->autoExecute(
-                    'autoexecute',
-                    $ar,
-                    'UPDATE',
-                    $where,
-                    $forceMode
-                );
+            $this->db->startTrans();
 
+            $response = $this->db->autoExecute(
+                'autoexecute',
+                $ar,
+                'UPDATE',
+                $where,
+                $forceMode
+            );
 
+            $this->db->completeTrans();
 
-                if (is_object($response)) {
-                    $reflection = new \ReflectionClass($response);
-                    $shortName  = $reflection->getShortName();
-                    $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+            if (is_object($response)) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-                    $this->assertTrue(
-                        $ok,
-                        sprintf(
-                            '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
-                            $forceMode,
-                            $fetchDescription
-                        )
-                    );
-                } else {
-                    $this->fail(
-                        sprintf(
-                            '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
-                                'an empty ADORecordSet Object If the record is updated successfully',
-                            $forceMode,
-                            $fetchDescription
-                        )
-                    );
-                }
-
-                $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-                $newRecord = $this->db->getRow($sql);
-
-                if ($fetchMode == 0 || $fetchMode == 3) {
-                    $field = 0;
-                } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                    $field = 'VARCHAR_FIELD';
-                } else {
-                    $field = 'varchar_field';
-                }
-
-                $value = $newRecord[$field];
-
-                $this->assertSame(
-                    $aeVar,
-                    $value,
+                $this->assertTrue(
+                    $ok,
                     sprintf(
-                        '[%s] updated record should have an varchar_field value %s in array %s',
-                        $fetchDescription,
-                        'AUTOEXECUTE' . $forceMode . $fetchMode,
-                        print_r($newRecord, true)
+                        '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
+                            'an empty ADORecordSet Object If the record is updated successfully',
+                        $forceMode,
+                        $fetchDescription
+                    )
+                );
+            } else {
+                $this->fail(
+                    sprintf(
+                        '[FORCEMODE %s][FETCH %s ] autoExecute should return ' .
+                            'an empty ADORecordSet Object If the record is updated successfully',
+                        $forceMode,
+                        $fetchDescription
                     )
                 );
             }
+
+            $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+            $newRecord = $this->db->getRow($sql);
+
+            if ($fetchMode == 0 || $fetchMode == 3) {
+                $field = 0;
+            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+                $field = 'VARCHAR_FIELD';
+            } else {
+                $field = 'varchar_field';
+            }
+
+            $value = $newRecord[$field];
+
+            $this->assertSame(
+                $aeVar,
+                $value,
+                sprintf(
+                    '[%s] updated record should have an varchar_field value %s in array %s',
+                    $fetchDescription,
+                    'AUTOEXECUTE' . $forceMode . $fetchMode,
+                    print_r($newRecord, true)
+                )
+            );
+
         }
     }
 
@@ -279,6 +292,8 @@ class AutoExecuteTest extends ADOdbTestCase
                         'number_run_field' => $nrf
                     );
 
+                    $this->db->startTrans();
+
                     $response = $this->db->autoExecute(
                         'autoexecute',
                         $ar,
@@ -286,6 +301,8 @@ class AutoExecuteTest extends ADOdbTestCase
                         $where,
                         $forceMode
                     );
+
+                    $this->db->completeTrans();
 
                     /*
                     * @todo I think this should return an ADORecordset, not true
@@ -339,8 +356,8 @@ class AutoExecuteTest extends ADOdbTestCase
 
 
                     $sql = "SELECT varchar_field,integer_field 
-                            FROM autoexecute
-                        ORDER BY id DESC";
+                              FROM autoexecute
+                          ORDER BY id DESC";
 
 
                     $newRecord = $this->db->getRow($sql);

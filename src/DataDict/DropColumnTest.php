@@ -51,7 +51,7 @@ class DropColumnTest extends DataDictFunctions
      *
      * @return void
      */
-    public function testDropColumnInBasicTable(): void
+    public function testDropColumnWithIndexInBasicTable(): void
     {
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
@@ -97,4 +97,61 @@ class DropColumnTest extends DataDictFunctions
             $this->skipFollowingTests = true;
         }
     }
+
+    /**
+     * Test for {@see ADODConnection::dropColumnSQL()}
+     *
+     * Written entirely by Copilot
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:dropcolumnsql
+     *
+     * @return void
+     */
+    public function testDropColumnWithForeignKeyInBasicTable(): void
+    {
+        if ($this->skipFollowingTests) {
+            $this->markTestSkipped(
+                'Skipping tests as the table was not created successfully'
+            );
+            return;
+        }
+
+
+        $sqlArray = $this->dataDictionary->dropColumnSQL(
+            $this->testTableName,
+            'DROPPABLE_INTEGER_FIELD'
+        );
+
+        if (!is_array($sqlArray)) {
+            $this->fail(
+                'dropColumnSql() should always return an array'
+            );
+            return;
+        }
+
+        if (count($sqlArray) == 0) {
+            $this->fail(
+                'dropColumnSql() not supported by driver'
+            );
+        }
+
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
+        if ($errno > 0) {
+            return;
+        }
+
+        $metaColumns = $this->db->metaColumns($this->testTableName);
+
+        $this->assertArrayNotHasKey(
+            'DROPPABLE_INTEGER_FIELD',
+            $metaColumns,
+            'after executution of dropColumnSQL(), ' .
+            'column DROPPABLE_INTEGER_FIELD should no longer exist'
+        );
+
+        if (array_key_exists('DROPPABLE_INTEGER_FIELD', $metaColumns)) {
+            $this->skipFollowingTests = true;
+        }
+    }
+
 }

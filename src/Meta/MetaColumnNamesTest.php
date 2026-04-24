@@ -70,7 +70,15 @@ class MetaColumnNamesTest extends MetaFunctions
             $forcePostgresOption
         );
         list($errno, $errmsg) = $this->assertADOdbError('metaColumnNames()');
-
+        $this->assertIsArray(
+            $executionResult,
+            sprintf(
+                '[FETCH %s] Table %s metaColumnName() did not return an array with postgres option set [%s]',
+                $this->testFetchModes[$ADODB_FETCH_MODE],
+                $this->testTableName,
+                $forcePostgresOption
+            )
+        );
         $executionKeys = array_keys($executionResult);
 
         if ($forcePostgresOption) {

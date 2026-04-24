@@ -48,14 +48,14 @@ class GenericMetaTypesTest extends MetaFunctions
     {
         parent::setup();
 
-        $tableSchema = sprintf(
-            '%s/DatabaseSetup/%s/metatype-test.sql',
+        $driverTypes = sprintf(
+            '%s/DriverControl/%s/ColumnTypes.inc',
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
 
-        if (file_exists($tableSchema)) {
-            $this->markTestSkipped('Use the MetaTypesTest plan instead');
+        if (file_exists($driverTypes)) {
+            $this->markTestSkipped('Use the Driver Specific MetaTypeTest plan instead');
             return;
         }
     }
@@ -289,15 +289,15 @@ class GenericMetaTypesTest extends MetaFunctions
         */
 
         return [
-            'Field 0 Is BIGINT' => ['I', 8, 0, 'BIGINT'],
+            'Field 0 Is BIGINT' => ['I8', 8, 0, 'BIGINT'],
             'Field 1 Is VARCHAR' => ['C', 20, 1, 'VARCHAR'],
             'Field 2 Is DATETIME' => ['T', 8, 2, 'DATETIME'],
             'Field 3 Is DATE' => ['D', 10, 3, 'DATE'],
-            'Field 4 Is INT' => ['I4', 4, 4, 'INTEGER'],
+            'Field 4 Is MEDIUMINT' => ['I4', 4, 4, 'MEDIUMINT'],
             'Field 5 Is NUMBER' => ['N', 12, 5, 'NUMERIC'],
             'Field 6 Is BOOLEAN' => ['L', 1, 6, 'BOOLEAN'],
             'Field 7 Is VARCHAR' => ['C', 240, 7, 'VARCHAR'],
-            'Field 8 Is BIGINT' => ['I', 4, 8, 'BIGINT'],
+            'Field 8 Is INTEGER' => ['I', 4, 8, 'INTEGER'],
             'Field 9 Does not Exist' => [false, -1, 9, ADODB_DEFAULT_METATYPE],
 
 

@@ -52,14 +52,21 @@ class AffectedRowsTest extends ADOdbCoreSetup
             $GLOBALS['SqlProvider']
         );
 
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
+
         /*
         * Loads the schema based on the DB type
         */
 
         readSqlIntoDatabase($db, $tableSchema);
 
-       // $db->completeTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
 
+      
         $db->startTrans();
 
         $sql = "SELECT * FROM insert_auto WHERE id=-1";
@@ -75,6 +82,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
         }
 
         $db->completeTrans();
+
     }
 
     /**
@@ -85,20 +93,24 @@ class AffectedRowsTest extends ADOdbCoreSetup
     public function testUpdateAffectedRowsWithoutBind(): void
     {
 
-        $this->db->startTrans();
+
+         $this->db->startTrans();
 
         $SQL = "UPDATE insert_auto 
                    SET integer_field=50
                  WHERE id<51";
         $this->db->execute($SQL);
 
-        $this->assertEquals(
-            50,
-            $this->db->affected_rows(),
-            'Affected_rows shoud return 100 from update'
-        );
+        $affectedRows = $this->db->affected_rows();
 
         $this->db->completeTrans();
+        $this->assertEquals(
+            50,
+            $affectedRows,
+            'Affected_rows shoud return 50 from update'
+        );
+
+       
     }
 
      /**
