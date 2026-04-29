@@ -84,6 +84,10 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
         $formatDate = "{$this->db->sqlDate($dateFormat,$field)}";
 
+        print "
+        FORMATDATE=$formatDate
+        ";
+
         $sql = "SELECT testdate, $formatDate $region, null 
                   FROM (
                 SELECT CONVERT(
@@ -116,7 +120,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
             ["d/m/Y", "testdate" ," FR4","17/12/2016"],
             ["d/m/y", "testdate" ," FR4b", "17/12/2016",],
-            ["d/m/Y", "NULL", "nullFR4", null],
+            ["d/m/Y", "NULL", "nullFR4", ],
             ["m/d/Y", "testdate" , " US4", "12/17/2016"],
             ["m/d/y", "testdate" , " US4b", "12/17/2016"],
             ["m-d-Y", "testdate" , " USD4", "17-12-2016"],

@@ -59,7 +59,7 @@ class AlterTableTest extends DataDictFunctions
 
         if ($GLOBALS['DriverControl']->hasNativeEnum) {
             $flds .= ",
-            ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers''
+            ENUM_FIELD ENUM('lions','tigers','halibut') DEFAULT 'tigers'
             ";
         }
 

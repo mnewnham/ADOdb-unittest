@@ -136,8 +136,8 @@ class DateFunctionsTest extends ADOdbTestCase
      */
     public function testDbTimestamp(): void
     {
-        $now = date('Y-m-d H:i:s');
-
+        $nowTime = time();
+        $now = date('Y-m-d H:i:s', $nowTime);
 
         $dbTs = $this->db->dbTimestamp($now);
         list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
@@ -147,10 +147,12 @@ class DateFunctionsTest extends ADOdbTestCase
             $dbTs
         );
 
+        $actualNowTime = strtotime($this->db->getOne($sql));
+
         $this->assertSame(
-            "'$now'",
-            $this->db->getOne($sql),
-            'dbTimestamp should return a quoted timestamp'
+            date('c', $nowTime),
+            date('c', $actualNowTime),
+            'dbTimestamp should return a date that evaluates to the calculated timestamp'
         );
     }
 
@@ -163,17 +165,48 @@ class DateFunctionsTest extends ADOdbTestCase
      */
     public function testBindTimestamp(): void
     {
-        $now = date('Y-m-d H:i:s');
+        $nowTime = time();
+        $now = date('Y-m-d H:i:s', $nowTime);
 
-        $bts = $this->db->bindTimestamp($now);
-        list($errno, $errmsg) = $this->assertADOdbError('bindTimestamp()');
 
+        $dbTs = $this->db->bindTimestamp($now);
+
+        if (substr($dbTs, 0, 1) == "'") {
+            $this->fail(
+                sprintf(
+                    'bindTimestamp() should return a timestamp without quotes, actually returned[%s]',
+                    $dbTs
+                )
+            );    
+        }
+
+        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
+
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            "'$dbTs'"
+        );
+
+        $actualNowTime = strtotime($this->db->getOne($sql));
+
+
+        $this->assertSame(
+            $nowTime,
+            $actualNowTime,
+            'dbTimestamp should return a date that evaluates to the calculated timestamp'
+        );
+
+        print "
+        ANT=[$actualNowTime]
+        ";
+        /*
         $now = sprintf("'%s'", $now);
         $this->assertSame(
             $now,
             $bts,
             'bindTimestamp should return a timestamp without quotes'
         );
+        */
     }
 
 
@@ -185,12 +218,11 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testYear(): void
+    public function testYearFromDateField(): void
     {
         /*
         * Retrieve a record with a known year
         */
-
         $sql = "SELECT {$this->db->year('date_field')} 
                   FROM testtable_3 
                  WHERE number_run_field=9";
@@ -214,7 +246,7 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testMonth(): void
+    public function testMonthFromDateField(): void
     {
         /*
         * Retrieve a record with a known month
@@ -243,7 +275,7 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testDay(): void
+    public function testDayFromDateField(): void
     {
 
         /*
@@ -251,18 +283,105 @@ class DateFunctionsTest extends ADOdbTestCase
         */
         $sql = "SELECT {$this->db->day('date_field')} 
                   FROM testtable_3 
-                 WHERE number_run_field=8";
+                 WHERE number_run_field=9";
 
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $expectedResult = '01';
+        $expectedResult = '29';
 
         $this->assertSame(
             $testResult,
             $expectedResult,
-            'Test of day portion of date_field should be 01'
+            'Test of day portion of date_field should be 29'
+        );
+    }
+
+    /**
+     * Test for {@see ADOConnection::year())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:year
+     *
+     * @return void
+     */
+    public function testYearFromDateTimeField(): void
+    {
+        /*
+        * Retrieve a record with a known year
+        */
+        $sql = "SELECT {$this->db->year('datetime_field')} 
+                  FROM testtable_3 
+                 WHERE number_run_field=9";
+
+        $testResult     = (string)$this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $expectedResult = '1959';
+
+        $this->assertSame(
+            $expectedResult,
+            $testResult,
+            'Expected year portion of datetime_field to be 1959'
+        );
+    }
+
+    /**
+     * Test for {@see ADOConnection::month()
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:month
+     *
+     * @return void
+     */
+    public function testMonthFromDateTimeField(): void
+    {
+        /*
+        * Retrieve a record with a known month
+        */
+        $sql = "SELECT {$this->db->month('datetime_field')}
+                  FROM testtable_3 
+                 WHERE number_run_field=9";
+
+        $testResult     = (string)$this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+
+        $expectedResult = '08';
+
+        $this->assertSame(
+            $expectedResult,
+            $testResult,
+            'Test of month portion of datetime_field should be 08'
+        );
+    }
+
+    /**
+     * Test for {@see ADOConnection::day())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:day
+     *
+     * @return void
+     */
+    public function testDayFromDateTimeField(): void
+    {
+
+        /*
+        * Retrieve a record with a known day
+        */
+        $sql = "SELECT {$this->db->day('datetime_field')} 
+                  FROM testtable_3 
+                 WHERE number_run_field=9";
+
+
+        $testResult     = (string)$this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $expectedResult = '29';
+
+        $this->assertSame(
+            $testResult,
+            $expectedResult,
+            'Test of day portion of datetime_field should be 29'
         );
     }
 
@@ -279,6 +398,7 @@ class DateFunctionsTest extends ADOdbTestCase
     public function testSqlDate(int $testMethod, string $format, ?int $timestamp): void
     {
 
+        
         switch ($testMethod) {
             case 1:
                 $expected = date($format, $timestamp);
@@ -303,32 +423,29 @@ class DateFunctionsTest extends ADOdbTestCase
                 'current timestamp identified by the format string: ' . $format;
                 break;
             case 3:
-                $sql = "SELECT id,date_field 
+                $sql = "SELECT id,datetime_field 
                         FROM testtable_3 
-                        WHERE date_field IS NOT NULL ";
+                        WHERE datetime_field IS NOT NULL ";
+
+                $this->db->storeFetchModes();
+                $this->db->setFetchMode(ADODB_FETCH_NUM);
 
                 $baseData = $this->db->getRow($sql);
+
+                $this->db->restoreFetchModes();
+
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-                switch (ADODB_ASSOC_CASE) {
-                    case ADODB_ASSOC_CASE_UPPER:
-                        $ifld = 'ID';
-                        $dfld = 'DATE_FIELD';
-                        break;
-                    case ADODB_ASSOC_CASE_LOWER:
-                        $ifld = 'id';
-                        $dfld = 'date_field';
-                        break;
-                }
-
-                $expected = date($format, strtotime($baseData[$dfld]));
+                
+                $baseData = array_values($baseData);
+               
+                $expected = date($format, strtotime($baseData[1]));
 
                 $sql = sprintf(
                     "SELECT %s 
                    FROM testtable_3
                     WHERE id=%s",
-                    $this->db->sqlDate($format, 'date_field'),
-                    $baseData[$ifld]
+                    $this->db->sqlDate($format, 'datetime_field'),
+                    $baseData[0]
                 );
 
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
@@ -347,6 +464,8 @@ class DateFunctionsTest extends ADOdbTestCase
 
         $message .= '. This may be caused by the difference in Time or Timezone of' .
         'the server if it is on a different machine than the client';
+
+        
 
         $this->assertSame(
             "$expected",

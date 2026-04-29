@@ -52,4 +52,18 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $dictionaryRequireTransactions = false;
+
+    /**
+     * What the qstr process should return as a quoted string
+     *
+     * @var string
+     */
+    public string $qStrExpectedResult = "Famed author James O\'Sullivan";
+
+     /**
+     * For methods that test for databases, use schema instead
+     *
+     * @var mixed
+     */
+    public bool $databaseIsSchema = false;
 }

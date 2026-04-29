@@ -114,10 +114,7 @@ class VariablesTest extends ADOdbTestCase
             _adodb_quote_fieldname($this->db, $this->testIdColumnName)
         );
 
-        print $sql;
-
         list($template, $errno, $errmsg) = $this->executeSqlString($sql);
-
 
         $ar = array(
             'column_name' => 'Sample data'
@@ -135,37 +132,26 @@ class VariablesTest extends ADOdbTestCase
         $success = is_object($response);
 
         $this->assertSame(
-            false,
+            true,
             $success,
-            'Data insertion should not succeed using Unquoted field and table names'
+            'Data insertion should succeed using quoted field and table reserved names'
         );
 
         $sql = sprintf(
-            "SELECT COUNT(*) FROM",
+            "SELECT COUNT(*) FROM %s",
             _adodb_quote_fieldname($this->db, $this->testTableName)
         );
 
         $count = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertEquals(
+        $this->assertGreaterThan(
             0,
             $count,
-            'Data insertion should not have succeeded using Unquoted field and table names'
+            'Data insertion should have succeeded using Quoted field and table names and added at least one record'
         );
 
-        /*
-        * Now activate the quoting of field and table names
-        */
-        $ADODB_QUOTE_FIELDNAMES = true;
 
-        $sql = $this->db->getInsertSQL(
-            $template,
-            $ar
-        );
-        list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-        list($success, $errno, $errmsg) = $this->executeSqlString($sql);
     }
 
     /**

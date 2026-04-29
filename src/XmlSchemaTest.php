@@ -192,6 +192,10 @@ class XmlSchemaTest extends ADOdbTestCase
             if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
 
+                print "
+                CC $sql | $columnComment
+                ";
+
                 $this->assertSame(
                     'DATE FIELD COMMENT',
                     $columnComment,

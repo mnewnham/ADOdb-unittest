@@ -18,7 +18,7 @@ CREATE TABLE dictionary_change_test_table (
 	varchar_field VARCHAR(50) DEFAULT '',
 	nvarchar_field NVARCHAR(50) DEFAULT '',
 	smallint_to_expand SMALLINT,
-	xl_field BLOB(100M),
+	xl_field CLOB,
 	PRIMARY KEY(id)
 );
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);

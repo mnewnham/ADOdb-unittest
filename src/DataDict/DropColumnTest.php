@@ -129,9 +129,9 @@ class DropColumnTest extends DataDictFunctions
             return;
         }
 
-        if (count($sqlArray) == 0) {
+        if (count($sqlArray) > 0) {
             $this->fail(
-                'dropColumnSql() not supported by driver'
+                'dropColumnSql() should not attempt to drop an index constrained by a Foreign Key'
             );
         }
 
@@ -142,16 +142,13 @@ class DropColumnTest extends DataDictFunctions
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
-        $this->assertArrayNotHasKey(
+        $this->assertArrayHasKey(
             'DROPPABLE_INTEGER_FIELD',
             $metaColumns,
-            'after executution of dropColumnSQL(), ' .
-            'column DROPPABLE_INTEGER_FIELD should no longer exist'
+            'after execution of dropColumnSQL(), ' .
+            'column DROPPABLE_INTEGER_FIELD should still be in table'
         );
 
-        if (array_key_exists('DROPPABLE_INTEGER_FIELD', $metaColumns)) {
-            $this->skipFollowingTests = true;
-        }
     }
 
 }

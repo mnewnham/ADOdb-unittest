@@ -91,8 +91,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             return;
         }
 
-        print "Source Column Types From: $columnTypesFile
-        ";
+        print "
+Source Column Types From: $columnTypesFile";
 
         require_once $columnTypesFile;
 

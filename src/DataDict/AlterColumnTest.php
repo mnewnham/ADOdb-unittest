@@ -186,6 +186,7 @@ class AlterColumnTest extends DataDictFunctions
         * re-read the column definitions
         */
         $metaColumns = $this->db->metaColumns($tableName);
+       // print_r($metaColumns['DECIMAL_FIELD_TO_MODIFY']); exit;
 
         $this->assertArrayHasKey(
             'DECIMAL_FIELD_TO_MODIFY',

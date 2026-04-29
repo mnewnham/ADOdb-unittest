@@ -14,8 +14,6 @@ CREATE TABLE dt_foreign_key_target_1 (
 -- Must provide a qualifying index to match the fk definition
 CREATE UNIQUE INDEX dt_fk1_proxy ON dt_foreign_key_target_1 (integer_field_1);
 
-DROP TABLE IF EXISTS dictionary_change_test_table;
-
 CREATE TABLE dictionary_change_test_table (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	date_field DATE NOT NULL,

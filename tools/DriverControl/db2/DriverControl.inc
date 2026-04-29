@@ -25,6 +25,13 @@ class DriverControl extends \CoreControl
      */
     public int $nativeModeCasing = 1;
 
+     /**
+     * What the qstr process should return as a quoted string
+     *
+     * @var string
+     */
+    public string $qStrExpectedResult = "Famed author James O''Sullivan";
+
     public function __construct(){
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }

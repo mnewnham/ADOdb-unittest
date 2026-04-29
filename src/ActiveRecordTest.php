@@ -65,11 +65,18 @@ class ActiveRecordTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        /*
-        * Loads the schema based on the DB type
-        */
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
+       
+        $ok = readSqlIntoDatabase($db, $tableSchema);
+        
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
 
-        readSqlIntoDatabase($db, $tableSchema);
+        $db->startTrans();
+
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/active-record-data.sql',
@@ -84,29 +91,17 @@ class ActiveRecordTest extends ADOdbTestCase
 
         $db->completeTrans();
 
+        //$quoteOperator = false;
+        //if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
+        //    $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
+        //}
+       
 
-        
-
-        /*
-        $_ADODB_ACTIVE_DBS = array();
-        class person extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
-        {
-        }
-        class child extends \ADOdb\Resources\ActiveRecord\ADOdbActiveRecord
-        {
-        }
-        */
-        $quoteOperator = false;
-        if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
-                $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
-        }
-        print "Active Record Quoting is set to: $quoteOperator
-    ";
-        global $ADODB_QUOTE_FIELDNAMES;
-        $ADODB_QUOTE_FIELDNAMES = $quoteOperator;
+        //global $ADODB_QUOTE_FIELDNAMES;
+        //$ADODB_QUOTE_FIELDNAMES = $quoteOperator;
         $GLOBALS['person']   = new \person(false, false, $db);
         $GLOBALS['child']    = new \child('children', array('id'), $db);
-        $GLOBALS['QuoteOperator'] = $quoteOperator;
+        //$GLOBALS['QuoteOperator'] = $quoteOperator;
 
         ADODB_SetDatabaseAdapter($db);
     }
