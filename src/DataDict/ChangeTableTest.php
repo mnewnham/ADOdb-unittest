@@ -148,7 +148,7 @@ class ChangeTableTest extends DataDictFunctions
             '[changeTableSql] VARCHAR_FIELD should have increased length from 50 to 80'
         );
 
-        $dbdate = str_replace("'",'',$this->db->dbDate('2010-01-01'));
+        $dbdate = str_replace("'", '', $this->db->dbDate('2010-01-01'));
 
         $this->assertSame(
             $dbdate,
@@ -169,8 +169,8 @@ class ChangeTableTest extends DataDictFunctions
         );
 
         $this->assertSame(
-            sprintf('%9.5f',1),
-            sprintf('%9.5f',$metaColumns['DECIMAL_FIELD_TO_MODIFY']->default_value),
+            sprintf('%9.5f', 1),
+            sprintf('%9.5f', $metaColumns['DECIMAL_FIELD_TO_MODIFY']->default_value),
             '[changeTableSql] DECIMAL_FIELD_TO_MODIFY should have changed default from 0 to 1'
         );
 

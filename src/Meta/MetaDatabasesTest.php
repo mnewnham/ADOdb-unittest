@@ -48,7 +48,7 @@ class MetaDatabasesTest extends MetaFunctions
         string $fetchDescription
     ): void {
 
-       
+
         if ($GLOBALS['DriverControl']->databaseIsSchema) {
             $baseDatabaseName = $this->db->user;
         } else {
@@ -82,7 +82,7 @@ class MetaDatabasesTest extends MetaFunctions
             )
         );
 
-        
+
         $flipResponse = array_change_key_case(array_flip($response), CASE_LOWER);
 
         $this->assertArrayHasKey(

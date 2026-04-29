@@ -148,7 +148,5 @@ class DropColumnTest extends DataDictFunctions
             'after execution of dropColumnSQL(), ' .
             'column DROPPABLE_INTEGER_FIELD should still be in table'
         );
-
     }
-
 }

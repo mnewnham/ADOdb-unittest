@@ -34,12 +34,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class PdoDriverTest extends ADOdbTestCase
 {
-    
-    
     const BIND_USE_QUESTION_MARKS = 0;
-	const BIND_USE_NAMED_PARAMETERS = 1;
-	const BIND_USE_BOTH = 2;
-    
+    const BIND_USE_NAMED_PARAMETERS = 1;
+    const BIND_USE_BOTH = 2;
+
     /**
      * Set up the test environment
      *
@@ -134,7 +132,7 @@ class PdoDriverTest extends ADOdbTestCase
      */
     public static function providerConformToBindParameterStyle(): array
     {
-        
+
         return [
             [
                 [1, 2, 3],

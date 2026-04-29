@@ -383,7 +383,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             'Using a string for the table name always fails currently and poisons the transaction scope of following tests'
         );
         return;
-        
+
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";

@@ -94,7 +94,6 @@ class AutoExecuteTest extends ADOdbTestCase
         $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
-            
             $aeVar = 'AUTOEXECUTE01' . $forceMode . $fetchMode;
 
             $ar = array(
@@ -179,7 +178,6 @@ class AutoExecuteTest extends ADOdbTestCase
         $where = "id=$lastId";
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
-           
             $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
 
             //$this->db->setFetchMode($fetchMode);
@@ -250,7 +248,6 @@ class AutoExecuteTest extends ADOdbTestCase
                     print_r($newRecord, true)
                 )
             );
-
         }
     }
 

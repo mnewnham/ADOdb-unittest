@@ -23,6 +23,7 @@ namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class LengthTest
  * Tests db agnostic field length tests
@@ -50,9 +51,9 @@ class LengthTest extends ADOdbTestCase
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-       
+
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
@@ -67,16 +68,14 @@ class LengthTest extends ADOdbTestCase
         );
 
         if (file_exists($schemaFile)) {
-            
-            $db->startTrans(); 
-            $ok = readSqlIntoDatabase($db, $schemaFile); 
+            $db->startTrans();
+            $ok = readSqlIntoDatabase($db, $schemaFile);
             $db->completeTrans();
-            
         }
 
-        if ($GLOBALS['ADOdriver'] == 'mysqli') {        
+        if ($GLOBALS['ADOdriver'] == 'mysqli') {
             $db->startTrans();
-            $db->updateClob('length_test','text_field','TEST567890TEST567890','id=1');
+            $db->updateClob('length_test', 'text_field', 'TEST567890TEST567890', 'id=1');
             $db->completeTrans();
         }
     }
@@ -127,7 +126,7 @@ class LengthTest extends ADOdbTestCase
                     FROM length_test 
                 WHERE id=1";
 
-       
+
         $row = $this->db->getRow($sql);
         if (!$row) {
             $this->markTestSkipped(
@@ -135,7 +134,7 @@ class LengthTest extends ADOdbTestCase
             );
             return;
         }
-       
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $numericRow = [];

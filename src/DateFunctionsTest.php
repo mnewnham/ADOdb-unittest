@@ -177,7 +177,7 @@ class DateFunctionsTest extends ADOdbTestCase
                     'bindTimestamp() should return a timestamp without quotes, actually returned[%s]',
                     $dbTs
                 )
-            );    
+            );
         }
 
         list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
@@ -398,7 +398,7 @@ class DateFunctionsTest extends ADOdbTestCase
     public function testSqlDate(int $testMethod, string $format, ?int $timestamp): void
     {
 
-        
+
         switch ($testMethod) {
             case 1:
                 $expected = date($format, $timestamp);
@@ -435,9 +435,9 @@ class DateFunctionsTest extends ADOdbTestCase
                 $this->db->restoreFetchModes();
 
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
-                
+
                 $baseData = array_values($baseData);
-               
+
                 $expected = date($format, strtotime($baseData[1]));
 
                 $sql = sprintf(
@@ -465,7 +465,7 @@ class DateFunctionsTest extends ADOdbTestCase
         $message .= '. This may be caused by the difference in Time or Timezone of' .
         'the server if it is on a different machine than the client';
 
-        
+
 
         $this->assertSame(
             "$expected",
@@ -586,9 +586,9 @@ class DateFunctionsTest extends ADOdbTestCase
         );
 
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
-        
+
         $od = $this->db->getOne($sql);
-                
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertSame(
@@ -605,8 +605,8 @@ class DateFunctionsTest extends ADOdbTestCase
             $this->db->offsetDate($offset)
         );
 
-        
-        
+
+
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -628,7 +628,7 @@ class DateFunctionsTest extends ADOdbTestCase
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $this->db->offsetDate($offset, date('Y-m-d H:i'))
-        );      
+        );
 
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);

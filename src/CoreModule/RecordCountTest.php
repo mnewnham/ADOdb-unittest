@@ -64,13 +64,12 @@ class RecordCountTest extends ADOdbCoreSetup
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
-
     }
 
     public function setup(): void
     {
         parent::setup();
-    
+
         $db = $this->db;
 
         $tableSchema = sprintf(

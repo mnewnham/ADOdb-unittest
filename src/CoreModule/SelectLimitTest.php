@@ -49,7 +49,7 @@ class SelectLimitTest extends ADOdbCoreSetup
     {
         $this->db->setFetchMode($fetchMode);
 
-        
+
         if ($bind) {
             $result = $this->db->selectLimit($sql, $count, $offset, $bind);
         } else {

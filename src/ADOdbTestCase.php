@@ -389,7 +389,7 @@ class ADOdbTestCase extends TestCase
         $dictionary = $this->dataDictionary;
 
         if (!is_array($sqlArray)) {
-            return array(false,-1,'Array not passed to method');    
+            return array(false,-1,'Array not passed to method');
         }
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {

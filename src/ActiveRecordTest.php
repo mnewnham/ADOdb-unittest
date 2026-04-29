@@ -68,9 +68,9 @@ class ActiveRecordTest extends ADOdbTestCase
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
-       
+
         $ok = readSqlIntoDatabase($db, $tableSchema);
-        
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
@@ -95,7 +95,7 @@ class ActiveRecordTest extends ADOdbTestCase
         //if (array_key_exists('quotefieldnames', $GLOBALS['TestingControl']['activerecord'])) {
         //    $quoteOperator = $GLOBALS['TestingControl']['activerecord']['quotefieldnames'];
         //}
-       
+
 
         //global $ADODB_QUOTE_FIELDNAMES;
         //$ADODB_QUOTE_FIELDNAMES = $quoteOperator;
@@ -161,7 +161,7 @@ class ActiveRecordTest extends ADOdbTestCase
         $person = $GLOBALS['person'] ;
 
         $attributes = $person->getAttributeNames();
-  
+
         foreach ($this->personColumns as $column) {
             $ok = in_array($column, $attributes);
             $this->assertTrue(
@@ -369,18 +369,17 @@ class ActiveRecordTest extends ADOdbTestCase
 
         $person->load("id=3");
 
-        
+
         $person->LoadRelations(
             'children',
             "name_first LIKE 'S%' ORDER BY id"
         );
-       
+
         $this->assertEquals(
             1,
             sizeof($person->children),
             'Relations of Person should match 1 loaded child'
         );
-
     }
 
     /**
@@ -394,7 +393,7 @@ class ActiveRecordTest extends ADOdbTestCase
 
         \ADOdb_Active_Record::TableHasMany('persons', 'children', 'person_id');
 
-  
+
         $person = $GLOBALS['person'] ;//new \person();
 
         $person->load("id=1");
@@ -422,7 +421,7 @@ class ActiveRecordTest extends ADOdbTestCase
             'children',
             "id=1"
         );
-    
+
         $this->assertEquals(
             'STAN',
             $person->children[0]->name_first,

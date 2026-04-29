@@ -103,7 +103,7 @@ class InsertIdTest extends ADOdbCoreSetup
 
             $this->validateResetFetchModes();
 
-            
+
             $counter++;
         }
     }
@@ -138,7 +138,7 @@ class InsertIdTest extends ADOdbCoreSetup
             $insertId = $this->db->insert_id();
 
             $this->db->completeTrans();
-            
+
             $this->assertEquals(
                 0,
                 $insertId,
@@ -150,7 +150,7 @@ class InsertIdTest extends ADOdbCoreSetup
             );
 
             $this->validateResetFetchModes();
-            
+
             $manualAr['id']++;
             $counter++;
         }

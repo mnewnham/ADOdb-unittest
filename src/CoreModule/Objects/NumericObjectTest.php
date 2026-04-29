@@ -40,5 +40,4 @@ class NumericObjectTest extends TestObjectHandling
         parent::setup();
         $this->db->setFetchMode(ADODB_FETCH_NUM);
     }
-
 }

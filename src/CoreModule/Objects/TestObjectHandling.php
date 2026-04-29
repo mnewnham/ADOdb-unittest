@@ -142,7 +142,7 @@ class TestObjectHandling extends ADOdbTestCase
      */
     public function testFetchFirstObj(): void
     {
-        
+
         /*
         * Must put the record pointer in place first
         */
@@ -185,7 +185,7 @@ class TestObjectHandling extends ADOdbTestCase
     {
 
         $nextObject = $this->fetchRecordSet->fetchObj();
-       
+
         $this->assertEquals(
             $this->comparison[0][$this->idKey],
             $nextObject->id,

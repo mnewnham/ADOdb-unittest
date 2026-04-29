@@ -101,7 +101,6 @@ class OrderByTest extends ADOdbTestCase
         $ADODB_QUOTE_FIELDNAMES = $method;
 
         if (property_exists($GLOBALS['ADOdbConnection'], 'quoteCharacters')) {
-            
             /*
             * Test new quoting feature
             */
@@ -109,39 +108,38 @@ class OrderByTest extends ADOdbTestCase
             $saveQuoteChars = $GLOBALS['ADOdbConnection']->quoteCharacters;
             $saveCasing     = $GLOBALS['ADOdbConnection']->fieldCasing;
 
-            switch($method){
+            switch ($method) {
                 case 'UPPER':
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                    break;
                 case 'LOWER':
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                    break;
                 case 'BRACKETS':
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                $GLOBALS['ADOdbConnection']->quoteCharacters = [ '[', ']'];
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                    $GLOBALS['ADOdbConnection']->quoteCharacters = [ '[', ']'];
+                    break;
                 case 'NATIVE':
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                    break;
                 case false:
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
-                $GLOBALS['ADOdbConnection']->autoQuoting = false;
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_NATIVE;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = false;
+                    break;
                 case ($method === true):
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                break;
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_LOWER;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
+                    break;
                 default:
-                $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
-                $GLOBALS['ADOdbConnection']->autoQuoting = true;
-                
+                    $GLOBALS['ADOdbConnection']->fieldCasing = $GLOBALS['ADOdbConnection']::FIELD_CASING_UPPER;
+                    $GLOBALS['ADOdbConnection']->autoQuoting = true;
             }
         }
-      
+
         $quotedField = _adodb_quote_fieldname($GLOBALS['ADOdbConnection'], $field);
 
         /*
@@ -198,7 +196,7 @@ class OrderByTest extends ADOdbTestCase
             /*
             * Test the legacy system
             */
-            
+
             $FIELD = sprintf(
                 "%sFIELD%s",
                 $GLOBALS['ADOdbConnection']->nameQuote,
@@ -215,7 +213,7 @@ class OrderByTest extends ADOdbTestCase
                 $GLOBALS['ADOdbConnection']->nameQuote
             );
             $fieldname = strtolower($FIELD);
-        
+
 
             return [
                 'No quoting, single-word field name' => [false, 'Field', 'FIELD'],
@@ -228,6 +226,5 @@ class OrderByTest extends ADOdbTestCase
                 'Unknown value defaults to UPPER' => ['XXX', 'Field', $FIELD],
             ];
         }
-        
     }
 }

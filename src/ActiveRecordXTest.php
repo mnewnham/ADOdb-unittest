@@ -111,7 +111,7 @@ class ActiveRecordXTest extends ADOdbTestCase
             );
         }
 
-        
+
         if (!$GLOBALS['TestingControl']['activerecord']['extended']) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(

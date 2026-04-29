@@ -56,7 +56,6 @@ class StringQuotingTest extends ADOdbTestCase
 
         parent::setup();
         $this->qStrExpectedResult = $GLOBALS['DriverControl']->qStrExpectedResult;
-   
     }
 
     /**
@@ -205,13 +204,13 @@ class StringQuotingTest extends ADOdbTestCase
         $SQL = "UPDATE testtable_3 SET empty_field = null";
 
         $this->db->startTrans();
-        
+
         $this->db->execute($SQL);
-        
+
         $this->db->completeTrans();
-  
+
         $qStrInboundValue = $this->db->qstr(null);
-       
+
         /*
         * Check that the escaping is correct
         */

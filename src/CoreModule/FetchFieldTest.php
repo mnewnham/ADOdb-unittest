@@ -204,13 +204,11 @@ class FetchFieldTest extends ADOdbCoreSetup
         $lastId = $this->db->getOne($sql);
 
         if (!$lastId) {
-            
             $this->fail(
                 'Could not find valid record from testtable_3'
             );
 
             return;
-
         }
         $SQL = "SELECT * FROM testtable_3 WHERE id=$lastId";
         $result = $this->db->execute($SQL);

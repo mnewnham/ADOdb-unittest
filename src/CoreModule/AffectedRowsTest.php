@@ -66,7 +66,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
             $db->completeTrans();
         }
 
-      
+
         $db->startTrans();
 
         $sql = "SELECT * FROM insert_auto WHERE id=-1";
@@ -82,7 +82,6 @@ class AffectedRowsTest extends ADOdbCoreSetup
         }
 
         $db->completeTrans();
-
     }
 
     /**
@@ -109,8 +108,6 @@ class AffectedRowsTest extends ADOdbCoreSetup
             $affectedRows,
             'Affected_rows shoud return 50 from update'
         );
-
-       
     }
 
      /**

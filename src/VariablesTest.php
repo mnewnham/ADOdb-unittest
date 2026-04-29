@@ -63,8 +63,7 @@ class VariablesTest extends ADOdbTestCase
         $db->execute(sprintf(
             'DROP TABLE IF EXISTS %s',
             _adodb_quote_fieldname($db, 'select')
-            )
-        );
+        ));
         $db->completeTrans();
 
         $db->startTrans();
@@ -150,8 +149,6 @@ class VariablesTest extends ADOdbTestCase
             $count,
             'Data insertion should have succeeded using Quoted field and table names and added at least one record'
         );
-
-
     }
 
     /**

@@ -40,5 +40,4 @@ class BothObjectTest extends TestObjectHandling
         parent::setup();
         $this->db->setFetchMode(ADODB_FETCH_BOTH);
     }
-
 }
