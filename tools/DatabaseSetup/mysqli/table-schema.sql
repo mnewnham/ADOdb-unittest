@@ -32,7 +32,7 @@ CREATE TABLE testtable_1 (
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
 	PRIMARY KEY(id,integer_field),
-	UNIQUE INDEX vdx1 (varchar_field) COMMENT '1234567890',
+	UNIQUE INDEX vdx1 (varchar_field) COMMENT 'A1234567890',
 	UNIQUE INDEX vdx2 (integer_field,date_field),
 	UNIQUE INDEX vdx3 (number_run_field)
 ) ENGINE=INNODB;
