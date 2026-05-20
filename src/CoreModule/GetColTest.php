@@ -46,10 +46,9 @@ class GetColTest extends ADOdbCoreSetup
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-            //$this->db->setFetchMode($fetchMode);
+     
             $this->insertFetchMode($fetchMode);
 
-            $this->db->startTrans();
             if ($bind) {
                 $cols = $this->db->getCol($sql, $bind);
 
@@ -78,7 +77,7 @@ class GetColTest extends ADOdbCoreSetup
                     )
                 );
             }
-            $this->db->completeTrans();
+            $this->validateResetFetchModes();
         }
     }
     /**

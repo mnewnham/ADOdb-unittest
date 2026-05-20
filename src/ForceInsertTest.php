@@ -126,7 +126,9 @@ class ForceInsertTest extends ADOdbTestCase
 
         $ADODB_FORCE_MODE = $forceMode;
 
+        $this->db->startTrans();
         $this->db->execute('DELETE FROM adodb_force_insert');
+        $this->db->completeTrans();
 
         $sql = "SELECT * FROM adodb_force_insert WHERE id=-1";
         $template = $this->db->execute($sql);
@@ -145,7 +147,9 @@ class ForceInsertTest extends ADOdbTestCase
         $tTable = 'adodb_force_insert';
         $sql = $this->db->getInsertSql($template, $ar, false, $forceMode);
 
+        $this->db->startTrans();
         $response = $this->db->execute($sql);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $response,
@@ -167,6 +171,9 @@ class ForceInsertTest extends ADOdbTestCase
             if ($index == 7) {
                 break;
             }
+
+            $expected = 'UNKNOWN';
+            $value    = 'UNKNOWN';
 
             if ($value === null) {
                 $value = 'NULL';
@@ -220,11 +227,11 @@ class ForceInsertTest extends ADOdbTestCase
 
             'ADODB_FORCE_IGNORE' => [
                 ADODB_FORCE_IGNORE,
-                [0, null, null, null, null, null, null]
+                [0, 0, NULL, null, null, null, null]
             ],
             'ADODB_FORCE_NULL' => [
                 ADODB_FORCE_NULL,
-                [0, null, null, null, null, null, null]
+                [0, 0, null, null, null, null, null]
             ],
             'ADODB_FORCE_EMPTY' => [
                 ADODB_FORCE_EMPTY,

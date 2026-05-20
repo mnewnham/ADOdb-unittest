@@ -45,8 +45,9 @@ class GetAllTest extends ADOdbCoreSetup
     #[DataProvider('providerTestGetAll')]
     public function testGetAll(int $fetchMode, array $expectedValue, string $sql, ?array $bind): void
     {
+
         $this->db->setFetchMode($fetchMode);
-        $this->db->startTrans();
+  
 
         if ($bind) {
             $returnedRows = $this->db->getAll($sql, $bind);
@@ -55,8 +56,6 @@ class GetAllTest extends ADOdbCoreSetup
         }
 
         list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
-
-        $this->db->completeTrans();
 
         if ($fetchMode == ADODB_FETCH_BOTH) {
             $expectedValue = $this->sortFetchBothRecords($expectedValue);
@@ -214,6 +213,9 @@ class GetAllTest extends ADOdbCoreSetup
                 ];
 
                 break;
+
+            default:
+                return [];
         }
     }
 }

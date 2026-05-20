@@ -355,6 +355,11 @@ class ADOdbTestCase extends TestCase
             );
         }
 
+         if (isset($GLOBALS['TestingControl']['transactions'])) {
+             if (isset($GLOBALS['TestingControl']['transactions']['ignoreScopeErrors'])){
+                return array($errno,$errmsg);
+             }
+        }
         if ($GLOBALS['globalTransOff'] < $transOff) {
             $this->assertTrue(
                 $transOff < 2,

@@ -259,11 +259,15 @@ class CacheSqlTest extends ADOdbTestCase
 
         $expectedError = ($expectedValue == false) ? true : false;
 
+        $this->db->startTrans();
+
         if ($bind) {
             $result = $this->db->cacheExecute($this->timeout, $sql, $bind);
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
+
+        $this->db->completeTrans();
 
         list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
 

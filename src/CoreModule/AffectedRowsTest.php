@@ -93,7 +93,12 @@ class AffectedRowsTest extends ADOdbCoreSetup
     {
 
 
-         $this->db->startTrans();
+        $SQL = "UPDATE insert_auto SET integer_field=0";
+        $this->db->startTrans();      
+        $this->db->execute($SQL);
+        $this->db->completeTrans();
+
+        $this->db->startTrans();
 
         $SQL = "UPDATE insert_auto 
                    SET integer_field=50
@@ -103,10 +108,11 @@ class AffectedRowsTest extends ADOdbCoreSetup
         $affectedRows = $this->db->affected_rows();
 
         $this->db->completeTrans();
+
         $this->assertEquals(
             50,
             $affectedRows,
-            'Affected_rows shoud return 50 from update'
+            'Affected_rows should return 50 from non-parameterized update'
         );
     }
 
@@ -177,7 +183,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
 
         $SQL = "DELETE FROM insert_auto";
         $this->db->execute($SQL);
-
+        
         $this->assertEquals(
             100,
             $this->db->affected_rows(),
@@ -199,13 +205,14 @@ class AffectedRowsTest extends ADOdbCoreSetup
 
         $SQL = "DELETE FROM insert_auto";
         $this->db->execute($SQL);
-
+        $this->db->completeTrans();
+        
         $this->assertEquals(
             0,
             $this->db->affected_rows(),
             'Affected_rows shoud return 0 from deletion of empty table'
         );
 
-        $this->db->completeTrans();
+       
     }
 }

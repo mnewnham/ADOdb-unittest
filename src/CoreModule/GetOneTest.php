@@ -46,11 +46,11 @@ class GetOneTest extends ADOdbCoreSetup
     {
 
         if ($bind) {
-            $this->db->startTrans();
+    
             $actualValue = (string)$this->db->getOne($sql, $bind);
 
             list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
-            $this->db->completeTrans();
+   
 
             $this->assertSame(
                 $expectedValue,
@@ -58,11 +58,11 @@ class GetOneTest extends ADOdbCoreSetup
                 'Test of getOne with bind variables'
             );
         } else {
-            $this->db->startTrans();
+
             $actualValue = (string)$this->db->getOne($sql);
 
             list($errno,$errmsg) = $this->assertADOdbError($sql);
-            $this->db->completeTrans();
+         
 
             $this->assertSame(
                 $expectedValue,
