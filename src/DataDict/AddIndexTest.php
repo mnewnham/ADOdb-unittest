@@ -178,4 +178,60 @@ class AddIndexTest extends DataDictFunctions
             'added index array_test_index'
         );
     }
+
+    /**
+     * Test for {@see ADODConnection::createIndexSQL()} passing an array
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:createindexsql
+     *
+     * @return void
+     */
+    public function testaddPartialIndexToBasicTableViaArray(): void
+    {
+        if ($this->skipFollowingTests) {
+            $this->markTestSkipped(
+                'Skipping tests as the table or ' .
+                'column was not created successfully'
+            );
+            return;
+        }
+
+        $metaIndexes = $this->dataDictionary->metaIndexes($this->testTableName);
+        if (array_key_exists('array_partial_test_index', $metaIndexes)) {
+            $dropIndexSql = $this->dataDictionary->dropIndexSql(
+                'array_partial_test_index',
+                $this->testTableName
+            );
+
+            list ($response,$errno,$errmsg) = $this->executeDictionaryAction($dropIndexSql);
+        }
+        $flds = array(
+            "VARCHAR_FIELD(10)"
+        );
+        
+        $sqlArray = $this->dataDictionary->createIndexSQL(
+            'array_partial_test_index',
+            $this->testTableName,
+            $flds
+        );
+
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
+        if ($errno > 0) {
+            return;
+        }
+
+        $GLOBALS['baseTestsComplete'] = 2;
+
+        $metaIndexes = array_change_key_case(
+            $this->db->metaIndexes($this->testTableName),
+            CASE_UPPER
+        );
+
+        $this->assertArrayHasKey(
+            'ARRAY_PARTIAL_TEST_INDEX',
+            $metaIndexes,
+            'AddIndexSQL Using Array For Fields should have ' .
+            'added index array_partial_test_index'
+        );
+    }
 }
