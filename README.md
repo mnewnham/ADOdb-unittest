@@ -216,14 +216,22 @@ Stored procedure testing must be explicitly enabled by adding a section and sett
 [storedprocedures]
 skipTests=0
 ````
+#### Transactions Section
+The tests ensure that a transaction has completed successfully if initiated. If this fails,
+the errors generated may obscure following errors. Set temporarily to expose those errors.
 
-##### Globals Section 
+````
+[transactions]
+ignoreScopeErrors=1;
+````
+#### Globals Section 
 To test some date functions, the local timezone must be equal to the server timezone. To change the timezone temporarily for the test, set the following global parameter in adodb-unittest.ini. This should exactly match the format in php.ini.
 ````
 [globals]
 date.timezone = 'America/Denver'
 ````
 Any parameter saved into the **[globals]** section will be set using ini_set()
+
 ### Test Execution 
 Testing supports all of the standard PHPunit test methods. Every test must include the --bootstrap connection statement
 #### Examples
