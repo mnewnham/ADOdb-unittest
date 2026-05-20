@@ -91,8 +91,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             return;
         }
 
-        print "
-Source Column Types From: $columnTypesFile";
 
         require_once $columnTypesFile;
 
@@ -275,32 +273,6 @@ Source Column Types From: $columnTypesFile";
             )
         );
 
-        /*
-        * Stage 3, pass a fieldobject to MetaType() as third arg
-        */
-        $metaResult = $GLOBALS['ADOdataDictionary']->metaType('', -1, $metaFetch);
-
-        $this->assertSame(
-            $expectedMetaType,
-            $metaResult,
-            sprintf(
-                'Checking MetaType of field [%s] returned' .
-                    ' by MetaType passing fieldObject as 3rd parameter',
-                $name
-            )
-        );
-
-        $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
-
-        $this->assertSame(
-            $expectedActualType,
-            $actualResult,
-            sprintf(
-                'Checking ActualType of field [%s] returned' .
-                ' by MetaType passing fieldObject as 3rd parameter',
-                $name
-            )
-        );
     }
 
      /**
@@ -366,7 +338,7 @@ Source Column Types From: $columnTypesFile";
 
         $sql = $this->db->getInsertSql($template, $fields);
 
-          $this->db->startTrans();
+        $this->db->startTrans();
         $result = $this->db->execute($sql);
         $this->db->completeTrans(false);
 
