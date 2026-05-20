@@ -31,8 +31,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class IndexCommentTest extends DataDictFunctions
 {
-    protected $commentTable  = 'testtable_1';
-    protected $commentIndex  = 'vdx1';
+    protected string $commentTable  = 'testtable_1';
+    protected string $commentIndex  = 'vdx1';
+
+    protected bool $skipFollowingTests = false;
     /**
      * Global setup for the test class
      *
@@ -125,6 +127,8 @@ class IndexCommentTest extends DataDictFunctions
     public function testRegetIndexCommentSql(): void
     {
 
+       
+              
         $sql = $this->dataDictionary->getIndexCommentSQL(
             $this->commentTable,
             $this->commentIndex
@@ -133,6 +137,20 @@ class IndexCommentTest extends DataDictFunctions
         if ($sql === null) {
             $this->markTestSkipped(
                 'getIndexCommentSql() not supported by driver'
+            );
+            $this->skipFollowingTests = true;
+            return;
+        }
+
+        $setSql = $this->dataDictionary->setIndexCommentSQL(
+            $this->commentTable,
+            $this->commentIndex,
+            $GLOBALS['iCommentText']
+        );
+        
+        if ($setSql === null) {
+            $this->markTestSkipped(
+                'cannot change comment because setting index comments outside of table creation is not supported by driver'
             );
             $this->skipFollowingTests = true;
             return;
