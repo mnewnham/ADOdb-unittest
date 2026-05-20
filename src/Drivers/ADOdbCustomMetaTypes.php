@@ -360,8 +360,8 @@ class ADOdbCustomMetaTypes extends ADOdbTestCase
         * a table using the XMLSchema functions
         */
         $schemaFile = sprintf(
-            '%s/../tools/DatabaseSetup/xmlschemafile-metatype.xml',
-            dirname(__FILE__)
+            '%s/DatabaseSetup/xmlschemafile-metatype.xml',
+            $GLOBALS['unitTestToolsDirectory']
         );
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
