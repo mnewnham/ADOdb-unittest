@@ -76,6 +76,7 @@ class CreateTableTest extends DataDictFunctions
         ];
 
         $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
+                 ID2 I NOTNULL PRIMARY KEY,
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
                  NVARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
@@ -116,9 +117,9 @@ class CreateTableTest extends DataDictFunctions
         $metaColumns = $this->db->metaColumns('dictionary_creation_test_table');
 
         if ($GLOBALS['DriverControl']->hasNativeEnum) {
-            $columnCount = 14;
+            $columnCount = 15;
         } else {
-            $columnCount = 13;
+            $columnCount = 14;
         }
 
         $this->assertEquals(
