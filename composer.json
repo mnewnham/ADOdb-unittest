@@ -16,5 +16,8 @@
             "name": "Mark Newnham",
             "email": "mark@newnhams.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
+    }
 }
