@@ -340,7 +340,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->db->startTrans();
         $result = $this->db->execute($sql);
-        $this->db->completeTrans(false);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $result,
@@ -377,7 +377,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->db->startTrans();
         $result = $this->db->execute($sql);
-        $this->db->completeTrans(false);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $result,
@@ -415,7 +415,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->db->startTrans();
         $result = $this->db->execute($sql);
-        $this->db->completeTrans(false);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $result,
@@ -453,7 +453,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->db->startTrans();
         $result = $this->db->execute($sql);
-        $this->db->completeTrans(false);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $result,
@@ -491,7 +491,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->db->startTrans();
         $result = $this->db->execute($sql);
-        $this->db->completeTrans(false);
+        $this->db->completeTrans();
 
         $this->assertIsObject(
             $result,
