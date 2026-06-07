@@ -487,3 +487,4 @@ $ADODB_COUNTRECS        = true;
 $ADODB_COMPAT_FETCH     = false;
 
 $GLOBALS['comparisonData'] = [];
+$GLOBALS['unittest-id'] = 'unittest-session';
