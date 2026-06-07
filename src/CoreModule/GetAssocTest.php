@@ -76,10 +76,10 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            
+            $expectedValue = [ 'NOT SET' ];
+            
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-
-            $this->db->startTrans();
-
 
             if ($bindFlag) {
                 $returnedRows = $this->db->getAssoc($boundSql, $bind, $forceArray, $first2Cols);
@@ -90,9 +90,8 @@ class GetAssocTest extends ADOdbCoreSetup
 
             $this->validateResetFetchModes();
 
-            $this->db->completeTrans();
-
             switch ($absoluteFetchMode) {
+
                 case ADODB_FETCH_NUM:
                     $expectedValue = $expectedNumericValue;
                     break;
@@ -100,6 +99,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     $expectedValue = $expectedAssociativeValue;
                     break;
                 case ADODB_FETCH_BOTH:
+                case ADODB_FETCH_DEFAULT:
                     $expectedValue = $expectedBothValue;
                     break;
             }
@@ -113,7 +113,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     $returnedRows[$key][$vKey] = (string)$vValue;
                 }
             }
-
+            
             $this->assertSame(
                 $expectedValue,
                 $returnedRows,
@@ -126,6 +126,7 @@ class GetAssocTest extends ADOdbCoreSetup
                 )
             );
         }
+
     }
 
 
@@ -172,10 +173,8 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+          
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-
-            $this->db->startTrans();
-
 
             if ($bindFlag) {
                 $returnedRows = $this->db->execute($boundSql, $bind)->getAssoc($forceArray, $first2Cols);
@@ -186,9 +185,8 @@ class GetAssocTest extends ADOdbCoreSetup
 
             $this->validateResetFetchModes();
 
-            $this->db->completeTrans();
-
             switch ($absoluteFetchMode) {
+
                 case ADODB_FETCH_NUM:
                     $expectedValue = $expectedNumericValue;
                     break;
@@ -196,6 +194,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     $expectedValue = $expectedAssociativeValue;
                     break;
                 case ADODB_FETCH_BOTH:
+                case ADODB_FETCH_DEFAULT:
                     $expectedValue = $expectedBothValue;
                     break;
             }
