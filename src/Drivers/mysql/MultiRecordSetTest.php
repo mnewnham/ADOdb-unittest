@@ -40,12 +40,12 @@ class MultiRecordSetTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'mysqli') {
+        //if ($this->adoDriver !== 'mysqli') {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
                 'This test is only applicable for the mysqli driver'
             );
-        }
+        //}
     }
 
     /**
