@@ -216,6 +216,17 @@ Stored procedure testing must be explicitly enabled by adding a section and sett
 [storedprocedures]
 skipTests=0
 ````
+#### Sessions Section
+This section provides testing for the ADOdb session management system and requires access to a functioning webserver
+enabled for PHP
+````
+skipTests=0;
+url=http://localhost/unittest
+verbose=0
+````
+The url parameter points to a virtual directory that references ADOdb-Unittest/server
+verbose activates additionally debugging options. Note that these will generate warnings in the PHPUnit test
+
 #### Transactions Section
 The tests ensure that a transaction has completed successfully if initiated. If this fails,
 the errors generated may obscure following errors. Set temporarily to expose those errors.
