@@ -52,9 +52,6 @@ class GetCountTest extends ADOdbCoreSetup
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->insertFetchMode($fetchMode);
 
-           //$this->db->debug = true;
-
-
             $response = _adodb_getcount(
                 $this->db, 
                 $sql,
