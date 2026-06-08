@@ -103,8 +103,8 @@ class ReplaceTest extends ADOdbTestCase
         $this->db->startTrans();
 
         $response = $this->db->replace(
-            'autoexecute', 
-            $ar, 
+            'autoexecute',
+            $ar,
             'id',
             false,
             true
@@ -138,7 +138,7 @@ class ReplaceTest extends ADOdbTestCase
     ): void {
 
         $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-        
+
 
         $numberRunField = 5001 + $fetchMode + (10 * $fetchMode);
 
@@ -157,8 +157,8 @@ class ReplaceTest extends ADOdbTestCase
         $this->db->startTrans();
 
         $response = $this->db->replace(
-            'autoexecute', 
-            $ar, 
+            'autoexecute',
+            $ar,
             'id',
             false,
             true

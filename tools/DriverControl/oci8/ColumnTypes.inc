@@ -26,12 +26,11 @@
  */
 class columnTypes
 {
-    
     /**
     * db     - The native database data type. There should be one for every supported native tyoe
     * meta   - The ADOdb metatype that should be returned by metaType()
     * output - The value returned by actualType() when the metaType is passed()
-    * build  - A column definition to pass in to the table building function fot testing 
+    * build  - A column definition to pass in to the table building function fot testing
     *
     * @var array
     */
@@ -44,12 +43,12 @@ class columnTypes
 
         ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
         ['db' => 'DATE', 'meta' => 'T', 'output' => 'DATE', 'build' => 'DATE'],
-       
+
         ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'],
         ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],
         ['db' => 'NCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'NCLOB'],
         ['db' => 'BFILE', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'BFILE'],
-       
+
         ['db' => 'LONG', 'meta' => 'X', 'output' => 'VARCHAR(4000)', 'build' => 'LONG'],
        // ['db' => 'RAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'RAW(1000)'],
        // ['db' => 'LONGRAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'LONG RAW'],
@@ -57,7 +56,7 @@ class columnTypes
 
         ['db' => 'NUMBER(1)', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
         ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
-        
+
         ['db' => 'NUMBER(3)', 'meta' => 'I1', 'output' => 'NUMBER(3)', 'build' => 'NUMBER(3)'],
         ['db' => 'NUMBER(5)', 'meta' => 'I2', 'output' => 'NUMBER(5)', 'build' => 'NUMBER(5)'],
         ['db' => 'NUMBER(10)', 'meta' => 'I4', 'output' => 'NUMBER(10)', 'build' => 'NUMBER(10)'],
@@ -68,11 +67,11 @@ class columnTypes
 
         ['db' => 'FLOAT(126)', 'meta' => 'F', 'output' => 'FLOAT(126)', 'build' => 'FLOAT(126)'],
         ['db' => 'FLOAT(63)', 'meta' => 'R', 'output' => 'FLOAT(63)', 'build' => 'FLOAT(63)'],
-  
+
     ];
 
     /**
-     * A database specific create table statement that wraps the 
+     * A database specific create table statement that wraps the
      * build statements above
      *
      * @var string
@@ -82,5 +81,4 @@ class columnTypes
     id number(20),
     %s
     )';
-
 }

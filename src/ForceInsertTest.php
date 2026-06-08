@@ -227,7 +227,7 @@ class ForceInsertTest extends ADOdbTestCase
 
             'ADODB_FORCE_IGNORE' => [
                 ADODB_FORCE_IGNORE,
-                [0, 0, NULL, null, null, null, null]
+                [0, 0, null, null, null, null, null]
             ],
             'ADODB_FORCE_NULL' => [
                 ADODB_FORCE_NULL,

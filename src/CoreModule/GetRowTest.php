@@ -70,10 +70,9 @@ class GetRowTest extends ADOdbCoreSetup
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-
             $this->insertFetchMode($fetchMode);
 
-   
+
 
             if ($bind == null) {
                 $record = $this->db->getRow($sql);
@@ -83,7 +82,7 @@ class GetRowTest extends ADOdbCoreSetup
 
             list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
-           
+
 
             if ($expectedValue == 1) {
                 switch ($fetchMode) {

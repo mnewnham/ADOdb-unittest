@@ -26,12 +26,11 @@
  */
 class columnTypes
 {
-    
     /**
     * db     - The native database data type. There should be one for every supported native tyoe
     * meta   - The ADOdb metatype that should be returned by metaType()
     * output - The value returned by actualType() when the metaType is passed()
-    * build  - A column definition to pass in to the table building function fot testing 
+    * build  - A column definition to pass in to the table building function fot testing
     *
     * @var array
     */
@@ -53,10 +52,10 @@ class columnTypes
 
         ['db' => 'ENUM', 'meta' => 'E', 'output' => 'ENUM', 'build' => "ENUM('cheddar','shropshire','wenslydale')"],
         ['db' => 'SET', 'meta' => 'E', 'output' => 'ENUM', 'build' => "SET('plaice','haddock','cod')"],
-       
+
         ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT(1)'],
         ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'],
-        
+
         ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'BOOLEAN', 'build' => 'TINYINT(1)'],
         ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT(10)'],
         ['db' => 'MEDIUMINT', 'meta' => 'I4', 'output' => 'INTEGER', 'build' => 'MEDIUMINT(10)'],
@@ -76,11 +75,11 @@ class columnTypes
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
         ['db' => 'TIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'TIME'],
         ['db' => 'YEAR', 'meta' => 'D', 'output' => 'DATE', 'build' => 'YEAR'],
-  
+
     ];
 
     /**
-     * A database specific create table statement that wraps the 
+     * A database specific create table statement that wraps the
      * build statements above
      *
      * @var string
@@ -91,5 +90,4 @@ class columnTypes
     %s,
     PRIMARY KEY(id)
     ) ENGINE=INNODB;';
-
 }

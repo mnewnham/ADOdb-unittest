@@ -67,7 +67,7 @@ class CoreControl
      */
     public bool $hasNativeEnum = false;
 
-    
+
     /**
      * If required, what is the stored procedure IN parameter type
      *
@@ -109,5 +109,4 @@ class CoreControl
      * @var string
      */
     public $dateMethodExecutor = 'SELECT %s';
-
 }

@@ -8,14 +8,13 @@ require_once $coreController;
 
 class DriverControl extends \CoreControl
 {
-
     /**
      * What the qstr process should return as a quoted string
      *
      * @var string
      */
     public string $qStrExpectedResult = "Famed author James O''Sullivan";
-    
+
     /**
      * The way in which the driver retrieves the fields in
      * FETCH_BOTH mode. Most drivers return the columns as
@@ -25,8 +24,9 @@ class DriverControl extends \CoreControl
      * @var integer
      */
     public int $fetchBothManner = 1;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }
 }

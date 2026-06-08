@@ -25,7 +25,6 @@ namespace MNewnham\ADOdbUnitTest\Session;
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-
 /**
  * Class NewSessionTest
  *
@@ -60,7 +59,7 @@ class NewSessionTest extends ADOdbTestCase
             $db->completeTrans();
         }
 
-        
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
@@ -86,7 +85,7 @@ class NewSessionTest extends ADOdbTestCase
     {
         $reflection = new \ReflectionClass($this);
         $class = $reflection->getShortName();
-        
+
         list ($a, $b) = $this->transmitSessionTest(
             __FILE__,
             $class,
@@ -98,28 +97,27 @@ class NewSessionTest extends ADOdbTestCase
         );
 
         $this->assertSame(
-            200, 
+            200,
             $a,
             'Call to server should return 200 OK'
         );
-    
-     
+
+
         $idObject = json_decode($b);
 
         $this->assertIsObject(
-            $idObject, 
+            $idObject,
             'Call to server should return a json encoded object'
         );
 
         $GLOBALS['unittest-id'] = $idObject->id;
-        
     }
 
     public function testReadSession(): void
     {
         $reflection = new \ReflectionClass($this);
         $class = $reflection->getShortName();
-        
+
         list ($a, $b) = $this->transmitSessionTest(
             __FILE__,
             $class,
@@ -129,11 +127,11 @@ class NewSessionTest extends ADOdbTestCase
                 'Cookie: PHPSESSID=' . $GLOBALS['unittest-id']
             ]
         );
- 
+
         $idObject = json_decode($b);
 
         $this->assertIsObject(
-            $idObject, 
+            $idObject,
             'Call to server should return a json encoded object'
         );
 
@@ -142,9 +140,5 @@ class NewSessionTest extends ADOdbTestCase
             $idObject->session->integer_field,
             'Session should have incremented integer_field value from 1 to 2'
         );
-
-
-       
-        
     }
 }

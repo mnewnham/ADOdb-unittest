@@ -27,17 +27,14 @@
  */
 class NewSessionTest
 {
-
-
-    
     /**
      * Test
-     * 
+     *
      * @return void
      */
     public function testInitializeNewSession(): void
     {
- 
+
         global $credentials;
 
         $options = [
@@ -46,11 +43,11 @@ class NewSessionTest
 
         /*
         * Set a timeout of 1 hour
-        */ 
+        */
         $timeoutMinutes = 60;
         $timeoutSeconds = $timeoutMinutes * 60;
 
-		ADOdb_Session::config(
+        ADOdb_Session::config(
             $credentials['driver'],
             $credentials['host'],
             $credentials['user'],
@@ -59,29 +56,28 @@ class NewSessionTest
             $options
         );
 
-		if ($timeoutMinutes > 0)
-			ADODB_Session::lifetime($timeoutSeconds);
-		//ADODB_Session::debug(true);
-		session_start();
+        if ($timeoutMinutes > 0) {
+            ADODB_Session::lifetime($timeoutSeconds);
+        }
+        //ADODB_Session::debug(true);
+        session_start();
 
         $_SESSION['integer_field'] = 1;
 
-        $c = new \stdClass;
+        $c = new \stdClass();
         $c->id = session_id();
         $c->test = 'testInitializeNewSession';
         print json_encode($c);
-
-
     }
 
     /**
      * Test
-     * 
+     *
      * @return void
      */
     public function testReadSession(): void
     {
-        
+
         global $credentials;
 
         $options = [
@@ -90,11 +86,11 @@ class NewSessionTest
 
         /*
         * Set a timeout of 1 hour
-        */ 
+        */
         $timeoutMinutes = 60;
         $timeoutSeconds = $timeoutMinutes * 60;
 
-		ADOdb_Session::config(
+        ADOdb_Session::config(
             $credentials['driver'],
             $credentials['host'],
             $credentials['user'],
@@ -102,17 +98,16 @@ class NewSessionTest
             $credentials['database'],
             $options
         );
-        
+
         session_start();
 
         $_SESSION['integer_field']++;
 
-        $cls = new \stdClass;
+        $cls = new \stdClass();
         $cls->session = $_SESSION;
         $cls->test    = 'testReadSession';
 
 
         print json_encode($cls);
-        
     }
 }

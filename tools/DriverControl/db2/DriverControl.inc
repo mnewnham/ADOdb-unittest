@@ -32,7 +32,8 @@ class DriverControl extends \CoreControl
      */
     public string $qStrExpectedResult = "Famed author James O''Sullivan";
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }
 }

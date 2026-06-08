@@ -26,12 +26,11 @@
  */
 class columnTypes
 {
-    
     /**
     * db     - The native database data type. There should be one for every supported native tyoe
     * meta   - The ADOdb metatype that should be returned by metaType()
     * output - The value returned by actualType() when the metaType is passed()
-    * build  - A column definition to pass in to the table building function fot testing 
+    * build  - A column definition to pass in to the table building function fot testing
     *
     * @var array
     */
@@ -45,28 +44,28 @@ class columnTypes
 
         ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
         //['db' => 'NVARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR(10)'],
-        
+
         ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT'],
-        
+
        // ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'BOOLEAN', 'build' => 'TINYINT'],
         ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
         ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
         ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'],
-      
+
         ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'FLOAT'],
-    
+
         ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'NUMERIC(16,2)'],
-    
+
         //['db' => 'DATETIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'DATETIME'],
         ['db' => 'TIMESTAMP', 'meta' => 'T', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
-        
+
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
         ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME']
-    
+
     ];
 
     /**
-     * A database specific create table statement that wraps the 
+     * A database specific create table statement that wraps the
      * build statements above
      *
      * @var string
@@ -76,5 +75,4 @@ class columnTypes
    	id SERIAL PRIMARY KEY,
     %s
     )';
-
 }

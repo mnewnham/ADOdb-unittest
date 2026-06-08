@@ -57,22 +57,22 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
     while ($filePointer && !feof($filePointer)) {
         $line = fgets($filePointer);
         $line = trim($line);
-        
+
         if (!$line) {
             continue; // skip empty lines
         }
 
-        if ($db->debug && substr($line,0,8) == '-- PRINT') {
-            print '### ' . substr($line,9) . "\n";
+        if ($db->debug && substr($line, 0, 8) == '-- PRINT') {
+            print '### ' . substr($line, 9) . "\n";
             continue;
         }
 
-        if ($line == '-- READ <<'){
+        if ($line == '-- READ <<') {
             $accumulatorFlag = true;
             continue;
         } elseif ($line == '-- <<') {
             $accumulatorFlag = false;
-            
+
             $line = $accumulatorString . ';';
             $line = str_replace('<NL>', "\n", $line);
             $accumulatorString = '';
@@ -90,7 +90,7 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
         $executionPoint .= $line;
         if (preg_match('/;$/', $line)) {
             $executionPoint = trim($executionPoint, ';');
-   
+
             if ($executionPoint) {
                 $ok = $db->execute($executionPoint);
             }
@@ -252,7 +252,7 @@ if (is_array($iniParams)) {
 
 
 $template = array(
-    'driver'=> null,
+    'driver' => null,
     'dsn' => '',
     'host' => null,
     'user' => null,
@@ -271,7 +271,7 @@ $credentials = array_merge(
 
 $pdoDriver  = '';
 $adoDriver  = $credentials['driver'];
-if (substr($adoDriver,0,3) == 'pdo') {
+if (substr($adoDriver, 0, 3) == 'pdo') {
     if ($credentials['legacy'] == 1) {
         $loadDriver = 'PDO';
         $pdoDriver  = str_replace('pdo-', '', $credentials['driver']);
@@ -303,7 +303,7 @@ if ($credentials['parameters']) {
             $scp[1] = (int)$scp[1];
         }
 
-        if ($scp[0] == 'bind-paramater-style'){
+        if ($scp[0] == 'bind-paramater-style') {
             continue;
         }
 
@@ -337,7 +337,7 @@ switch ($credentials['driver']) {
     case 'mssqlnative':
         $GLOBALS['schemaOwner'] = $db->database;
         break;
-    
+
     default:
         $GLOBALS['schemaOwner'] = $credentials['user'];
 }
@@ -372,8 +372,8 @@ $GLOBALS['unitTestToolsDirectory'] = $unitTestToolsDirectory;
 $GLOBALS['SqlProvider']     = $adoDriver;
 $GLOBALS['ControlProvider'] = $adoDriver;
 if (substr($adoDriver, 0, 3) == 'pdo') {
-    $GLOBALS['SqlProvider'] = $pdoSqlProviders[$adoDriver]; 
-    $GLOBALS['ControlProvider'] = str_replace('-', '/', $adoDriver); 
+    $GLOBALS['SqlProvider'] = $pdoSqlProviders[$adoDriver];
+    $GLOBALS['ControlProvider'] = str_replace('-', '/', $adoDriver);
 }
 
 $tableSchema = sprintf(
@@ -401,7 +401,6 @@ $tableSchema = sprintf(
 );
 
 if (!file_exists($tableSchema)) {
-
     $tableSchema = sprintf(
         '%s/DatabaseSetup/table3-data.sql',
         $GLOBALS['unitTestToolsDirectory']
@@ -447,10 +446,13 @@ global $ADODB_CACHE_DIR;
 * The base classes for Activw record testing
 */
 if ($GLOBALS['skipActiveRecordTests'] == 0) {
-    
     $_ADODB_ACTIVE_DBS = array();
-    class person extends \ADOdb_Active_Record {}
-    class child extends \ADOdb_Active_Record {}
+    class person extends \ADOdb_Active_Record
+    {
+    }
+    class child extends \ADOdb_Active_Record
+    {
+    }
 }
 
 
@@ -463,14 +465,14 @@ $driverControl = sprintf(
 
 if (file_exists($driverControl)) {
     require_once $driverControl;
-    $GLOBALS['DriverControl'] = new \DriverControl;
+    $GLOBALS['DriverControl'] = new \DriverControl();
 } else {
     $driverControl = sprintf(
         '%s/DriverControl/CoreControl.inc',
         $GLOBALS['unitTestToolsDirectory']
-    );  
+    );
     require_once $driverControl;
-    $GLOBALS['DriverControl'] = new \CoreControl;
+    $GLOBALS['DriverControl'] = new \CoreControl();
 }
 
 print "Driver Control File: $driverControl

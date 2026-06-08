@@ -26,7 +26,8 @@ class DriverControl extends \CoreControl
     public bool $dictionaryRequireTransactions = true;
 
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }
 }

@@ -37,10 +37,5 @@ $className = $data->class;
 $testName  = $data->test;
 $testData  = $data->data;
 
-$class = new $className;
+$class = new $className();
 $test  = $class->$testName($testData);
-
-
-
-
-

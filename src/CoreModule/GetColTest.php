@@ -46,7 +46,6 @@ class GetColTest extends ADOdbCoreSetup
     {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-     
             $this->insertFetchMode($fetchMode);
 
             if ($bind) {

@@ -272,7 +272,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 print_r($metaFetch, true)
             )
         );
-
     }
 
      /**

@@ -208,7 +208,7 @@ class AddIndexTest extends DataDictFunctions
         $flds = array(
             "VARCHAR_FIELD(10)"
         );
-        
+
         $sqlArray = $this->dataDictionary->createIndexSQL(
             'array_partial_test_index',
             $this->testTableName,

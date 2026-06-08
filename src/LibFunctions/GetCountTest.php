@@ -46,17 +46,16 @@ class GetCountTest extends ADOdbCoreSetup
         string $expectedResult,
         string $sql,
         mixed $bind
-    ): void
-    {
+    ): void {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->insertFetchMode($fetchMode);
 
             $response = _adodb_getcount(
-                $this->db, 
+                $this->db,
                 $sql,
                 $bind,
-                $secs2cache=0
+                $secs2cache = 0
             );
 
             $this->assertSame(
@@ -67,7 +66,6 @@ class GetCountTest extends ADOdbCoreSetup
                     $fetchDescription
                 )
             );
-            
         }
     }
 

@@ -15,7 +15,7 @@ class DriverControl extends \CoreControl
      */
     public int $nativeModeCasing = 1;
 
-        
+
     /**
      * If required, what is the stored procedure IN parameter type
      *
@@ -64,5 +64,4 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public $dateMethodExecutor = 'SELECT %s AS result FROM dual';
-
 }

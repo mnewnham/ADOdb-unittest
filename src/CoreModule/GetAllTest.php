@@ -47,7 +47,7 @@ class GetAllTest extends ADOdbCoreSetup
     {
 
         $this->db->setFetchMode($fetchMode);
-  
+
 
         if ($bind) {
             $returnedRows = $this->db->getAll($sql, $bind);

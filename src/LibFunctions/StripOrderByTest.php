@@ -44,8 +44,7 @@ class StripOrderByTest extends ADOdbCoreSetup
     public function testStripOrderBy(
         string $expectedResult,
         string $sql
-    ): void
-    {
+    ): void {
 
         $response = adodb_strip_order_by($sql);
 
@@ -53,7 +52,7 @@ class StripOrderByTest extends ADOdbCoreSetup
         $to   = [" ", " "];
         $this->assertSame(
             $expectedResult,
-            trim(str_replace($from,$to,$response)),
+            trim(str_replace($from, $to, $response)),
             'ADOConnection::adodb_strip_order_by'
         );
     }
@@ -85,12 +84,12 @@ class StripOrderByTest extends ADOdbCoreSetup
                 "SELECT * FROM testtable_3, 'ORDER BY' orderby order by number_run_field"
             ],
             'Union SQL No Alias' => [
-"SELECT a,b FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1)",
-"SELECT a,b FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) ORDER BY b DESC"                
+            "SELECT a,b FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1)",
+            "SELECT a,b FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) ORDER BY b DESC"
             ],
             'Union SQL Alias' => [
-"SELECT a,b, 'ORDER BY' orderby FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) MYALIAS",
-"SELECT a,b, 'ORDER BY' orderby FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) MYALIAS ORDER BY b DESC"                
+            "SELECT a,b, 'ORDER BY' orderby FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) MYALIAS",
+            "SELECT a,b, 'ORDER BY' orderby FROM (SELECT a,b FROM testtable_3 UNION SELECT a,b FROM testtable_1) MYALIAS ORDER BY b DESC"
             ]
         ];
     }

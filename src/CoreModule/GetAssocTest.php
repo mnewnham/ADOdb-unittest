@@ -76,9 +76,8 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            
             $expectedValue = [ 'NOT SET' ];
-            
+
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             if ($bindFlag) {
@@ -91,7 +90,6 @@ class GetAssocTest extends ADOdbCoreSetup
             $this->validateResetFetchModes();
 
             switch ($absoluteFetchMode) {
-
                 case ADODB_FETCH_NUM:
                     $expectedValue = $expectedNumericValue;
                     break;
@@ -113,7 +111,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     $returnedRows[$key][$vKey] = (string)$vValue;
                 }
             }
-            
+
             $this->assertSame(
                 $expectedValue,
                 $returnedRows,
@@ -126,7 +124,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 )
             );
         }
-
     }
 
 
@@ -173,7 +170,6 @@ class GetAssocTest extends ADOdbCoreSetup
                 ORDER BY number_run_field";
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-          
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
             if ($bindFlag) {
@@ -186,7 +182,6 @@ class GetAssocTest extends ADOdbCoreSetup
             $this->validateResetFetchModes();
 
             switch ($absoluteFetchMode) {
-
                 case ADODB_FETCH_NUM:
                     $expectedValue = $expectedNumericValue;
                     break;

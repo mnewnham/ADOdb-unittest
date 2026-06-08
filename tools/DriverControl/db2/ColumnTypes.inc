@@ -26,12 +26,11 @@
  */
 class columnTypes
 {
-    
     /**
     * db     - The native database data type. There should be one for every supported native tyoe
     * meta   - The ADOdb metatype that should be returned by metaType()
     * output - The value returned by actualType() when the metaType is passed()
-    * build  - A column definition to pass in to the table building function fot testing 
+    * build  - A column definition to pass in to the table building function fot testing
     *
     * @var array
     */
@@ -58,7 +57,7 @@ class columnTypes
     ];
 
     /**
-     * A database specific create table statement that wraps the 
+     * A database specific create table statement that wraps the
      * build statements above
      *
      * @var string
@@ -68,5 +67,4 @@ class columnTypes
     id BIGINT,
     %s
     )';
-
 }

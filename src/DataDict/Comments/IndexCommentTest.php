@@ -127,8 +127,8 @@ class IndexCommentTest extends DataDictFunctions
     public function testRegetIndexCommentSql(): void
     {
 
-       
-              
+
+
         $sql = $this->dataDictionary->getIndexCommentSQL(
             $this->commentTable,
             $this->commentIndex
@@ -147,7 +147,7 @@ class IndexCommentTest extends DataDictFunctions
             $this->commentIndex,
             $GLOBALS['iCommentText']
         );
-        
+
         if ($setSql === null) {
             $this->markTestSkipped(
                 'cannot change comment because setting index comments outside of table creation is not supported by driver'
