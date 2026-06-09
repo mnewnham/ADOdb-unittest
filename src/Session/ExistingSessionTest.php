@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for for ADOdb Session Services
  */
-class NewSessionTest extends ADOdbTestCase
+class ExistingSessionTest extends ADOdbTestCase
 {
     /**
      * Global setup for the test class
@@ -138,9 +138,9 @@ class NewSessionTest extends ADOdbTestCase
         );
 
         $this->assertEquals(
-            2,
+            10,
             $idObject->session->integer_field,
-            'Session should have incremented integer_field value from 1 to 2'
+            'Session should have incremented integer_field value to 10'
         );
     }
 }
