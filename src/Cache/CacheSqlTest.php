@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest;
+namespace MNewnham\ADOdbUnitTest\Cache;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -1052,4 +1052,93 @@ class CacheSqlTest extends ADOdbTestCase
 
         ];
     }
+
+    /**
+     * Test for {@see ADODConnection::cacheFlush()} flushing a single table
+     *
+     * @return void
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheFlush
+     */
+    public function testCacheFlushOneUnbound(): void {
+
+        if ($this->skipAllTests) {
+            $this->markTestSkipped('Skipping tests as caching not configured');
+            return;
+        }
+
+        global $ADODB_CACHE_DIR;
+
+        $sql = "SELECT testtable_3.varchar_field 
+                        FROM testtable_3 
+                       WHERE number_run_field>2 
+                    ORDER BY number_run_field";
+
+        
+        $response = $this->db->cacheFlush($sql);
+        
+        $this->assertSame(
+            null,
+            $response,
+            "CacheFlush should not return a value"
+        );
+    }
+
+    /**
+     * Test for {@see ADODConnection::cacheFlush()} flushing a single table
+     * using bind parameters
+     *
+     * @return void
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheFlush
+     */
+    public function testCacheFlushOneBound(): void {
+
+        if ($this->skipAllTests) {
+            $this->markTestSkipped('Skipping tests as caching not configured');
+            return;
+        }
+
+        $GLOBALS['ADOdbConnection']->param(false);
+        $p1 = $GLOBALS['ADOdbConnection']->param('p1');
+        $bind = array(
+            'p1' => 'LINE 11'
+        );
+        
+        $sql = "SELECT testtable_3.varchar_field,testtable_3.* 
+                  FROM testtable_3 WHERE varchar_field=$p1";
+        
+        $response = $this->db->cacheFlush($sql, $bind);
+        
+        $this->assertSame(
+            null,
+            $response,
+            "CacheFlush should not return a value"
+        );
+    }
+
+    /**
+     * Test for {@see ADODConnection::cacheFlush()} flushing all tables
+     *
+     * @return void
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheFlush
+     */
+    public function testCacheFlushAll(): void {
+
+        if ($this->skipAllTests) {
+            $this->markTestSkipped('Skipping tests as caching not configured');
+            return;
+        }
+        
+        $response = $this->db->cacheFlush();
+        
+        $this->assertSame(
+            true,
+            $response,
+            "CacheFlush All should return true"
+        );
+    }
+
+    
 }
