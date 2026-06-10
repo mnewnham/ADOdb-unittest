@@ -331,8 +331,8 @@ class ADOdbTestCase extends TestCase
 
         if ($expectError) {
             $this->assertNotEquals(
-                0,
-                $errno,
+                '0',
+                (string)$errno,
                 sprintf(
                     'ADOdb execution of SQL %s%s should return error: %d - %s',
                     $sql,
