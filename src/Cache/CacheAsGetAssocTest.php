@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for core SQL functions of ADODb
+ * Tests cases for Cache SQL functions used as the core function of ADODb
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -22,7 +22,6 @@
 namespace MNewnham\ADOdbUnitTest\Cache;
 
 use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
-use PhpParser\Node\Stmt\TraitUse;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**

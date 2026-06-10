@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for core SQL functions of ADODb
+ * Tests cases for Cache SQL functions used as the core function of ADODb
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -46,10 +46,13 @@ class CacheAsExecuteTest extends ADOdbCoreSetup
     public function testSelectCacheAsExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
 
-
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->insertFetchMode($fetchMode);
-            $result = $this->db->cacheExecute($sql, $bind);
+            if ($bind) {
+                $result = $this->db->cacheExecute($sql, $bind);
+            } else {
+                $result = $this->db->cacheExecute($sql);
+            }
             //list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
             $this->assertSame(
@@ -110,7 +113,11 @@ class CacheAsExecuteTest extends ADOdbCoreSetup
     public function testNonSelectCacheAsExecute(bool $expectedValue, string $sql, ?array $bind): void
     {
 
-        $result = $this->db->cacheExecute($sql, $bind);
+        if ($bind) {
+            $result = $this->db->cacheExecute($sql, $bind);
+        } else {
+            $result = $this->db->cacheExecute($sql);
+        }
         //list($result,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
         if (is_object($result)) {
