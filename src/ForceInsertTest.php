@@ -133,6 +133,15 @@ class ForceInsertTest extends ADOdbTestCase
         $sql = "SELECT * FROM adodb_force_insert WHERE id=-1";
         $template = $this->db->execute($sql);
 
+        /*
+        	varchar_field VARCHAR(20),
+            datetime_field DATETIME,
+            date_field DATE,
+            integer_field INT(4),
+            decimal_field DECIMAL(12.2),
+            boolean_field BOOLEAN,
+            trigger_field TINYINT,
+            */
         $ar = [
 
             'varchar_field' => '',
@@ -142,6 +151,11 @@ class ForceInsertTest extends ADOdbTestCase
             'decimal_field' => '',
             'boolean_field' => '',
             'trigger_field' => 9
+        ];
+        //$this->db->debug = true;
+
+        $ar = [
+            'varchar_field' => 'SOME VALUE'
         ];
 
         $tTable = 'adodb_force_insert';
@@ -164,41 +178,55 @@ class ForceInsertTest extends ADOdbTestCase
 
         $insertResult = $this->db->getRow($sql);
 
+        //print_r($insertResult);
+        //print_r($columnValues);
+
         foreach ($insertResult as $index => $value) {
-            if ($index == 0) {
+            if ($index < 2) {
                 continue;
             }
             if ($index == 7) {
                 break;
             }
 
-            $expected = 'UNKNOWN';
-            $value    = 'UNKNOWN';
+            print "INDEX=$index ACTUAL=|$value| EXPECTED=|{$columnValues[$index]}|
+";
 
-            if ($value === null) {
-                $value = 'NULL';
-            } elseif ($value === '') {
-                $value = 'BLANK';
+
+            $expected = 'UNKNOWN';
+            $actual    = 'UNKNOWN';
+
+            if (is_null($value)) {
+                $actual = 'NULL';
+            } else if ($value === 0) {
+                $actual = 'ZERO';
+            } elseif ($value == null) {
+                $actual = 'NULL';
+            } elseif ($value == '') {
+                $actual = 'BLANK';
             } elseif ((int)$value == 0) {
-                $value = 'ZERO';
+                $actual = 'ZERO';
             }
 
-            if ($columnValues[$index] === null) {
+
+            if (is_null($columnValues[$index])) {
                 $expected = 'NULL';
+            } elseif (strlen($columnValues[$index]) == 1) {
+                $expected = 'ZERO';
             } elseif ($columnValues[$index] == 'BLANK') {
                 $expected = 'BLANK';
-            } elseif ((int)$columnValues[$index] == 0) {
-                $expected = 'ZERO';
+            } elseif ($columnValues[$index] == '') {
+                $expected = 'NULL';
             }
 
             $this->assertSame(
                 $expected,
-                $value,
+                $actual,
                 sprintf(
                     'Force Mode [%s]: Index %s is %s, should be %s',
                     $this->forceModeDescriptions[$forceMode],
                     $index,
-                    $value,
+                    $actual,
                     $expected
                 )
             );
@@ -227,23 +255,23 @@ class ForceInsertTest extends ADOdbTestCase
 
             'ADODB_FORCE_IGNORE' => [
                 ADODB_FORCE_IGNORE,
-                [0, 0, null, null, null, null, null]
+                [1, 'SOME VALUE', null, null, null, null, null]
             ],
             'ADODB_FORCE_NULL' => [
                 ADODB_FORCE_NULL,
-                [0, 0, null, null, null, null, null]
+                 [2, 'SOME VALUE', null, null, null, null, null]
             ],
             'ADODB_FORCE_EMPTY' => [
                 ADODB_FORCE_EMPTY,
-                [0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
+                [3, 'SOME VALUE', 0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
             ],
             'ADODB_FORCE_VALUE' => [
                 ADODB_FORCE_VALUE,
-                 [0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
+                 [4, 'SOME VALUE', 0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
             ],
             'ADODB_FORCE_NULL_AND_ZERO' => [
                 ADODB_FORCE_NULL_AND_ZERO,
-                [0, null, null, null, 0, 0, 0]
+                [5, 'SOME VALUE', 0, null, null, null, 0, 0, 0]
             ]
         ];
     }
