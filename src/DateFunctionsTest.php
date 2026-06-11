@@ -196,17 +196,13 @@ class DateFunctionsTest extends ADOdbTestCase
             'dbTimestamp should return a date that evaluates to the calculated timestamp'
         );
 
-        print "
-        ANT=[$actualNowTime]
-        ";
-        /*
         $now = sprintf("'%s'", $now);
         $this->assertSame(
             $now,
             $bts,
             'bindTimestamp should return a timestamp without quotes'
         );
-        */
+        
     }
 
 
