@@ -189,10 +189,6 @@ class ForceInsertTest extends ADOdbTestCase
                 break;
             }
 
-            print "INDEX=$index ACTUAL=|$value| EXPECTED=|{$columnValues[$index]}|
-";
-
-
             $expected = 'UNKNOWN';
             $actual    = 'UNKNOWN';
 
