@@ -39,6 +39,9 @@ class ExistingSessionTest extends ADOdbTestCase
      */
     public static function setUpBeforeClass(): void
     {
+        if ($GLOBALS['skipSessionTests'] == 1) {
+            return;
+        }
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
@@ -71,6 +74,14 @@ class ExistingSessionTest extends ADOdbTestCase
         }
 
         parent::setUpBeforeClass();
+    }
+
+     public function setup(): void {
+        if ($GLOBALS['skipSessionTests'] == 1) {
+            $this->markTestSkipped('Session testing is disabled');
+            return;
+        }
+        parent::setup();
     }
 
 

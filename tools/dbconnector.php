@@ -490,3 +490,8 @@ $ADODB_COMPAT_FETCH     = false;
 
 $GLOBALS['comparisonData'] = [];
 $GLOBALS['unittest-id'] = 'unittest-session';
+$GLOBALS['skipSessionTests'] = 0;
+$sessionParams = $availableCredentials['session'];
+if ($sessionParams['skipTests'] == '1') {
+    $GLOBALS['skipSessionTests'] = 1;
+}
