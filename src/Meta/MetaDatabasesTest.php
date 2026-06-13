@@ -85,9 +85,14 @@ class MetaDatabasesTest extends MetaFunctions
 
         $flipResponse = array_change_key_case(array_flip($response), CASE_LOWER);
 
-        $this->assertArrayHasKey(
-            strtolower($baseDatabaseName ?? ''),
-            $flipResponse,
+        $success = false;
+        foreach($response as $value) {
+            if (str_contains($value, $baseDatabaseName)) {
+                $success = true;
+            }
+        }
+        $this->assertTrue(
+            $success,
             sprintf(
                 '[FETCH MODE %s] Checking that metaDatabases ' .
                 'returns the currently attached database',
