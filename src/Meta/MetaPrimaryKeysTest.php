@@ -91,7 +91,7 @@ class MetaPrimaryKeysTest extends MetaFunctions
             /*
             * Cannot test casing of values
             */
-            $executionResult = array_map('strtolower', $executionResult);
+            $executionResult = array_values(array_map('strtolower', $executionResult));
 
             $this->assertSame(
                 'id',
