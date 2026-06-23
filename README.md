@@ -217,15 +217,24 @@ Stored procedure testing must be explicitly enabled by adding a section and sett
 skipTests=0
 ````
 #### Sessions Section
-This section provides testing for the ADOdb session management system and requires access to a functioning webserver
-enabled for PHP
+This section provides testing for the ADOdb session management system and requires access to a functioning webserver enabled for PHP
 ````
 skipTests=0;
 url=http://localhost/unittest
 verbose=0
+persist=P
+compress=
+encrypt=
+clob=
 ````
-The url parameter points to a virtual directory that references ADOdb-Unittest/server
-verbose activates additionally debugging options. Note that these will generate warnings in the PHPUnit test
+- The url parameter points to a virtual directory that references ADOdb-Unittest/server
+- verbose activates additionally debugging options. Note that these will generate warnings in the PHPUnit test
+- persist (options: P - Persist, N - New Connection, C - Connect)
+- compress (options: gzip, bz2)
+- encrypt (options: crypt, sha1) [secret only testable on linux]
+- clob (options: null, CLOB, BLOB) matches the type of sessdata column
+  
+Testing compression or encryption options requires use of a session schema file where the sessdata column is a BLOB storage field
 
 #### Transactions Section
 The tests ensure that a transaction has completed successfully if initiated. If this fails,
