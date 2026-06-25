@@ -134,7 +134,7 @@ class ForceInsertTest extends ADOdbTestCase
         $template = $this->db->execute($sql);
 
         /*
-        	varchar_field VARCHAR(20),
+            varchar_field VARCHAR(20),
             datetime_field DATETIME,
             date_field DATE,
             integer_field INT(4),
@@ -194,7 +194,7 @@ class ForceInsertTest extends ADOdbTestCase
 
             if (is_null($value)) {
                 $actual = 'NULL';
-            } else if ($value === 0) {
+            } elseif ($value === 0) {
                 $actual = 'ZERO';
             } elseif ($value == null) {
                 $actual = 'NULL';

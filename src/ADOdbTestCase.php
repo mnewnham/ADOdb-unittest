@@ -202,7 +202,12 @@ class ADOdbTestCase extends TestCase
             $this->dataDictionary = NewDataDictionary($this->db);
         } else {
             $this->db             = $GLOBALS['ADOdbConnection'];
-            $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
+            if ($GLOBALS['ADOdataDictionary']) {
+                $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
+            } else {
+                //print_r($GLOBALS); exit;
+                //$this->dataDictionary = NewDataDictionary($GLOBALS['ADOdbConnection'], $GLOBALS['ADOdriver']);
+            }
         }
 
         /*

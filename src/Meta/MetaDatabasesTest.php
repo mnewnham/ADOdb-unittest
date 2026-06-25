@@ -86,7 +86,7 @@ class MetaDatabasesTest extends MetaFunctions
         $flipResponse = array_change_key_case(array_flip($response), CASE_LOWER);
 
         $success = false;
-        foreach($response as $value) {
+        foreach ($response as $value) {
             if (str_contains($value, $baseDatabaseName)) {
                 $success = true;
             }

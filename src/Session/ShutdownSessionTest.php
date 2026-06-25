@@ -23,7 +23,6 @@
 namespace MNewnham\ADOdbUnitTest\Session;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -31,7 +30,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for for ADOdb Session Services
  */
-class NewSessionTest extends ADOdbTestCase
+class ShutdownSessionTest extends ADOdbTestCase
 {
     /**
      * Global setup for the test class
@@ -40,45 +39,13 @@ class NewSessionTest extends ADOdbTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        
         if ($GLOBALS['skipSessionTests'] == 1) {
             return;
-        }
-        $db = $GLOBALS['ADOdbConnection'];
-        /*
-        * Load the table to test data length tests
-        */
-        $schemaFile = sprintf(
-            '%s/DatabaseSetup/%s/sessions-schema.sql',
-            $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['SqlProvider']
-        );
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
-        }
-
-        $db->execute('DROP TABLE IF EXISTS session_test');
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
-        }
-
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
-        }
-
-        $ok = readSqlIntoDatabase($db, $schemaFile);
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
         }
 
         parent::setUpBeforeClass();
     }
 
-    
     public function setup(): void
     {
         if ($GLOBALS['skipSessionTests'] == 1) {
@@ -98,7 +65,7 @@ class NewSessionTest extends ADOdbTestCase
      *
      * @return void
      */
-    public function testInitializeNewSession(): void
+    public function testDestroySession(): void
     {
         $reflection = new \ReflectionClass($this);
         $class = $reflection->getShortName();
@@ -106,7 +73,7 @@ class NewSessionTest extends ADOdbTestCase
         list ($a, $b) = $this->transmitSessionTest(
             __FILE__,
             $class,
-            'testInitializeNewSession',
+            'testDestroySession',
             '',
             [
                 'Cookie: PHPSESSID=' . $GLOBALS['unittest-id']
@@ -119,43 +86,28 @@ class NewSessionTest extends ADOdbTestCase
             'Call to server should return 200 OK'
         );
 
-
         $idObject = json_decode($b);
 
         $this->assertIsObject(
             $idObject,
-            'Call to server should return a json encoded object'
+            sprintf(
+                'Call to server should return a json encoded object, returned %s',
+                $b
+            )
+        );
+
+        $SQL = "SELECT COUNT(*) 
+                  FROM session_test
+                 WHERE expireref IS NULL";
+
+        $pastCount = $GLOBALS['ADOdbConnection']->getOne($SQL);
+
+        $this->assertSame(
+            0,
+            (int)$pastCount,
+            'The current record should have been deleted'
         );
 
         $GLOBALS['unittest-id'] = $idObject->id;
-    }
-
-    public function testReadSession(): void
-    {
-        $reflection = new \ReflectionClass($this);
-        $class = $reflection->getShortName();
-
-        list ($a, $b) = $this->transmitSessionTest(
-            __FILE__,
-            $class,
-            'testReadSession',
-            '',
-            [
-                'Cookie: PHPSESSID=' . $GLOBALS['unittest-id']
-            ]
-        );
-
-        $idObject = json_decode($b);
-
-        $this->assertIsObject(
-            $idObject,
-            'Call to server should return a json encoded object'
-        );
-
-        $this->assertEquals(
-            2,
-            $idObject->session->integer_field,
-            'Session should have incremented integer_field value from 1 to 2'
-        );
     }
 }

@@ -126,7 +126,9 @@ class GetUpdateSqlTest extends ADOdbTestCase
          $ar = array(
             'varchar_field' => 'GETUPDATESQL0' . $fetchMode,
             'integer_field' => 99,
-            'number_run_field' => 4001 + $fetchMode
+            'number_run_field' => 4001 + $fetchMode,
+            'decimal_eval_field+' => 2.5,
+            'varchar_eval_field!' => "CASE WHEN number_run_field < 4003 THEN 'HELLO' ELSE 'GOODBYE' END"
          );
 
         /*
@@ -149,7 +151,7 @@ class GetUpdateSqlTest extends ADOdbTestCase
              );
          }
 
-         $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+         $sql = "SELECT varchar_field,integer_field, decimal_eval_field, varchar_eval_field FROM autoexecute ORDER BY id DESC";
          $newRecord = $this->db->getRow($sql);
 
          if ($fetchMode == 0 || $fetchMode == 3) {

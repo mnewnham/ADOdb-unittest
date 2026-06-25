@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tests cases for Cache SQL functions used as the core function of ADODb
  *

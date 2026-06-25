@@ -202,7 +202,6 @@ class DateFunctionsTest extends ADOdbTestCase
             $bts,
             'bindTimestamp should return a timestamp without quotes'
         );
-        
     }
 
 

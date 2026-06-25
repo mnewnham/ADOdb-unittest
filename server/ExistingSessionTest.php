@@ -21,7 +21,7 @@
  */
 
 /**
- * Class NewSessionTest
+ * Class ExistingSessionTest
  *
  * Test cases for for ADOdb Session Services
  */
@@ -35,35 +35,9 @@ class ExistingSessionTest
     public function testUseExistingSession(): void
     {
 
-        global $credentials;
-
-        $options = [
-            'table' => 'session_test'
-        ];
-
-        /*
-        * Set a timeout of 1 hour
-        */
-        $timeoutMinutes = 60;
-        $timeoutSeconds = $timeoutMinutes * 60;
-
-        /*
-        ADOdb_Session::config(
-            $credentials['driver'],
-            $credentials['host'],
-            $credentials['user'],
-            $credentials['password'],
-            $credentials['database'],
-            $options
-        );
-
-        if ($timeoutMinutes > 0) {
-            ADODB_Session::lifetime($timeoutSeconds);
-        }
-        */
-        //ADODB_Session::debug(true);
-        session_start();
-
+        $acc = new ActivateCompatConnection();
+        $acc->startup();
+        
         $_SESSION['integer_field'] = 10;
 
         $c = new \stdClass();
@@ -73,43 +47,142 @@ class ExistingSessionTest
     }
 
     /**
-     * Test
+     * Test adding an integer value to an existing field
      *
      * @return void
      */
     public function testReadSession(): void
     {
 
-        global $credentials;
-
-        $options = [
-            'table' => 'session_test'
-        ];
-
-        /*
-        * Set a timeout of 1 hour
-        */
-        $timeoutMinutes = 60;
-        $timeoutSeconds = $timeoutMinutes * 60;
-
-        ADOdb_Session::config(
-            $credentials['driver'],
-            $credentials['host'],
-            $credentials['user'],
-            $credentials['password'],
-            $credentials['database'],
-            $options
-        );
-
-        session_start();
+        $acc = new ActivateCompatConnection();
+        $acc->startup();
 
         $_SESSION['integer_field']++;
 
         $cls = new \stdClass();
+        $cls->id = session_id();
         $cls->session = $_SESSION;
         $cls->test    = 'testReadSession';
 
 
         print json_encode($cls);
+    }
+
+    /**
+     * Test writing large text data into a session record
+     *
+     * @return void
+     */
+    public function testWriteClobIntoSession(): void
+    {
+
+        $acc = new ActivateCompatConnection();
+        $acc->startup();
+
+        if (!isset($GLOBALS['TestingControl']['blob'])) {
+           
+            $cls = new \stdClass();
+            $cls->id = session_id();
+            $cls->session = $_SESSION;
+            $cls->test    = 'testWriteClobIntoSession';
+            $cls->error   = 'No CLOB test data available';
+
+            print json_encode($cls);
+            return;
+        }
+
+        $blobSection = $GLOBALS['TestingControl']['blob'];
+
+        if (!isset($blobSection['testClob'])) {
+            $cls = new \stdClass();
+            $cls->id = session_id();
+            $cls->session = $_SESSION;
+            $cls->test    = 'testWriteClobIntoSession';
+            $cls->error   = 'No CLOB test data available';
+
+            print json_encode($cls);
+            return;
+        }
+
+        $testData = file_get_contents($blobSection['testClob']);
+
+        $_SESSION['big_data'] = $testData;
+
+        $cls = new \stdClass();
+        $cls->id = session_id();
+        $cls->session = $_SESSION;
+        $cls->test    = 'testWriteClobIntoSession';
+
+
+        print json_encode($cls);
+    }
+
+    /**
+     * Test writing large text data into a session record
+     *
+     * @return void
+     */
+    public function testReadClobFromSession(): void
+    {
+
+        $acc = new ActivateCompatConnection();
+        $acc->startup();
+
+        if (!isset($GLOBALS['TestingControl']['blob'])) {
+            $cls = new \stdClass();
+            $cls->id = session_id();
+            $cls->session = $_SESSION;
+            $cls->test    = 'testWriteClobIntoSession';
+            $cls->error   = 'No CLOB test data available';
+
+            print json_encode($cls);
+            return;
+        }
+
+        $blobSection = $GLOBALS['TestingControl']['blob'];
+
+        if (!isset($blobSection['testClob'])) {
+            $cls = new \stdClass();
+            $cls->id = session_id();
+            $cls->session = $_SESSION;
+            $cls->test    = 'testWriteClobIntoSession';
+            $cls->error   = 'No CLOB test data available';
+
+            print json_encode($cls);
+            return;
+        }
+
+        if (!isset($_SESSION['big_data'])) {
+            $cls = new \stdClass();
+            $cls->id = session_id();
+            $cls->session = $_SESSION;
+            $cls->test    = 'testWriteClobIntoSession';
+            $cls->error   = 'CLOB Test data was not written to session';
+
+            print json_encode($cls);
+            return;
+        }
+
+        $clobName = $GLOBALS['TestingControl']['blob']['testClob'];
+
+        $newFileArray = explode('.', $clobName);
+        $extension = array_pop($newFileArray);
+        $newFile = implode('.', $newFileArray) . '-decoded.' . $extension;
+
+        
+        file_put_contents(
+            $newFile,
+            $_SESSION['big_data']
+        );
+
+        $cls = new \stdClass();
+        $cls->id = session_id();
+        $cls->session = $_SESSION;
+        $cls->test    = 'testReadClobFromSession';
+        $cls->originalFileName = $clobName;
+        $cls->newFileName      = $newFile;
+
+        print json_encode($cls);
+
     }
 }

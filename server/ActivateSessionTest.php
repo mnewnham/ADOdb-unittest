@@ -25,7 +25,7 @@
  *
  * Test cases for for ADOdb Session Services
  */
-class NewSessionTest
+class ActivateSessionTest
 {
     /**
      * Test
@@ -35,33 +35,9 @@ class NewSessionTest
     public function testInitializeNewSession(): void
     {
 
-        global $credentials;
-
-        $options = [
-            'table' => 'session_test'
-        ];
-
-        /*
-        * Set a timeout of 1 hour
-        */
-        $timeoutMinutes = 60;
-        $timeoutSeconds = $timeoutMinutes * 60;
-
-        ADOdb_Session::config(
-            $credentials['driver'],
-            $credentials['host'],
-            $credentials['user'],
-            $credentials['password'],
-            $credentials['database'],
-            $options
-        );
-
-        if ($timeoutMinutes > 0) {
-            ADODB_Session::lifetime($timeoutSeconds);
-        }
-        //ADODB_Session::debug(true);
-        session_start();
-
+        $acc = new ActivateCompatConnection();
+        $acc->startup();
+       
         $_SESSION['integer_field'] = 1;
 
         $c = new \stdClass();
@@ -77,36 +53,15 @@ class NewSessionTest
      */
     public function testReadSession(): void
     {
-
-        global $credentials;
-
-        $options = [
-            'table' => 'session_test'
-        ];
-
-        /*
-        * Set a timeout of 1 hour
-        */
-        $timeoutMinutes = 60;
-        $timeoutSeconds = $timeoutMinutes * 60;
-
-        ADOdb_Session::config(
-            $credentials['driver'],
-            $credentials['host'],
-            $credentials['user'],
-            $credentials['password'],
-            $credentials['database'],
-            $options
-        );
-
-        session_start();
+        
+        $acc = new ActivateCompatConnection(true);
+        $acc->startup();
 
         $_SESSION['integer_field']++;
 
         $cls = new \stdClass();
         $cls->session = $_SESSION;
         $cls->test    = 'testReadSession';
-
 
         print json_encode($cls);
     }
