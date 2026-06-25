@@ -312,7 +312,6 @@ if ($credentials['parameters']) {
 }
 
 if ($credentials['dsn']) {
-    print $credentials['dsn'];
     $db->connect(
         $credentials['dsn'],
         $credentials['user'],
@@ -366,6 +365,7 @@ $GLOBALS['loadDriver']      = $loadDriver;
 $GLOBALS['ADOxmlSchema']    = new \adoSchema($db);
 $GLOBALS['TestingControl']  = $availableCredentials;
 $GLOBALS['globalTransOff']  = 0;
+$GLOBALS['credentials']     = $credentials;
 
 $GLOBALS['unitTestToolsDirectory'] = $unitTestToolsDirectory;
 
