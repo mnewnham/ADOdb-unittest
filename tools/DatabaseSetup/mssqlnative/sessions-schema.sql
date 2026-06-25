@@ -3,51 +3,51 @@
  DROP TABLE IF EXISTS session_test;
 
 CREATE TABLE session_test (
-  sesskey VARCHAR( 64 ) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  sesskey VARCHAR( 64 ) NOT NULL DEFAULT '',
   expiry DATETIME NOT NULL ,
   expireref VARCHAR( 250 ) DEFAULT '',
   created DATETIME NOT NULL ,
   modified DATETIME NOT NULL ,
-  text_sessdata LONGTEXT,
-  sessdata LONGBLOB,
-  PRIMARY KEY ( sesskey ) ,
-  INDEX sess2_expiry( expiry ),
-  INDEX sess2_expireref( expireref )
+  sessdata VARCHAR(MAX),
+  PRIMARY KEY ( sesskey )
 );
+
+CREATE INDEX sess2_expiry ON session_test( expiry );
+CREATE INDEX sess2_expireref ON session_test( expireref );
 
 
 INSERT INTO session_test(sesskey, expiry, expireref, created, modified, sessdata) values (
   'session001',
-  (NOW()) + INTERVAL -36000 SECOND ,
+  DATEADD(s, -36000, GETDATE()),
   'PASTEXPIRY',
-  (NOW()) + INTERVAL -36000 SECOND ,
-  (NOW()) + INTERVAL -36000 SECOND ,
+  DATEADD(s, -36000, GETDATE()),
+  DATEADD(s, -36000, GETDATE()),
   NULL
   );
 
 INSERT INTO session_test(sesskey, expiry, expireref, created, modified, sessdata) values (
   'session002',
-  (NOW()) + INTERVAL 36000 SECOND ,
+   DATEADD(s, 36000, GETDATE()),
   'FUTUREEXPIRY',
-  (NOW()) + INTERVAL 36000 SECOND ,
-  (NOW()) + INTERVAL 36000 SECOND ,
-  NULL
+   DATEADD(s, 36000, GETDATE()),
+   DATEADD(s, 36000, GETDATE()),
+   NULL
   );
 
   INSERT INTO session_test(sesskey, expiry, expireref, created, modified, sessdata) values (
   'session003',
-  (NOW()) + INTERVAL -72000 SECOND ,
+   DATEADD(s, -72000, GETDATE()),
   'PASTEXPIRY',
-  (NOW()) + INTERVAL -72000 SECOND ,
-  (NOW()) + INTERVAL -72000 SECOND ,
+   DATEADD(s, -72000, GETDATE()),
+   DATEADD(s, -72000, GETDATE()),
   NULL
   );
 
   INSERT INTO session_test(sesskey, expiry, expireref, created, modified, sessdata) values (
   'session004',
-  (NOW()) + INTERVAL 72000 SECOND ,
+   DATEADD(s, 72000, GETDATE()),
   'FUTUREEXPIRY',
-  (NOW()) + INTERVAL 72000 SECOND ,
-  (NOW()) + INTERVAL 72000 SECOND ,
+   DATEADD(s, 72000, GETDATE()),
+   DATEADD(s, 72000, GETDATE()),
   NULL
   );
