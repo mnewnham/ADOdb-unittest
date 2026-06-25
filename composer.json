@@ -3,6 +3,7 @@
     "description": "A PHPUnit testing package for ADOdb",
     "type": "project",
     "require": {
+        "php" : "^8.3.0",
         "phpunit/phpunit": "^12.5"
     },
     "license": "MIT",
