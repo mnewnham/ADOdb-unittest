@@ -53,6 +53,6 @@ CREATE OR REPLACE TRIGGER dictionary_change_test_table_t BEFORE insert ON dictio
 
 -- FOREIGN KEY (droppable_integer_field) REFERENCES dt_foreign_key_target_1(integer_field_1),
 
---ALTER TABLE dictionary_change_test_table ADD CONSTRAINT fks_fk_1
---FOREIGN KEY (droppable_integer_field)
---	REFERENCES dt_foreign_key_target_1(integer_field_1);
+ALTER TABLE dictionary_change_test_table ADD CONSTRAINT dfkt_1
+FOREIGN KEY (droppable_integer_field)
+REFERENCES dt_foreign_key_target_1(integer_field_1); 
