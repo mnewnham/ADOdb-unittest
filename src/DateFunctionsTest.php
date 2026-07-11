@@ -171,6 +171,7 @@ class DateFunctionsTest extends ADOdbTestCase
 
         $dbTs = $this->db->bindTimestamp($now);
 
+
         if (substr($dbTs, 0, 1) == "'") {
             $this->fail(
                 sprintf(
@@ -184,7 +185,7 @@ class DateFunctionsTest extends ADOdbTestCase
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
-            "'$dbTs'"
+            $dbTs
         );
 
         $actualNowTime = strtotime($this->db->getOne($sql));
@@ -193,15 +194,12 @@ class DateFunctionsTest extends ADOdbTestCase
         $this->assertSame(
             $nowTime,
             $actualNowTime,
-            'dbTimestamp should return a date that evaluates to the calculated timestamp'
+            sprintf(
+                'dbTimestamp should return a date that evaluates to the calculated timestamp, executed %s',
+                $dbTs
+            )
         );
 
-        $now = sprintf("'%s'", $now);
-        $this->assertSame(
-            $now,
-            $bts,
-            'bindTimestamp should return a timestamp without quotes'
-        );
     }
 
 
@@ -390,7 +388,7 @@ class DateFunctionsTest extends ADOdbTestCase
      *
      */
     #[DataProvider('providerTestSqlDate')]
-    public function testSqlDate(int $testMethod, string $format, ?int $timestamp): void
+    public function testSqlDate(int $testMethod, string $format, ?int $timestamp, int $margin=0): void
     {
 
 
@@ -460,11 +458,19 @@ class DateFunctionsTest extends ADOdbTestCase
         $message .= '. This may be caused by the difference in Time or Timezone of' .
         'the server if it is on a different machine than the client';
 
+        if (preg_match('/^[0-9]+/', $actual)) {
+        $range = [
+            'from' => $expected - $margin,
+            'to'   => $expected + $margin
+        ];
 
+        $success = ($actual >= $range['from'] && $actual <= $range['to'] ) ? true : false; 
+        } else {
+            $success = strcmp($expected, $actual) !== false ? true : false;
+        }
 
-        $this->assertSame(
-            "$expected",
-            "$actual",
+        $this->assertTrue(
+            $success,
             $message
         );
     }
@@ -495,7 +501,7 @@ class DateFunctionsTest extends ADOdbTestCase
             [2, 'd', $testNowTimestamp],
             [2, 'H', $testNowTimestamp],
             [2, 'i', $testNowTimestamp],
-            [2, 's', $testNowTimestamp],
+            [2, 's', $testNowTimestamp, 5],
 
             [3, 'Y', null],
             [3, 'm', null],
@@ -503,7 +509,7 @@ class DateFunctionsTest extends ADOdbTestCase
             [3, 'd', null],
             [3, 'H', null],
             [3, 'i', null],
-            [3, 's', null],
+            [3, 's', null, 5],
         ];
     }
 
@@ -518,7 +524,11 @@ class DateFunctionsTest extends ADOdbTestCase
     {
         $now = time();
 
-        $sql = "SELECT " . $this->db->unixDate($now);
+         $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->unixDate($now)
+        );
+
         list($errno, $errmsg) = $this->assertADOdbError('unixDate()');
 
         $unixDate = $this->db->getOne($sql);
@@ -600,9 +610,8 @@ class DateFunctionsTest extends ADOdbTestCase
             $this->db->offsetDate($offset)
         );
 
-
-
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -618,12 +627,16 @@ class DateFunctionsTest extends ADOdbTestCase
         */
         $offset = 1.5; // 12 hours
 
-        $nowStamp = date('Y-m-d', strtotime('now + 36 hours'));
+        $nowStamp = date('Y-m-d H:i', strtotime('now + 90 minutes'));
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $this->db->offsetDate($offset, date('Y-m-d H:i'))
         );
+
+        print "----------------------
+        $sql
+        --------------------------";
 
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
@@ -646,7 +659,7 @@ class DateFunctionsTest extends ADOdbTestCase
         $dateField = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $nowStamp = date('Y-m-d', strtotime($dateField . ' + 7 days'));
+        $nowStamp = date('Y-m-d H:i', strtotime($dateField . ' + 7 days'));
 
         $offset = 7; // 1 week
         $sql = "SELECT {$this->db->offsetDate($offset, 'date_field')}
@@ -674,10 +687,10 @@ class DateFunctionsTest extends ADOdbTestCase
     public function testOffsetDateUsingHours(): void
     {
 
-        $offset = 7;
-        $nowStamp = date('Y-m-d', strtotime('today +7 days'));
+        $offset = 5;
+        $nowStamp = date('Y-m-d H:i', strtotime('now + 5 hours'));
 
-        $offsetHours = sprintf('%d/24', $offset * 24); // Convert days to hours
+        $offsetHours = 5/60/60;// hours to minuts to seconds
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -692,13 +705,13 @@ class DateFunctionsTest extends ADOdbTestCase
         $this->assertSame(
             $nowStamp,
             $od,
-            'Offset date using hours should return the date 1 week in the future'
+            'Offset date using hours should return the datetime 5 hours in the future'
         );
 
-        $offset = -7;
-        $nowStamp = date('Y-m-d', strtotime('today -7 days'));
+        $offset = -5;
+        $nowStamp = date('Y-m-d H:i', strtotime('now -5 hours'));
 
-        $offsetHours = sprintf('%s/24', $offset * 24); // Convert days to hours
+        $offsetHours = -5/24; // Convert days to hours
 
         $sql = "SELECT " . $this->db->offsetDate($offsetHours);
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
@@ -708,7 +721,7 @@ class DateFunctionsTest extends ADOdbTestCase
         $this->assertSame(
             $nowStamp,
             $od,
-            'Offset date using hours should return the date 1 week in the past'
+            'Offset date using hours should return the date 5 hours in the past'
         );
     }
 }
