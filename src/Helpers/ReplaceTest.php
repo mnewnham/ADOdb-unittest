@@ -95,7 +95,7 @@ class ReplaceTest extends ADOdbTestCase
         $aeVar = 'REPLACE01' . $fetchMode . $fetchMode;
 
         $ar = array(
-            'varchar_field' => $aeVar,
+            'varchar_field' => $this->db->quote($aeVar),
             'integer_field' => 99,
             'number_run_field' => 5001 + $fetchMode + (10 * $fetchMode)
         );
@@ -139,7 +139,6 @@ class ReplaceTest extends ADOdbTestCase
 
         $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
-
         $numberRunField = 5001 + $fetchMode + (10 * $fetchMode);
 
         $SQL = "SELECT id FROM autoexecute WHERE number_run_field=$numberRunField";
@@ -149,7 +148,7 @@ class ReplaceTest extends ADOdbTestCase
 
         $ar = array(
             'id' => $thisId,
-            'varchar_field' => $aeVar,
+            'varchar_field' => $this->db->quote($aeVar),
             'integer_field' => 99,
             'number_run_field' => 5001 + $fetchMode + (10 * $fetchMode)
         );
@@ -182,7 +181,7 @@ class ReplaceTest extends ADOdbTestCase
 
         $this->assertSame(
             $aeVar,
-            $varCharField,
+            str_replace("'","", $varCharField),
             sprintf(
                 '[FORCEMODE %s][FETCH %s ] Replace() should have changed ' .
                 'varchar_field to [%s] if the record was updated successfully',

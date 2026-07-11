@@ -106,7 +106,7 @@ class GetInsertSqlTest extends ADOdbTestCase
             'integer_field' => 99,
             'number_run_field' => 3001 + $fetchMode,
             'date_field' => date('Y-m-d'),
-            'decimal_eval_field+' => 'integer_field',
+            'decimal_eval_field' => 0,
             //'varchar_eval_field!' => "(CASE WHEN number_run_field < 3003 THEN 'HELLO' ELSE 'GOODBYE' END)"
             'varchar_eval_field!' => "(SELECT MAX(number_run_field) FROM testtable_1) "
         );

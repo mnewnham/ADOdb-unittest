@@ -116,30 +116,31 @@ class GetUpdateSqlTest extends ADOdbTestCase
 
          $this->insertFetchMode($fetchMode);
 
-         $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
-         $lastId = $this->db->getOne($sql);
+        $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
+        $lastId = $this->db->getOne($sql);
 
-         $sql = "SELECT * FROM autoexecute WHERE id=$lastId";
+        $sql = "SELECT * FROM autoexecute WHERE id=$lastId";
 
-         list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
+        list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
-         $ar = array(
+
+        $ar = array(
             'varchar_field' => 'GETUPDATESQL0' . $fetchMode,
             'integer_field' => 99,
             'number_run_field' => 4001 + $fetchMode,
             'decimal_eval_field+' => 2.5,
             'varchar_eval_field!' => "CASE WHEN number_run_field < 4003 THEN 'HELLO' ELSE 'GOODBYE' END"
-         );
+        );
 
         /*
         * This should create a record populated with default values and the
         * next available id
         */
-         $sql = $this->db->getUpdateSql($template, $ar);
+        $sql = $this->db->getUpdateSql($template, $ar);
 
-         $response = $this->db->execute($sql);
+        $response = $this->db->execute($sql);
 
-         if (is_object($response)) {
+        if (is_object($response)) {
              $reflection = new \ReflectionClass($response);
              $shortName  = $reflection->getShortName();
              $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -149,10 +150,17 @@ class GetUpdateSqlTest extends ADOdbTestCase
                  'getUpdateSql should return an empty ADORecordSet object ' .
                  'If the record is updated successfully, returned ' . $shortName
              );
-         }
+        }
+        
+        $sql = "SELECT varchar_field,integer_field, decimal_eval_field, varchar_eval_field 
+                  FROM autoexecute ORDER BY id DESC";
+        $newRecord = $this->db->getRow($sql);
 
-         $sql = "SELECT varchar_field,integer_field, decimal_eval_field, varchar_eval_field FROM autoexecute ORDER BY id DESC";
-         $newRecord = $this->db->getRow($sql);
+        if (!$newRecord) {
+            $this->fail(
+                'Could not find the autoexecute record to update'
+            );
+        }
 
          if ($fetchMode == 0 || $fetchMode == 3) {
              $field = 0;

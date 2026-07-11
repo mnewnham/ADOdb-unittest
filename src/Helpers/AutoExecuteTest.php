@@ -172,10 +172,21 @@ class AutoExecuteTest extends ADOdbTestCase
         string $fetchDescription
     ): void {
 
-        $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
+         $sql = sprintf(
+                "SELECT %s FROM %s ORDER BY %s DESC",
+                _adodb_quote_fieldname($this->db, 'id'),
+                _adodb_quote_fieldname($this->db, 'autoexecute'),
+                _adodb_quote_fieldname($this->db, 'id')
+            );
+
         $lastId = $this->db->getOne($sql);
 
-        $where = "id=$lastId";
+        $where = sprintf(
+            '%s=%s',
+            _adodb_quote_fieldname($this->db, 'id'),
+            $lastId
+        );
+     
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
             $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
@@ -270,10 +281,22 @@ class AutoExecuteTest extends ADOdbTestCase
         foreach ($qfArray as $qfIndex => $qfValue) {
             $ADODB_QUOTE_FIELDNAMES = $qfIndex;
 
-            $sql = "SELECT id FROM autoexecute ORDER BY id DESC";
+            $sql = sprintf(
+                "SELECT %s FROM %s ORDER BY %s DESC",
+                _adodb_quote_fieldname($this->db, 'id'),
+                _adodb_quote_fieldname($this->db, 'autoexecute'),
+                _adodb_quote_fieldname($this->db, 'id')
+            );
+
             $lastId = $this->db->getOne($sql);
 
+            $this->assertIsInt(
+                (int)$lastId, 
+                'There are no autoexecute rows available to test'
+            );
+
             $where = "id=$lastId";
+
 
             for ($forceMode = 0; $forceMode < 2; $forceMode++) {
                 foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
