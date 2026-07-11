@@ -36,4 +36,18 @@ class DriverControl extends \CoreControl
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }
+
+    /**
+     * A wrapper to allow the execution of date statements
+     *
+     * @var string
+     */
+    public $dateMethodExecutor = 'SELECT %s AS result FROM SYSIBM.SYSDUMMY1';
+
+    /**
+     * For methods that test for databases, use schema instead
+     *
+     * @var mixed
+     */
+    public bool $databaseIsSchema = true;
 }

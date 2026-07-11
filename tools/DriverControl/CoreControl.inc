@@ -109,4 +109,11 @@ class CoreControl
      * @var string
      */
     public $dateMethodExecutor = 'SELECT %s';
+
+    /**
+     * Can compound primary keys include AUTO components
+     *
+     * @var boolean
+     */
+    public bool $allowAutoIncrementOnCompundKeys = true;
 }

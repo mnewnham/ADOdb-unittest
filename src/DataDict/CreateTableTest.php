@@ -70,16 +70,21 @@ class CreateTableTest extends DataDictFunctions
             $this->db->completeTrans();
         }
 
+        $autoIncrement = 'AUTOINCREMENT';
+        if (!$GLOBALS['DriverControl']->allowAutoIncrementOnCompundKeys) {
+            $autoIncrement = '';
+        }
+
         $options = [
             'MYSQL' => "ENGINE MYISAM",
             'COMMENT' => 'TABLE COMMENT'
         ];
 
-        $flds = "ID I NOTNULL PRIMARY KEY AUTOINCREMENT,
+        $flds = "ID I NOTNULL PRIMARY KEY $autoIncrement,
                  ID2 I NOTNULL PRIMARY KEY,
                  DATE_FIELD D NOTNULL DEFAULT '2030-01-01',
                  VARCHAR_FIELD C(50) NOTNULL DEFAULT '',
-                 NVARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
+                 NVARCHAR_FIELD C2(50) ,
                  SMALLINT_FIELD I2 DEFAULT 0,
                  MEDIUMINT_FIELD I4 DEFAULT 0,
                  BIGINT_FIELD I8 DEFAULT 0,
@@ -91,16 +96,20 @@ class CreateTableTest extends DataDictFunctions
                  DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
               ";
 
+        
         if ($GLOBALS['DriverControl']->hasNativeEnum) {
             $flds .= " ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
             ";
         }
+
+            
         $sqlArray = $this->dataDictionary->createTableSQL(
             'dictionary_creation_test_table',
             $flds,
             $options
         );
 
+        
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
         $flipMetaTables = array_change_key_case(
