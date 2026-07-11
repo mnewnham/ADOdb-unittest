@@ -40,6 +40,27 @@ class RenameTableTest extends DataDictFunctions
     {
 
         parent::setUpBeforeClass();
+        
+        $db = $GLOBALS['ADOdbConnection'];
+       
+        /*
+        * Load the table to test data length tests
+        */
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/rename-table-test.sql',
+            $GLOBALS['unitTestToolsDirectory']
+        );
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
+
+        $ok = readSqlIntoDatabase($db, $schemaFile);
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
+
     }
 
      /**
@@ -66,22 +87,36 @@ class RenameTableTest extends DataDictFunctions
             return;
         }
 
+        $sql = 'DROP TABLE IF EXISTS rename_table_renamed';
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->startTrans();
+        }
+
+       $this->db->execute($sql);
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->completeTrans();
+        }
+
         $sqlArray = $this->dataDictionary->renameTableSQL(
-            'insertion_table',
-            'insertion_table_renamed'
+            'rename_table',
+            'rename_table_renamed'
         );
 
-        $assertionResult = $this->assertIsArray(
-            $sqlArray,
-            'Test of renameTableSQL - should return an array of SQL statements'
-        );
-
-        if (!$assertionResult) {
+        if (!$sqlArray) {
             $this->markTestSkipped(
                 'Skipping test as renameTableSQL not supported by the driver'
             );
             return;
         }
+
+        $this->assertIsArray(
+            $sqlArray,
+            'Test of renameTableSQL - should return an array of SQL statements'
+        );
+
+        
 
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
@@ -92,40 +127,29 @@ class RenameTableTest extends DataDictFunctions
         * Depends on the success of the metatables
         * function passing the new table name
         */
-        $metaTables = $this->db->metaTables('T', '', 'insertion_table_renamed');
-
-        $assertionResult = $this->assertFalse(
-            $metaTables,
-            'Test of renameTableSQL - new table insertion_table_renamed should exist'
+        $success = $this->db->validateMetaTable('rename_table_renamed');
+      
+        $this->assertTrue(
+            $success,
+            'Test of renameTableSQL - new table rename_table_renamed should exist'
         );
-
-        if ($assertionResult) {
-            $this->skipFollowingTests = true;
-            return;
-        }
-
-        $this->assertSame(
-            'insertion_table_renamed',
-            $metaTables[0],
-            'Test of renameTableSQL - renamed table exists'
-        );
-
-         $metaTables = $this->db->metaTables('T', '', 'insertion_table_renamed');
-
-
-        if (empty($metaTables)) {
-            $this->skipFollowingTests = true;
-            return;
-        }
 
         $sqlArray = $this->dataDictionary->renameTableSQL(
-            'insertion_table_renamed',
-            'insertion_table'
+            'rename_table_renamed',
+            'rename_table'
         );
 
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
             return;
         }
+
+        $success = $this->db->validateMetaTable('rename_table');
+      
+        $this->assertTrue(
+            $success,
+            'Test of renameTableSQL - table rename_table_renamed' .
+            ' should have been renamed back to rename_table'
+        );
     }
 }

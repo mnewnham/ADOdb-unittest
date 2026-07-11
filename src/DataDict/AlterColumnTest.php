@@ -83,12 +83,13 @@ class AlterColumnTest extends DataDictFunctions
             VARCHAR_FIELD VARCHAR(120) COMMENT 'THIS IS A COLUMN COMMENT'
             ";
 
+        
         $sqlArray = $this->dataDictionary->alterColumnSQL(
             $tableName,
             $flds
         );
 
-        if (count($sqlArray) == 0) {
+        if (count($sqlArray) === false) {
             $this->fail(
                 'AlterColumnSql() not supported currently by driver'
             );
@@ -142,6 +143,7 @@ class AlterColumnTest extends DataDictFunctions
             $flds
         );
 
+       
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
             return;

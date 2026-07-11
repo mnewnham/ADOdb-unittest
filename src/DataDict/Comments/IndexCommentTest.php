@@ -127,8 +127,6 @@ class IndexCommentTest extends DataDictFunctions
     public function testRegetIndexCommentSql(): void
     {
 
-
-
         $sql = $this->dataDictionary->getIndexCommentSQL(
             $this->commentTable,
             $this->commentIndex

@@ -131,7 +131,11 @@ class DropColumnTest extends DataDictFunctions
 
         if (count($sqlArray) > 0) {
             $this->fail(
-                'dropColumnSql() should not attempt to drop an index constrained by a Foreign Key'
+                sprintf(
+                    'dropColumnSql() should not attempt to drop ' .
+                    'an index constrained by a Foreign Key, returned %s',
+                    print_r($sqlArray, true)
+                )
             );
         }
 
