@@ -62,17 +62,23 @@ class LengthTest extends ADOdbTestCase
         * Load the table to test data length tests
         */
         $schemaFile = sprintf(
-            '%s/DatabaseSetup/length-test-data.sql',
+            '%s/DatabaseSetup/%s/length-test-data.sql',
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
 
-        if (file_exists($schemaFile)) {
-            $db->startTrans();
-            $ok = readSqlIntoDatabase($db, $schemaFile);
-            $db->completeTrans();
+        if (!file_exists($schemaFile)) {
+            $schemaFile = sprintf(
+                '%s/DatabaseSetup/length-test-data.sql',
+                $GLOBALS['unitTestToolsDirectory'],
+                $GLOBALS['SqlProvider']
+            );
         }
 
+        $db->startTrans();
+        $ok = readSqlIntoDatabase($db, $schemaFile);
+        $db->completeTrans();
+       
         if ($GLOBALS['ADOdriver'] == 'mysqli') {
             $db->startTrans();
             $db->updateClob('length_test', 'text_field', 'TEST567890TEST567890', 'id=1');
