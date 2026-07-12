@@ -1,7 +1,9 @@
 ## ADODb Unit Tests
-This is a standalone PHPUnit Unit Tester for the [ADOdb](https://adodb.org) database abstraction layer. It runs using any supported ADOdb database and performs tests against the driver and data dictionary for the database in use. It can be easily configured to run against multiple, side-by-side installations of ADOdb. For that reason, ADOdb is not included in the composer file. It can be found at [Github](https:/github.com/adodb/adodb) or at [Packagist](https://packagist.org/packages/adodb/adodb-php)
+This is a standalone PHPUnit Unit Tester for the [ADOdb](https://adodb.org) database abstraction layer. It runs using any supported ADOdb database and performs tests against the driver and data dictionary for the database in use. It can be easily configured to run against multiple, side-by-side installations of ADOdb. For that reason, ADOdb is not included in the composer file. It can be found at [Github](https:/github.com/mnewnham/adodb) or at [Packagist](https://packagist.org/packages/mnewnham/adodb-php)
+### Implementation Note
+This package is not designed for use with ADOdb Versions 5.23 or lower. It is possible to use it and sometimes get usable feedback, the test results may be overwhelmed by errors especially outside the core MySQL, Postgres, Oracle drivers. It is designed for use with the upcoming ADOdb V6 release and higher
 ### Installation
-Easiest installed from Packagist as this will add PHPUnit as well, otherwise download the release code and use it
+Easiest installed from Packagist as this will add PHPUnit and PHPCS as well, otherwise download the release code and use it
 ### Prerequsites
 [PHPunit version 12+](https://phpunit.org) must be installed and running for this to work. Packagist will install it if you don't already have it.  An ADOdb installation must be installed somewhere on the local file system, but that doesn't need any special installation.
  - The unit tester requires access to a supported database via a configured ADOdb connection. The user requires privileges to add, change and delete tables, views and procedures as well as SELECT,CREATE,UPDATE,DELETE privileges on the created tables.
