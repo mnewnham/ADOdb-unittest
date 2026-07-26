@@ -21,7 +21,7 @@
 
 namespace MNewnham\ADOdbUnitTest\Helpers;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\Helpers\HelperFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -29,56 +29,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for for ADOdb getInsertSql
  */
-class GetInsertSqlTest extends ADOdbTestCase
+class GetInsertSqlTest extends HelperFunctions
 {
-    protected string $testTableName = 'testtable_3';
-
-    /**
-     * Set up the test environment first time
-     *
-     * @return void
-     */
-    public static function setupBeforeClass(): void
-    {
-        $db        = $GLOBALS['ADOdbConnection'];
-
-        /*
-        *load Data into the table, checking for driver specific loader
-        */
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
-        }
-
-        $tableSchema = sprintf(
-            '%s/DatabaseSetup/%s/autoexecute-schema.sql',
-            $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['SqlProvider']
-        );
-
-        /*
-        * Loads the schema based on the DB type
-        */
-        readSqlIntoDatabase($db, $tableSchema);
-
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
-        }
-    }
-
-
-    /**
-     * Set up the test environment
-     *
-     * @return void
-     */
-    public function setup(): void
-    {
-
-        parent::setup();
-    }
-
+    
     /**
      * Test for {@see ADODConnection::getInsertSql()}
      *
@@ -99,7 +52,7 @@ class GetInsertSqlTest extends ADOdbTestCase
 
         $sql = "SELECT * FROM autoexecute WHERE id=-1";
 
-        list ($template,$errno,$errmsg) = $this->executeSqlString($sql, null, false);
+        $template = $this->db->execute($sql);
 
         $ar = array(
             'varchar_field' => "GETINSERTSQL'0", //$this->db->qStr("GETINSERTSQL'0") . $fetchMode,
@@ -115,9 +68,12 @@ class GetInsertSqlTest extends ADOdbTestCase
         * This should create a record populated with default values and the
         * next available id
         */
+       
+
         $sql = $this->db->getInsertSql($template, $ar);
 
         $this->db->startTrans();
+        if (!$sql) { die('empty sql'); } 
         $response = $this->db->execute($sql);
         $this->db->completeTrans();
 
@@ -278,7 +234,7 @@ class GetInsertSqlTest extends ADOdbTestCase
     ): void {
 
 
-        $this->insertFetchMode($fetchMode);
+        $absoluteFetchMode = $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
         $lastRecord = $this->db->getRow($sql);
@@ -340,7 +296,7 @@ class GetInsertSqlTest extends ADOdbTestCase
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
         $newRecord = $this->db->getRow($sql);
 
-        if ($fetchMode == 0 || $fetchMode == 3) {
+        if ($absoluteFetchMode == ADODB_FETCH_NUM) {
             $field = 0;
         } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
             $field = 'ID';

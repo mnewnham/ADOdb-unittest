@@ -21,62 +21,16 @@
 
 namespace MNewnham\ADOdbUnitTest\Helpers;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\Helpers\HelperFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoExecuteTest
  * Test cases for AutoExecute
  */
-class ReplaceTest extends ADOdbTestCase
+class ReplaceTest extends HelperFunctions
 {
-    protected string $testTableName = 'testtable_3';
-
-    /**
-     * Set up the test environment first time
-     *
-     * @return void
-     */
-    public static function setupBeforeClass(): void
-    {
-        $db        = $GLOBALS['ADOdbConnection'];
-
-        /*
-        *load Data into the table, checking for driver specific loader
-        */
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
-        }
-
-        $tableSchema = sprintf(
-            '%s/DatabaseSetup/%s/autoexecute-schema.sql',
-            $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['SqlProvider']
-        );
-
-        /*
-        * Loads the schema based on the DB type
-        */
-        readSqlIntoDatabase($db, $tableSchema);
-
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
-        }
-    }
-
-
-    /**
-     * Set up the test environment
-     *
-     * @return void
-     */
-    public function setup(): void
-    {
-        parent::setup();
-    }
-
+    
     /**
      * Test for {@see ADODConnection::getUpdateSql()}
      *

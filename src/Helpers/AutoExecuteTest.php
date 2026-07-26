@@ -21,63 +21,16 @@
 
 namespace MNewnham\ADOdbUnitTest\Helpers;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\Helpers\HelperFunctions;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AutoExecuteTest
  * Test cases for AutoExecute
  */
-class AutoExecuteTest extends ADOdbTestCase
+class AutoExecuteTest extends HelperFunctions
 {
-    protected string $testTableName = 'testtable_3';
-
-
-    /**
-     * Set up the test environment first time
-     *
-     * @return void
-     */
-    public static function setupBeforeClass(): void
-    {
-        $db        = $GLOBALS['ADOdbConnection'];
-
-        /*
-        *load Data into the table, checking for driver specific loader
-        */
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
-        }
-
-        $tableSchema = sprintf(
-            '%s/DatabaseSetup/%s/autoexecute-schema.sql',
-            $GLOBALS['unitTestToolsDirectory'],
-            $GLOBALS['SqlProvider']
-        );
-
-        /*
-        * Loads the schema based on the DB type
-        */
-        readSqlIntoDatabase($db, $tableSchema);
-
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
-        }
-    }
-
-
-    /**
-     * Set up the test environment
-     *
-     * @return void
-     */
-    public function setup(): void
-    {
-        parent::setup();
-    }
-
+    
     /**
      * Test for {@see ADODConnection::getUpdateSql()}
      *
@@ -134,7 +87,8 @@ class AutoExecuteTest extends ADOdbTestCase
             }
 
             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
+            $result = $this->db->selectLimit($sql,1);
+            $newRecord = $result->fetchRow();
 
             if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
@@ -173,10 +127,9 @@ class AutoExecuteTest extends ADOdbTestCase
     ): void {
 
          $sql = sprintf(
-                "SELECT %s FROM %s ORDER BY %s DESC",
+                "SELECT MAX(%s) FROM %s",
                 _adodb_quote_fieldname($this->db, 'id'),
-                _adodb_quote_fieldname($this->db, 'autoexecute'),
-                _adodb_quote_fieldname($this->db, 'id')
+                _adodb_quote_fieldname($this->db, 'autoexecute')
             );
 
         $lastId = $this->db->getOne($sql);
@@ -237,7 +190,8 @@ class AutoExecuteTest extends ADOdbTestCase
             }
 
             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $newRecord = $this->db->getRow($sql);
+            $result = $this->db->selectLimit($sql,1);
+            $newRecord = $result->fetchRow();
 
             if ($fetchMode == 0 || $fetchMode == 3) {
                 $field = 0;
@@ -281,11 +235,10 @@ class AutoExecuteTest extends ADOdbTestCase
         foreach ($qfArray as $qfIndex => $qfValue) {
             $ADODB_QUOTE_FIELDNAMES = $qfIndex;
 
-            $sql = sprintf(
-                "SELECT %s FROM %s ORDER BY %s DESC",
+             $sql = sprintf(
+                "SELECT MAX(%s) FROM %s",
                 _adodb_quote_fieldname($this->db, 'id'),
-                _adodb_quote_fieldname($this->db, 'autoexecute'),
-                _adodb_quote_fieldname($this->db, 'id')
+                _adodb_quote_fieldname($this->db, 'autoexecute')
             );
 
             $lastId = $this->db->getOne($sql);
@@ -375,12 +328,9 @@ class AutoExecuteTest extends ADOdbTestCase
                     }
 
 
-                    $sql = "SELECT varchar_field,integer_field 
-                              FROM autoexecute
-                          ORDER BY id DESC";
-
-
-                    $newRecord = $this->db->getRow($sql);
+                    $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+                    $result = $this->db->selectLimit($sql,1);
+                    $newRecord = $result->fetchRow();
 
                     if ($fetchMode == 0 || $fetchMode == 3) {
                         $field = 0;
