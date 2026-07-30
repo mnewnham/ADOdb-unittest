@@ -35,5 +35,3 @@ ALTER TABLE dictionary_change_test_table ADD CONSTRAINT df_boolean_field_to_chan
 ALTER TABLE dictionary_change_test_table ADD CONSTRAINT df_droppable_field DEFAULT  80.111 FOR droppable_field;
 
 CREATE UNIQUE INDEX index_to_drop ON dictionary_change_test_table (varchar_field);
-CREATE INDEX droppable_field_index ON dictionary_change_test_table (droppable_field);
-

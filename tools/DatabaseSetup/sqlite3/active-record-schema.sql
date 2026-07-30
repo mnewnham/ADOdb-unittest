@@ -10,6 +10,7 @@ CREATE TABLE persons (
     birth_date DATE NOT NULL
 );
 
+
 CREATE TABLE children (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     person_id INTEGER NOT NULL,
