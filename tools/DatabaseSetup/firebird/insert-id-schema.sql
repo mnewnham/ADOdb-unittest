@@ -10,18 +10,18 @@ RECREATE TABLE insert_auto (
 	PRIMARY KEY(id)
 );
 -- 2. Create a sequence (generator)
-RECREATE SEQUENCE insert_auto_seq;
+--RECREATE SEQUENCE insert_auto_seq;
 
 -- 3. Create a BEFORE INSERT trigger to auto-generate IDs
 -- SET TERM !! ; 
 -- READ <<
-CREATE TRIGGER insert_auto_trigger FOR insert_auto
-ACTIVE BEFORE INSERT POSITION 0
-AS
-BEGIN
-    IF (NEW.id IS NULL) THEN
-        NEW.id = NEXT VALUE FOR insert_auto_seq;
-END;
+--CREATE TRIGGER insert_auto_trigger FOR insert_auto
+--ACTIVE BEFORE INSERT POSITION 0
+--AS
+--BEGIN
+--    IF (NEW.id IS NULL) THEN
+--        NEW.id = NEXT VALUE FOR insert_auto_seq;
+--END;
 -- <<
 -- Creates a simple table where the key field must be incremented manually
 RECREATE TABLE insert_manual (
