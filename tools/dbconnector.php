@@ -376,6 +376,8 @@ if (substr($adoDriver, 0, 3) == 'pdo') {
     $GLOBALS['ControlProvider'] = str_replace('-', '/', $adoDriver);
 }
 
+print "Dictionary Provider: {$GLOBALS['SqlProvider']}\n";
+
 $tableSchema = sprintf(
     '%s/DatabaseSetup/%s/table-schema.sql',
     $GLOBALS['unitTestToolsDirectory'],
