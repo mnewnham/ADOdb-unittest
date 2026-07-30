@@ -140,11 +140,13 @@ class MetaTablesTest extends MetaFunctions
      * @return void
      */
     #[DataProvider('providerTestMetaTablesForView')]
-    public function testMetaTablesForView(bool $includesView1, mixed $filterType, mixed $mask): void
-    {
+    public function testMetaTablesForView(
+        bool $includesView1, 
+        mixed $filterType, 
+        mixed $mask): void {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            //$this->db->setFetchMode($fetchMode);
+          
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
@@ -161,7 +163,10 @@ class MetaTablesTest extends MetaFunctions
                 array_map('strtoupper', $executionResult)
             );
 
-
+            $not ='';
+            if (!$includesView1) {
+                $not = ' not';
+            }
             if (is_array($executionResult) && count($executionResult) > 5) {
                 $statement = sprintf(
                     '%s and %s others',
@@ -176,11 +181,12 @@ class MetaTablesTest extends MetaFunctions
                 $includesView1,
                 $tableExists,
                 sprintf(
-                    "[FETCH MODE: %s] View %s should be in metaTables with 
-                    filterType %s mask %s, actually returned:
+                    "[FETCH MODE: %s] View %s should%s be in metaTables with " .
+                    "filterType %s mask %s, actually returned:
                     %s",
                     $fetchModeName,
                     $GLOBALS['testViewName'],
+                    $not,
                     $filterType,
                     $mask,
                     $statement
@@ -202,7 +208,7 @@ class MetaTablesTest extends MetaFunctions
             'Show only Views' => [true,'VIEWS',false],
             'Show only [V]iews' => [true,'V',false],
             'Show only views beginning test%' => [true,false,'test%'],
-            'Show only views beginning notest%' => [false,false,'notest%'],
+            'Show only beginningy views notest%' => [false,false,'notest%'],
             'Show only views matching testtable_1_view' => [true,'VIEWS','testtable_1_view']
         ];
     }
@@ -231,7 +237,7 @@ class MetaTablesTest extends MetaFunctions
 
             $this->validateResetFetchModes();
 
-            $assertionResult = $this->assertIsArray(
+            $this->assertIsArray(
                 $executionResult,
                 sprintf(
                     '[FETCH MODE %s] metaTables returns an array when exact ' .
@@ -240,30 +246,30 @@ class MetaTablesTest extends MetaFunctions
                 )
             );
 
-            if ($assertionResult) {
-                $assertionResult = $this->assertEquals(
-                    1,
-                    count($executionResult),
-                    sprintf(
-                        '[FETCH MODE %s] metaTables should return an array ' .
-                        'with exactly one element when exact table name ' .
-                        'that exists in the database is provided',
-                        $fetchModeName
-                    )
-                );
-                if ($assertionResult) {
-                    $this->assertSame(
-                        strtoupper($this->testTableName),
-                        strtoupper($executionResult[0]),
-                        sprintf(
-                            '[FETCH MODE %s] metaTables should return an array ' .
-                            'with the exact table name when exact table name ' .
-                            'that exists in the database is provided',
-                            $fetchModeName
-                        )
-                    );
-                }
-            }
+            
+            $this->assertEquals(
+                1,
+                count($executionResult),
+                sprintf(
+                    '[FETCH MODE %s] metaTables should return an array ' .
+                    'with exactly one element when exact table name ' .
+                    'that exists in the database is provided',
+                    $fetchModeName
+                )
+            );
+            
+            $this->assertSame(
+                strtoupper($this->testTableName),
+                strtoupper($executionResult[0]),
+                sprintf(
+                    '[FETCH MODE %s] metaTables should return an array ' .
+                    'with the exact table name when exact table name ' .
+                    'that exists in the database is provided',
+                    $fetchModeName
+                )
+            );
+           
+            
         }
     }
 
@@ -291,7 +297,7 @@ class MetaTablesTest extends MetaFunctions
 
             $this->validateResetFetchModes();
 
-            $assertionResult = $this->assertFalse(
+            $this->assertFalse(
                 $executionResult,
                 sprintf(
                     '[FETCH MODE %s] metaTables should return false when an invalid table match occurs',

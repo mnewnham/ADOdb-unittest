@@ -66,7 +66,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
      * @param string $dateFormat The date to test
      * @param string $field      The field to test
      * @param string $region     The region to test
-     * @param string $result     The expected result
+     * @param string $expected   The expected result
      *
      * @return void
      */
@@ -75,37 +75,37 @@ class MssqlnativeDriverTest extends ADOdbTestCase
         string $dateFormat,
         string $field,
         string $region,
-        string $result
+        ?string $expected
     ): void {
 
         if ($this->skipFollowingTests) {
             return;
         }
 
+        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
+
         $formatDate = "{$this->db->sqlDate($dateFormat,$field)}";
 
-        print "
-        FORMATDATE=$formatDate
-        ";
-
-        $sql = "SELECT testdate, $formatDate $region, null 
+        $sql = "SELECT test_date, $formatDate $region, null 
                   FROM (
                 SELECT CONVERT(
                         DATETIME,'2016-12-17 18:55:30.590' ,121
-                        ) testdate,
+                        ) test_date,
                        CONVERT(
                        DATETIME,'2016-01-01 18:55:30.590' ,121
-                       ) testdatesmall,
+                       ) test_datesmall,
                 null nulldate
                 ) q ";
 
-        $res = $this->db->GetRow($sql);
+        $result = $this->db->selectLimit($sql,1);
+        $res = $result->fetchRow();
+       
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
-            $res['region'],
-            $result,
-            'SQL Date format for region ' . $region . ' should match expected format'
+            $expected,
+            $res[strtolower($region)],
+            'SQL Date format for region ' . $res[strtolower($region)] . ' should match expected format'
         );
     }
 
@@ -118,24 +118,25 @@ class MssqlnativeDriverTest extends ADOdbTestCase
     {
         return [
 
-            ["d/m/Y", "testdate" ," FR4","17/12/2016"],
-            ["d/m/y", "testdate" ," FR4b", "17/12/2016",],
-            ["d/m/Y", "NULL", "nullFR4", ],
-            ["m/d/Y", "testdate" , " US4", "12/17/2016"],
-            ["m/d/y", "testdate" , " US4b", "12/17/2016"],
-            ["m-d-Y", "testdate" , " USD4", "17-12-2016"],
-            ["m-d-y", "testdate" , " USD4b", "17-12-2016"],
-            ["Y.m.d", "testdate" , " ANSI4", "2016.12.17"],
-            ["d.m.Y", "testdate" , " GE4", "17.12.2016"],
-            ["d.m.y", "testdate" , " GE4b", "17.12.2016"],
-            ["d-m-Y", "testdate" , " IT4", "17-12-2016"],
-            ["d-m-y", "testdate" , " IT4b", "17-12-2016"],
-            ["Y/m/d", "testdate" , " Japan4", "2016/12/17"],
-            ["y/m/d", "testdate" , " Japan4b", "2016/12/17"],
-            ["H:i:s", "testdate" ,  " timeonly","18:55:30"],
-            ["d m Y",  "testdate" ," Space4","17 12 2016"],  // Is done by former method
-            ["d m Y",  "NULL" ," nullSpace4","null"],
-            ["m-d-Y","testdatesmall"," nowUSdash4","01-01-2016"]
+            ["d/m/Y", "test_date" ,"FR4","17/12/2016"],
+            ["d/m/y", "test_date" ,"FR4b", "17/12/2016",],
+            ["d/m/Y", "NULL", "nullFR4", NULL ],
+            ["m/d/Y", "test_date" , "US4", "12/17/2016"],
+            ["m/d/y", "test_date" , "US4b", "12/17/2016"],
+            ["m-d-Y", "test_date" , "USD4", "12-17-2016"],
+            ["m-d-y", "test_date" , "USD4b", "12-17-2016"],
+            ["Y.m.d", "test_date" , "ANSI4", "2016.12.17"],
+            ["d.m.Y", "test_date" , "GE4", "17.12.2016"],
+            ["d.m.y", "test_date" , "GE4b", "17.12.2016"],
+            ["d-m-Y", "test_date" , "IT4", "17-12-2016"],
+            ["d-m-y", "test_date" , "IT4b", "17-12-2016"],
+            ["Y/m/d", "test_date" , "Japan4", "2016/12/17"],
+            ["y/m/d", "test_date" , "Japan4b", "2016/12/17"],
+            ["H:i:s", "test_date" ,  "timeonly","18:55:30"],
+            ["d m Y",  "test_date" ,"Space4","17 12 2016"],  // Is done by former method
+            ["d m Y",  "NULL" ,"nullSpace4", NULL],
+            ["m-d-Y","test_date","nowUSdash4","01-01-2016"]
         ];
     }
 }
+

@@ -48,7 +48,7 @@
         </field>
 
         <index name="integer_field_index">
-            <descr>Put a unique index on the integer_field</descr> 
+            <descr>Put a unique index on the integer_field Should be discarded because it already exists</descr> 
             <col>integer_field</col>
             <UNIQUE/>
         </index>

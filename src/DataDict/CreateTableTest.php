@@ -56,18 +56,21 @@ class CreateTableTest extends DataDictFunctions
     public function testCreateTableSql(): void
     {
 
-        $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
+
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
 
 
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $this->db->startTrans();
-        }
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $this->db->startTrans();
+            }
 
-        $this->db->execute($sql);
+            $this->db->execute($sql);
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $this->db->completeTrans();
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $this->db->completeTrans();
+            }
         }
 
         $autoIncrement = 'AUTOINCREMENT';

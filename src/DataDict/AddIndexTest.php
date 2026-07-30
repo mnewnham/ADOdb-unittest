@@ -188,6 +188,7 @@ class AddIndexTest extends DataDictFunctions
      */
     public function testaddPartialIndexToBasicTableViaArray(): void
     {
+        //$this->skipFollowingTests = true;
         if ($this->skipFollowingTests) {
             $this->markTestSkipped(
                 'Skipping tests as the table or ' .

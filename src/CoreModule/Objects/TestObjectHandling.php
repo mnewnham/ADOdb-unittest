@@ -55,9 +55,16 @@ class TestObjectHandling extends ADOdbTestCase
             return;
         }
 
-         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
+        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
 
-        $this->comparison = $this->db->getAll($this->setupSql);
+
+        $comparison = $this->db->getAll($this->setupSql);
+        if (!$comparison) {
+            $this->fail(
+                'Execution of SQL failed'
+            );
+        }
+        $this->comparison = $comparison;
 
         $this->comparisonLcKeys = array_map(
             'strtolower',

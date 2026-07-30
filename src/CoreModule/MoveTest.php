@@ -95,6 +95,7 @@ class MoveTest extends ADOdbTestCase
         * into an array so that the AssertArray methods can be used to
         * ensure the correct record is return
         */
+        
         $expectedData = $db->getAll($setupSql);
         foreach ($expectedData as $cd) {
             $obj = new \ADOFetchObj();

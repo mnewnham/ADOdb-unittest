@@ -99,10 +99,7 @@ class MetaForeignKeysTest extends MetaFunctions
             $associativeKeys
         );
 
-
         $this->db->setFetchMode($originalFetchMode);
-
-
 
         if ($expectedFirstFieldKeys == false && $expectedSecondTableKey === false) {
             $this->assertFalse(
@@ -147,7 +144,6 @@ class MetaForeignKeysTest extends MetaFunctions
 
             $fkData = $executionResult[$expectedFirstTableKey];
 
-
             $this->assertSame(
                 $expectedFirstFieldKeys,
                 $fkData,
@@ -177,7 +173,6 @@ class MetaForeignKeysTest extends MetaFunctions
             );
 
             $fkData = $executionResult[$expectedSecondTableKey];
-
 
             $this->assertSame(
                 $expectedSecondFieldKeys,
@@ -319,7 +314,7 @@ class MetaForeignKeysTest extends MetaFunctions
             ],
             'Default Behaviour, Passing Invalid Table, ADODB_FETCH_ASSOC' => [
                 ADODB_FETCH_ASSOC,
-                'invalide_foreign_key_source',
+                'invalid_foreign_key_source',
                 'foreign_key_target_1',
                 false,
                 true,

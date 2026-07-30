@@ -107,7 +107,7 @@ class TransactionScopeTest extends ADOdbTestCase
 
             $this->db->StartTrans();
 
-            $assertion = $this->assertEquals(
+            $this->assertEquals(
                 1,
                 $this->db->transCnt,
                 sprintf(
@@ -121,13 +121,8 @@ class TransactionScopeTest extends ADOdbTestCase
                       FROM testtable_3 
                   ORDER BY id";
 
-            $baseData = $this->db->getRow($sql);
-
-            //list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-            //if ($errno > 0) {
-            //    return;
-            //}
+            $result = $this->db->selectLimit($sql,1);
+            $baseData = $result->fetchRow();
 
             $this->assertSame(
                 $baseData[$vcField],
@@ -148,7 +143,7 @@ class TransactionScopeTest extends ADOdbTestCase
                 $this->failTest(
                     sprintf(
                         '[%s] Cannot set varchar_field error [%s] %s',
-                        $fetcDescription,
+                        $fetchDescription,
                         $errno,
                         $errmsg
                     )
@@ -164,12 +159,6 @@ class TransactionScopeTest extends ADOdbTestCase
                     WHERE id = {$baseData[$idField]}";
 
             $preCommit = $this->db->getOne($sql);
-
-            //list($errno, $errmsg) = $this->assertADOdbError($sql);
-
-            //if ($errno > 0) {
-            //    return;
-           // }
 
             $this->assertEquals(
                 'transaction test',
@@ -252,7 +241,7 @@ class TransactionScopeTest extends ADOdbTestCase
                 return;
             }
 
-            $assertion = $this->assertEquals(
+            $this->assertEquals(
                 0,
                 $this->db->transCnt,
                 sprintf(
@@ -266,7 +255,7 @@ class TransactionScopeTest extends ADOdbTestCase
                 $this->fail(
                     sprintf(
                         '[%s] Trans Count shoud be 0 but is %d',
-                        $fetcDescription,
+                        $fetchDescription,
                         $this->db->transCnt
                     )
                 );
@@ -310,8 +299,9 @@ class TransactionScopeTest extends ADOdbTestCase
             );
         }
 
-        foreach ($this->testFetchModes as $fetchMode => $fetcDescription) {
-            //$this->db->setFetchMode($fetchMode);
+        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
+           
+           
             $this->insertFetchMode($fetchMode);
 
             if ($fetchMode == 0 || $fetchMode == 3) {
@@ -327,13 +317,13 @@ class TransactionScopeTest extends ADOdbTestCase
 
             $this->db->beginTrans();
 
-            $assertion = $this->assertEquals(
+            $this->assertEquals(
                 1,
                 $this->db->transCnt,
                 sprintf(
                     '[%s] Transaction did not start correctly,' .
                     'transCnt should be equal to 1',
-                    $fetcDescription
+                    $fetchDescription
                 )
             );
 
@@ -341,13 +331,14 @@ class TransactionScopeTest extends ADOdbTestCase
                     FROM testtable_3 
                 ORDER BY id";
 
-            $baseData = $this->db->getRow($sql);
+            $result = $this->db->selectLimit($sql, 1);
+            $baseData = $result->fetchRow();
+
             list($errno, $errmsg) = $this->assertADOdbError($sql);
 
             if ($errno > 0) {
                 return;
             }
-
 
             $sql = "UPDATE testtable_3 
                     SET varchar_field = 'transaction test' 
@@ -380,12 +371,11 @@ class TransactionScopeTest extends ADOdbTestCase
                 sprintf(
                     '[%s] VARCHAR_FIELD Data should have been updated ' .
                      'in the transaction before commit',
-                    $fetcDescription
+                    $fetchDescription
                 )
             );
 
             $this->db->rollbackTrans();
-
 
             $this->db->CommitTrans();
 
@@ -411,7 +401,7 @@ class TransactionScopeTest extends ADOdbTestCase
                 sprintf(
                     '[%s] VARCHAR_FIELD Data should now be rolled back ' .
                      'in the transaction after commit',
-                    $fetcDescription
+                    $fetchDescription
                 )
             );
         }

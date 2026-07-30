@@ -80,17 +80,18 @@ class ChangeTableTest extends DataDictFunctions
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
             DECIMAL_FIELD_TO_MODIFY N(9.5) NOTNULL DEFAULT 1,
             SMALLINT_TO_EXPAND I4,
-            XL_FIELD XL,
+            XL_FIELD XL
             ";
         
+        $this->db->startTrans();
 
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName,
             $flds
         );
 
-        print_r($sqlArray);
-        exit;
+        //print_r($sqlArray); exit;
+
         $this->assertIsArray(
             $sqlArray,
             'changeTableSql() should alway return an array'
@@ -108,6 +109,7 @@ class ChangeTableTest extends DataDictFunctions
             return;
         }
 
+        $this->db->completeTrans();
 
         $metaColumns = $this->db->metaColumns($this->testTableName);
 

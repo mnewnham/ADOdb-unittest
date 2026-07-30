@@ -43,6 +43,9 @@ class RenameTableTest extends DataDictFunctions
         
         $db = $GLOBALS['ADOdbConnection'];
        
+        if (!$GLOBALS['DriverControl']->supportsRenameTable) {
+            return;
+        }
         /*
         * Load the table to test data length tests
         */
@@ -80,9 +83,9 @@ class RenameTableTest extends DataDictFunctions
             return;
         }
 
-        if ($this->adoDriver == 'sqlite3') {
+        if (!$GLOBALS['DriverControl']->supportsRenameTable) {
             $this->markTestSkipped(
-                'Skipping test as rename table is not currently supported by SQLite'
+                'Skipping test as rename table is not currently supported by this driver'
             );
             return;
         }

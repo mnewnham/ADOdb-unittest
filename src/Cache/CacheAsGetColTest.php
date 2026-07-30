@@ -87,6 +87,7 @@ class CacheAsGetColTest extends ADOdbCoreSetup
      */
     public static function providerTestCacheAsGetCol(): array
     {
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $bind = array('p1' => 'LINE 11');
         return [

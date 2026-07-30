@@ -192,10 +192,12 @@ class XmlSchemaTest extends ADOdbTestCase
             if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
 
+                /*
                 print "
                 CC $sql | $columnComment
                 ";
-
+                */
+                
                 $this->assertSame(
                     'DATE FIELD COMMENT',
                     $columnComment,
@@ -233,7 +235,6 @@ class XmlSchemaTest extends ADOdbTestCase
     public function testXmlSchemaUpdate(): void
     {
 
-
         $schemaFile = sprintf(
             '%s/DatabaseSetup/xmlschemafile-update.xml',
             $GLOBALS['unitTestToolsDirectory']
@@ -244,9 +245,11 @@ class XmlSchemaTest extends ADOdbTestCase
             'Schema file does not exist: ' . $schemaFile
         );
 
+        
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
+        
         if (!$ok) {
             $this->assertTrue(
                 $ok,

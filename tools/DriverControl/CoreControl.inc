@@ -116,4 +116,19 @@ class CoreControl
      * @var boolean
      */
     public bool $allowAutoIncrementOnCompundKeys = true;
+
+    /**
+     * Does the driver support renaming a table
+     *
+     * @var boolean
+     */
+    public bool $supportsRenameTable = true;
+
+    /**
+     * Does the driver support the IF EXISTS statement
+     *
+     * @var boolean
+     */
+    public bool $supportsDropIfExists = true;
+
 }

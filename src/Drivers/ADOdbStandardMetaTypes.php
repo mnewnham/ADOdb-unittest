@@ -158,6 +158,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $columnTypes = new \columnTypes();
 
         $this->databaseFieldsDefinition = $columnTypes->databaseFieldsDefinition;
+    
     }
 
     /**
@@ -179,16 +180,17 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         object $metaFetch
     ): void {
 
-
         if (!$baseFieldName) {
             $this->markTestSkipped('metatype_test table not found for driver');
             return;
         }
+
         $name     = $metaFetch->name;
+        
         $fieldArray = explode('_', $name);
+        //print "LOOK FOR {$fieldArray[1]}\n";
+
         $nameData = $this->databaseFieldsDefinition[$fieldArray[1]];
-
-
 
         $expectedActualType    = $nameData['output'];
         //$expectedSize          = $nameData[1];
@@ -200,59 +202,32 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeX;
         } elseif (strcasecmp($expectedActualType, 'typexl') == 0) {
             $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeXL;
-        }
-        //if ($expectedSize) {
-        //    $expectedActualType .= sprintf('(%s)', $expectedSize);
-        //}
-
-        if (1 == 2) {
+        }      
+        
         /*
-        * Stage 1, pass a string and length to MetaType()
-        */
-
-            $metaResult = $GLOBALS['ADOdataDictionary']->metaType(
-                $metaFetch->type,
-                $metaFetch->max_length
-            );
-
-            $this->assertSame(
-                $expectedMetaType,
-                $metaResult,
-                sprintf(
-                    'Checking MetaType of field [%s] passing string ' .
-                    'type [%s] and length [%s] from FetchField()',
-                    $name,
-                    $metaFetch->type,
-                    $metaFetch->max_length
-                )
-            );
-
-            $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
-
-            $this->assertSame(
-                $expectedActualType,
-                $actualResult,
-                sprintf(
-                    '
-                Checking ActualType of field [%s] returned' .
-                    ' by MetaType using string type and length',
-                    $name
-                )
-            );
-        }
-        /*
-        * Stage 2, pass a fieldobject to MetaType() as first arg
+        * Stage 1, pass a fieldobject to MetaType() as first arg
         */
         $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
+
+        /*
+        print "Executing $fieldOffset / $driverColType ---------\n";
+        print_r($fieldType);
+        print_r($metaResult);
+        */
 
         $this->assertSame(
             $expectedMetaType,
             $metaResult,
             sprintf(
                 'Checking MetaType of field [%s] derived from DB type [%s] returned' .
-                ' by Metatype passing fieldObject as 1st parameter',
+                ' by Metatype passing fieldObject as 1st parameter with name data Object %s',
                 $name,
-                $driverColType
+                $driverColType,
+                print_r(
+                    $nameData, 
+                    true
+                    )
+            
             )
         );
 
@@ -299,6 +274,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $returnData = [];
         for ($i = 1; $i < $cols; $i++) {
             $field = $executionResult->fetchField($i);
+           
             $returnData[$field->name] = array(
                 $field->name,
                 $field->type,

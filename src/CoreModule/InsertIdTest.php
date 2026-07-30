@@ -62,53 +62,6 @@ class InsertIdTest extends ADOdbCoreSetup
     }
 
     /**
-     * Test successfully incrementing autoincrement columns
-     *
-     * @return void
-     */
-    public function testInsertAutoId(): void
-    {
-
-        $autoAr = array(
-            'integer_field' => 99
-        );
-
-        $counter = 1;
-        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-            $this->db->startTrans();
-            $this->insertFetchMode($fetchMode);
-
-            $this->db->hasInsertID = true;
-            $sql = "SELECT * FROM insert_auto WHERE id=-1";
-            $autoTemplate = $this->db->execute($sql);
-
-            $sql = $this->db->getInsertSql($autoTemplate, $autoAr);
-
-
-            $this->db->execute($sql);
-
-            $insertId = $this->db->insert_id();
-
-            $this->db->completeTrans();
-
-            $this->assertEquals(
-                $counter,
-                $insertId,
-                sprintf(
-                    '[FETCH MODE %s] Auto increment insertid should increment',
-                    $fetchModeName
-                )
-            );
-
-
-            $this->validateResetFetchModes();
-
-
-            $counter++;
-        }
-    }
-
-    /**
      * Test table with no auto-increment column does not trigger insert_id
      *
      * @return void
@@ -155,4 +108,54 @@ class InsertIdTest extends ADOdbCoreSetup
             $counter++;
         }
     }
+    
+    
+    /**
+     * Test successfully incrementing autoincrement columns
+     *
+     * @return void
+     */
+    public function testInsertAutoId(): void
+    {
+
+        $autoAr = array(
+            'integer_field' => 99
+        );
+
+        $counter = 1;
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            $this->db->startTrans();
+            $this->insertFetchMode($fetchMode);
+
+            $this->db->hasInsertID = true;
+            $sql = "SELECT * FROM insert_auto WHERE id=-1";
+            $autoTemplate = $this->db->execute($sql);
+
+            $sql = $this->db->getInsertSql($autoTemplate, $autoAr);
+
+
+            $this->db->execute($sql);
+
+            $insertId = $this->db->insert_id();
+
+            $this->db->completeTrans();
+
+            $this->assertEquals(
+                $counter,
+                $insertId,
+                sprintf(
+                    '[FETCH MODE %s] Auto increment insertid should increment',
+                    $fetchModeName
+                )
+            );
+
+
+            $this->validateResetFetchModes();
+
+
+            $counter++;
+        }
+    }
+
+    
 }

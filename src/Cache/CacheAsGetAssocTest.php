@@ -25,9 +25,9 @@ use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class MetaFunctionsTest
+ * Class CacheAsGetAssocTest
  *
- * Test cases for for ADOdb Core functions
+ * Test cases for for ADOdb Cache functions when used as core functions
  */
 
 class CacheAsGetAssocTest extends ADOdbCoreSetup
@@ -158,6 +158,7 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
                 WHERE number_run_field BETWEEN 2 AND 6
                 ORDER BY number_run_field";
 
+        $GLOBALS['ADOdbConnection']->param(false);
         $p1 = $GLOBALS['ADOdbConnection']->param('p1');
         $p2 = $GLOBALS['ADOdbConnection']->param('p2');
         $bind = array('p1' => 2,
