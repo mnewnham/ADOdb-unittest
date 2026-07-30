@@ -8,8 +8,8 @@ CREATE TABLE adodb_force_insert (
 	varchar_field VARCHAR(20),
 	datetime_field TIME,
 	date_field DATE,
-	integer_field SMALLINT
-	decimal_field DECIMAL(1,2),
+	integer_field SMALLINT,
+	decimal_field DECIMAL(12,2),
 	boolean_field SMALLINT,
 	trigger_field SMALLINT
 );
