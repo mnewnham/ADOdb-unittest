@@ -23,7 +23,7 @@ class DriverControl extends \CoreControl
      *
      * @var boolean
      */
-    public bool $dictionaryRequireTransactions = true;
+    public bool $dictionaryRequireTransactions = false;
 
 
     public function __construct()

@@ -25,6 +25,20 @@ class DriverControl extends \CoreControl
      */
     public int $fetchBothManner = 1;
 
+    /**
+     * Does the driver support renaming a table
+     *
+     * @var boolean
+     */
+    public bool $supportsRenameTable = false;
+
+    /**
+     * Can compound primary keys include AUTO components
+     *
+     * @var boolean
+     */
+    public bool $allowAutoIncrementOnCompundKeys = false;
+
     public function __construct()
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
