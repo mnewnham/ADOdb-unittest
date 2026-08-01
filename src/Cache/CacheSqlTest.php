@@ -858,8 +858,8 @@ class CacheSqlTest extends ADOdbTestCase
     ): void {
 
         global $ADODB_CACHE_DIR;
-        global $ADODB_FETCH_MODE;
-
+        //global $ADODB_FETCH_MODE;
+       
         if ($this->skipAllTests) {
             $this->markTestSkipped(
                 'Skipping tests as caching not configured'
@@ -867,9 +867,12 @@ class CacheSqlTest extends ADOdbTestCase
             return;
         }
 
+        $this->db->storeFetchModes();
         $this->db->setFetchMode($fetchMode);
 
         $this->db->startTrans();
+
+        
 
         if ($bind) {
             $result = $this->db->cacheSelectLimit(
@@ -895,6 +898,17 @@ class CacheSqlTest extends ADOdbTestCase
             $returnedRows[] = $row;
         }
 
+        if ($fetchMode == ADODB_FETCH_BOTH) {
+            if (is_array($returnedRows)) {
+                $returnedRows  = $this->sortFetchBothRecords($returnedRows);
+            }
+
+            if (is_array($expectedValue)) {
+                $expectedValue = $this->sortFetchBothRecords($expectedValue);
+            }
+              
+        } 
+
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
             foreach ($expectedValue as $ek => $er) {
                 $er = array_change_key_case($er, CASE_UPPER);
@@ -909,10 +923,11 @@ class CacheSqlTest extends ADOdbTestCase
             $returnedRows,
             sprintf(
                 "Initial read of cacheSelectLimit() with FETCH MODE %s
-                and casing %s returns %s",
-                $this->testFetchModes[$ADODB_FETCH_MODE],
+                and casing %s returns %s, requires %s",
+                $this->testFetchModes[$fetchMode],
                 $this->caseDescription[ADODB_ASSOC_CASE],
-                print_r($returnedRows, true)
+                print_r($returnedRows, true),
+                print_r($expectedValue, true)
             )
         );
 
@@ -948,6 +963,12 @@ class CacheSqlTest extends ADOdbTestCase
             $returnedRows[] = $row;
         }
 
+        if ($fetchMode == ADODB_FETCH_BOTH) {
+            if (is_array($returnedRows)) {
+                $returnedRows  = $this->sortFetchBothRecords($returnedRows);
+            }
+        } 
+
         $this->db->completeTrans();
 
         $this->assertSame(
@@ -956,7 +977,7 @@ class CacheSqlTest extends ADOdbTestCase
             sprintf(
                 "Second read of cacheSelectLimit() with FETCH MODE %s
                 and casing %s should read cache, not database but returns %s",
-                $this->testFetchModes[$ADODB_FETCH_MODE],
+                $this->testFetchModes[$fetchMode],
                 $this->caseDescription[ADODB_ASSOC_CASE],
                 print_r($returnedRows, true)
             )
@@ -971,6 +992,8 @@ class CacheSqlTest extends ADOdbTestCase
                           AND varchar_field = 'TCSL TEST VALUE'";
 
         list($result, $errrno, $errmsg) = $this->executeSqlString($rewriteSql);
+
+        $this->db->restoreFetchModes();
     }
 
     /**

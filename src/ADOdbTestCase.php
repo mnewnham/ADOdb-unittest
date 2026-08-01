@@ -459,7 +459,24 @@ class ADOdbTestCase extends TestCase
         $outputArray         = array();
 
         foreach ($inputArray as $k => $v) {
-            $outputArray[$k] = ksort($v);
+            if (!is_array($v)) {
+                print_r($inputArray);
+                die("DIE $k IS  $v\n");
+            }
+            $aValues = array_values($v);
+            $aKeys   = array_keys($v);
+            if ($aKeys[0] == 0) {
+                /*
+                * The array is in the correct order, return immediately
+                */
+                return $inputArray;
+            }
+            $rowArray = [];
+            for($i=0;$i<count($aKeys);$i+=2) {
+                $rowArray[$aKeys[$i+1]] = $aValues[$i];
+                $rowArray[$aKeys[$i]]   = $aValues[$i+1];
+            }
+            $outputArray[$k] = $rowArray;
         }
 
         return $outputArray;
