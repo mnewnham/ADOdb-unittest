@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
-DROP INDEX IF EXISTS integer_field_index;
+
+DROP INDEX IF EXISTS integer_field_index ON xml_schema_test ;
 
 
 DROP VIEW IF EXISTS testtable_1_view;
