@@ -16,7 +16,7 @@ class DriverControl extends \CoreControl
      *
      * @var integer
      */
-    public int $fetchBothManner = 1;
+    public int $fetchBothManner = 0;
 
     /**
      * Do updates to the data dictionary require transactional scope
