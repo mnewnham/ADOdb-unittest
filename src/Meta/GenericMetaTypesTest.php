@@ -53,7 +53,7 @@ class GenericMetaTypesTest extends MetaFunctions
             $GLOBALS['unitTestToolsDirectory'],
             $GLOBALS['SqlProvider']
         );
-
+       
         if (file_exists($driverTypes)) {
             $this->markTestSkipped('Use the Driver Specific MetaTypeTest plan instead');
             return;

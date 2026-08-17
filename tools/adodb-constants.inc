@@ -66,9 +66,15 @@ if (!function_exists('ADODB_SetDatabaseAdapter')) {
 }
 
 if (!function_exists('NewDataDictionary')) {
-    function NewDataDictionary($db)
-    {
-    }
+    	/**
+	 * Get a new Data Dictionary object for the connection.
+	 *
+	 * @param object  $conn       A Valid connection
+	 * @param string  $drivername An override driver name
+	 *
+	 * @return object|false
+	 */
+	function newDataDictionary(object &$conn, string $drivername='') : mixed { return false; }
 }
 
 if (!function_exists('newAdoConnection')) {

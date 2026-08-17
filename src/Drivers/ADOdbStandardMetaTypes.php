@@ -188,7 +188,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $name     = $metaFetch->name;
         
         $fieldArray = explode('_', $name);
-        //print "LOOK FOR {$fieldArray[1]}\n";
 
         $nameData = $this->databaseFieldsDefinition[$fieldArray[1]];
 
@@ -208,12 +207,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         * Stage 1, pass a fieldobject to MetaType() as first arg
         */
         $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
-
-        /*
-        print "Executing $fieldOffset / $driverColType ---------\n";
-        print_r($fieldType);
-        print_r($metaResult);
-        */
 
         $this->assertSame(
             $expectedMetaType,

@@ -60,8 +60,6 @@ class CreateTableTest extends DataDictFunctions
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
             $sql = "DROP TABLE IF EXISTS dictionary_creation_test_table";
 
-
-
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $this->db->startTrans();
             }

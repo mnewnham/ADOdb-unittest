@@ -202,11 +202,6 @@ class LengthTest extends ADOdbTestCase
                     FROM length_test 
                 WHERE id=1";
 
-       // print "
-        //$fetchDescription $sql
-        //-----------------------------------
-        //";
-
         $row = $this->db->getRow($sql);
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);

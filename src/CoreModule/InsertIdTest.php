@@ -25,9 +25,9 @@ use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class MetaForeignKeysTest
+ * Class InsertIdTest
  *
- * Test cases for for ADOdb MetaForeignKeys
+ * Test cases for for ADOdb Autoincrement value handling 
  */
 class InsertIdTest extends ADOdbCoreSetup
 {
@@ -44,8 +44,28 @@ class InsertIdTest extends ADOdbCoreSetup
         $db        = $GLOBALS['ADOdbConnection'];
         $adoDriver = $GLOBALS['ADOdriver'];
 
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = "DROP TABLE IF EXISTS unittest_seq_no";
+            $db->execute($sql);
+
+            $sql = "DROP TABLE IF EXISTS unittest_genid_no";
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+        }
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
+
         /*
-        * load foreign keys test schema
+        * load insert id test schema
         */
 
         $tableSchema = sprintf(
@@ -59,6 +79,10 @@ class InsertIdTest extends ADOdbCoreSetup
         */
 
         readSqlIntoDatabase($db, $tableSchema);
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
     }
 
     /**

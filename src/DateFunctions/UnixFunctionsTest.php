@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tests cases for date functions of ADODb. Some of these functions
  * are effectively obsolete since 64 bit processors

@@ -164,7 +164,7 @@ class AffectedRowsTest extends ADOdbCoreSetup
         $this->assertEquals(
             0,
             $this->db->affected_rows(),
-            'Affected_rows shoud return 0 for a select statement'
+            'Affected_rows should return 0 for a select statement'
         );
 
         $this->db->completeTrans();
