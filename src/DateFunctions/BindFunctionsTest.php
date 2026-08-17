@@ -51,7 +51,6 @@ class BindFunctionsTest extends ADOdbTestCase
         $userDate = $this->db->userDate($time, 'Y-m-d');
         list($errno, $errmsg) = $this->assertADOdbError('userDate()');
 
-       
         $this->assertSame(
             $expected,
             $userDate,
@@ -118,7 +117,6 @@ class BindFunctionsTest extends ADOdbTestCase
         $bindDate = $this->db->bindDate($today);
         list($errno, $errmsg) = $this->assertADOdbError('bindDate()');
 
-
         $this->assertNotNull(
             $bindDate,
             'bindDate() should return a string to use ' .
@@ -134,7 +132,7 @@ class BindFunctionsTest extends ADOdbTestCase
      * @return void
      *
      */
-    public function testDbTimestamp(): void
+    public function testDbTimestampWithDate(): void
     {
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
@@ -157,6 +155,39 @@ class BindFunctionsTest extends ADOdbTestCase
     }
 
     /**
+     * Test for {@see ADOConnection::dbTimestamp())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:dbtimestamp
+     *
+     * @return void
+     *
+     */
+    public function testDbTimestampWithTime(): void
+    {
+        $nowTime = time();
+        $now = date('Y-m-d H:i:s', $nowTime);
+
+        $dbTs = $this->db->dbTimestamp($nowTime);
+      
+        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
+
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $dbTs
+        );
+
+        $stringTime = $this->db->getOne($sql);
+
+        $actualNowTime = strtotime($stringTime);
+
+        $this->assertSame(
+            date('c', $nowTime),
+            date('c', $actualNowTime),
+            'dbTimestamp should return a date that evaluates to the calculated timestamp'
+        );
+    }
+
+    /**
      * Test for {@see ADOConnection::bindTimestamp())
      *
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:bindtimestamp
@@ -168,14 +199,12 @@ class BindFunctionsTest extends ADOdbTestCase
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
 
-
         $dbTs = $this->db->bindTimestamp($now);
 
-
-        if (substr($dbTs, 0, 1) == "'") {
+        if (substr($dbTs, 0, 1) != "'") {
             $this->fail(
                 sprintf(
-                    'bindTimestamp() should return a timestamp without quotes, actually returned[%s]',
+                    'bindTimestamp() should return a timestamp quoted, actually returned[%s]',
                     $dbTs
                 )
             );
@@ -188,14 +217,28 @@ class BindFunctionsTest extends ADOdbTestCase
             $dbTs
         );
 
+        $actual = $this->db->getOne($sql);
+
+
+
         $this->db->param('');
         $p1 = $this->db->param('p1');
 
         $bind = [ 'p1' => $dbTs ];
 
-        $sql = 'select * from testtable_1 where datetime_field=' . $p1;
+        $sql = 'SELECT * FROM testtable_1 WHERE datetime_field=' . sprintf("(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))",$dbTs);
 
-        $result = $this->db->selectLimit($sql, 1, -1, $bind);
+        $result = $this->db->selectLimit($sql, 1, -1);
+        
+        $this->assertIsObject(
+            $result,
+            sprintf(
+                "Execution of the SQL %s with parameters %s should have returned an ADOrecordset object",
+                $sql,
+                print_r($bind, true)
+            )
+        );
+        
         if (!$r = $result->fetchRow()) {
             $this->assertTrue(
                 true,

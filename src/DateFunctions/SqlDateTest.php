@@ -63,17 +63,28 @@ class SqlDateTest extends ADOdbTestCase
                 'provided timestamp identified by the format string: ' . $format;
                 break;
             case 2:
-                $expected = date($format);
-                $sql = "SELECT " . $this->db->sqlDate($format);
+                
+                if ($format == 'Q') {
+                    $expected = ceil((new \DateTime)->format('n') / 3);
+                } else {
+                    $expected = date($format);
+                }
+              
+                $sql = sprintf(
+                    $GLOBALS['DriverControl']->dateMethodExecutor,
+                    $this->db->sqlDate($format)
+                );
+
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
                 $actual = $this->db->getOne($sql);
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
                 $message = 'sqlDate should return the portion of the ' .
-                'current timestamp identified by the format string: ' . $format;
+                'current timestamp identified by the format string [ ' . $format . ' ]';
                 break;
             case 3:
-                $sql = "SELECT id,datetime_field 
+
+                $sql = "SELECT id,{$GLOBALS['DriverControl']->dateTimeField}
                         FROM testtable_3 
                         WHERE datetime_field IS NOT NULL ";
 
@@ -89,34 +100,45 @@ class SqlDateTest extends ADOdbTestCase
 
                 $baseData = array_values($baseData);
 
-                $expected = date($format, strtotime($baseData[1]));
+              
 
+                 if ($format == 'Q') {
+                    $expected = ceil((new \DateTime($baseData[1]))->format('n') / 3);
+                } else {
+                    $expected = date($format, strtotime($baseData[1]));
+                }
+                
+
+                $dtSql =  $this->db->sqlDate($format, 'datetime_field');
                 $sql = sprintf(
-                    "SELECT %s 
+                    "SELECT %s, {$GLOBALS['DriverControl']->dateTimeField} 
                    FROM testtable_3
                     WHERE id=%s",
-                    $this->db->sqlDate($format, 'datetime_field'),
+                    $dtSql,
                     $baseData[0]
                 );
 
+
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
 
-                $actual = $this->db->getOne($sql);
+                $row = array_values($this->db->getRow($sql));
+                $actual = $row[0];
 
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-                $message = 'sqlDate should return the portion of the ' .
-                'date field identified by the format string: ' . $format;
-                break;
+                $message = 'When the SQL [' . $sql . '] is executed, sqlDate should return the portion of the ' .
+                'date field identified by the format string [ ' . $format . ' ]. ' . 
+                ' The raw value of the field is [' . $row[1] . ']';
+                break; 
 
-            default:
+                default:
                 $this->fail("Invalid test method: $testMethod");
         }
 
         $message .= '. This may be caused by the difference in Time or Timezone of' .
-        'the server if it is on a different machine than the client';
+        ' the server if it is on a different machine than the client. ';
 
-        if (preg_match('/^[0-9]+/', $actual)) {
+        if (preg_match('/^[0-9]+$/', $expected) && $actual && preg_match('/^[0-9]+$/', $actual)) {
             $range = [
                 'from' => $expected - $margin,
                 'to'   => $expected + $margin
@@ -131,7 +153,7 @@ class SqlDateTest extends ADOdbTestCase
                 $actual
             );
         } else {
-            $success = strcmp($expected, $actual) !== false ? true : false;
+            $success = strcmp($expected, $actual ?? '') !== false ? true : false;
             $message = sprintf(
                 '$s - Expected %s, got %s',
                 $message,
@@ -167,21 +189,32 @@ class SqlDateTest extends ADOdbTestCase
             [1, 'i', $testPastTimestamp],
             [1, 's', $testPastTimestamp],
             */
-            [2, 'Y', $testNowTimestamp],
-            [2, 'm', $testNowTimestamp],
-            [2, 'M', $testNowTimestamp],
-            [2, 'd', $testNowTimestamp],
-            [2, 'H', $testNowTimestamp],
-            [2, 'i', $testNowTimestamp],
-            [2, 's', $testNowTimestamp, 5],
+            '4 Digit Year' => [2, 'Y', $testNowTimestamp],
+            '2 Digit Month' => [2, 'm', $testNowTimestamp],
+            '3 Char Month' => [2, 'M', $testNowTimestamp],
+            '2 Digit Day Of Month' => [2, 'd', $testNowTimestamp],
+            '2 Digit 24 Hour Of Day' => [2, 'H', $testNowTimestamp],
+            '2 Digit 12 Hour Of Day' => [2, 'h A', $testNowTimestamp],
+            '2 Digit Minute Of Hour' => [2, 'i', $testNowTimestamp],
+            'Day Of Week' => [2, 'w', $testNowTimestamp],
+            'Character Day Of Week' => [2, 'I', $testNowTimestamp],
+            'Week Of Year' => [2, 'W', $testNowTimestamp],
+            'Quarter Of Year' => [2, 'Q', $testNowTimestamp],
+            '2 Digit Second Of Minute' => [2, 's', $testNowTimestamp, 5],
 
-            [3, 'Y', null],
-            [3, 'm', null],
-            [3, 'M', null],
-            [3, 'd', null],
-            [3, 'H', null],
-            [3, 'i', null],
-            [3, 's', null, 5],
+
+            'Now 4 Digit Year' => [3, 'Y', null],
+            'Now 2 Digit Month' => [3, 'm', null],
+            'Now 3 Char Month' => [3, 'M', null],
+            'Now 2 Digit Day Of Month' => [3, 'd', null],
+            'Now 2 Digit 24 Hour Of Day' => [3, 'H', null],
+            'Now 2 Digit 12 Hour Of Day' => [3, 'h A', null],
+            'Now 2 Digit Minute Of Hour' => [3, 'i', null],
+            'Now Day Of Week' => [3, 'w', null],
+            'Now Character Day Of Week' => [3, 'I', null],
+            'Now Week Of Year' => [3, 'W', null],
+            'Now Quarter Of Year' => [3, 'Q', null],
+            'Now 2 Digit Second Of Minute' => [3, 's', null, 5],
         ];
     }
 

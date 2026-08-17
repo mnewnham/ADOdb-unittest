@@ -152,13 +152,14 @@ class OffsetDateTest extends ADOdbTestCase
         $dateField = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $nowStamp = date('Y-m-d', strtotime($dateField . ' + 7 days'));
+        $nowStamp = date('Y-m-d', strtotime($dateField . ' +168 hours'));
 
         $offset = 7; // 1 week
         $sql = "SELECT {$this->db->offsetDate($offset, 'date_field')}
                   FROM testtable_3 
                  WHERE number_run_field=9";
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -193,19 +194,33 @@ class OffsetDateTest extends ADOdbTestCase
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-
         $this->assertSame(
             $nowStamp,
             $od,
             'Offset date using hours should return the datetime 5 hours in the future'
         );
 
+    }
+
+    /**
+     * Test for {@see ADOConnection::offsetDate())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:offsetdate
+     *
+     * @return void
+     */
+    public function testOffsetDateUsingNegativeHours(): void {
+
         $offset = -5;
         $nowStamp = date('Y-m-d H:i', strtotime('now -5 hours'));
 
         $offsetHours = -5/24; // Convert days to hours
 
-        $sql = "SELECT " . $this->db->offsetDate($offsetHours);
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offsetHours)
+        );
+
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -213,7 +228,7 @@ class OffsetDateTest extends ADOdbTestCase
         $this->assertSame(
             $nowStamp,
             $od,
-            'Offset date using hours should return the date 5 hours in the past'
+            'Offset date using negative hours should return the date 5 hours in the past'
         );
     }
 }
