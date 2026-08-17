@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest;
+namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;

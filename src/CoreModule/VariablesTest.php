@@ -19,7 +19,7 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest;
+namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -59,18 +59,35 @@ class VariablesTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        $db->startTrans();
-        $db->execute(sprintf(
-            'DROP TABLE IF EXISTS %s',
-            _adodb_quote_fieldname($db, 'select')
-        ));
-        $db->completeTrans();
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            $db->startTrans();
+            $db->execute(sprintf(
+                'DROP TABLE IF EXISTS %s',
+                _adodb_quote_fieldname($db, 'select')
+            ));
+            $db->completeTrans();
+        }
 
-        $db->startTrans();
+        /*
+        *load Data into the table, checking for driver specific loader
+        */
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->startTrans();
+        }
         $ok = readSqlIntoDatabase($db, $schemaFile);
-        $db->completeTrans();
+        /*
+        *load Data into the table, checking for driver specific loader
+        */
+
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $db->completeTrans();
+        }
     }
 
+    public function setup(): void {
+        parent::setup();
+    }
 
     /**
      * Tests if the isConnected method works
@@ -147,7 +164,8 @@ class VariablesTest extends ADOdbTestCase
         $this->assertGreaterThan(
             0,
             $count,
-            'Data insertion should have succeeded using Quoted field and table names and added at least one record'
+            'Data insertion should have succeeded using Quoted field ' . 
+            'and table names and added at least one record'
         );
     }
 
