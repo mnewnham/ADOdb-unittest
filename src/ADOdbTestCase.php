@@ -59,6 +59,20 @@ class ADOdbTestCase extends TestCase
         ADODB_ASSOC_CASE_NATIVE => 'ADODB_ASSOC_CASE_NATIVE'
     );
 
+    protected array $coreFetchModes = [
+        '[0] ADODB_FETCH_DEFAULT',
+        '[1] ADODB_FETCH_NUM',
+        '[2] ADODB_FETCH_ASSOC',
+        '[3] ADODB_FETCH_BOTH'
+    ];
+
+    const FETCH_GLOBAL_NUM = 0;
+    const FETCH_GLOBAL_ASSOC = 1;
+    const FETCH_GLOBAL_BOTH = 2;
+    const FETCH_FETCHMODE_NUM = 3;
+    const FETCH_FETCHMODE_ASSOC = 4;
+    const FETCH_FETCHMODE_BOTH = 5;
+
     protected array $testFetchModes = [
         '[1] GLOBAL ADODB_FETCH_NUM',
         '[2] GLOBAL ADODB_FETCH_ASSOC',
@@ -204,10 +218,7 @@ class ADOdbTestCase extends TestCase
             $this->db             = $GLOBALS['ADOdbConnection'];
             if ($GLOBALS['ADOdataDictionary']) {
                 $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
-            } else {
-                //print_r($GLOBALS); exit;
-                //$this->dataDictionary = NewDataDictionary($GLOBALS['ADOdbConnection'], $GLOBALS['ADOdriver']);
-            }
+            } 
         }
 
         /*
@@ -460,8 +471,7 @@ class ADOdbTestCase extends TestCase
 
         foreach ($inputArray as $k => $v) {
             if (!is_array($v)) {
-                print_r($inputArray);
-                die("DIE $k IS  $v\n");
+                return $inputArray;
             }
             $aValues = array_values($v);
             $aKeys   = array_keys($v);
@@ -480,6 +490,48 @@ class ADOdbTestCase extends TestCase
         }
 
         return $outputArray;
+    }
+
+    /**
+     * We don't know what format the data will be returned in ADODB_FETCH_BOTH
+     * requests, numeric key first then associative or vice-versa. This
+     * method sorts them to all numeric keysJ followed by all associative keys.
+     * That way we can get a standardized data set for comparisons
+     *
+     * @param array $inputArray The data to sort
+     *
+     * @return array
+     */
+    protected function validateFetchBothRecords(array $expectedRows, array $returnedRows): array
+    {
+        $outputArray         = array();
+
+        foreach ($expectedRows as $k => $expectedRow) {
+            if (!array_key_exists($k, $returnedRows)) {
+                return $returnedRows;
+            }
+            if (!is_array($expectedRow)) {
+                return $expectedRows;
+            }
+            if (count($expectedRow) <> count($returnedRows[$k])) {
+                return $returnedRows;
+            }
+
+            $returnedRow = $returnedRows[$k];
+
+            foreach ($expectedRow as $index => $value) {
+                 if (!array_key_exists($index, $returnedRow)) {
+                    return $returnedRows;
+                 }
+
+                 if (strcmp($expectedRow[$index], $returnedRow[$index]) <> 0) {
+                    return $returnedRows;
+                 } 
+            }
+
+        }
+
+        return $expectedRows;
     }
 
     /**
