@@ -145,6 +145,11 @@ class MoveTest extends ADOdbTestCase
         /*
         * Move to the second to last offset
         */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
         $success = $this->moveRecordSet->move(8);
         $this->assertTrue(
             $success,
@@ -231,6 +236,15 @@ class MoveTest extends ADOdbTestCase
     public function testMoveToStart(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+
         $this->db->setFetchMode(ADODB_FETCH_ASSOC);
 
         $success = $this->moveRecordSet->move(0);
@@ -283,6 +297,14 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveToEnd(): void
     {
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         $success = $this->moveRecordSet->move($this->lastRecordOffset);
 
@@ -338,6 +360,15 @@ class MoveTest extends ADOdbTestCase
     public function testMoveToEndAgain(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+
         $success = $this->moveRecordSet->move($this->lastRecordOffset);
 
         $this->assertTrue(
@@ -376,6 +407,14 @@ class MoveTest extends ADOdbTestCase
     public function testMovePastEnd(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
         $success = $this->moveRecordSet->move($this->lastRecordOffset + 1);
 
         $this->assertFalse(
@@ -415,6 +454,15 @@ class MoveTest extends ADOdbTestCase
     public function testMovePastEndAgain(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+        
         $success = $this->moveRecordSet->move($this->lastRecordOffset + 2);
 
         $this->assertFalse(
@@ -453,6 +501,14 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveBackToEnd(): void
     {
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         $success = $this->moveRecordSet->move($this->lastRecordOffset);
 
@@ -502,6 +558,15 @@ class MoveTest extends ADOdbTestCase
     public function testMoveBackwardsFromEnd(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+        
         $success = $this->moveRecordSet->move($this->lastRecordOffset - 1);
 
         $this->assertTrue(
@@ -551,6 +616,14 @@ class MoveTest extends ADOdbTestCase
     public function testMoveToNegativeOffset(): void
     {
 
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
         $success = $this->moveRecordSet->move(-1);
 
         $this->assertFalse(
@@ -611,6 +684,14 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveBackToStartOffset(): void
     {
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         $success = $this->moveRecordSet->move(0);
 
@@ -645,6 +726,15 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveNext(): void
     {
+
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         /*
         * Start at beginning of recordset for test
@@ -693,6 +783,15 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveNextAgain(): void
     {
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+
         $success = $this->moveRecordSet->moveNext();
 
         $this->assertTrue(
@@ -726,6 +825,15 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveToLast(): void
     {
+
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         /*
         * Start at beginning of recordset for test
@@ -771,6 +879,14 @@ class MoveTest extends ADOdbTestCase
     {
 
         /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
+        /*
         * Move pointer  of fito start of fi`le
         */
         $success = $this->moveRecordSet->moveFirst();
@@ -807,6 +923,15 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveNextOffEnd(): void
     {
+
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         /*
         * Move to the second to last offset
@@ -873,6 +998,14 @@ class MoveTest extends ADOdbTestCase
      */
     public function testMoveFrom8to5to9Last(): void
     {
+        /*
+        * Move to the second to last offset
+        */
+        if ($this->moveRecordSet->canSeek == 0) {
+            $this->markTestSkipped(
+                'Random seeking is not supported by the current driver'
+            );
+        }
 
         /*
         * Move to the second to last offset
