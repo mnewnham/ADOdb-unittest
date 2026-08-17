@@ -104,6 +104,29 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
     return $ok;
 }
 
+/**
+ * Removes the cache tree, so that caching is tested fresh every time
+ *
+ * @param string $dir
+ * 
+ * @return void
+ */
+function removeCacheTree(string $dir): void {
+
+    $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it,
+                 RecursiveIteratorIterator::CHILD_FIRST);
+
+    foreach($files as $file) {
+        if ($file->isDir()){
+            rmdir($file->getPathname());
+        } else {
+            unlink($file->getPathname());
+        }
+    }
+    
+}
+
 /*
 * What native mode driver provides the test
 * SQL files for the PDO drivers
@@ -334,6 +357,9 @@ if (!$db->isConnected()) {
 switch ($credentials['driver']) {
     case 'mysqli':
     case 'mssqlnative':
+    case 'pdo-mysql':
+    case 'pdo-sqlsrv':
+    case 'postgres9':
         $GLOBALS['schemaOwner'] = $db->database;
         break;
 
@@ -430,6 +456,19 @@ if (array_key_exists('caching', $availableCredentials)) {
     switch ($cacheParams['cacheMethod'] ?? 0) {
         case 1:
             $ADODB_CACHE_DIR = $cacheParams['cacheDir'] ?? '';
+            if (!$ADODB_CACHE_DIR) {
+                $cacheParams['cacheMethod'] = 0;
+                break;
+            }
+            $e = explode("/", $ADODB_CACHE_DIR);
+            
+            if (count($e) < 3) {
+                die('STOP: For test safety, the cache directory must be at least 2 levels from root, e.g. c:/a/b');
+            }
+            /*
+            * Flush the existing cache to ensure auto-creation works
+            */
+            removeCacheTree( $cacheParams['cacheDir']);
             break;
         case 2:
             $db->memCache     = true;
