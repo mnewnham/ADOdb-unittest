@@ -52,16 +52,19 @@ class ActivateSessionTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->startTrans();
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $db->execute('DROP TABLE IF EXISTS session_test');
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+
         }
-
-        $db->execute('DROP TABLE IF EXISTS session_test');
-
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $db->completeTrans();
-        }
-
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();

@@ -49,15 +49,18 @@ class XmlSchemaTest extends ADOdbTestCase
             return;
         }
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $GLOBALS['ADOdbConnection']->startTrans();
-        }
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $GLOBALS['ADOdbConnection']->startTrans();
+            }
 
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS XML_SCHEMA_TEST");
+            $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS xml_schema_test");
+            $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS XML_SCHEMA_TEST");
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $GLOBALS['ADOdbConnection']->completeTrans();
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $GLOBALS['ADOdbConnection']->completeTrans();
+            }
         }
     }
 
@@ -113,6 +116,7 @@ class XmlSchemaTest extends ADOdbTestCase
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
 
+      
         if (!$ok) {
             $this->assertTrue(
                 $ok,
@@ -191,12 +195,6 @@ class XmlSchemaTest extends ADOdbTestCase
             );
             if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
-
-                /*
-                print "
-                CC $sql | $columnComment
-                ";
-                */
                 
                 $this->assertSame(
                     'DATE FIELD COMMENT',
@@ -239,17 +237,19 @@ class XmlSchemaTest extends ADOdbTestCase
             '%s/DatabaseSetup/xmlschemafile-update.xml',
             $GLOBALS['unitTestToolsDirectory']
         );
+        
 
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile
         );
 
+       
         
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
-        
+       
         if (!$ok) {
             $this->assertTrue(
                 $ok,

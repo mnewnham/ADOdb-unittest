@@ -90,16 +90,19 @@ class RenameTableTest extends DataDictFunctions
             return;
         }
 
-        $sql = 'DROP TABLE IF EXISTS rename_table_renamed';
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            $sql = 'DROP TABLE IF EXISTS rename_table_renamed';
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $this->db->startTrans();
-        }
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $this->db->startTrans();
+            }
 
-       $this->db->execute($sql);
+            $this->db->execute($sql);
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $this->db->completeTrans();
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $this->db->completeTrans();
+            }
         }
 
         $sqlArray = $this->dataDictionary->renameTableSQL(

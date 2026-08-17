@@ -39,6 +39,25 @@ class SequenceTest extends ADOdbTestCase
     {
         $db        = $GLOBALS['ADOdbConnection'];
 
+        
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+      
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = "DROP SEQUENCE IF EXISTS unittest_seq_no";
+            $db->execute($sql);
+
+            $sql = "DROP SEQUENCE IF EXISTS unittest_genid_no";
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+     
+        }
+
         $SQL = "SELECT COUNT(*) AS core_table3_count FROM testtable_3";
         $table3DataExists = $db->getOne($SQL);
 
@@ -88,7 +107,7 @@ class SequenceTest extends ADOdbTestCase
             $this->db->startTrans();
         }
 
-        $response = $this->db->CreateSequence('unittest_seq', 50);
+        $response = $this->db->CreateSequence('unittest_seq_no', 50);
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->completeTrans();
@@ -127,13 +146,19 @@ class SequenceTest extends ADOdbTestCase
     public function testGenID(): void
     {
 
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->startTrans();
+        }
 
-        $this->db->startTrans();
-        $nextId = $this->db->GenID('unittest_seq');
+        $this->db->validateSequences = true;
+
+        $nextId = $this->db->GenID('unittest_genid_no', 50);
 
         list($errno,$errmsg) = $this->assertADOdbError('genID()');
 
-        $this->db->completeTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->completeTrans();
+        }
 
         $this->assertSame(
             50,
@@ -158,7 +183,7 @@ class SequenceTest extends ADOdbTestCase
     {
 
 
-        $nextId = $this->db->GenID('unittest_seq');
+        $nextId = $this->db->GenID('unittest_genid_no');
 
         list($errno, $errmsg) = $this->assertADOdbError('genID()');
 
@@ -184,7 +209,7 @@ class SequenceTest extends ADOdbTestCase
             $this->db->startTrans();
         }
 
-        $response = $this->db->DropSequence('unittest_seq');
+        $response = $this->db->DropSequence('unittest_seq_no');
 
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {

@@ -45,6 +45,22 @@ class RecordCountTest extends ADOdbCoreSetup
         * load simple insertion schema
         */
 
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = 'DROP TABLE IF EXISTS insert_auto';
+            $db->execute($sql);
+
+            $sql = 'DROP TABLE IF EXISTS insert_manual';
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+
+        }
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/insert-id-schema.sql',
@@ -64,9 +80,25 @@ class RecordCountTest extends ADOdbCoreSetup
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
+
+        $db->startTrans();
+
+        $sql = "SELECT * FROM insert_auto WHERE id=-1";
+        $autoTemplate = $db->execute($sql);
+
+        $autoAr = array(
+            'integer_field' => 99
+        );
+
+        for ($i = 1; $i <= 100; $i++) {
+            $sql = $db->getInsertSql($autoTemplate, $autoAr);
+            $db->execute($sql);
+        }
+
+        $db->completeTrans();
     }
 
-    public function setup(): void
+    public function xsetup(): void
     {
         parent::setup();
 
@@ -116,7 +148,7 @@ class RecordCountTest extends ADOdbCoreSetup
     public function testRecordCountWithoutBind(): void
     {
 
-        $this->db->startTrans();
+        //$this->db->startTrans();
 
         $SQL = "SELECT * FROM insert_auto 
                  WHERE id<51";
@@ -128,7 +160,7 @@ class RecordCountTest extends ADOdbCoreSetup
             'RecordCount shoud return 50 from base SELECT'
         );
 
-        $this->db->completeTrans();
+        //$this->db->completeTrans();
     }
 
      /**
@@ -140,7 +172,7 @@ class RecordCountTest extends ADOdbCoreSetup
     {
 
 
-        $this->db->startTrans();
+        //$this->db->startTrans();
 
         $p1 = $this->db->param('p1');
 
@@ -156,7 +188,7 @@ class RecordCountTest extends ADOdbCoreSetup
             'RecordCount shoud return 50 from SELECTLIMIT'
         );
 
-        $this->db->completeTrans();
+        //$this->db->completeTrans();
     }
 
     /**
@@ -178,7 +210,5 @@ class RecordCountTest extends ADOdbCoreSetup
             $result->po_recordcount(),
             'po_recordcount should return 100 rows for a select statement'
         );
-
-        $this->db->completeTrans();
     }
 }

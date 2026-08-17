@@ -66,6 +66,23 @@ class BlobHandlingTest extends ADOdbTestCase
 
 
         $db = $GLOBALS['ADOdbConnection'];
+
+
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = "DROP TABLE IF EXISTS blob_storage_table";
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+
+        }
+
         /*
         * Load the table to test data length tests
         */

@@ -44,6 +44,21 @@ class HelperFunctions extends ADOdbTestCase
     {
         $db        = $GLOBALS['ADOdbConnection'];
 
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = 'DROP TABLE IF EXISTS autoexecute';
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+
+        }
+
         /*
         *load Data into the table, checking for driver specific loader
         */
