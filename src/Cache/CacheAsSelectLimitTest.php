@@ -61,9 +61,12 @@ class CacheAsSelectLimitTest extends ADOdbCoreSetup
 
         $returnedRows = array();
 
-        foreach ($result as $index => $row) {
+        while ($row = $result->fetchRow()) {
+        //foreach ($result as $index => $row) {
             $returnedRows[] = $row;
         }
+
+        //print_r($returnedRows);
 
         if ($fetchMode == ADODB_FETCH_BOTH) {
             $returnedRows  = $this->sortFetchBothRecords($returnedRows);

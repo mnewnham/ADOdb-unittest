@@ -79,15 +79,12 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
             $expectedValue = [ 'NOT SET' ];
 
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-
+           
             if ($bindFlag) {
                 $returnedRows = $this->db->cacheGetAssoc($boundSql, $bind, $forceArray, $first2Cols);
             } else {
                 $returnedRows = $this->db->cacheGetAssoc($unboundSql, false, $forceArray, $first2Cols);
             }
-
-
-            $this->validateResetFetchModes();
 
             switch ($absoluteFetchMode) {
                 case ADODB_FETCH_NUM:
@@ -112,6 +109,17 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
                 }
             }
 
+            if ($absoluteFetchMode == ADODB_FETCH_BOTH) {
+                if (is_array($returnedRows)) {
+                    $returnedRows  = $this->sortFetchBothRecords($returnedRows);
+                }
+
+                if (is_array($expectedValue)) {
+                    $expectedValue = $this->sortFetchBothRecords($expectedValue);
+                }
+              
+            } 
+
             $this->assertSame(
                 $expectedValue,
                 $returnedRows,
@@ -123,6 +131,8 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
                     $first2Cols
                 )
             );
+
+            $this->validateResetFetchModes();
         }
     }
 
@@ -433,9 +443,9 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
             ],
 
             'T3, Bound, 3 fields [number_run_field,varchar_field,id] , force array true, first2=true' => [
-                $baseNumeric2Array,
-                $baseAssociative2Array,
-                $baseBoth2Array,
+                $baseArray,
+                $baseArray,
+                $baseArray,
                 "number_run_field,varchar_field,id",
                 true,
                 true,

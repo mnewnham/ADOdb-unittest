@@ -25,55 +25,60 @@ use MNewnham\ADOdbUnitTest\CoreModule\ADOdbCoreSetup;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Class MetaFunctionsTest
+ * Class CacheAsGetRowTest
  *
- * Test cases for for ADOdb Core functions
+ * Test cases for for using cacheGetRow() as a replacement
+ * for getRow()
  */
 class CacheAsGetRowTest extends ADOdbCoreSetup
 {
     /**
      * Test for {@see ADODConnection::getRow()]
      *
-     * @param int    $expectedValue The value to return
+     * @param int    $expectedValue The expected number of rows
      * @param string $sql           The SQL to execute
      * @param ?array $bind          Optional Bind
      *
      * @return void
      *
-     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:getrow
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cachegetrow
      */
     #[DataProvider('providerTestCacheAsGetRow')]
     public function testCacheAsGetRow(int $expectedValue, string $sql, ?array $bind): void
     {
 
+        $baseFields = [ 
+            '0' => 'ID',
+            '1' => 'VARCHAR_FIELD',
+            '2' => 'DATETIME_FIELD',
+            '3' => 'DATE_FIELD',
+            '4' => 'INTEGER_FIELD',
+            '5' => 'DECIMAL_FIELD',
+            '6' => 'BOOLEAN_FIELD',
+            '7' => 'EMPTY_FIELD',
+            '8' => 'NUMBER_RUN_FIELD'
+        ];
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-            $fields = [ '0' => 'ID',
-                        '1' => 'VARCHAR_FIELD',
-                        '2' => 'DATETIME_FIELD',
-                        '3' => 'DATE_FIELD',
-                        '4' => 'INTEGER_FIELD',
-                        '5' => 'DECIMAL_FIELD',
-                        '6' => 'BOOLEAN_FIELD',
-                        '7' => 'EMPTY_FIELD',
-                        '8' => 'NUMBER_RUN_FIELD'
-                      ];
+            $fields = array_map('strtoupper', $baseFields);
+            /*
+            $fields = [ 
+                '0' => 'ID',
+                '1' => 'VARCHAR_FIELD',
+                '2' => 'DATETIME_FIELD',
+                '3' => 'DATE_FIELD',
+                '4' => 'INTEGER_FIELD',
+                '5' => 'DECIMAL_FIELD',
+                '6' => 'BOOLEAN_FIELD',
+                '7' => 'EMPTY_FIELD',
+                '8' => 'NUMBER_RUN_FIELD'
+                ];
+            */
         } else {
-            $fields = [ '0' => 'id',
-                        '1' => 'varchar_field',
-                        '2' => 'datetime_field',
-                        '3' => 'date_field',
-                        '4' => 'integer_field',
-                        '5' => 'decimal_field',
-                        '6' => 'boolean_field',
-                        '7' => 'empty_field',
-                        '8' => 'number_run_field'
-                      ];
+            $fields = array_map('strtolower', $baseFields);
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
             $this->insertFetchMode($fetchMode);
-
-
 
             if ($bind == null) {
                 $record = $this->db->cacheGetRow($sql);
@@ -83,12 +88,10 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
 
             list($errno,$errmsg) = $this->assertADOdbError($sql, $bind);
 
-
-
             if ($expectedValue == 1) {
                 switch ($fetchMode) {
-                    case 1:
-                    case 4:
+                    case self::FETCH_GLOBAL_ASSOC:
+                    case self::FETCH_FETCHMODE_ASSOC:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $value,
@@ -100,8 +103,8 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
                             );
                         }
                         break;
-                    case 0:
-                    case 3:
+                    case self::FETCH_GLOBAL_NUM:
+                    case self::FETCH_FETCHMODE_NUM:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $key,
@@ -113,14 +116,14 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
                             );
                         }
                         break;
-                    case 2:
-                    case 5:
+                    case self::FETCH_GLOBAL_BOTH:
+                    case self::FETCH_FETCHMODE_BOTH:
                         foreach ($fields as $key => $value) {
                             $this->assertArrayHasKey(
                                 $value,
                                 $record,
                                 sprintf(
-                                    '[%s] Checking if associative key ' .
+                                    '[%s] Checking if associative key part of BOTH array ' .
                                     'exists in fields array',
                                     $fetchDescription
                                 )
@@ -132,7 +135,7 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
                                 $key,
                                 $record,
                                 sprintf(
-                                    '[%s] Checking if numeric key ' .
+                                    '[%s] Checking if numeric key part of BOTH array ' .
                                     'exists in fields array',
                                     $fetchDescription
                                 )
