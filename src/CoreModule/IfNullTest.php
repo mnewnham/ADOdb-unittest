@@ -67,18 +67,18 @@ class IfNullTest extends ADOdbTestCase
         * Now get a weird value back from the ifnull function
         */
 
-        $sql = "SELECT {$this->db->ifNull('decimal_field', 8675304)} 
+        $sql = "SELECT {$this->db->ifNull('decimal_field', 8675304.56)} 
                   FROM testtable_1 
                  WHERE number_run_field={$row[$firstColumn]}";
 
-        $expectedResult = (float)$this->db->getOne($sql);
+        $returnedValue = (float)$this->db->getOne($sql);
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
-            8675304,
-            $expectedResult,
-            'Test of ifnull function  should return 8675304'
+            8675304.56,
+            $returnedValue,
+            'Test of ifnull function  should return 8675304.56'
         );
 
         /*
