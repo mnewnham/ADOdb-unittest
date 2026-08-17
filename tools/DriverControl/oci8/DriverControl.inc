@@ -64,4 +64,11 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public $dateMethodExecutor = 'SELECT %s AS result FROM dual';
+
+    /**
+     * How to obtain the entire contents of the datetime_field
+     *
+     * @var string
+     */
+    public string $dateTimeField = "TO_CHAR(datetime_field, 'YYYY-MM-DD HH24:MI:SS')";
 }

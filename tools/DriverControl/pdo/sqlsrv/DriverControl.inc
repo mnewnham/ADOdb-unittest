@@ -16,7 +16,7 @@ class DriverControl extends \CoreControl
      *
      * @var integer
      */
-    public int $fetchBothManner = 0;
+    public int $fetchBothManner = 1;
 
     /**
      * Do updates to the data dictionary require transactional scope
@@ -24,6 +24,14 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $dictionaryRequireTransactions = false;
+
+    
+    /**
+     * What the qstr process should return as a quoted string
+     *
+     * @var string
+     */
+    public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
 
 
     public function __construct()

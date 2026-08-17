@@ -58,7 +58,7 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $qStrExpectedResult = "Famed author James O\'Sullivan";
+    public string $qStrExpectedResult = "Famed author James O''Sullivan";
 
      /**
      * For methods that test for databases, use schema instead
@@ -66,4 +66,11 @@ class DriverControl extends \CoreControl
      * @var mixed
      */
     public bool $databaseIsSchema = false;
+
+     /**
+     * For methods that test for ownership, what is the schema owner
+     *
+     * @var mixed
+     */
+    public mixed $schemaOwner = false;
 }

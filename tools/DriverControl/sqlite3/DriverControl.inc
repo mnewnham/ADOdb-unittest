@@ -10,6 +10,13 @@ class DriverControl extends \CoreControl
 {
     
     /**
+     * Indicates whether native mode casing is upper or lower
+     *
+     * @var integer
+     */
+    public int $nativeModeCasing = 0;
+
+    /**
      * What the qstr process should return as a quoted string
      *
      * @var string

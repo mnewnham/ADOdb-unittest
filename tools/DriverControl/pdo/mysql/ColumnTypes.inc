@@ -47,11 +47,11 @@ class columnTypes
         ['db' => 'TEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'TEXT(1000)'],
         ['db' => 'MEDIUMTEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'MEDIUMTEXT'],
         ['db' => 'LONGTEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'LONGTEXT'],
-        ['db' => 'ENUM', 'meta' => 'C', 'output' => 'ENUM', 'build' => "ENUM('cheddar','shropshire','wenslydale')"], //254
-        ['db' => 'SET', 'meta' => 'C', 'output' => 'ENUM', 'build' => "SET('plaice','haddock','cod')"], //254
+        ['db' => 'ENUM', 'meta' => 'E', 'output' => 'ENUM', 'build' => "ENUM('cheddar','shropshire','wenslydale')"],
+        ['db' => 'SET', 'meta' => 'E', 'output' => 'ENUM', 'build' => "SET('plaice','haddock','cod')"],
         ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT(1)'],
-        ['db' => 'BOOLEAN', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'BOOLEAN'],
-        ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'TINYINT(1)'],
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'],
+        ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'BOOLEAN', 'build' => 'TINYINT(1)'],
         ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT(10)'],
         ['db' => 'MEDIUMINT', 'meta' => 'I4', 'output' => 'INTEGER', 'build' => 'MEDIUMINT(10)'],
         ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER(10)'],
@@ -61,10 +61,10 @@ class columnTypes
         ['db' => 'DOUBLE', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'DOUBLE(14,12)'],
         ['db' => 'DOUBLE PRECISION', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'DOUBLE PRECISION(16,12)'],
         ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'DECIMAL(16,2)'],
-        ['db' => 'DATETIME', 'meta' => 'DT', 'output' => 'DATETIME', 'build' => 'DATETIME'],
+        ['db' => 'DATETIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'DATETIME'],
         ['db' => 'TIMESTAMP', 'meta' => 'T', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
-        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIMESTAMP', 'build' => 'TIME'],
+        ['db' => 'TIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'TIME'],
         ['db' => 'YEAR', 'meta' => 'D', 'output' => 'DATE', 'build' => 'YEAR'],
 
     ];
