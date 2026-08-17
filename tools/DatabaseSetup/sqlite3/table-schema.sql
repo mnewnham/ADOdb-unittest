@@ -18,6 +18,8 @@ DROP TABLE IF EXISTS xml_schema_test;
 -- Acting as a sequence
 DROP TABLE IF EXISTS unittest_seq;
 
+DROP TABLE IF EXISTS autoexecute;
+
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (

@@ -21,6 +21,13 @@ DROP TABLE IF EXISTS insertion_table_renamed;
 
 DROP TABLE IF EXISTS testtable_3;
 
+DROP SEQUENCE seq_test_1;
+DROP SEQUENCE seq_test_2;
+DROP SEQUENCE unittest_genid_no;
+
+CREATE SEQUENCE seq_test_1 START WITH 1 NO MAXVALUE NO CYCLE INCREMENT BY 1 NO CACHE;
+CREATE SEQUENCE seq_test_2 START WITH 1 NO MAXVALUE NO CYCLE INCREMENT BY 1 NO CACHE;
+
 
 DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests

@@ -11,6 +11,14 @@ DROP VIEW IF EXISTS testtable_1_view;
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
+DROP SEQUENCE IF EXISTS seq_test_1;
+DROP SEQUENCE IF EXISTS seq_test_2;
+DROP SEQUENCE IF EXISTS unittest_genid_no;
+
+-- CREATE SEQUENCE unittest_genid_no START 50;
+CREATE SEQUENCE seq_test_1 START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_test_2 START WITH 1 INCREMENT BY 1;
+
 
 DROP TABLE IF EXISTS testtable_3;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
@@ -73,7 +81,7 @@ CREATE VIEW testtable_1_view AS
 CREATE TABLE testtable_3 (
 id INTEGER NOT NULL,
     varchar_field VARCHAR(20),
-    datetime_field TIMESTAMP,
+    datetime_field DATE,
     date_field DATE,
     integer_field SMALLINT NOT NULL,
     decimal_field NUMBER(12,2),

@@ -17,6 +17,9 @@ DROP TABLE IF EXISTS xml_schema_test;
 
 DROP TABLE IF EXISTS custom_metatype_test;
 
+DROP TABLE IF EXISTS unittest_genid_no;
+DROP TABLE IF EXISTS unittest_seq_no;
+
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 -- Comment on index vdx1 is read by the index comment test
@@ -27,7 +30,7 @@ CREATE TABLE testtable_1 (
 	datetime_field DATETIME,
 	date_field DATE,
 	integer_field INT(2) DEFAULT 0,
-	decimal_field decimal(12.2) DEFAULT 0,
+	decimal_field decimal(12.2) DEFAULT 6,
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
@@ -50,7 +53,7 @@ CREATE TABLE testtable_3 (
 	datetime_field DATETIME,
 	date_field DATE,
 	integer_field INT(2) DEFAULT 0,
-	decimal_field decimal(12.2) DEFAULT 0,
+	decimal_field decimal(12,2) DEFAULT 6,
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,

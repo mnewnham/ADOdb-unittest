@@ -15,6 +15,15 @@ DROP TABLE IF EXISTS testtable_1;
 -- This table will be built by XMLschema tests
 DROP TABLE IF EXISTS xml_schema_test;
 
+DROP SEQUENCE IF EXISTS seq_test_1;
+DROP SEQUENCE IF EXISTS seq_test_2;
+DROP SEQUENCE IF EXISTS unittest_genid_no;
+
+-- CREATE SEQUENCE unittest_genid_no START 50;
+CREATE SEQUENCE seq_test_1 START 1;
+CREATE SEQUENCE seq_test_2 START 1;
+
+
 DROP TYPE IF EXISTS ENUM_FIELD_TO_KEEP_ENUM_TYPE;
 
 -- Testtable_1 is used to test the basic functionality of the meta functions

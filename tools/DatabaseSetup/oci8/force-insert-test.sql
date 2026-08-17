@@ -8,10 +8,11 @@ DROP TRIGGER IF EXISTS adodb_force_insert_t;
 CREATE TABLE adodb_force_insert (
 	id INTEGER NOT NULL,
 	varchar_field VARCHAR(20),
-	datetime_field DATETIME,
+	another_varchar_field VARCHAR(20),
+	datetime_field DATE,
 	date_field DATE,
 	integer_field SMALLINT,
-	decimal_field NUMBER(12.2),
+	decimal_field NUMBER(12,2),
 	boolean_field NUMBER(1,0),
 	trigger_field SMALLINT
 );
@@ -22,3 +23,4 @@ CREATE SEQUENCE adodb_force_insert_seq
     START WITH 1;
 
 CREATE OR REPLACE TRIGGER adodb_force_insert_t BEFORE insert ON adodb_force_insert FOR EACH ROW WHEN (NEW.id IS NULL OR NEW.id=0) BEGIN select adodb_force_insert_seq.nextval into :new.id from dual; END; ;
+

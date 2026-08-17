@@ -9,6 +9,13 @@ DROP TABLE IF EXISTS insert_manual;
 DROP TABLE IF EXISTS insertion_table;
 DROP TABLE IF EXISTS insertion_table_renamed;
 
+DROP SEQUENCE IF EXISTS seq_test_1;
+DROP SEQUENCE IF EXISTS seq_test_2;
+DROP SEQUENCE IF EXISTS unittest_genid_no;
+
+CREATE SEQUENCE seq_test_1 START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_test_2 START WITH 1 INCREMENT BY 1;
+
 DROP TABLE IF EXISTS testtable_3;
 
 DROP INDEX IF EXISTS integer_field_index ON xml_schema_test ;

@@ -7,7 +7,7 @@ INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_fie
 INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (6, 'LINE 6','2025-06-01',9006,1000.51,null,'',6);
 INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (7, 'LINE 7','2025-07-01',9007,1000.61,null,'',7);
 INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (8, 'LINE 8','2025-08-01',9008,1000.71,null,'',8);
-INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (9, 'LINE 9','1959-08-29',9009,1000.81,null,'',9);
+INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field, datetime_field) values (9, 'LINE 9','1959-08-29',9009,1000.81,null,'',9, '1959-08-29 01:50:30');
 INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (10, 'LINE 10','2025-10-01',9010,1000.91,null,'',10);
 INSERT INTO testtable_3 (id, varchar_field,date_field, integer_field,decimal_field,boolean_field, empty_field,number_run_field) values (11, 'LINE 11','1725-11-01',-9011,-1000.11,null,'',11);
 -- Insert a record to test foreign key constraints

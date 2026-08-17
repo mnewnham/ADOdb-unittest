@@ -1,7 +1,7 @@
 -- Standard format for testing autoexecute based functions
 -- used by all the test in /Helpers
 
-DROP TABLE IF EXISTS autoexecute;
+-- DROP TABLE IF EXISTS autoexecute;
 
 CREATE TABLE autoexecute (
 	id INTEGER,
