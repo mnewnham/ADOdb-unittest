@@ -111,6 +111,10 @@ class GetAssocTest extends ADOdbCoreSetup
                     $returnedRows[$key][$vKey] = (string)$vValue;
                 }
             }
+  
+            if ($absoluteFetchMode == ADODB_FETCH_BOTH) {
+                $returnedRows = $this->validateFetchBothRecords($expectedValue, $returnedRows);
+            } 
 
             $this->assertSame(
                 $expectedValue,
@@ -153,6 +157,8 @@ class GetAssocTest extends ADOdbCoreSetup
         int $first2Cols
     ): void {
 
+        $expectedValue = '';
+
         $unboundSql = "SELECT $fields
                 FROM testtable_3 
                 WHERE number_run_field BETWEEN 2 AND 6
@@ -171,14 +177,13 @@ class GetAssocTest extends ADOdbCoreSetup
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-
+          
             if ($bindFlag) {
                 $returnedRows = $this->db->execute($boundSql, $bind)->getAssoc($forceArray, $first2Cols);
             } else {
                 $returnedRows = $this->db->execute($unboundSql, false)->getAssoc($forceArray, $first2Cols);
             }
-
-
+           
             $this->validateResetFetchModes();
 
             switch ($absoluteFetchMode) {
@@ -190,6 +195,7 @@ class GetAssocTest extends ADOdbCoreSetup
                     break;
                 case ADODB_FETCH_BOTH:
                 case ADODB_FETCH_DEFAULT:
+                
                     $expectedValue = $expectedBothValue;
                     break;
             }
@@ -203,6 +209,10 @@ class GetAssocTest extends ADOdbCoreSetup
                     $returnedRows[$key][$vKey] = (string)$vValue;
                 }
             }
+
+            if ($absoluteFetchMode == ADODB_FETCH_BOTH) {
+                $returnedRows = $this->validateFetchBothRecords($expectedValue, $returnedRows);
+            } 
 
             $this->assertSame(
                 $expectedValue,
@@ -431,9 +441,9 @@ class GetAssocTest extends ADOdbCoreSetup
             ],
 
             'T3, Bound, 3 fields [number_run_field,varchar_field,id] , force array true, first2=true' => [
-                $baseNumeric2Array,
-                $baseAssociative2Array,
-                $baseBoth2Array,
+                $baseArray,
+                $baseArray,
+                $baseArray,
                 "number_run_field,varchar_field,id",
                 true,
                 true,
