@@ -4,10 +4,10 @@ DROP TABLE IF EXISTS session_test;
 
 CREATE TABLE session_test (
   sesskey VARCHAR( 64 ) DEFAULT '',
-  expiry TIMESTAMP NOT NULL ,
+  expiry DATE NOT NULL ,
   expireref VARCHAR( 250 ) DEFAULT '',
-  created TIMESTAMP NOT NULL ,
-  modified TIMESTAMP NOT NULL ,
+  created DATE NOT NULL ,
+  modified DATE NOT NULL ,
   sessdata CLOB,
   PRIMARY KEY ( sesskey )
 );
