@@ -231,4 +231,117 @@ class OffsetDateTest extends ADOdbTestCase
             'Offset date using negative hours should return the date 5 hours in the past'
         );
     }
+
+    /**
+     * Test for {@see ADOConnection::offsetDate())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:offsetdate
+     *
+     * @return void
+     */
+    public function testOffsetDateUsingFraction(): void {
+
+        
+        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+
+        $offsetHours = 1440/(24*3600); // Convert days to hours
+
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $this->db->offsetDate($offsetHours)
+        );
+
+        list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+        $od = $this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->assertSame(
+            $nowStamp,
+            $od,
+            'Offset date using date fraction should return the date 1440 seconds in the future'
+        );
+    }
+
+    /**
+     * Test for {@see ADOConnection::offsetDate()) using offsetDate to construct a value
+     * and writing it back into the database
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:offsetdate
+     *
+     * @return void
+     */
+    public function testOffsetWriteUsingFractionAndDateField(): void
+    {
+
+        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+
+        $offset = 1440/(24*3600); // Convert days to hours
+
+        /*
+        * Set the base date column to the current time 
+        */
+        $sql = "UPDATE testtable_3
+                   SET date_field={$this->db->offsetDate($offset, false, true)}
+                 WHERE number_run_field=8";
+
+        $this->db->execute($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $sql = "SELECT {$GLOBALS['DriverControl']->dateField}
+                  FROM testtable_3 
+                 WHERE number_run_field=8";
+        list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+
+        $od = $this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->assertSame(
+            $nowStamp,
+            $od,
+            'Offset date using a column as the base date should ' .
+            'return the date 1440 seconds in the future based on the date_field column'
+        );
+    }
+
+     /**
+     * Test for {@see ADOConnection::offsetDate()) Simulating the type of update used
+     * for session management
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:offsetdate
+     *
+     * @return void
+     */
+    public function testOffsetReadUsingFractionAndDateField(): void
+    {
+
+        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+
+        $offset = 1440/(24*3600); // Convert days to hours
+
+        /*
+        * Set the base date column to the current time 
+        */
+        $sql = "UPDATE testtable_3
+                   SET date_field={$this->db->sysTimeStamp}
+                 WHERE number_run_field=8";
+
+        $this->db->execute($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $sql = "SELECT {$this->db->offsetDate($offset, 'date_field')}
+                  FROM testtable_3 
+                 WHERE number_run_field=8";
+        list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
+
+        $od = $this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->assertSame(
+            $nowStamp,
+            $od,
+            'Offset date using a column as the base date should ' .
+            'return the date 1440 seconds in the future based on the date_field column'
+        );
+    }
+
 }
