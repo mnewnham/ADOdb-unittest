@@ -136,6 +136,13 @@ class CoreControl
      *
      * @var string
      */
+    public string $dateField = 'date_field';
+
+    /**
+     * How to obtain the entire contents of the datetime_field
+     *
+     * @var string
+     */
     public string $dateTimeField = 'datetime_field';
 
 }
