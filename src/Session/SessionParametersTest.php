@@ -58,8 +58,12 @@ class SessionParametersTest extends ADOdbTestCase
             $clob = $sessionParams['clob'];
         }
 
+        if (!isset($GLOBALS['credentials']['parameters']) || !$GLOBALS['credentials']['parameters']) {
+            $GLOBALS['credentials']['parameters'] = [];
+        }
+
         $testItems = array_merge(
-            $GLOBALS['credentials'],
+           
             [
                 'table' => 'session_test',
                 'lifetime' => 1440,
@@ -67,7 +71,8 @@ class SessionParametersTest extends ADOdbTestCase
                 'persist' => $persist,
                 'parameters' => new \stdClass(),
                 'clob' => $clob
-            ]
+            ],
+            $GLOBALS['credentials'],
         );
 
         if (isset($GLOBALS['credentials']['dsn']) &&  $GLOBALS['credentials']['dsn']) {
@@ -98,7 +103,7 @@ class SessionParametersTest extends ADOdbTestCase
             )
         );
 
-        foreach (['table', 'driver','host', 'user', 'password', 'database', 'lifetime', 'persist', 'parameters', 'clob', 'encryption_key'] as $cred) {
+        foreach (['table', 'driver','host', 'user', 'password', 'database', 'lifetime', 'persist', 'clob', 'encryption_key'] as $cred) {
             $this->assertEquals(
                 $testItems[$cred],
                 $idObject->staticData->$cred,
