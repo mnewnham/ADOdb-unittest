@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Base Tests cases for driver specific string quoting
  *
@@ -19,14 +18,14 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest\Drivers;
+namespace MNewnham\ADOdbUnitTest\CoreModule;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ADOdbStringQuoting
- * Base Class for custom driver tests
+ * Test how strings are quoted for database insertion
  */
 
 class StringQuotingTest extends ADOdbTestCase
@@ -85,12 +84,10 @@ class StringQuotingTest extends ADOdbTestCase
         * Check that the escaping is correct
         */
         $this->assertSame(
+            "'{$GLOBALS['DriverControl']->qStrExpectedResult}'",
             $qStrInboundValue,
-            "'$this->qStrExpectedResult'",
             'The qstr() method should escape the inbound string correctly'
         );
-
-
 
         $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
 
@@ -148,10 +145,11 @@ class StringQuotingTest extends ADOdbTestCase
         * insert the string into the empty_field column
         * and see if it fails to insert or not.
         */
+        $qString = $this->db->addQ($this->qStrInboundValue);
         $this->db->param(false);
         $p1 = $this->db->param('p1');
         $bind = array(
-            'p1' => $this->db->addQ($this->qStrInboundValue)
+            'p1' => $qString
         );
 
         $sql = "UPDATE testtable_3 SET empty_field = $p1";
@@ -213,9 +211,9 @@ class StringQuotingTest extends ADOdbTestCase
         * Check that the escaping is correct
         */
         $this->assertSame(
+            'NULL',
             $qStrInboundValue,
-            "NULL",
-            'The qstr() method should escape the inbound string correctly'
+            'The qstr() method should create a string representing the null value for adding to an SQL statement'
         );
 
         $SQL = "UPDATE testtable_3 SET empty_field = $qStrInboundValue";
@@ -236,7 +234,7 @@ class StringQuotingTest extends ADOdbTestCase
         $this->assertSame(
             $expectedValue,
             $actualValue,
-            'All rows should have been updated with the test string'
+            'All rows should have been updated with a null value'
         );
 
         // Now we will check the value in the empty_field column
@@ -252,11 +250,9 @@ class StringQuotingTest extends ADOdbTestCase
             return;
         }
 
-        $this->assertSame(
-            null,
-            $returnValue,
-            'Qstr should have returned a string with the apostrophe ' .
-            'set back to normal after retrieval from DB'
+        $this->assertTrue(
+            (NULL == $returnValue),
+            'Qstr should have returned a string set to NULL'
         );
     }
 
@@ -283,10 +279,17 @@ class StringQuotingTest extends ADOdbTestCase
         * insert the string into the empty_field column
         * and see if it fails to insert or not.
         */
+
+        $nullString = $this->db->addQ(null);
+        $this->assertTrue(
+            (NULL === $nullString),
+            "AddQ() should return NULL in preparation for use in _query"
+        );
+
         $this->db->param(false);
         $p1 = $this->db->param('p1');
         $bind = array(
-            'p1' => $this->db->addQ(null)
+            'p1' => $nullString
         );
 
         $sql = "UPDATE testtable_3 SET empty_field = $p1";
@@ -318,8 +321,148 @@ class StringQuotingTest extends ADOdbTestCase
         $this->assertSame(
             null,
             $returnValue,
-            'addQ should have returned a string with the apostrophe ' .
-            'set back to normal after retrieval from DB'
+            'empty_field should now only contain null values'
+        );
+    }
+
+    /**
+     * Test for {@see ADODConnection::qstr()}
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:qstr
+     *
+     * @return void
+     */
+    public function testSendZeroToQstr(): void
+    {
+        /*
+        * Reset  the empty_field column first to ensure that
+        * the total number of rows updated is correct
+        */
+        $SQL = "UPDATE testtable_3 SET empty_field = 'NOT EMPTY'";
+
+        $this->db->startTrans();
+        $this->db->execute($SQL);
+        $this->db->completeTrans();
+
+        $zeroString = $this->db->qstr(0);
+
+        /*
+        * Check that the escaping is correct
+        */
+        $this->assertSame(
+            "'0'",
+              $zeroString,
+            'The qstr() method should return a quoted zero string \'0\' correctly'
+        );
+
+        $SQL = "UPDATE testtable_3 SET empty_field = $zeroString";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($SQL);
+
+        if ($errno > 0) {
+            return;
+        }
+
+        $expectedValue = 11;
+        $actualValue = $this->getAffectedRows();
+
+        list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
+
+
+        // We should have updated 11 rows
+        $this->assertSame(
+            $expectedValue,
+            $actualValue,
+            'All rows should have been updated with a zero value'
+        );
+
+        // Now we will check the value in the empty_field column
+        $sql = "SELECT empty_field FROM testtable_3";
+
+        $this->db->startTrans();
+        $returnValue = $this->db->getOne($sql);
+
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->db->CompleteTrans();
+        if ($errno > 0) {
+            return;
+        }
+
+        $this->assertSame(
+            '0',
+            $returnValue,
+            'Qstr should have returned a string set to 0'
+        );
+    }
+
+    /**
+     * Test for {@see ADODConnection::addq()}
+     *
+     * @link   https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:addq
+     * @return void
+     */
+    public function testSendZeroToAddq(): void
+    {
+
+        /*
+        * Reset  the empty_field column first to ensure that
+        * the total number of rows updated is correct
+        */
+        $SQL = "UPDATE testtable_3 SET empty_field = 'NOT EMPTY'";
+
+        $this->db->startTrans();
+        $this->db->execute($SQL);
+        $this->db->completeTrans();
+        /*
+        * The expected result is db dependent, so we will
+        * insert the string into the empty_field column
+        * and see if it fails to insert or not.
+        */
+
+        $zeroString = $this->db->addQ(0);
+        $this->assertSame(
+            '0',
+            $zeroString,
+            "AddQ() should return an unquoted zero in preparation for use in _query"
+        );
+
+        $this->db->param(false);
+        $p1 = $this->db->param('p1');
+        $bind = array(
+            'p1' => $zeroString
+        );
+
+        $sql = "UPDATE testtable_3 SET empty_field = $p1";
+
+        list($result, $errno, $errmsg) = $this->executeSqlString($sql, $bind);
+
+        if ($errno > 0) {
+            return;
+        }
+
+        $affectedRows =  $this->getAffectedRows();
+
+        list($errno, $errmsg) = $this->assertADOdbError('Affected_Rows()');
+
+        // We should have updated 11 rows
+        $this->assertSame(
+            11,
+            $affectedRows,
+            'All rows should have been updated with the test string'
+        );
+
+        // Now we will check the value in the empty_field column
+        $sql = "SELECT empty_field FROM testtable_3";
+
+        $returnValue = $this->db->getOne($sql);
+
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
+        $this->assertSame(
+            '0',
+            $returnValue,
+            'empty_field should now only contain zero values'
         );
     }
 }
