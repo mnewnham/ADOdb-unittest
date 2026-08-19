@@ -57,11 +57,17 @@ class ActivateSessionTest
         $acc = new ActivateCompatConnection(true);
         $acc->startup();
 
-        $_SESSION['integer_field']++;
+        if (isset($_SESSION['integer_field'])) {
+            $_SESSION['integer_field']++;
+        }
 
         $cls = new \stdClass();
         $cls->session = $_SESSION;
+        $cls->error   = '';
         $cls->test    = 'testReadSession';
+        if (!isset($_SESSION['integer_field'])) {
+            $cls->error = 'integer_field is missing';
+        }
 
         print json_encode($cls);
     }
