@@ -66,6 +66,14 @@ class ADOdbTestCase extends TestCase
         '[3] ADODB_FETCH_BOTH'
     ];
 
+    protected array $forceModeDescriptions = [
+        '[0] ADODB_FORCE_IGNORE',
+		'[1] ADODB_FORCE_NULL',
+		'[2] ADODB_FORCE_EMPTY',
+		'[3] ADODB_FORCE_VALUE',
+		'[4] ADODB_FORCE_NULL_AND_ZERO'
+    ];
+
     const FETCH_GLOBAL_NUM = 0;
     const FETCH_GLOBAL_ASSOC = 1;
     const FETCH_GLOBAL_BOTH = 2;
@@ -498,7 +506,8 @@ class ADOdbTestCase extends TestCase
      * method sorts them to all numeric keysJ followed by all associative keys.
      * That way we can get a standardized data set for comparisons
      *
-     * @param array $inputArray The data to sort
+     * @param array $expectedRows The expected data
+     * @param array $returnedRows The actual data
      *
      * @return array
      */
