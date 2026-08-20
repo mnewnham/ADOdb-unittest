@@ -90,8 +90,6 @@ class ChangeTableTest extends DataDictFunctions
             $flds
         );
 
-        //print_r($sqlArray); exit;
-
         $this->assertIsArray(
             $sqlArray,
             'changeTableSql() should alway return an array'
