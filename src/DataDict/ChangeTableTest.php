@@ -83,7 +83,9 @@ class ChangeTableTest extends DataDictFunctions
             XL_FIELD XL
             ";
         
-        $this->db->startTrans();
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->startTrans();
+        }
 
         $sqlArray = $this->dataDictionary->changeTableSQL(
             $this->testTableName,
@@ -107,8 +109,10 @@ class ChangeTableTest extends DataDictFunctions
             return;
         }
 
-        $this->db->completeTrans();
-
+        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+            $this->db->completeTrans();
+        }
+        
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
         $this->assertArrayHasKey(
