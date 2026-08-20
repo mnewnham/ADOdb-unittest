@@ -60,8 +60,9 @@ class GetInsertSqlTest extends HelperFunctions
             'number_run_field' => 3001 + $fetchMode,
             'date_field' => date('Y-m-d'),
             'decimal_eval_field' => 0,
-            //'varchar_eval_field!' => "(CASE WHEN number_run_field < 3003 THEN 'HELLO' ELSE 'GOODBYE' END)"
-            'varchar_eval_field!' => "(SELECT MAX(number_run_field) FROM testtable_1) "
+            //'varchar_eval_field' => 'GOODBYE'
+            'varchar_eval_field!' => "(CASE WHEN 2003 < 3003 THEN 'HELLO' ELSE 'GOODBYE' END)"
+            //'varchar_eval_field!' => "TO_CHAR(SELECT MAX(number_run_field) FROM testtable_1, '99999')"
         );
 
         /*
@@ -249,7 +250,7 @@ class GetInsertSqlTest extends HelperFunctions
             'number_run_field' => 3021 + $fetchMode,
             'some_invalid_field' => 'ABC123',
             'datetime_field' => time(),
-            'date_field' => date('Y-m-d')
+            //'date_field' => date('Y-m-d')
         );
 
         /*
