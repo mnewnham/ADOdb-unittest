@@ -57,7 +57,6 @@ class ActiveRecordTest extends ADOdbTestCase
         /*
         *load Active record Table and Data into the table
         */
-        $db->startTrans();
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/active-record-schema.sql',
