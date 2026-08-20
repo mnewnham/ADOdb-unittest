@@ -27,7 +27,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class ForceInsertTest
  *
- * Test cases for for ADOdb XMLSchema functions
+ * Test cases for for ADOdb Force mode settings. 
+ * 
+ * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_force_type
  */
 class ForceInsertTest extends ADOdbTestCase
 {
@@ -46,14 +48,18 @@ class ForceInsertTest extends ADOdbTestCase
     public static function setUpBeforeClass(): void
     {
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $GLOBALS['ADOdbConnection']->startTrans();
-        }
+     //$GLOBALS['ADOdbConnection']->debug = true;
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+       
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $GLOBALS['ADOdbConnection']->startTrans();
+            }
 
-        $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS force_insert_test");
+            $GLOBALS['ADOdbConnection']->execute("DROP TABLE IF EXISTS force_insert_test");
 
-        if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
-            $GLOBALS['ADOdbConnection']->completeTrans();
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $GLOBALS['ADOdbConnection']->completeTrans();
+            }
         }
     }
 
@@ -69,7 +75,7 @@ class ForceInsertTest extends ADOdbTestCase
     }
 
     /**
-     * Test the XML Schema creation
+     * Test Forcing the table creation without DB defaults
      *
      * @return void
      */
@@ -110,21 +116,23 @@ class ForceInsertTest extends ADOdbTestCase
      /**
      * Test for {@see ADODConnection::force insert()] Table Section
      *
-     * @param bool   $includesTable1
-     * @param string $filterType
-     * @param string $mask
-     *
+     * @param integer $forceMode        The ADODB_FORCE_MODE value
+     * @param array   $columnValueArray The values to insert
+     * 
      * @return void
      */
     #[DataProvider('providerTestDefaultColumns')]
-    public function testDefaultColumns(int $forceMode, array $columnValues): void
-    {
+    public function testDefaultColumns(
+        int $forceMode, 
+        array $columnValueArray
+        ): void {
 
+        $columnValues = array_values($columnValueArray);
         static $template = false;
 
-        global $ADODB_FORCE_MODE;
+        global $ADODB_FORCE_TYPE;
 
-        $ADODB_FORCE_MODE = $forceMode;
+        $ADODB_FORCE_TYPE = $forceMode;
 
         $this->db->startTrans();
         $this->db->execute('DELETE FROM adodb_force_insert');
@@ -144,7 +152,8 @@ class ForceInsertTest extends ADOdbTestCase
             */
         $ar = [
 
-            'varchar_field' => '',
+            'varchar_field' => 'SOME VALUE',
+            'another_varchar_field' => '',
             'datetime_field' => '',
             'date_field' => '',
             'integer_field' => '',
@@ -152,14 +161,16 @@ class ForceInsertTest extends ADOdbTestCase
             'boolean_field' => '',
             'trigger_field' => 9
         ];
-        //$this->db->debug = true;
+       
 
-        $ar = [
+        $vak = array_keys($ar);
+
+        $xar = [
             'varchar_field' => 'SOME VALUE'
         ];
 
         $tTable = 'adodb_force_insert';
-        $sql = $this->db->getInsertSql($template, $ar, false, $forceMode);
+        $sql = $this->db->getInsertSql($template, $ar, false);
 
         $this->db->startTrans();
         $response = $this->db->execute($sql);
@@ -209,19 +220,26 @@ class ForceInsertTest extends ADOdbTestCase
                 $expected = 'NULL';
             } elseif (strlen($columnValues[$index]) == 1) {
                 $expected = 'ZERO';
+            } elseif ($columnValues[$index] == 'ZERO') {
+                $expected = 'ZERO';
             } elseif ($columnValues[$index] == 'BLANK') {
                 $expected = 'BLANK';
             } elseif ($columnValues[$index] == '') {
                 $expected = 'NULL';
+            } elseif ($columnValues[$index] == 'NULL') {
+                $expected = 'NULL';
             }
+
+           //  print "FM=$forceMode {$this->forceModeDescriptions[$forceMode]} INDEX=$index V=$value CV={$columnValues[$index]} E=$expected A=$actual\n";
 
             $this->assertSame(
                 $expected,
                 $actual,
                 sprintf(
-                    'Force Mode [%s]: Index %s is %s, should be %s',
+                    'Force Mode [%s]: Index [%s] %s is %s, should be %s',
                     $this->forceModeDescriptions[$forceMode],
                     $index,
+                    $vak[$index],
                     $actual,
                     $expected
                 )
@@ -251,23 +269,66 @@ class ForceInsertTest extends ADOdbTestCase
 
             'ADODB_FORCE_IGNORE' => [
                 ADODB_FORCE_IGNORE,
-                [1, 'SOME VALUE', null, null, null, null, null]
+                [1, 'SOME VALUE', null, null, null, null, null, null]
             ],
             'ADODB_FORCE_NULL' => [
                 ADODB_FORCE_NULL,
-                 [2, 'SOME VALUE', null, null, null, null, null]
+                 //[2, 'SOME VALUE', null, null, null, null, null, null]
+                [
+                    'id' => 2,
+                    'varchar_field' => 'SOME VALUE',
+                    'another_varchar_field' => 'NULL',
+                    'datetime_field' => 'NULL',
+                    'date_field' => 'NULL',
+                    'integer_field' => 'NULL',
+                    'decimal_field' => 'NULL',
+                    'boolean_field' => 'NULL',
+                    'trigger_field' =>  0,
+                ]
             ],
             'ADODB_FORCE_EMPTY' => [
                 ADODB_FORCE_EMPTY,
-                [3, 'SOME VALUE', 0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
+                //[3, 'SOME VALUE', 'BLANK', null, null,0, 0, 0, 0, 0]
+                [
+                    'id' => 3,
+                    'varchar_field' => 'SOME VALUE',
+                    'another_varchar_field' => 'BLANK',
+                    'datetime_field' => 'NULL',
+                    'date_field' => 'NULL',
+                    'integer_field' => 'ZERO',
+                    'decimal_field' => 'ZERO',
+                    'boolean_field' => 'ZERO',
+                    'trigger_field' =>  0,
+                ]
             ],
             'ADODB_FORCE_VALUE' => [
-                ADODB_FORCE_VALUE,
-                 [4, 'SOME VALUE', 0, 'BLANK', 'BLANK', 'BLANK', 0, 0, 0]
+                ADODB_FORCE_VALUE, 
+                //[4, 'SOME_VALUE', null, null,null, null, 0, 0, 0, 0, 0]
+                [
+                    'id' => 4,
+                    'varchar_field' => 'SOME VALUE',
+                    'another_varchar_field' => 'BLANK',
+                    'datetime_field' => 'NULL',
+                    'date_field' => 'NULL',
+                    'integer_field' => 'ZERO',
+                    'decimal_field' => 'ZERO',
+                    'boolean_field' => 'ZERO',
+                    'trigger_field' =>  0,
+                ]
             ],
             'ADODB_FORCE_NULL_AND_ZERO' => [
                 ADODB_FORCE_NULL_AND_ZERO,
-                [5, 'SOME VALUE', 0, null, null, null, 0, 0, 0]
+                [
+                    'id' => 5,
+                    'varchar_field' => 'SOME VALUE',
+                    'another_varchar_field' => 'NULL',
+                    'datetime_field' => 'NULL',
+                    'date_field' => 'NULL',
+                    'integer_field' => 'ZERO',
+                    'decimal_field' => 'ZERO',
+                    'boolean_field' => 'ZERO',
+                    'trigger_field' =>  0,
+                ]
             ]
         ];
     }
