@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tests cases for FieldCount of ADODb
+ * Tests cases for FetchField of ADODb
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -64,6 +64,9 @@ class FetchFieldTest extends ADOdbCoreSetup
 
     /**
      * Test fetchField against an unbound statement
+     * 
+     * @param int    $fetchMode        The fetch mode
+     * @param string $fetchDescription The description
      *
      * @return void
      */
