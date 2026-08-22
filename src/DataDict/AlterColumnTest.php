@@ -80,7 +80,7 @@ class AlterColumnTest extends DataDictFunctions
         */
 
         $flds = " 
-            VARCHAR_FIELD VARCHAR(120) COMMENT 'THIS IS A COLUMN COMMENT'
+            VARCHAR_FIELD C(120) COMMENT 'THIS IS A COLUMN COMMENT'
             ";
 
         
