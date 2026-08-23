@@ -142,11 +142,7 @@ class GetInsertSqlTest extends HelperFunctions
         string $fetchDescription
     ): void {
 
-        $this->markTestSkipped(
-            'Using a string for the table name always fails currently and poisons the transaction scope of following tests'
-        );
-        return;
-
+       
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
@@ -337,12 +333,6 @@ class GetInsertSqlTest extends HelperFunctions
         int $fetchMode,
         string $fetchDescription
     ): void {
-
-
-        $this->markTestSkipped(
-            'Using a string for the table name always fails currently and poisons the transaction scope of following tests'
-        );
-        return;
 
         $this->insertFetchMode($fetchMode);
 
