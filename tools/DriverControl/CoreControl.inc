@@ -145,4 +145,18 @@ class CoreControl
      */
     public string $dateTimeField = 'datetime_field';
 
+    /**
+     * How to obtain the entire contents of the sqldate_test_field
+     *
+     * @var string
+     */
+    public string $sqlDateTestField = "sqldate_test_field";
+
+    /**
+     * How to obtain the entire contents of the offsetdate_test_field
+     *
+     * @var string
+     */
+    public string $offsetDateTestField = "offsetdate_test_field";
+
 }

@@ -19,9 +19,9 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest;
+namespace MNewnham\ADOdbUnitTest\DateFunctions;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\DateFunctions\DateHandling;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -29,13 +29,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for ADOdb date functions
  */
-class UnixFunctionsTest extends ADOdbTestCase
+class UnixFunctionsTest extends DateHandling
 {
-    public static function setUpBeforeClass(): void
-    {
-        $GLOBALS['ADOdbConnection']->_errorCode = 0;
-    }
-    
+        
     /**
      * Test for {@see ADOConnection::unixDate())
      *

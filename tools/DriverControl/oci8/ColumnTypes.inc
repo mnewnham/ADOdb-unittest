@@ -40,23 +40,17 @@ class columnTypes
         ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'NCHAR(10)'],
         ['db' => 'NVARCHAR2', 'meta' => 'C', 'output' => 'VARCHAR2', 'build' => 'NVARCHAR2(10)'],
         ['db' => 'NVARCHAR2', 'meta' => 'X', 'output' => 'TYPEX', 'build' => 'NVARCHAR2(1000)'],
-
         ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
         ['db' => 'DATE', 'meta' => 'T', 'output' => 'DATE', 'build' => 'DATE'],
-
         ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'],
         ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],
         ['db' => 'NCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'NCLOB'],
         ['db' => 'BFILE', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'BFILE'],
-
         ['db' => 'LONG', 'meta' => 'X', 'output' => 'VARCHAR(4000)', 'build' => 'LONG'],
        // ['db' => 'RAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'RAW(1000)'],
        // ['db' => 'LONGRAW', 'meta' => 'B', 'output' =>'BLOB', 'build' => 'LONG RAW'],
-
-
         ['db' => 'NUMBER(1)', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
         ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'NUMBER(1)', 'build' => 'NUMBER(1)'],
-
         ['db' => 'NUMBER(3)', 'meta' => 'I1', 'output' => 'NUMBER(3)', 'build' => 'NUMBER(3)'],
         ['db' => 'NUMBER(5)', 'meta' => 'I2', 'output' => 'NUMBER(5)', 'build' => 'NUMBER(5)'],
         ['db' => 'NUMBER(10)', 'meta' => 'I4', 'output' => 'NUMBER(10)', 'build' => 'NUMBER(10)'],

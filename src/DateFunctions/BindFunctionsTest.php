@@ -20,9 +20,9 @@
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
 
-namespace MNewnham\ADOdbUnitTest;
+namespace MNewnham\ADOdbUnitTest\DateFunctions;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\DateFunctions\DateHandling;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -30,12 +30,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for ADOdb date functions
  */
-class BindFunctionsTest extends ADOdbTestCase
+class BindFunctionsTest extends DateHandling
 {
-    public static function setUpBeforeClass(): void
-    {
-        $GLOBALS['ADOdbConnection']->_errorCode = 0;
-    }
+    
     /**
      * Test for {@see ADOConnection::userDate()}
      *
@@ -226,7 +223,7 @@ class BindFunctionsTest extends ADOdbTestCase
 
         $bind = [ 'p1' => $dbTs ];
 
-        $sql = 'SELECT * FROM testtable_1 WHERE datetime_field=' . sprintf("(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))",$dbTs);
+        $sql = 'SELECT * FROM date_columns_test WHERE datetime_field=' . sprintf("(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))",$dbTs);
 
         $result = $this->db->selectLimit($sql, 1, -1);
         
@@ -245,20 +242,5 @@ class BindFunctionsTest extends ADOdbTestCase
                 'OK'
             );
         }
-
-        //$actualNowTime = strtotime($this->db->getOne($sql));
-    /*
-
-        $this->assertSame(
-            $nowTime,
-            $actualNowTime,
-            sprintf(
-                'dbTimestamp should return a date that evaluates to the calculated timestamp, executed %s',
-                $dbTs
-            )
-        );
-
-    */
-
     }
 }

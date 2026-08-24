@@ -22,7 +22,7 @@
 
 namespace MNewnham\ADOdbUnitTest\DateFunctions;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\DateFunctions\DateHandling;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -30,12 +30,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for ADOdb date functions
  */
-class DatePeriodExtractionTest extends ADOdbTestCase
+class DatePeriodExtractionTest extends DateHandling
 {
-    public static function setUpBeforeClass(): void
-    {
-        $GLOBALS['ADOdbConnection']->_errorCode = 0;
-    }
+   
 
     /**
      * Test for {@see ADOConnection::year())
@@ -50,8 +47,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known year
         */
         $sql = "SELECT {$this->db->year('date_field')} 
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+                  FROM date_columns_test 
+                 WHERE id=2";
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -78,8 +75,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known month
         */
         $sql = "SELECT {$this->db->month('date_field')}
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+                  FROM date_columns_test 
+                 WHERE id=2";
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -108,9 +105,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known day
         */
         $sql = "SELECT {$this->db->day('date_field')} 
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
-
+                  FROM date_columns_test 
+                 WHERE id=2";
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -137,8 +133,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known year
         */
         $sql = "SELECT {$this->db->year('datetime_field')} 
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+                  FROM date_columns_test 
+                 WHERE id=2";
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -165,8 +161,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known month
         */
         $sql = "SELECT {$this->db->month('datetime_field')}
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+                  FROM date_columns_test 
+                 WHERE id=2";
 
         $testResult     = (string)$this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -195,8 +191,8 @@ class DatePeriodExtractionTest extends ADOdbTestCase
         * Retrieve a record with a known day
         */
         $sql = "SELECT {$this->db->day('datetime_field')} 
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+                  FROM date_columns_test 
+                 WHERE id=2";
 
 
         $testResult     = (string)$this->db->getOne($sql);

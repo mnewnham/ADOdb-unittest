@@ -22,7 +22,7 @@
 
 namespace MNewnham\ADOdbUnitTest\DateFunctions;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\DateFunctions\DateHandling;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -30,13 +30,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for ADOdb date functions
  */
-class SqlDateTest extends ADOdbTestCase
+class SqlDateTest extends DateHandling
 {
-    public static function setUpBeforeClass(): void
-    {
-        $GLOBALS['ADOdbConnection']->_errorCode = 0;
-    }
-
+    
     /**
      * Test for {@see ADOConnection::sqlDate())
      *
@@ -85,7 +81,7 @@ class SqlDateTest extends ADOdbTestCase
             case 3:
 
                 $sql = "SELECT id,{$GLOBALS['DriverControl']->dateTimeField}
-                        FROM testtable_3 
+                        FROM date_columns_test 
                         WHERE datetime_field IS NOT NULL ";
 
                 $this->db->storeFetchModes();
@@ -112,8 +108,8 @@ class SqlDateTest extends ADOdbTestCase
                 $dtSql =  $this->db->sqlDate($format, 'datetime_field');
                 $sql = sprintf(
                     "SELECT %s, {$GLOBALS['DriverControl']->dateTimeField} 
-                   FROM testtable_3
-                    WHERE id=%s",
+                       FROM date_columns_test
+                      WHERE id=%s",
                     $dtSql,
                     $baseData[0]
                 );
@@ -121,7 +117,15 @@ class SqlDateTest extends ADOdbTestCase
 
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
 
-                $row = array_values($this->db->getRow($sql));
+                $row = $this->db->getRow($sql);
+
+                if (!is_array($row)) {
+                    $message = 'Execution of ' . $sql . ' failed, continuing';
+                    $this->fail($message);
+                }
+
+                $row = array_values($row);
+
                 $actual = $row[0];
 
                 list($errno, $errmsg) = $this->assertADOdbError($sql);

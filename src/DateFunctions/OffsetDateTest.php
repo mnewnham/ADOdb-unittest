@@ -22,7 +22,7 @@
 
 namespace MNewnham\ADOdbUnitTest\DateFunctions;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
+use MNewnham\ADOdbUnitTest\DateFunctions\DateHandling;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -30,13 +30,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *
  * Test cases for ADOdb offset date functions
  */
-class OffsetDateTest extends ADOdbTestCase
+class OffsetDateTest extends DateHandling
 {
-    public static function setUpBeforeClass(): void
-    {
-        $GLOBALS['ADOdbConnection']->_errorCode = 0;
-    }
-
+   
     /**
      * Test for {@see ADOConnection::offsetDate())
      *
@@ -145,9 +141,9 @@ class OffsetDateTest extends ADOdbTestCase
         /*
         * Test using a column as the base date
         */
-        $sql = "SELECT date_field 
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+        $sql = "SELECT offsetdate_test_field 
+                  FROM date_columns_test 
+                 WHERE id=1";
 
         $dateField = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -155,9 +151,9 @@ class OffsetDateTest extends ADOdbTestCase
         $nowStamp = date('Y-m-d', strtotime($dateField . ' +168 hours'));
 
         $offset = 7; // 1 week
-        $sql = "SELECT {$this->db->offsetDate($offset, 'date_field')}
-                  FROM testtable_3 
-                 WHERE number_run_field=9";
+        $sql = "SELECT {$this->db->offsetDate($offset, 'offsetdate_test_field')}
+                  FROM date_columns_test 
+                 WHERE id=1";
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
 
         $od = $this->db->getOne($sql);
@@ -167,7 +163,7 @@ class OffsetDateTest extends ADOdbTestCase
             $nowStamp,
             $od,
             'Offset date using a column as the base date should ' .
-            'return the date 1 week in the future based on the date_field column'
+            'return the date 1 week in the future based on the offsetdate_test_field column'
         );
     }
 
@@ -280,16 +276,16 @@ class OffsetDateTest extends ADOdbTestCase
         /*
         * Set the base date column to the current time 
         */
-        $sql = "UPDATE testtable_3
-                   SET date_field={$this->db->offsetDate($offset, false, true)}
-                 WHERE number_run_field=8";
+        $sql = "UPDATE date_columns_test
+                   SET offsetdate_test_field={$this->db->offsetDate($offset, false, true)}
+                 WHERE id=1";
 
         $this->db->execute($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $sql = "SELECT {$GLOBALS['DriverControl']->dateField}
-                  FROM testtable_3 
-                 WHERE number_run_field=8";
+        $sql = "SELECT {$GLOBALS['DriverControl']->offsetDateTestField}
+                  FROM date_columns_test 
+                 WHERE id=1";
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
 
         $od = $this->db->getOne($sql);
@@ -321,16 +317,16 @@ class OffsetDateTest extends ADOdbTestCase
         /*
         * Set the base date column to the current time 
         */
-        $sql = "UPDATE testtable_3
-                   SET date_field={$this->db->sysTimeStamp}
-                 WHERE number_run_field=8";
+        $sql = "UPDATE date_columns_test
+                   SET offsetdate_test_field={$this->db->sysTimeStamp}
+                 WHERE id=1";
 
         $this->db->execute($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $sql = "SELECT {$this->db->offsetDate($offset, 'date_field')}
-                  FROM testtable_3 
-                 WHERE number_run_field=8";
+        $sql = "SELECT {$this->db->offsetDate($offset, 'offsetdate_test_field')}
+                  FROM date_columns_test 
+                 WHERE id=1";
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
 
         $od = $this->db->getOne($sql);
