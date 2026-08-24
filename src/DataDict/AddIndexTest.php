@@ -83,6 +83,11 @@ class AddIndexTest extends DataDictFunctions
             $indexOptions
         );
 
+        $this->assertIsArray(
+            $sqlArray,
+            'createIndexSql adding a unique index with a comment should return an executable SQL statement'
+        );
+
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
             return;
