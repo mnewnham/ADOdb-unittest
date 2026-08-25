@@ -127,7 +127,8 @@ class ForceInsertTest extends ADOdbTestCase
         array $columnValueArray
         ): void {
 
-        $columnValues = array_values($columnValueArray);
+        //$columnValues = array_values($columnValueArray);
+        $columnValues = array_change_key_case($columnValueArray, CASE_UPPER);
         static $template = false;
 
         global $ADODB_FORCE_TYPE;
@@ -163,7 +164,7 @@ class ForceInsertTest extends ADOdbTestCase
         ];
        
 
-        $vak = array_keys($ar);
+        $vak = array_change_key_case(array_keys($ar), CASE_UPPER);
 
         $xar = [
             'varchar_field' => 'SOME VALUE'
@@ -182,22 +183,20 @@ class ForceInsertTest extends ADOdbTestCase
             'If the record is created successfully'
         );
 
-
-        $this->db->setFetchMode(ADODB_FETCH_NUM);
+        $this->db->setFetchMode(ADODB_FETCH_ASSOC);
 
         $sql = "SELECT * FROM adodb_force_insert";
 
         $insertResult = $this->db->getRow($sql);
-
-        //print_r($insertResult);
-        //print_r($columnValues);
+        $insertResult = array_change_key_case($insertResult, CASE_UPPER);
 
         foreach ($insertResult as $index => $value) {
-            if ($index < 2) {
+            if (in_array($index, [ 'ID', 'VARCHAR_FIELD' ])) {
                 continue;
             }
-            if ($index == 7) {
-                break;
+
+            if (in_array($index, [ 'TRIGGER_FIELD' ])) {
+                continue;
             }
 
             $expected = 'UNKNOWN';
@@ -207,13 +206,14 @@ class ForceInsertTest extends ADOdbTestCase
                 $actual = 'NULL';
             } elseif ($value === 0) {
                 $actual = 'ZERO';
-            } elseif ($value == null) {
-                $actual = 'NULL';
-            } elseif ($value == '') {
+            } elseif ($value === '') {
                 $actual = 'BLANK';
             } elseif ((int)$value == 0) {
                 $actual = 'ZERO';
             }
+
+            //print "\nFM={$this->forceModeDescriptions[$forceMode]} Index=$index\n";
+           // print_r($columnValues);
 
 
             if (is_null($columnValues[$index])) {
@@ -236,10 +236,9 @@ class ForceInsertTest extends ADOdbTestCase
                 $expected,
                 $actual,
                 sprintf(
-                    'Force Mode [%s]: Index [%s] %s is %s, should be %s',
+                    'Force Mode [%s]: Index [%s] is %s, should be %s',
                     $this->forceModeDescriptions[$forceMode],
                     $index,
-                    $vak[$index],
                     $actual,
                     $expected
                 )
@@ -269,7 +268,17 @@ class ForceInsertTest extends ADOdbTestCase
 
             'ADODB_FORCE_IGNORE' => [
                 ADODB_FORCE_IGNORE,
-                [1, 'SOME VALUE', null, null, null, null, null, null]
+                [
+                    'id' => 1,
+                    'varchar_field' => 'SOME VALUE',
+                    'another_varchar_field' => null,
+                    'datetime_field' => null,
+                    'date_field' => null,
+                    'integer_field' => null,
+                    'decimal_field' => null,
+                    'boolean_field' => null,
+                    'trigger_field' =>  0,
+                ]
             ],
             'ADODB_FORCE_NULL' => [
                 ADODB_FORCE_NULL,
