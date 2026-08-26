@@ -84,6 +84,12 @@ class LengthTest extends ADOdbTestCase
             $db->updateClob('length_test', 'text_field', 'TEST567890TEST567890', 'id=1');
             $db->completeTrans();
         }
+
+        if ($GLOBALS['ADOdriver'] == 'db2') {
+            $db->startTrans();
+            $db->updateBlob('length_test', 'blob_field', 'TEST567890TEST567890', 'id=1');
+            $db->completeTrans();
+        }
     }
 
     /**
@@ -187,7 +193,7 @@ class LengthTest extends ADOdbTestCase
 
         foreach ($metaColumns as $col => $data) {
             $metaType = $this->db->metaType($data);
-            if (!in_array($metaType, ['C','C2','X','XL'])) {
+            if (!in_array($metaType, ['C','C2','B', 'X','XL'])) {
                 continue;
             }
             $valueColumns[] = sprintf(
@@ -217,6 +223,9 @@ class LengthTest extends ADOdbTestCase
         }
 
         foreach ($numericRow as $k => $v) {
+            if(!isset($valueColumns[$k])) {
+                continue;
+            }
             $this->assertEquals(
                 'TEST567890TEST567890',
                 $v,
