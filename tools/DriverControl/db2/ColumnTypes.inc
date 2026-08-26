@@ -37,17 +37,17 @@ class columnTypes
     public array $databaseFieldsDefinition = [
         ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],              //0
         ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],        //1
-        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(1)'],        //1
-        ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'BINARY', 'build' => 'BINARY'],         //2
-        ['db' => 'VARBINARY(30)', 'meta' => 'C2', 'output' => 'BINARY', 'build' => 'VARBINARY(30)'], //3
-        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'], //4
-        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'], //5
-        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],  //6
-        ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'], //7
-        ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],  //8
-        ['db' => 'DBCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'DBCLOB'],  //9
-        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'], //10
-        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'], //11
+        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(1)'],        //2
+        ['db' => 'VARGRAPHIC', 'meta' => 'C2', 'output' => 'VARGRAPHIC', 'build' => 'VARGRAPHIC(60)'],         //3
+        ['db' => 'VARBINARY(30)', 'meta' => 'C2', 'output' => 'VARGRAPHIC', 'build' => 'VARBINARY(30)'], //4
+        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'], //5
+        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'], //6
+        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],  //7
+        ['db' => 'BLOB', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BLOB'], //8
+        ['db' => 'CLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'CLOB'],  //9
+        ['db' => 'DBCLOB', 'meta' => 'XL', 'output' => 'CLOB', 'build' => 'DBCLOB'],  //10
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BOOLEAN'], //11
+        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'], //12
         ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'], //12
         ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'], //13
         ['db' => 'DECIMAL(5,3)', 'meta' => 'N', 'output' => 'DECIMAL', 'build' => 'DECIMAL(6,3)'], //14
