@@ -372,7 +372,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         if (count($fields) == 0) {
             $this->markTestSkipped(
-                'No I2 columns in database for test insertion'
+                'No I4 columns in database for test insertion'
             );
             return;
         }
