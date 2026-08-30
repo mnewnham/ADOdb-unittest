@@ -226,6 +226,26 @@ class BlobHandlingTest extends ADOdbTestCase
             return;
         }
 
+        /*
+        * Do some filesystem checks
+        */
+        $originalFileSize = filesize($this->testBlobFile);
+
+        $SQL = "SELECT {$this->db->length('blob_field', 'B')} 
+                  FROM {$this->testTableName} 
+                 WHERE integer_field=9002";
+
+        $blobLength = $this->db->getOne($SQL);
+
+        $this->assertGreaterThan(
+            $originalFileSize - 1,
+            $blobLength,
+            sprintf('Failed to insert Blob into database correctly, length should be at least %s, actually %s',
+            $originalFileSize,
+            $blobLength
+            )
+        );
+
         $newFileArray = explode('.', $this->testBlobFile);
         $extension = array_pop($newFileArray);
         $newFile = implode('.', $newFileArray) . '-decoded.' . $extension;
