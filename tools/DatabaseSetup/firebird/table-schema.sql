@@ -16,6 +16,7 @@ RECREATE TABLE TESTTABLE_1 (
 	boolean_field BOOLEAN DEFAULT 0,
     empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INTEGER DEFAULT 0,
+	blob_field BLOB,
 	PRIMARY KEY (id,integer_field)
 );
 -- PRINT Load additional indexes
@@ -57,6 +58,7 @@ RECREATE TABLE testtable_3 (
 	boolean_field BOOLEAN DEFAULT 0,
     empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INTEGER DEFAULT 0,
+	blob_field BLOB,
 	PRIMARY KEY (id,integer_field)
 );
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);

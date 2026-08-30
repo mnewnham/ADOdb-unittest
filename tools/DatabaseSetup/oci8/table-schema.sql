@@ -55,6 +55,7 @@ CREATE TABLE testtable_1 (
     boolean_field NUMBER(1,0),
     empty_field VARCHAR(240) DEFAULT '',
     number_run_field SMALLINT NOT NULL,
+    blob_field BLOB,
     PRIMARY KEY(id,integer_field)
 );
 CREATE	UNIQUE INDEX vdx1 ON testtable_1 (varchar_field);
@@ -87,7 +88,8 @@ id INTEGER NOT NULL,
     decimal_field NUMBER(12,2),
     boolean_field NUMBER(1,0) DEFAULT 1,
     empty_field VARCHAR(240) DEFAULT '',
-    number_run_field SMALLINT NOT NULL
+    number_run_field SMALLINT NOT NULL,
+    blob_field BLOB
 );
 
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);

@@ -34,6 +34,7 @@ CREATE TABLE testtable_1 (
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
+	blob_field BLOB,
 	PRIMARY KEY(id,integer_field),
 	UNIQUE INDEX vdx1 (varchar_field) COMMENT 'A1234567890',
 	UNIQUE INDEX vdx2 (integer_field,date_field),
@@ -57,6 +58,7 @@ CREATE TABLE testtable_3 (
 	boolean_field BOOLEAN DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
 	number_run_field INT(4) DEFAULT 0,
+	blob_field BLOB,
 	PRIMARY KEY(id,integer_field),
 	UNIQUE INDEX vdx31 (varchar_field),
 	UNIQUE INDEX vdx33 (number_run_field)
