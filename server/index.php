@@ -27,6 +27,9 @@ ob_start();
 require_once '../tools/dbconnector.php';
 ob_end_clean();
 
+$GLOBALS['ADOdbConnection']->stdOutputDebugging = false;
+$GLOBALS['ADOdbConnection']->noHtmlDebugging    = true;
+
 /**
  * A dummy function actived by the shutdown handler
  *

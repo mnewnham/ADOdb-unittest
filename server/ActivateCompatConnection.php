@@ -56,11 +56,11 @@ class ActivateCompatConnection {
             $options['parameters'] = $credentials['parameters'];
         }
 
-        if (in_array($credentials['driver'], ['sqlite3', 'db2'] ) || substr($credentials['driver'],0,3 == 'pdo')) {
+        if (in_array($credentials['driver'], ['sqlite3', 'db2'] ) || stripos($credentials['driver'], 'pdo') === 0) {
             $credentials['host'] = $credentials['dsn'];
         }
 
-        $credentials['driver'] = str_replace('pdo-', 'pdo_', $credentials['driver']);
+        $credentials['driver'] = str_replace('pdo-', 'PDO\\', $credentials['driver']);
 
         ADOdb_Session::config(
             $credentials['driver'],

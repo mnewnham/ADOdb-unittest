@@ -42,6 +42,7 @@ class SessionParametersTest extends ADOdbTestCase
     {
 
         $sessionParams = $GLOBALS['TestingControl']['session'];
+        $driver        = $GLOBALS['credentials']['driver'];
 
         $persist = null;
 
@@ -50,8 +51,12 @@ class SessionParametersTest extends ADOdbTestCase
         }
 
         $clob = null;
-        if ($GLOBALS['credentials']['driver'] == 'oci8') {
+        if ($driver == 'oci8') {
             //$clob = 'CLOB';
+        }
+
+         if (stripos($driver, 'pdo') === 0) {
+            $driver = str_replace('pdo-', 'PDO\\', $driver);
         }
 
         if (isset($sessionParams['clob']) && $sessionParams['clob']) {
@@ -73,6 +78,9 @@ class SessionParametersTest extends ADOdbTestCase
                 'clob' => $clob
             ],
             $GLOBALS['credentials'],
+            [
+                'driver' => $driver
+            ]
         );
 
         if (isset($GLOBALS['credentials']['dsn']) &&  $GLOBALS['credentials']['dsn']) {

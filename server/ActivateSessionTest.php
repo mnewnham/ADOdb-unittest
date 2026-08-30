@@ -40,9 +40,12 @@ class ActivateSessionTest
        
         $_SESSION['integer_field'] = 1;
 
+        $output = ob_get_flush();
+
         $c = new \stdClass();
         $c->id = session_id();
         $c->test = 'testInitializeNewSession';
+        $c->output = $output;
         print json_encode($c);
     }
 
@@ -61,8 +64,12 @@ class ActivateSessionTest
             $_SESSION['integer_field']++;
         }
 
+        
+        $output = ob_get_flush();
+
         $cls = new \stdClass();
         $cls->session = $_SESSION;
+        $cls->output  = $output;
         $cls->error   = '';
         $cls->test    = 'testReadSession';
         if (!isset($_SESSION['integer_field'])) {
