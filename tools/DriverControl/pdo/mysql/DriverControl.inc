@@ -58,7 +58,7 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $qStrExpectedResult = "Famed author James O''Sullivan";
+    public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
 
      /**
      * For methods that test for databases, use schema instead
