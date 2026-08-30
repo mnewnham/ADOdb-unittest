@@ -122,7 +122,8 @@ class MetaColumnNamesTest extends MetaFunctions
                     'DECIMAL_FIELD',
                     'BOOLEAN_FIELD',
                     'EMPTY_FIELD',
-                    'NUMBER_RUN_FIELD'
+                    'NUMBER_RUN_FIELD',
+                    'BLOB_FIELD'
                 ],
                 false
             ],
@@ -138,7 +139,8 @@ class MetaColumnNamesTest extends MetaFunctions
                     'DECIMAL_FIELD',
                     'BOOLEAN_FIELD',
                     'EMPTY_FIELD',
-                    'NUMBER_RUN_FIELD'
+                    'NUMBER_RUN_FIELD',
+                    'BLOB_FIELD'
                 ],
                 false
 
@@ -146,13 +148,13 @@ class MetaColumnNamesTest extends MetaFunctions
             'Force Numeric Array ADODB_FETCH_ASSOC' => [
                 true,
                 ADODB_FETCH_ASSOC,
-                [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ],
+                [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
                 false
             ],
             'Force Postgres Option ADODB_FETCH_ASSOC' => [
                 true,
                 ADODB_FETCH_ASSOC,
-                [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+                [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
                 true
             ]
         ];

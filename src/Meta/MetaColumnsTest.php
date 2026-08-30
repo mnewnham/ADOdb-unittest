@@ -54,7 +54,7 @@ class MetaColumnsTest extends MetaFunctions
         string $fetchDescription
     ): void {
 
-        $expectedResult  = 9;
+        $expectedResult  = 10;
 
         $this->insertFetchMode($fetchMode);
 
@@ -151,7 +151,9 @@ class MetaColumnsTest extends MetaFunctions
             '4' => 'INTEGER_FIELD',
             '5' => 'DECIMAL_FIELD',
             '6' => 'BOOLEAN_FIELD',
-            '7' => 'EMPTY_FIELD'
+            '7' => 'EMPTY_FIELD',
+            '8' => 'NUMBER_RUN_FIELD',
+            '9' => 'BLOB_FIELD'
         ];
 
         $absoluteFetchMode = $this->insertFetchMode($fetchMode);

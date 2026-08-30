@@ -59,9 +59,9 @@ class FieldCountTest extends ADOdbCoreSetup
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(
-            9,
+            10,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount shoud return 9 with no bind usage', $fetchDescription)
+            sprintf('[FETCH %s] FieldCount shoud return 10 with no bind usage', $fetchDescription)
         );
     }
 
@@ -87,9 +87,9 @@ class FieldCountTest extends ADOdbCoreSetup
         $result = $this->db->execute($SQL, $bind);
 
         $this->assertEquals(
-            9,
+            10,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount shoud return 9 with bind usage', $fetchDescription)
+            sprintf('[FETCH %s] FieldCount shoud return 10 with bind usage', $fetchDescription)
         );
     }
 }

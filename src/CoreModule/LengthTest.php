@@ -85,7 +85,7 @@ class LengthTest extends ADOdbTestCase
             $db->completeTrans();
         }
 
-        if ($GLOBALS['ADOdriver'] == 'db2') {
+        if ($GLOBALS['ADOdriver'] == 'db2' || $GLOBALS['ADOdriver'] == 'pdo-ibm') {
             $db->startTrans();
             $db->updateBlob('length_test', 'blob_field', 'TEST567890TEST567890', 'id=1');
             $db->completeTrans();
@@ -117,9 +117,10 @@ class LengthTest extends ADOdbTestCase
             if (!in_array($metaType, ['C','C2','X','B','XL'])) {
                 continue;
             }
+           
             $lengthColumns[] = sprintf(
                 '%s %s_length',
-                $this->db->length(strtolower($data->name)),
+                $this->db->length(strtolower($data->name), $metaType),
                 strtolower($data->name)
             );
         }
@@ -196,10 +197,15 @@ class LengthTest extends ADOdbTestCase
             if (!in_array($metaType, ['C','C2','B', 'X','XL'])) {
                 continue;
             }
-            $valueColumns[] = sprintf(
-                'TRIM(%s)',
-                strtolower($data->name)
-            );
+            
+            if (in_array($metaType, ['B'])) {
+                $valueColumns[] = strtolower($data->name);
+            } else {
+                $valueColumns[] = sprintf(
+                    'TRIM(%s)',
+                    strtolower($data->name)
+                );
+            }
         }
 
         $valueString = implode(',', $valueColumns);
@@ -225,6 +231,10 @@ class LengthTest extends ADOdbTestCase
         foreach ($numericRow as $k => $v) {
             if(!isset($valueColumns[$k])) {
                 continue;
+            }
+            if (is_resource($v)) {
+                $x = stream_get_contents($v);
+                $v = $x;
             }
             $this->assertEquals(
                 'TEST567890TEST567890',
