@@ -6,10 +6,11 @@ DROP TABLE IF EXISTS adodb_force_insert;
 CREATE TABLE adodb_force_insert (
 	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
 	varchar_field VARCHAR(20),
+	another_varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
-	integer_field SMALLINT
-	decimal_field DECIMAL(12.2),
+	integer_field SMALLINT,
+	decimal_field DECIMAL(12,2),
 	boolean_field SMALLINT,
 	trigger_field SMALLINT
 );
