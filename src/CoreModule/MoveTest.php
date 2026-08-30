@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Tests cases for core move() methods
+ * Tests cases for core move() methods. Bounces the record pointer across the recordset, both
+ * forward and backwards
  *
  * This file is part of ADOdb-unittest, a PHPUnit test suite for
  * the ADOdb Database Abstraction Layer library for PHP.
@@ -98,11 +99,8 @@ class MoveTest extends ADOdbTestCase
         
         $expectedData = $db->getAll($setupSql);
         foreach ($expectedData as $cd) {
-            $obj = new \ADOFetchObj();
-            foreach ($cd as $k => $v) {
-                $k = strtolower($k);
-                $obj->$k = $v;
-            }
+            $obj = new \ADOFetchObj($cd);
+            
             $GLOBALS['expectedData'][] = $obj;
         }
 
