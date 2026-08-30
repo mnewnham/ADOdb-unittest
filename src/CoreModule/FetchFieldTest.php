@@ -40,7 +40,8 @@ class FetchFieldTest extends ADOdbCoreSetup
         'decimal_field',
         'boolean_field',
         'empty_field',
-        'number_run_field'
+        'number_run_field',
+        'blob_field'
     ];
 
     /**
@@ -85,14 +86,14 @@ class FetchFieldTest extends ADOdbCoreSetup
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(
-            9,
+            10,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and invalid id', $fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 10 with no bind usage and invalid id', $fetchDescription)
         );
 
         for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
-
+            
             $this->assertIsObject(
                 $fieldObject,
                 sprintf(
@@ -147,9 +148,9 @@ class FetchFieldTest extends ADOdbCoreSetup
         $result = $this->db->execute($SQL, $bind);
 
         $this->assertEquals(
-            9,
+            10,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with bind usage and invalid id', $fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 10 with bind usage and invalid id', $fetchDescription)
         );
 
         for ($i = 0; $i < $result->fieldCount(); $i++) {
@@ -217,9 +218,9 @@ class FetchFieldTest extends ADOdbCoreSetup
         $result = $this->db->execute($SQL);
 
         $this->assertEquals(
-            9,
+            10,
             $result->fieldCount(),
-            sprintf('[FETCH %s] FieldCount should return 9 with no bind usage and valid id', $fetchDescription)
+            sprintf('[FETCH %s] FieldCount should return 10 with no bind usage and valid id', $fetchDescription)
         );
 
         for ($i = 0; $i < $result->fieldCount(); $i++) {
@@ -282,9 +283,9 @@ class FetchFieldTest extends ADOdbCoreSetup
          $result = $this->db->execute($SQL, $bind);
 
          $this->assertEquals(
-             9,
+             10,
              $result->fieldCount(),
-             sprintf('[FETCH %s] FieldCount should return 9 with bind usage and valid id', $fetchDescription)
+             sprintf('[FETCH %s] FieldCount should return 10 with bind usage and valid id', $fetchDescription)
          );
 
          for ($i = 0; $i < $result->fieldCount(); $i++) {
