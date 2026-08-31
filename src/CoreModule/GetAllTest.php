@@ -43,11 +43,14 @@ class GetAllTest extends ADOdbCoreSetup
      * @return void
      */
     #[DataProvider('providerTestGetAll')]
-    public function testGetAll(int $fetchMode, array $expectedValue, string $sql, ?array $bind): void
-    {
+    public function testGetAll(
+        int $fetchMode, 
+        array $expectedValue, 
+        string $sql, 
+        ?array $bind
+    ): void {
 
         $this->db->setFetchMode($fetchMode);
-
 
         if ($bind) {
             $returnedRows = $this->db->getAll($sql, $bind);
