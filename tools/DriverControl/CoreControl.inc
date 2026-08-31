@@ -159,4 +159,11 @@ class CoreControl
      */
     public string $offsetDateTestField = "offsetdate_test_field";
 
+    /**
+     * Does the driver support true internal sequences
+     *
+     * @var boolean
+     */
+    public bool $hasInternalSequences = true;
+
 }

@@ -39,6 +39,13 @@ class DriverControl extends \CoreControl
      */
     public bool $allowAutoIncrementOnCompundKeys = false;
 
+    /**
+     * Does the driver support true internal sequences
+     *
+     * @var boolean
+     */
+    public bool $hasInternalSequences = false;
+
     public function __construct()
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
