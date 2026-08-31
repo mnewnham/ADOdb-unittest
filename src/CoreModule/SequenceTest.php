@@ -39,6 +39,10 @@ class SequenceTest extends ADOdbTestCase
     {
         $db        = $GLOBALS['ADOdbConnection'];
 
+        if ($GLOBALS['DriverControl']->hasInternalSequences == false) {
+            return;
+        }
+
         
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
       
@@ -90,6 +94,16 @@ class SequenceTest extends ADOdbTestCase
         readSqlIntoDatabase($db, $tableSchema);
 
         $db->completeTrans();
+    }
+
+    public function setup() : void {
+         if ($GLOBALS['DriverControl']->hasInternalSequences == false) {
+           $this->markTestSkipped('Driver does not support true sequences');
+           return;
+        }
+
+        parent::setup();
+
     }
 
 
