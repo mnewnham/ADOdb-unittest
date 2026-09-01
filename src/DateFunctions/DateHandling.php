@@ -32,14 +32,19 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class DateHandling extends ADOdbTestCase
 {
 
-
     /**
      * Sets up a flag used from refreshing the table mid-test
      *
      * @return void
      */
-    public static function setupBeforeClass(): void
+    /**
+     * Set up the test environment
+     *
+     * @return void
+     */
+    public function setup(): void
     {
+        parent::setup();
         $GLOBALS['ADOdbConnection']->_errorCode = 0;
         $db = $GLOBALS['ADOdbConnection'];
     
@@ -80,16 +85,4 @@ class DateHandling extends ADOdbTestCase
         $db->completeTrans();
     }
 
-    /**
-     * Set up the test environment
-     *
-     * @return void
-     */
-    public function setup(): void
-    {
-
-        parent::setup();
-
-        
-    }
 }
