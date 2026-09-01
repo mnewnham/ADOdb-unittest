@@ -51,4 +51,11 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $hasInternalSequences = false;
+
+    /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "strftime('%%Y-%%m-%%d %%H:%%M:%%S', %s)";
 }

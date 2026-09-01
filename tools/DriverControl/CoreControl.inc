@@ -160,6 +160,13 @@ class CoreControl
     public string $offsetDateTestField = "offsetdate_test_field";
 
     /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))";
+
+    /**
      * Does the driver support true internal sequences
      *
      * @var boolean

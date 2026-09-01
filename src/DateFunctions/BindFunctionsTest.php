@@ -223,7 +223,10 @@ class BindFunctionsTest extends DateHandling
 
         $bind = [ 'p1' => $dbTs ];
 
-        $sql = 'SELECT * FROM date_columns_test WHERE datetime_field=' . sprintf("(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))",$dbTs);
+ 
+        $sql = 'SELECT * 
+                  FROM date_columns_test 
+                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$dbTs);
 
         $result = $this->db->selectLimit($sql, 1, -1);
         
