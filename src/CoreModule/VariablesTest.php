@@ -319,7 +319,7 @@ class VariablesTest extends ADOdbTestCase
         global $ADODB_COUNTRECS;
         $ADODB_COUNTRECS = false; // Set to true by default
 
-        $sql = 'select varchar_field from testtable_1 where id<9999';
+        $sql = 'SELECT varchar_field FROM testtable_1 WHERE id<9999';
 
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
 
