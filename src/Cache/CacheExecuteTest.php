@@ -82,14 +82,15 @@ class CacheExecuteTest extends CacheFunctions
             return;
         }
 
-        $expectedError = ($expectedValue == false) ? true : false;
+        $expectsError = ($expectedValue == false) ? true : false;
 
         if ($bind) {
             $result = $this->db->cacheExecute($this->timeout, $sql, $bind);
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
-        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
+               
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectsError);
 
         $this->assertSame(
             $expectedValue,
@@ -102,7 +103,7 @@ class CacheExecuteTest extends CacheFunctions
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
-        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectsError);
 
         $this->assertSame(
             $expectedValue,
@@ -125,8 +126,11 @@ class CacheExecuteTest extends CacheFunctions
      * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:cacheexecute
      */
     #[DataProvider('providerTestNonSelectCacheExecute')]
-    public function testNonSelectCacheExecute(bool $expectedValue, string $sql, ?array $bind): void
-    {
+    public function testNonSelectCacheExecute(
+        bool $expectedValue, 
+        string $sql, 
+        ?array $bind
+    ): void {
 
         global $ADODB_CACHE_DIR;
         if ($this->skipAllTests) {
@@ -134,7 +138,7 @@ class CacheExecuteTest extends CacheFunctions
             return;
         }
 
-        $expectedError = ($expectedValue == false) ? true : false;
+        $expectsError = ($expectedValue == false) ? true : false;
 
         $this->db->startTrans();
 
@@ -144,10 +148,10 @@ class CacheExecuteTest extends CacheFunctions
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
 
+        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectsError);
+
         $this->db->completeTrans();
-
-        list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectedError);
-
+        
         if (is_object($result)) {
             $reflection = new \ReflectionClass($result);
             $shortName  = $reflection->getShortName();
