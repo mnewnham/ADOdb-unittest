@@ -358,11 +358,9 @@ class ADOdbTestCase extends TestCase
                 '0',
                 (string)$errno,
                 sprintf(
-                    'ADOdb execution of SQL %s%s should return error: %d - %s',
+                    'ADOdb execution of SQL %s %s should return non-zero error code',
                     $sql,
-                    $params,
-                    $errno,
-                    $errmsg
+                    $params
                 )
             );
         } else {
