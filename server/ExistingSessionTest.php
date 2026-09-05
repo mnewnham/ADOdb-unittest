@@ -106,12 +106,13 @@ class ExistingSessionTest
 
         $testData = file_get_contents($blobSection['testClob']);
 
-        $_SESSION['big_data'] = $testData;
-
+       
         $cls = new \stdClass();
         $cls->id = session_id();
         $cls->session = $_SESSION;
         $cls->test    = 'testWriteClobIntoSession';
+
+        $_SESSION['big_data'] = $testData;
 
 
         print json_encode($cls);
