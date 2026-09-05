@@ -44,6 +44,19 @@ class FetchFieldTest extends ADOdbCoreSetup
         'blob_field'
     ];
 
+    protected $tt1Types = [
+        'I',
+        'C',
+        'TS',
+        'D',
+        'I',
+        'N',
+        'L',
+        'C',
+        'I',
+        'B'
+    ];
+
     /**
      * Global setup for the test class
      *
@@ -121,7 +134,22 @@ class FetchFieldTest extends ADOdbCoreSetup
                     $fetchDescription,
                     $this->tt1Fields[$i],
                     $i,
+                    $fieldObject->name
+                )
+            );
+
+            $expectedType = $this->tt1Types[$i];
+            $metaType     = $this->db->metaType($fieldObject);
+            $this->assertEquals(
+                $expectedType,
+                $metaType,
+                sprintf(
+                    '[FETCH %s] Expected field name %s with no bind usage and invalid metaType %s at position %d, found %s',
+                    $fetchDescription,
                     $fieldObject->name,
+                    $expectedType,
+                    $i,
+                    $metaType
                 )
             );
         }
