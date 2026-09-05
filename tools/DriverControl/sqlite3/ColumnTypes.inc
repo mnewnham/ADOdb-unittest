@@ -86,7 +86,7 @@ class columnTypes
      */
     public string $createTableWrapper = '
     CREATE TABLE metatype_test(
-    id INTEGER
+    id INTEGER,
     %s,
 	PRIMARY KEY(id)
     )';
