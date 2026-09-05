@@ -6,5 +6,6 @@ CREATE TABLE length_test (
 id INTEGER NOT NULL,
     char_field CHAR(30) DEFAULT 'TEST567890TEST567890',
     varchar_field VARCHAR(30) DEFAULT 'TEST567890TEST567890',
-    text_field TEXT  
+    text_field TEXT ,
+    blob_field BLOB
 );
