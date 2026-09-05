@@ -33,6 +33,23 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class SessionParametersTest extends ADOdbTestCase
 {
+     public static function setUpBeforeClass(): void
+    {
+
+        if ($GLOBALS['skipSessionTests'] == 1) {
+            return;
+        }
+    }
+
+    public function setup(): void
+    {
+        if ($GLOBALS['skipSessionTests'] == 1) {
+            $this->markTestSkipped('Session testing is disabled');
+            return;
+        }
+        parent::setup();
+    }
+    
     /**
      * Test
      *
