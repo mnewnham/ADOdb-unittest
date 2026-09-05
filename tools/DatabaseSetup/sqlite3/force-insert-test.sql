@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS adodb_force_insert;
 CREATE TABLE adodb_force_insert (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	varchar_field VARCHAR(20),
+	another_varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
 	integer_field INT(2),
