@@ -45,6 +45,8 @@ class SqlDateTest extends DateHandling
     public function testSqlDate(int $testMethod, string $format, ?int $timestamp, int $margin=0): void
     {
 
+        $this->db->setFetchMode(ADODB_FETCH_NUM);
+
         switch ($testMethod) {
             case 1:
                 $expected = date($format, $timestamp);
@@ -87,6 +89,8 @@ class SqlDateTest extends DateHandling
                 $this->db->storeFetchModes();
                 $this->db->setFetchMode(ADODB_FETCH_NUM);
 
+              
+
                 $result = $this->db->selectLimit($sql, 1);
                 $baseData = $result->fetchRow();
 
@@ -94,18 +98,14 @@ class SqlDateTest extends DateHandling
 
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-                $baseData = array_values($baseData);
-
-              
-
-                 if ($format == 'Q') {
+                if ($format == 'Q') {
                     $expected = ceil((new \DateTime($baseData[1]))->format('n') / 3);
                 } else {
                     $expected = date($format, strtotime($baseData[1]));
                 }
                 
-
                 $dtSql =  $this->db->sqlDate($format, 'datetime_field');
+
                 $sql = sprintf(
                     "SELECT %s, {$GLOBALS['DriverControl']->dateTimeField} 
                        FROM date_columns_test
@@ -113,7 +113,6 @@ class SqlDateTest extends DateHandling
                     $dtSql,
                     $baseData[0]
                 );
-
 
                 list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
 
@@ -205,6 +204,8 @@ class SqlDateTest extends DateHandling
             'Week Of Year' => [2, 'W', $testNowTimestamp],
             'Quarter Of Year' => [2, 'Q', $testNowTimestamp],
             '2 Digit Second Of Minute' => [2, 's', $testNowTimestamp, 5],
+            'US Date' => [2, 'm/d/Y', $testNowTimestamp],
+            'Non-US Date' => [2, 'd/m/Y', $testNowTimestamp],
 
 
             'Now 4 Digit Year' => [3, 'Y', null],
