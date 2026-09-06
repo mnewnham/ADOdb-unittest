@@ -28,4 +28,18 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $hasNativeEnum = true;
+
+    /**
+     * How to obtain the entire contents of the offsetdate_test_field
+     *
+     * @var string
+     */
+    public string $offsetDateTestField = "DATE_FORMAT(offsetdate_test_field, '%Y-%m-%d %H:%i')";
+
+    /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "DATE_FORMAT(%s, '%%Y-%%m-%%d %%H:%%i')";
 }
