@@ -116,7 +116,7 @@ class AlterColumnTest extends DataDictFunctions
             '120',
             (string)$metaColumns['VARCHAR_FIELD']->max_length,
             'AlterColumnSQL should have Increased the ' .
-            'length of VARCHAR_FIELD to from 50 to 120'
+            'length of VARCHAR_FIELD from 50 to 120'
         );
 
         if (property_exists($this->dataDictionary, 'hasColumnComments') && $this->dataDictionary->hasColumnComments) {
