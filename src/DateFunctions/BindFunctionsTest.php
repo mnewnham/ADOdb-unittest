@@ -201,7 +201,7 @@ class BindFunctionsTest extends DateHandling
         if (substr($dbTs, 0, 1) != "'") {
             $this->fail(
                 sprintf(
-                    'bindTimestamp() should return a timestamp quoted, actually returned[%s]',
+                    'bindTimestamp() should return a timestamp single quoted, actually returned[%s]',
                     $dbTs
                 )
             );
@@ -216,19 +216,37 @@ class BindFunctionsTest extends DateHandling
 
         $actual = $this->db->getOne($sql);
 
+        $sql = 'SELECT * 
+                  FROM date_columns_test 
+                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$dbTs);
 
+        $result = $this->db->selectLimit($sql, 1, -1);
+        
+        $this->assertIsObject(
+            $result,
+            sprintf(
+                "Execution of the SQL %s without parameters should have returned an ADOrecordset object",
+                $sql
+            )
+        );
+        
+        if (!$r = $result->fetchRow()) {
+            $this->assertTrue(
+                true,
+                'OK'
+            );
+        }
 
         $this->db->param('');
         $p1 = $this->db->param('p1');
 
         $bind = [ 'p1' => $dbTs ];
 
- 
         $sql = 'SELECT * 
                   FROM date_columns_test 
-                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$dbTs);
+                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$p1);
 
-        $result = $this->db->selectLimit($sql, 1, -1);
+        $result = $this->db->selectLimit($sql, 1, -1, $bind);
         
         $this->assertIsObject(
             $result,
