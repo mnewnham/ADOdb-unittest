@@ -85,8 +85,7 @@ class MetaSequencesTest extends MetaFunctions
                         $fetchModeName
                     )
                 );
-            } else if ($expectedCount === false) {
-           
+            } elseif ($expectedCount === false) {
                 $this->assertSame(
                     $expectedCount,
                     $executionResult,
@@ -96,7 +95,6 @@ class MetaSequencesTest extends MetaFunctions
                     )
                 );
             } else {
-           
                 $this->assertSame(
                     $expectedCount,
                     count($executionResult),
@@ -147,8 +145,7 @@ class MetaSequencesTest extends MetaFunctions
                 false,
                 false
             ],
-            
+
         ];
     }
-
 }

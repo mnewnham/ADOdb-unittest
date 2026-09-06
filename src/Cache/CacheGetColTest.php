@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheGetColTest extends CacheFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::cachegetCol()]
      *
@@ -133,5 +132,4 @@ class CacheGetColTest extends CacheFunctions
 
             ];
     }
-
 }

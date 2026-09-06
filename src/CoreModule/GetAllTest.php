@@ -44,9 +44,9 @@ class GetAllTest extends ADOdbCoreSetup
      */
     #[DataProvider('providerTestGetAll')]
     public function testGetAll(
-        int $fetchMode, 
-        array $expectedValue, 
-        string $sql, 
+        int $fetchMode,
+        array $expectedValue,
+        string $sql,
         ?array $bind
     ): void {
 

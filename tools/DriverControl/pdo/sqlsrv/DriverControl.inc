@@ -25,7 +25,7 @@ class DriverControl extends \CoreControl
      */
     public bool $dictionaryRequireTransactions = false;
 
-    
+
     /**
      * What the qstr process should return as a quoted string
      *

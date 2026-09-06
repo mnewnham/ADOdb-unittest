@@ -97,20 +97,20 @@ class CreateTableTest extends DataDictFunctions
                  DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
               ";
 
-        
+
         if ($GLOBALS['DriverControl']->hasNativeEnum) {
             $flds .= " ENUM_FIELD_TO_KEEP ENUM('duplo','lego','meccano')
             ";
         }
 
-            
+
         $sqlArray = $this->dataDictionary->createTableSQL(
             'dictionary_creation_test_table',
             $flds,
             $options
         );
 
-        
+
         list ($response,$errno,$errmsg) = $this->executeDictionaryAction($sqlArray);
 
         $flipMetaTables = array_change_key_case(

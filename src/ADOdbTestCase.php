@@ -68,10 +68,10 @@ class ADOdbTestCase extends TestCase
 
     protected array $forceModeDescriptions = [
         '[0] ADODB_FORCE_IGNORE',
-		'[1] ADODB_FORCE_NULL',
-		'[2] ADODB_FORCE_EMPTY',
-		'[3] ADODB_FORCE_VALUE',
-		'[4] ADODB_FORCE_NULL_AND_ZERO'
+        '[1] ADODB_FORCE_NULL',
+        '[2] ADODB_FORCE_EMPTY',
+        '[3] ADODB_FORCE_VALUE',
+        '[4] ADODB_FORCE_NULL_AND_ZERO'
     ];
 
     const FETCH_GLOBAL_NUM = 0;
@@ -226,7 +226,7 @@ class ADOdbTestCase extends TestCase
             $this->db             = $GLOBALS['ADOdbConnection'];
             if ($GLOBALS['ADOdataDictionary']) {
                 $this->dataDictionary = $GLOBALS['ADOdataDictionary'];
-            } 
+            }
         }
 
         /*
@@ -488,9 +488,9 @@ class ADOdbTestCase extends TestCase
                 return $inputArray;
             }
             $rowArray = [];
-            for($i=0;$i<count($aKeys);$i+=2) {
-                $rowArray[$aKeys[$i+1]] = $aValues[$i];
-                $rowArray[$aKeys[$i]]   = $aValues[$i+1];
+            for ($i = 0; $i < count($aKeys); $i += 2) {
+                $rowArray[$aKeys[$i + 1]] = $aValues[$i];
+                $rowArray[$aKeys[$i]]   = $aValues[$i + 1];
             }
             $outputArray[$k] = $rowArray;
         }
@@ -527,15 +527,14 @@ class ADOdbTestCase extends TestCase
             $returnedRow = $returnedRows[$k];
 
             foreach ($expectedRow as $index => $value) {
-                 if (!array_key_exists($index, $returnedRow)) {
+                if (!array_key_exists($index, $returnedRow)) {
                     return $returnedRows;
-                 }
+                }
 
-                 if (strcmp($expectedRow[$index], $returnedRow[$index]) <> 0) {
+                if (strcmp($expectedRow[$index], $returnedRow[$index]) <> 0) {
                     return $returnedRows;
-                 } 
+                }
             }
-
         }
 
         return $expectedRows;

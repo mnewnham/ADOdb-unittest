@@ -37,7 +37,7 @@ class ExistingSessionTest
 
         $acc = new ActivateCompatConnection();
         $acc->startup();
-        
+
         $_SESSION['integer_field'] = 10;
 
         $c = new \stdClass();
@@ -80,7 +80,6 @@ class ExistingSessionTest
         $acc->startup();
 
         if (!isset($GLOBALS['TestingControl']['blob'])) {
-           
             $cls = new \stdClass();
             $cls->id = session_id();
             $cls->session = $_SESSION;
@@ -106,7 +105,7 @@ class ExistingSessionTest
 
         $testData = file_get_contents($blobSection['testClob']);
 
-       
+
         $cls = new \stdClass();
         $cls->id = session_id();
         $cls->session = $_SESSION;
@@ -170,7 +169,7 @@ class ExistingSessionTest
         $extension = array_pop($newFileArray);
         $newFile = implode('.', $newFileArray) . '-decoded.' . $extension;
 
-        
+
         file_put_contents(
             $newFile,
             $_SESSION['big_data']
@@ -184,6 +183,5 @@ class ExistingSessionTest
         $cls->newFileName      = $newFile;
 
         print json_encode($cls);
-
     }
 }

@@ -69,7 +69,6 @@ class BlobHandlingTest extends ADOdbTestCase
 
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->startTrans();
             }
@@ -80,7 +79,6 @@ class BlobHandlingTest extends ADOdbTestCase
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
-
         }
 
         /*
@@ -240,9 +238,10 @@ class BlobHandlingTest extends ADOdbTestCase
         $this->assertGreaterThan(
             $originalFileSize - 1,
             $blobLength,
-            sprintf('Failed to insert Blob into database correctly, length should be at least %s, actually %s',
-            $originalFileSize,
-            $blobLength
+            sprintf(
+                'Failed to insert Blob into database correctly, length should be at least %s, actually %s',
+                $originalFileSize,
+                $blobLength
             )
         );
 

@@ -32,8 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class DatePeriodExtractionTest extends DateHandling
 {
-   
-
     /**
      * Test for {@see ADOConnection::year())
      *
@@ -206,5 +204,4 @@ class DatePeriodExtractionTest extends DateHandling
             'Test of day portion of datetime_field should be 29'
         );
     }
-
 }

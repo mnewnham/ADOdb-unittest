@@ -108,23 +108,25 @@ function readSqlIntoDatabase(object $db, string $fileName): mixed
  * Removes the cache tree, so that caching is tested fresh every time
  *
  * @param string $dir
- * 
+ *
  * @return void
  */
-function removeCacheTree(string $dir): void {
+function removeCacheTree(string $dir): void
+{
 
     $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-    $files = new RecursiveIteratorIterator($it,
-                 RecursiveIteratorIterator::CHILD_FIRST);
+    $files = new RecursiveIteratorIterator(
+        $it,
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
 
-    foreach($files as $file) {
-        if ($file->isDir()){
+    foreach ($files as $file) {
+        if ($file->isDir()) {
             rmdir($file->getPathname());
         } else {
             unlink($file->getPathname());
         }
     }
-    
 }
 
 /*
@@ -461,14 +463,14 @@ if (array_key_exists('caching', $availableCredentials)) {
                 break;
             }
             $e = explode("/", $ADODB_CACHE_DIR);
-            
+
             if (count($e) < 3) {
                 die('STOP: For test safety, the cache directory must be at least 2 levels from root, e.g. c:/a/b');
             }
             /*
             * Flush the existing cache to ensure auto-creation works
             */
-            removeCacheTree( $cacheParams['cacheDir']);
+            removeCacheTree($cacheParams['cacheDir']);
             break;
         case 2:
             $db->memCache     = true;

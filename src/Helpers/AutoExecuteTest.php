@@ -30,7 +30,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class AutoExecuteTest extends HelperFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::getUpdateSql()}
      *
@@ -87,7 +86,7 @@ class AutoExecuteTest extends HelperFunctions
             }
 
             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $result = $this->db->selectLimit($sql,1);
+            $result = $this->db->selectLimit($sql, 1);
             $newRecord = $result->fetchRow();
 
             if ($fetchMode == 0 || $fetchMode == 3) {
@@ -127,10 +126,10 @@ class AutoExecuteTest extends HelperFunctions
     ): void {
 
          $sql = sprintf(
-                "SELECT MAX(%s) FROM %s",
-                _adodb_quote_fieldname($this->db, 'id'),
-                _adodb_quote_fieldname($this->db, 'autoexecute')
-            );
+             "SELECT MAX(%s) FROM %s",
+             _adodb_quote_fieldname($this->db, 'id'),
+             _adodb_quote_fieldname($this->db, 'autoexecute')
+         );
 
         $lastId = $this->db->getOne($sql);
 
@@ -139,7 +138,7 @@ class AutoExecuteTest extends HelperFunctions
             _adodb_quote_fieldname($this->db, 'id'),
             $lastId
         );
-     
+
 
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
             $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
@@ -190,7 +189,7 @@ class AutoExecuteTest extends HelperFunctions
             }
 
             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $result = $this->db->selectLimit($sql,1);
+            $result = $this->db->selectLimit($sql, 1);
             $newRecord = $result->fetchRow();
 
             if ($fetchMode == 0 || $fetchMode == 3) {
@@ -236,15 +235,15 @@ class AutoExecuteTest extends HelperFunctions
             $ADODB_QUOTE_FIELDNAMES = $qfIndex;
 
              $sql = sprintf(
-                "SELECT MAX(%s) FROM %s",
-                _adodb_quote_fieldname($this->db, 'id'),
-                _adodb_quote_fieldname($this->db, 'autoexecute')
-            );
+                 "SELECT MAX(%s) FROM %s",
+                 _adodb_quote_fieldname($this->db, 'id'),
+                 _adodb_quote_fieldname($this->db, 'autoexecute')
+             );
 
             $lastId = $this->db->getOne($sql);
 
             $this->assertIsInt(
-                (int)$lastId, 
+                (int)$lastId,
                 'There are no autoexecute rows available to test'
             );
 
@@ -329,7 +328,7 @@ class AutoExecuteTest extends HelperFunctions
 
 
                     $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-                    $result = $this->db->selectLimit($sql,1);
+                    $result = $this->db->selectLimit($sql, 1);
                     $newRecord = $result->fetchRow();
 
                     if ($fetchMode == 0 || $fetchMode == 3) {

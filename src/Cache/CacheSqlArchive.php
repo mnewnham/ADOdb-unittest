@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheGetRowTest extends CacheFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::cachegetAll()}
      *
@@ -192,7 +191,7 @@ class CacheGetRowTest extends CacheFunctions
 
         global $ADODB_CACHE_DIR;
         //global $ADODB_FETCH_MODE;
-       
+
         if ($this->skipAllTests) {
             $this->markTestSkipped(
                 'Skipping tests as caching not configured'
@@ -208,7 +207,6 @@ class CacheGetRowTest extends CacheFunctions
         $this->db->debug = 2;
 
         if ($bind) {
-          
             $result = $this->db->cacheSelectLimit(
                 $this->timeout,
                 $sql,
@@ -217,7 +215,6 @@ class CacheGetRowTest extends CacheFunctions
                 $bind
             );
         } else {
-           
             $result = $this->db->cacheSelectLimit(
                 $this->timeout,
                 $sql,
@@ -241,8 +238,7 @@ class CacheGetRowTest extends CacheFunctions
             if (is_array($expectedValue)) {
                 $expectedValue = $this->sortFetchBothRecords($expectedValue);
             }
-              
-        } 
+        }
 
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
             foreach ($expectedValue as $ek => $er) {
@@ -258,7 +254,7 @@ class CacheGetRowTest extends CacheFunctions
         * read record greater than 2 , so 3,4,5,6,7,8,9,10
         * add offet of 2, so 5,6,7,8,9,10
         * limit 4, so 5,6,5,8
-        */ 
+        */
 
         $this->assertSame(
             $expectedValue,
@@ -311,7 +307,7 @@ class CacheGetRowTest extends CacheFunctions
             if (is_array($returnedRows)) {
                 $returnedRows  = $this->validateFetchBothRecords($expectedValue, $returnedRows);
             }
-        } 
+        }
 
         $this->db->completeTrans();
 

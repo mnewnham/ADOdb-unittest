@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class BindFunctionsTest extends DateHandling
 {
-    
     /**
      * Test for {@see ADOConnection::userDate()}
      *
@@ -165,7 +164,7 @@ class BindFunctionsTest extends DateHandling
         $now = date('Y-m-d H:i:s', $nowTime);
 
         $dbTs = $this->db->dbTimestamp($nowTime);
-      
+
         list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
 
         $sql = sprintf(
@@ -218,10 +217,10 @@ class BindFunctionsTest extends DateHandling
 
         $sql = 'SELECT * 
                   FROM date_columns_test 
-                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$dbTs);
+                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation, $dbTs);
 
         $result = $this->db->selectLimit($sql, 1, -1);
-        
+
         $this->assertIsObject(
             $result,
             sprintf(
@@ -229,7 +228,7 @@ class BindFunctionsTest extends DateHandling
                 $sql
             )
         );
-        
+
         if (!$r = $result->fetchRow()) {
             $this->assertTrue(
                 true,
@@ -244,10 +243,10 @@ class BindFunctionsTest extends DateHandling
 
         $sql = 'SELECT * 
                   FROM date_columns_test 
-                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation,$p1);
+                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation, $p1);
 
         $result = $this->db->selectLimit($sql, 1, -1, $bind);
-        
+
         $this->assertIsObject(
             $result,
             sprintf(
@@ -256,7 +255,7 @@ class BindFunctionsTest extends DateHandling
                 print_r($bind, true)
             )
         );
-        
+
         if (!$r = $result->fetchRow()) {
             $this->assertTrue(
                 true,

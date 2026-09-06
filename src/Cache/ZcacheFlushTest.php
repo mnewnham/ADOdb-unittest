@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ZcacheFlushTest extends CacheFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::cacheFlush()} flushing a single table
      * using bind parameters

@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheGetRowTest extends CacheFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::cachegetRow()]
      *
@@ -120,7 +119,7 @@ class CacheGetRowTest extends CacheFunctions
         }
 
         /*
-        * Now update the empty_field column of the database, but 
+        * Now update the empty_field column of the database, but
         * the cache should hold the original value of 80111
         */
         $this->setEmptyColumn(null);

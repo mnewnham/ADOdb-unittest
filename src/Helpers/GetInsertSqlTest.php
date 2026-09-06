@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class GetInsertSqlTest extends HelperFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::getInsertSql()}
      *
@@ -69,12 +68,14 @@ class GetInsertSqlTest extends HelperFunctions
         * This should create a record populated with default values and the
         * next available id
         */
-       
+
 
         $sql = $this->db->getInsertSql($template, $ar);
 
         $this->db->startTrans();
-        if (!$sql) { die('empty sql'); } 
+        if (!$sql) {
+            die('empty sql');
+        }
         $response = $this->db->execute($sql);
         $this->db->completeTrans();
 
@@ -142,7 +143,7 @@ class GetInsertSqlTest extends HelperFunctions
         string $fetchDescription
     ): void {
 
-       
+
         $this->insertFetchMode($fetchMode);
 
         $sql = "SELECT * FROM autoexecute ORDER BY id DESC";

@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class HelperFunctions extends ADOdbTestCase
 {
-
     protected string $testTableName = 'testtable_3';
 
 
@@ -45,7 +44,6 @@ class HelperFunctions extends ADOdbTestCase
         $db        = $GLOBALS['ADOdbConnection'];
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->startTrans();
             }
@@ -56,7 +54,6 @@ class HelperFunctions extends ADOdbTestCase
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
-
         }
 
         /*
@@ -92,5 +89,4 @@ class HelperFunctions extends ADOdbTestCase
     {
         parent::setup();
     }
-
 }

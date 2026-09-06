@@ -27,8 +27,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class ForceInsertTest
  *
- * Test cases for for ADOdb Force mode settings. 
- * 
+ * Test cases for for ADOdb Force mode settings.
+ *
  * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:adodb_force_type
  */
 class ForceInsertTest extends ADOdbTestCase
@@ -50,7 +50,6 @@ class ForceInsertTest extends ADOdbTestCase
 
      //$GLOBALS['ADOdbConnection']->debug = true;
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $GLOBALS['ADOdbConnection']->startTrans();
             }
@@ -118,14 +117,14 @@ class ForceInsertTest extends ADOdbTestCase
      *
      * @param integer $forceMode        The ADODB_FORCE_MODE value
      * @param array   $columnValueArray The values to insert
-     * 
+     *
      * @return void
      */
     #[DataProvider('providerTestDefaultColumns')]
     public function testDefaultColumns(
-        int $forceMode, 
+        int $forceMode,
         array $columnValueArray
-        ): void {
+    ): void {
 
         //$columnValues = array_values($columnValueArray);
         $columnValues = array_change_key_case($columnValueArray, CASE_UPPER);
@@ -162,7 +161,7 @@ class ForceInsertTest extends ADOdbTestCase
             'boolean_field' => '',
             'trigger_field' => 9
         ];
-       
+
 
         $vak = array_change_key_case(array_keys($ar), CASE_UPPER);
 
@@ -311,7 +310,7 @@ class ForceInsertTest extends ADOdbTestCase
                 ]
             ],
             'ADODB_FORCE_VALUE' => [
-                ADODB_FORCE_VALUE, 
+                ADODB_FORCE_VALUE,
                 //[4, 'SOME_VALUE', null, null,null, null, 0, 0, 0, 0, 0]
                 [
                     'id' => 4,

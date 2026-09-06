@@ -141,12 +141,12 @@ class MetaTablesTest extends MetaFunctions
      */
     #[DataProvider('providerTestMetaTablesForView')]
     public function testMetaTablesForView(
-        bool $includesView1, 
-        mixed $filterType, 
-        mixed $mask): void {
+        bool $includesView1,
+        mixed $filterType,
+        mixed $mask
+    ): void {
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
-          
             $this->insertFetchMode($fetchMode);
 
             $executionResult = $this->db->metaTables(
@@ -163,7 +163,7 @@ class MetaTablesTest extends MetaFunctions
                 array_map('strtoupper', $executionResult)
             );
 
-            $not ='';
+            $not = '';
             if (!$includesView1) {
                 $not = ' not';
             }
@@ -246,7 +246,7 @@ class MetaTablesTest extends MetaFunctions
                 )
             );
 
-            
+
             $this->assertEquals(
                 1,
                 count($executionResult),
@@ -257,7 +257,7 @@ class MetaTablesTest extends MetaFunctions
                     $fetchModeName
                 )
             );
-            
+
             $this->assertSame(
                 strtoupper($this->testTableName),
                 strtoupper($executionResult[0]),
@@ -268,8 +268,6 @@ class MetaTablesTest extends MetaFunctions
                     $fetchModeName
                 )
             );
-           
-            
         }
     }
 

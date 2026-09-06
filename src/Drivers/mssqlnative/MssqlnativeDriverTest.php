@@ -97,9 +97,9 @@ class MssqlnativeDriverTest extends ADOdbTestCase
                 null nulldate
                 ) q ";
 
-        $result = $this->db->selectLimit($sql,1);
+        $result = $this->db->selectLimit($sql, 1);
         $res = $result->fetchRow();
-       
+
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
         $this->assertEquals(
@@ -120,7 +120,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
 
             ["d/m/Y", "test_date" ,"FR4","17/12/2016"],
             ["d/m/y", "test_date" ,"FR4b", "17/12/2016",],
-            ["d/m/Y", "NULL", "nullFR4", NULL ],
+            ["d/m/Y", "NULL", "nullFR4", null ],
             ["m/d/Y", "test_date" , "US4", "12/17/2016"],
             ["m/d/y", "test_date" , "US4b", "12/17/2016"],
             ["m-d-Y", "test_date" , "USD4", "12-17-2016"],
@@ -134,9 +134,8 @@ class MssqlnativeDriverTest extends ADOdbTestCase
             ["y/m/d", "test_date" , "Japan4b", "2016/12/17"],
             ["H:i:s", "test_date" ,  "timeonly","18:55:30"],
             ["d m Y",  "test_date" ,"Space4","17 12 2016"],  // Is done by former method
-            ["d m Y",  "NULL" ,"nullSpace4", NULL],
+            ["d m Y",  "NULL" ,"nullSpace4", null],
             ["m-d-Y","test_date","nowUSdash4","01-01-2016"]
         ];
     }
 }
-

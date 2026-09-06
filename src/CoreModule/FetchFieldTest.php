@@ -78,7 +78,7 @@ class FetchFieldTest extends ADOdbCoreSetup
 
     /**
      * Test fetchField against an unbound statement
-     * 
+     *
      * @param int    $fetchMode        The fetch mode
      * @param string $fetchDescription The description
      *
@@ -106,7 +106,7 @@ class FetchFieldTest extends ADOdbCoreSetup
 
         for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
-            
+
             $this->assertIsObject(
                 $fieldObject,
                 sprintf(

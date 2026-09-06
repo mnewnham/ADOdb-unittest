@@ -172,5 +172,4 @@ class CoreControl
      * @var boolean
      */
     public bool $hasInternalSequences = true;
-
 }

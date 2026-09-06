@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheGetAllTest extends CacheFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::cachegetAll()}
      *
@@ -162,5 +161,4 @@ class CacheGetAllTest extends CacheFunctions
 
                 ];
     }
-
 }

@@ -53,7 +53,6 @@ class ActivateSessionTest extends ADOdbTestCase
         );
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->startTrans();
             }
@@ -63,7 +62,6 @@ class ActivateSessionTest extends ADOdbTestCase
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
-
         }
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {

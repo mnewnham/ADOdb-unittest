@@ -120,7 +120,7 @@ class PdoDriverTest extends ADOdbTestCase
 
          $method = new \ReflectionMethod($this->db, 'conformToBindParameterStyle');
 
-
+         $this->db->setFetchMode(ADODB_FETCH_NUM);
          $this->db->bindParameterStyle = $bindParameterStyle;
          $this->assertSame($expected, $method->invoke($this->db, $sql ?? '', $inputarr));
     }

@@ -59,7 +59,6 @@ class RecordCountTest extends ADOdbCoreSetup
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
-
         }
 
         $tableSchema = sprintf(

@@ -37,7 +37,7 @@ class ActivateSessionTest
 
         $acc = new ActivateCompatConnection();
         $acc->startup();
-       
+
         $_SESSION['integer_field'] = 1;
 
         $output = ob_get_flush();
@@ -56,7 +56,7 @@ class ActivateSessionTest
      */
     public function testReadSession(): void
     {
-        
+
         $acc = new ActivateCompatConnection(true);
         $acc->startup();
 
@@ -64,7 +64,7 @@ class ActivateSessionTest
             $_SESSION['integer_field']++;
         }
 
-        
+
         $output = ob_get_flush();
 
         $cls = new \stdClass();

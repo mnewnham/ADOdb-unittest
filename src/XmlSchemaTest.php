@@ -50,7 +50,6 @@ class XmlSchemaTest extends ADOdbTestCase
         }
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $GLOBALS['ADOdbConnection']->startTrans();
             }
@@ -116,7 +115,7 @@ class XmlSchemaTest extends ADOdbTestCase
 
         $ok = $this->xmlSchema->parseSchema($schemaFile);
 
-      
+
         if (!$ok) {
             $this->assertTrue(
                 $ok,
@@ -195,7 +194,7 @@ class XmlSchemaTest extends ADOdbTestCase
             );
             if ($sql !== null) {
                 $columnComment = $this->db->getOne($sql);
-                
+
                 $this->assertSame(
                     'DATE FIELD COMMENT',
                     $columnComment,
@@ -237,19 +236,19 @@ class XmlSchemaTest extends ADOdbTestCase
             '%s/DatabaseSetup/xmlschemafile-update.xml',
             $GLOBALS['unitTestToolsDirectory']
         );
-        
+
 
         $this->assertFileExists(
             $schemaFile,
             'Schema file does not exist: ' . $schemaFile
         );
 
-       
-        
+
+
         $ok = $this->xmlSchema->parseSchema($schemaFile);
         list($errno, $errmsg) = $this->assertADOdbError('xml->parseSchema()');
 
-       
+
         if (!$ok) {
             $this->assertTrue(
                 $ok,

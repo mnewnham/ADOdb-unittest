@@ -82,7 +82,7 @@ class ChangeTableTest extends DataDictFunctions
             SMALLINT_TO_EXPAND I4,
             XL_FIELD XL
             ";
-        
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->startTrans();
         }
@@ -112,7 +112,7 @@ class ChangeTableTest extends DataDictFunctions
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->completeTrans();
         }
-        
+
         $metaColumns = $this->db->metaColumns($this->testTableName);
 
         $this->assertArrayHasKey(
@@ -193,7 +193,7 @@ class ChangeTableTest extends DataDictFunctions
             true
         );
 
-       $this->assertIsArray(
+        $this->assertIsArray(
             $sqlArray,
             'changeTableSql() should alway return an array'
         );

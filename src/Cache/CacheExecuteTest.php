@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheExecuteTest extends CacheFunctions
 {
-    
     /**
      * Data provider for {@see testSelectExecute()}
      *
@@ -89,7 +88,7 @@ class CacheExecuteTest extends CacheFunctions
         } else {
             $result = $this->db->cacheExecute($this->timeout, $sql);
         }
-               
+
         list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectsError);
 
         $this->assertSame(
@@ -127,8 +126,8 @@ class CacheExecuteTest extends CacheFunctions
      */
     #[DataProvider('providerTestNonSelectCacheExecute')]
     public function testNonSelectCacheExecute(
-        bool $expectedValue, 
-        string $sql, 
+        bool $expectedValue,
+        string $sql,
         ?array $bind
     ): void {
 
@@ -151,7 +150,7 @@ class CacheExecuteTest extends CacheFunctions
         list($errno, $errmsg) = $this->assertADOdbError($sql, $bind, $expectsError);
 
         $this->db->completeTrans();
-        
+
         if (is_object($result)) {
             $reflection = new \ReflectionClass($result);
             $shortName  = $reflection->getShortName();
@@ -193,5 +192,4 @@ class CacheExecuteTest extends CacheFunctions
              ],
         ];
     }
-
 }

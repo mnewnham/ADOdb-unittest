@@ -96,11 +96,11 @@ class MoveTest extends ADOdbTestCase
         * into an array so that the AssertArray methods can be used to
         * ensure the correct record is return
         */
-        
+
         $expectedData = $db->getAll($setupSql);
         foreach ($expectedData as $cd) {
             $obj = new \ADOFetchObj($cd);
-            
+
             $GLOBALS['expectedData'][] = $obj;
         }
 
@@ -460,7 +460,7 @@ class MoveTest extends ADOdbTestCase
                 'Random seeking is not supported by the current driver'
             );
         }
-        
+
         $success = $this->moveRecordSet->move($this->lastRecordOffset + 2);
 
         $this->assertFalse(
@@ -564,7 +564,7 @@ class MoveTest extends ADOdbTestCase
                 'Random seeking is not supported by the current driver'
             );
         }
-        
+
         $success = $this->moveRecordSet->move($this->lastRecordOffset - 1);
 
         $this->assertTrue(

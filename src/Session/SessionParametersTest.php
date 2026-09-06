@@ -33,7 +33,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class SessionParametersTest extends ADOdbTestCase
 {
-     public static function setUpBeforeClass(): void
+    public static function setUpBeforeClass(): void
     {
 
         if ($GLOBALS['skipSessionTests'] == 1) {
@@ -49,7 +49,7 @@ class SessionParametersTest extends ADOdbTestCase
         }
         parent::setup();
     }
-    
+
     /**
      * Test
      *
@@ -72,7 +72,7 @@ class SessionParametersTest extends ADOdbTestCase
             //$clob = 'CLOB';
         }
 
-         if (stripos($driver, 'pdo') === 0) {
+        if (stripos($driver, 'pdo') === 0) {
             $driver = str_replace('pdo-', 'PDO\\', $driver);
         }
 
@@ -85,7 +85,6 @@ class SessionParametersTest extends ADOdbTestCase
         }
 
         $testItems = array_merge(
-           
             [
                 'table' => 'session_test',
                 'lifetime' => 1440,

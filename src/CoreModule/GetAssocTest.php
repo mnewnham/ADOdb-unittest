@@ -111,10 +111,10 @@ class GetAssocTest extends ADOdbCoreSetup
                     $returnedRows[$key][$vKey] = (string)$vValue;
                 }
             }
-  
+
             if ($absoluteFetchMode == ADODB_FETCH_BOTH) {
                 $returnedRows = $this->validateFetchBothRecords($expectedValue, $returnedRows);
-            } 
+            }
 
             $this->assertSame(
                 $expectedValue,
@@ -177,13 +177,13 @@ class GetAssocTest extends ADOdbCoreSetup
 
         foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-          
+
             if ($bindFlag) {
                 $returnedRows = $this->db->execute($boundSql, $bind)->getAssoc($forceArray, $first2Cols);
             } else {
                 $returnedRows = $this->db->execute($unboundSql, false)->getAssoc($forceArray, $first2Cols);
             }
-           
+
             $this->validateResetFetchModes();
 
             switch ($absoluteFetchMode) {
@@ -195,7 +195,6 @@ class GetAssocTest extends ADOdbCoreSetup
                     break;
                 case ADODB_FETCH_BOTH:
                 case ADODB_FETCH_DEFAULT:
-                
                     $expectedValue = $expectedBothValue;
                     break;
             }
@@ -212,7 +211,7 @@ class GetAssocTest extends ADOdbCoreSetup
 
             if ($absoluteFetchMode == ADODB_FETCH_BOTH) {
                 $returnedRows = $this->validateFetchBothRecords($expectedValue, $returnedRows);
-            } 
+            }
 
             $this->assertSame(
                 $expectedValue,

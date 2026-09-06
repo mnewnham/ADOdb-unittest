@@ -83,7 +83,7 @@ class AlterColumnTest extends DataDictFunctions
             VARCHAR_FIELD C(120) COMMENT 'THIS IS A COLUMN COMMENT'
             ";
 
-        
+
         $sqlArray = $this->dataDictionary->alterColumnSQL(
             $tableName,
             $flds
@@ -143,7 +143,7 @@ class AlterColumnTest extends DataDictFunctions
             $flds
         );
 
-       
+
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
             return;
@@ -188,7 +188,7 @@ class AlterColumnTest extends DataDictFunctions
         * re-read the column definitions
         */
         $metaColumns = $this->db->metaColumns($tableName);
-      
+
         $this->assertArrayHasKey(
             'DECIMAL_FIELD_TO_MODIFY',
             $metaColumns,

@@ -39,9 +39,9 @@ class ShutdownSessionTest
         $acc->startup();
 
         $id = session_id();
-        
+
         ADOdb_Session::destroy($id);
-        
+
         $c = new \stdClass();
         $c->id = $id;
         $c->test = 'testDestroySession';

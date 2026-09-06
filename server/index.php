@@ -35,17 +35,18 @@ $GLOBALS['ADOdbConnection']->noHtmlDebugging    = true;
  *
  * @param string|null $expiref The expiref
  * @param string      $key     The session key
- * 
+ *
  * @return string
  */
-function expiryNotificationTrigger(?string $expiref, string $key) : string {
-   return $key;
+function expiryNotificationTrigger(?string $expiref, string $key): string
+{
+    return $key;
 }
 
 $sessionParameters = $GLOBALS['TestingControl']['session'];
 
 $compression = [
-    'gzip' => [ 
+    'gzip' => [
         'file' => 'adodb-compress-gzip.php',
         'class' => 'ADODB_Compress_Gzip'
         ],
@@ -83,8 +84,8 @@ $compressionInclude = $compressionClass = '';
 if (isset($sessionParameters['compress']) && $sessionParameters['compress']) {
     $compressionInclude =  $compression[$sessionParameters['compress']]['file'];
     $compressionClass   =  $compression[$sessionParameters['compress']]['class'];
-    
-    require_once $ADOdbSettings['directory'] . '/session/' . $compressionInclude;    
+
+    require_once $ADOdbSettings['directory'] . '/session/' . $compressionInclude;
 }
 
 $encryptionInclude = $encryptionClass = '';
@@ -95,16 +96,16 @@ require_once $ADOdbSettings['directory'] . '/session/adodb-session2.php';
 if (isset($sessionParameters['encrypt']) && $sessionParameters['encrypt']) {
     $encryptionInclude =  $encryption[$sessionParameters['encrypt']]['file'];
     $encryptionClass   =  $encryption[$sessionParameters['encrypt']]['class'];
-    
-    require_once $ADOdbSettings['directory'] . '/session/' . $encryptionInclude;    
+
+    require_once $ADOdbSettings['directory'] . '/session/' . $encryptionInclude;
 }
 
 
 if ($compressionClass) {
-    ADODB_Session::filter(new $compressionClass);
+    ADODB_Session::filter(new $compressionClass());
 }
 if ($encryptionClass) {
-    ADODB_Session::filter(new $encryptionClass);
+    ADODB_Session::filter(new $encryptionClass());
 }
 
 ADODB_Session::expireNotify(['', 'expiryNotificationTrigger']);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tests cases for date functions of ADODb. Some of these functions
  * are effectively obsolete since 64 bit processors
@@ -31,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class UnixFunctionsTest extends DateHandling
 {
-        
     /**
      * Test for {@see ADOConnection::unixDate())
      *
@@ -44,9 +44,9 @@ class UnixFunctionsTest extends DateHandling
         $now = time();
 
          $sql = sprintf(
-            $GLOBALS['DriverControl']->dateMethodExecutor,
-            $this->db->unixDate($now)
-        );
+             $GLOBALS['DriverControl']->dateMethodExecutor,
+             $this->db->unixDate($now)
+         );
 
         list($errno, $errmsg) = $this->assertADOdbError('unixDate()');
 

@@ -30,8 +30,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class GetUpdateSqlTest extends HelperFunctions
 {
-   
-    
     /**
      * Set up the test environment first time
      *
@@ -83,30 +81,30 @@ class GetUpdateSqlTest extends HelperFunctions
 
          $this->insertFetchMode($fetchMode);
 
-        $sql = "SELECT MAX(id) FROM autoexecute";
-        $lastId = $this->db->getOne($sql);
+         $sql = "SELECT MAX(id) FROM autoexecute";
+         $lastId = $this->db->getOne($sql);
 
-        $sql = "SELECT * FROM autoexecute WHERE id=$lastId";
+         $sql = "SELECT * FROM autoexecute WHERE id=$lastId";
 
-        list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
+         list ($template,$errno,$errmsg) = $this->executeSqlString($sql);
 
-        $ar = array(
+         $ar = array(
             'varchar_field' => 'GETUPDATESQL0' . $fetchMode,
             'integer_field' => 99,
             'number_run_field' => 4001 + $fetchMode,
             'decimal_eval_field+' => 2.5,
             'varchar_eval_field!' => "CASE WHEN number_run_field < 4003 THEN 'HELLO' ELSE 'GOODBYE' END"
-        );
+         );
 
         /*
         * This should create a record populated with default values and the
         * next available id
         */
-        $sql = $this->db->getUpdateSql($template, $ar);
+         $sql = $this->db->getUpdateSql($template, $ar);
 
-        $response = $this->db->execute($sql);
+         $response = $this->db->execute($sql);
 
-        if (is_object($response)) {
+         if (is_object($response)) {
              $reflection = new \ReflectionClass($response);
              $shortName  = $reflection->getShortName();
              $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
@@ -116,18 +114,18 @@ class GetUpdateSqlTest extends HelperFunctions
                  'getUpdateSql should return an empty ADORecordSet object ' .
                  'If the record is updated successfully, returned ' . $shortName
              );
-        }
-        
-        $sql = "SELECT varchar_field,integer_field, decimal_eval_field, varchar_eval_field 
-                  FROM autoexecute ORDER BY id DESC";
-        $result = $this->db->selectLimit($sql,1);
-        $newRecord = $result->fetchRow();
+         }
 
-        if (!$newRecord) {
-            $this->fail(
-                'Could not find the autoexecute record to update'
-            );
-        }
+         $sql = "SELECT varchar_field,integer_field, decimal_eval_field, varchar_eval_field 
+                  FROM autoexecute ORDER BY id DESC";
+         $result = $this->db->selectLimit($sql, 1);
+         $newRecord = $result->fetchRow();
+
+         if (!$newRecord) {
+             $this->fail(
+                 'Could not find the autoexecute record to update'
+             );
+         }
 
          if ($fetchMode == 0 || $fetchMode == 3) {
              $field = 0;
@@ -207,9 +205,9 @@ class GetUpdateSqlTest extends HelperFunctions
                  );
              }
 
-            $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $result = $this->db->selectLimit($sql,1);
-            $newRecord = $result->fetchRow();
+             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+             $result = $this->db->selectLimit($sql, 1);
+             $newRecord = $result->fetchRow();
 
              if ($fetchMode == 0 || $fetchMode == 3) {
                  $field = 0;
@@ -290,9 +288,9 @@ class GetUpdateSqlTest extends HelperFunctions
              );
          }
 
-        $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-        $result = $this->db->selectLimit($sql,1);
-        $newRecord = $result->fetchRow();
+         $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+         $result = $this->db->selectLimit($sql, 1);
+         $newRecord = $result->fetchRow();
 
          if ($fetchMode == 0 || $fetchMode == 3) {
              $field = 0;
@@ -330,77 +328,77 @@ class GetUpdateSqlTest extends HelperFunctions
 
          $this->insertFetchMode($fetchMode);
          for ($forceMode = 0; $forceMode < 2; $forceMode++) {
-            $sql = "SELECT MAX(id) FROM autoexecute";
-            $lastId = $this->db->getOne($sql);
+             $sql = "SELECT MAX(id) FROM autoexecute";
+             $lastId = $this->db->getOne($sql);
 
-            $this->db->param(false);
-            $p1 = $this->db->param('p1');
-            $bind = [
-            'p1' => $lastId
-            ];
+             $this->db->param(false);
+             $p1 = $this->db->param('p1');
+             $bind = [
+             'p1' => $lastId
+             ];
 
-            $sql = "SELECT * FROM autoexecute WHERE id=$p1";
+             $sql = "SELECT * FROM autoexecute WHERE id=$p1";
 
-            list ($template,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+             list ($template,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
 
-            $ar = array(
-            'varchar_field' => 'GETUPDATESQL0' . $fetchMode . $forceMode,
-            'integer_field' => 99,
-            'number_run_field' => 4001 + $fetchMode + (10 * $forceMode),
-            'some_invalid_field' => 'ABC123'
-            );
+             $ar = array(
+             'varchar_field' => 'GETUPDATESQL0' . $fetchMode . $forceMode,
+             'integer_field' => 99,
+             'number_run_field' => 4001 + $fetchMode + (10 * $forceMode),
+             'some_invalid_field' => 'ABC123'
+             );
 
             /*
             * This should create a record populated with default values and the
             * next available id
             */
 
-            $sql = $this->db->getUpdateSql($template, $ar, $forceMode);
+             $sql = $this->db->getUpdateSql($template, $ar, $forceMode);
 
-            $response = $this->db->execute($sql, $bind);
+             $response = $this->db->execute($sql, $bind);
 
-            $this->assertIsObject(
-                $response,
-                'updates should return an object ' .
-                'If the record is updated successfully'
-            );
+             $this->assertIsObject(
+                 $response,
+                 'updates should return an object ' .
+                 'If the record is updated successfully'
+             );
 
-            if (is_object($response)) {
-                $reflection = new \ReflectionClass($response);
-                $shortName  = $reflection->getShortName();
-                $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+             if (is_object($response)) {
+                 $reflection = new \ReflectionClass($response);
+                 $shortName  = $reflection->getShortName();
+                 $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
 
-                $this->assertTrue(
-                    $ok,
-                    'getUpdateSql should return an empty ADORecordSet object ' .
-                    'If the record is created successfully, returned ' . $shortName
-                );
-            }
+                 $this->assertTrue(
+                     $ok,
+                     'getUpdateSql should return an empty ADORecordSet object ' .
+                     'If the record is created successfully, returned ' . $shortName
+                 );
+             }
 
-            $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
-            $result = $this->db->selectLimit($sql,1);
-            $newRecord = $result->fetchRow();
+             $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+             $result = $this->db->selectLimit($sql, 1);
+             $newRecord = $result->fetchRow();
 
-            if ($fetchMode == 0 || $fetchMode == 3) {
-                $field = 0;
-            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
-                $field = 'VARCHAR_FIELD';
-            } else {
-                $field = 'varchar_field';
-            }
+             if ($fetchMode == 0 || $fetchMode == 3) {
+                 $field = 0;
+             } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+                 $field = 'VARCHAR_FIELD';
+             } else {
+                 $field = 'varchar_field';
+             }
 
-            $value = $newRecord[$field];
+             $value = $newRecord[$field];
 
-            $this->assertSame(
-                'GETUPDATESQL0' . $fetchMode . $forceMode,
-                $value,
-                sprintf(
-                    '[%s] [FORCE=%s] updated record should have an varchar_field value %s',
-                    $fetchDescription,
-                    $forceMode,
-                    'GETUPDATESQL0' . $fetchMode  . $forceMode
-                )
-            );
-        }
+             $this->assertSame(
+                 'GETUPDATESQL0' . $fetchMode . $forceMode,
+                 $value,
+                 sprintf(
+                     '[%s] [FORCE=%s] updated record should have an varchar_field value %s',
+                     $fetchDescription,
+                     $forceMode,
+                     'GETUPDATESQL0' . $fetchMode  . $forceMode
+                 )
+             );
+         }
     }
 }

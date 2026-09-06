@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class OffsetDateTest extends DateHandling
 {
-   
     /**
      * Test for {@see ADOConnection::offsetDate())
      *
@@ -40,7 +39,8 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffsetPlusOneWeek(): void {
+    public function testOffsetPlusOneWeek(): void
+    {
 
         $offset   = 7;
         $nowStamp = date('Y-m-d', strtotime('now +7 days'));
@@ -70,7 +70,8 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffsetLessOneWeek(): void {
+    public function testOffsetLessOneWeek(): void
+    {
 
         $offset = -7;
         $nowStamp = date('Y-m-d', strtotime('now -7 days'));
@@ -90,7 +91,6 @@ class OffsetDateTest extends DateHandling
             $od,
             'Offset date should return the date 1 week in the past'
         );
-
     }
 
     /**
@@ -100,7 +100,8 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffset90minutes(): void {
+    public function testOffset90minutes(): void
+    {
 
         /*
         * Test using a timestamp basedate to test the effect
@@ -125,7 +126,6 @@ class OffsetDateTest extends DateHandling
             'Offset date using hours should return the date 90 minute ' .
             'from now based on the current time of day'
         );
-
     }
 
     /**
@@ -174,12 +174,13 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffsetDateUsingHours(): void {
+    public function testOffsetDateUsingHours(): void
+    {
 
         $offset = 5;
         $nowStamp = date('Y-m-d H:i', strtotime('now + 5 hours'));
 
-        $offsetHours = 5/24;// hours to minuts to seconds
+        $offsetHours = 5 / 24;// hours to minuts to seconds
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -195,7 +196,6 @@ class OffsetDateTest extends DateHandling
             $od,
             'Offset date using hours should return the datetime 5 hours in the future'
         );
-
     }
 
     /**
@@ -205,12 +205,13 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffsetDateUsingNegativeHours(): void {
+    public function testOffsetDateUsingNegativeHours(): void
+    {
 
         $offset = -5;
         $nowStamp = date('Y-m-d H:i', strtotime('now -5 hours'));
 
-        $offsetHours = -5/24; // Convert days to hours
+        $offsetHours = -5 / 24; // Convert days to hours
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -235,12 +236,13 @@ class OffsetDateTest extends DateHandling
      *
      * @return void
      */
-    public function testOffsetDateUsingFraction(): void {
+    public function testOffsetDateUsingFraction(): void
+    {
 
-        
+
         $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
 
-        $offsetHours = 1440/(24*3600); // Convert days to hours
+        $offsetHours = 1440 / (24 * 3600); // Convert days to hours
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -271,10 +273,10 @@ class OffsetDateTest extends DateHandling
 
         $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
 
-        $offset = 1440/(24*3600); // Convert days to hours
+        $offset = 1440 / (24 * 3600); // Convert days to hours
 
         /*
-        * Set the base date column to the current time 
+        * Set the base date column to the current time
         */
         $sql = "UPDATE date_columns_test
                    SET offsetdate_test_field={$this->db->offsetDate($offset, false, true)}
@@ -312,10 +314,10 @@ class OffsetDateTest extends DateHandling
 
         $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
 
-        $offset = 1440/(24*3600); // Convert days to hours
+        $offset = 1440 / (24 * 3600); // Convert days to hours
 
         /*
-        * Set the base date column to the current time 
+        * Set the base date column to the current time
         */
         $sql = "UPDATE date_columns_test
                    SET offsetdate_test_field={$this->db->sysTimeStamp}
@@ -339,5 +341,4 @@ class OffsetDateTest extends DateHandling
             'return the date 1440 seconds in the future based on the date_field column'
         );
     }
-
 }

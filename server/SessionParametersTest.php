@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Response Tests cases for Session functions of ADODb
  * This tests retrieving all the current parameters
@@ -36,7 +37,7 @@ class SessionParametersTest
 
         $acc = new ActivateCompatConnection();
         $acc->startup();
-        
+
         $cls = new \stdClass();
         $cls->id = session_id();
         $cls->session = $_SESSION;
@@ -53,7 +54,7 @@ class SessionParametersTest
             'parameters' => ADOdb_Session::parameters(),
             'clob' => ADOdb_Session::clob(),
             'encryption_key' => ADOdb_Session::encryptionKey()
-            
+
         ];
 
         $cls ->objectData = [
@@ -71,6 +72,5 @@ class SessionParametersTest
         ];
 
         print json_encode($cls);
-
     }
 }

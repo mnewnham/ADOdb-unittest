@@ -18,7 +18,7 @@ class DriverControl extends \CoreControl
      */
     public int $fetchBothManner = 1;
 
-    
+
     /**
      * What the qstr process should return as a quoted string
      *

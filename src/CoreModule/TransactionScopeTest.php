@@ -121,7 +121,7 @@ class TransactionScopeTest extends ADOdbTestCase
                       FROM testtable_3 
                   ORDER BY id";
 
-            $result = $this->db->selectLimit($sql,1);
+            $result = $this->db->selectLimit($sql, 1);
             $baseData = $result->fetchRow();
 
             $this->assertSame(
@@ -300,8 +300,6 @@ class TransactionScopeTest extends ADOdbTestCase
         }
 
         foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
-           
-           
             $this->insertFetchMode($fetchMode);
 
             if ($fetchMode == 0 || $fetchMode == 3) {

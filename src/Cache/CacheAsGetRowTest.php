@@ -47,7 +47,7 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
     public function testCacheAsGetRow(int $expectedValue, string $sql, ?array $bind): void
     {
 
-        $baseFields = [ 
+        $baseFields = [
             '0' => 'ID',
             '1' => 'VARCHAR_FIELD',
             '2' => 'DATETIME_FIELD',
@@ -61,7 +61,7 @@ class CacheAsGetRowTest extends ADOdbCoreSetup
         if (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
             $fields = array_map('strtoupper', $baseFields);
             /*
-            $fields = [ 
+            $fields = [
                 '0' => 'ID',
                 '1' => 'VARCHAR_FIELD',
                 '2' => 'DATETIME_FIELD',

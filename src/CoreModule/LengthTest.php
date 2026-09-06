@@ -78,7 +78,7 @@ class LengthTest extends ADOdbTestCase
         $db->startTrans();
         $ok = readSqlIntoDatabase($db, $schemaFile);
         $db->completeTrans();
-       
+
         if ($GLOBALS['ADOdriver'] == 'mysqli') {
             $db->startTrans();
             $db->updateClob('length_test', 'text_field', 'TEST567890TEST567890', 'id=1');
@@ -117,7 +117,7 @@ class LengthTest extends ADOdbTestCase
             if (!in_array($metaType, ['C','C2','X','B','XL'])) {
                 continue;
             }
-           
+
             $lengthColumns[] = sprintf(
                 '%s %s_length',
                 $this->db->length(strtolower($data->name), $metaType),
@@ -197,7 +197,7 @@ class LengthTest extends ADOdbTestCase
             if (!in_array($metaType, ['C','C2','B', 'X','XL'])) {
                 continue;
             }
-            
+
             if (in_array($metaType, ['B'])) {
                 $valueColumns[] = strtolower($data->name);
             } else {
@@ -229,7 +229,7 @@ class LengthTest extends ADOdbTestCase
         }
 
         foreach ($numericRow as $k => $v) {
-            if(!isset($valueColumns[$k])) {
+            if (!isset($valueColumns[$k])) {
                 continue;
             }
             if (is_resource($v)) {

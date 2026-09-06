@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class CacheFunctions extends ADOdbTestCase
 {
-
     protected string $testTableName = 'testtable_3';
 
 
@@ -120,5 +119,4 @@ class CacheFunctions extends ADOdbTestCase
         $sql = "UPDATE testtable_3 SET empty_field = $value";
         list($result, $errno, $errmsg) = $this->executeSqlString($sql);
     }
-
 }

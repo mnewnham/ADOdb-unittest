@@ -40,9 +40,9 @@ class RenameTableTest extends DataDictFunctions
     {
 
         parent::setUpBeforeClass();
-        
+
         $db = $GLOBALS['ADOdbConnection'];
-       
+
         if (!$GLOBALS['DriverControl']->supportsRenameTable) {
             return;
         }
@@ -63,7 +63,6 @@ class RenameTableTest extends DataDictFunctions
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
-
     }
 
      /**
@@ -91,7 +90,6 @@ class RenameTableTest extends DataDictFunctions
         }
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-       
             $sql = 'DROP TABLE IF EXISTS rename_table_renamed';
 
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
@@ -122,7 +120,7 @@ class RenameTableTest extends DataDictFunctions
             'Test of renameTableSQL - should return an array of SQL statements'
         );
 
-        
+
 
         list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
         if ($errno > 0) {
@@ -134,7 +132,7 @@ class RenameTableTest extends DataDictFunctions
         * function passing the new table name
         */
         $success = $this->db->validateMetaTable('rename_table_renamed');
-      
+
         $this->assertTrue(
             $success,
             'Test of renameTableSQL - new table rename_table_renamed should exist'
@@ -151,7 +149,7 @@ class RenameTableTest extends DataDictFunctions
         }
 
         $success = $this->db->validateMetaTable('rename_table');
-      
+
         $this->assertTrue(
             $success,
             'Test of renameTableSQL - table rename_table_renamed' .

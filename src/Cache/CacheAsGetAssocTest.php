@@ -79,7 +79,7 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
             $expectedValue = [ 'NOT SET' ];
 
             $absoluteFetchMode = $this->insertFetchMode($fetchMode);
-           
+
             if ($bindFlag) {
                 $returnedRows = $this->db->cacheGetAssoc($boundSql, $bind, $forceArray, $first2Cols);
             } else {
@@ -117,8 +117,7 @@ class CacheAsGetAssocTest extends ADOdbCoreSetup
                 if (is_array($expectedValue)) {
                     $expectedValue = $this->sortFetchBothRecords($expectedValue);
                 }
-              
-            } 
+            }
 
             $this->assertSame(
                 $expectedValue,

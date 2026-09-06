@@ -85,7 +85,8 @@ class VariablesTest extends ADOdbTestCase
         }
     }
 
-    public function setup(): void {
+    public function setup(): void
+    {
         parent::setup();
     }
 
@@ -164,7 +165,7 @@ class VariablesTest extends ADOdbTestCase
         $this->assertGreaterThan(
             0,
             $count,
-            'Data insertion should have succeeded using Quoted field ' . 
+            'Data insertion should have succeeded using Quoted field ' .
             'and table names and added at least one record'
         );
     }

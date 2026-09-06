@@ -14,7 +14,7 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
-    
+
     /**
      * What additional data is required for column comments
      *

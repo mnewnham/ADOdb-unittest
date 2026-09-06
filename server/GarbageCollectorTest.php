@@ -38,10 +38,10 @@ class GarbageCollectorTest
         $acc = new ActivateCompatConnection();
         $acc->startup();
 
-        
+
         ADOdb_Session::optimize(true);
         ADOdb_Session::gc(3600);
-        
+
         $c = new \stdClass();
         $c->id = session_id();
         $c->test = 'testGarbageCollector';

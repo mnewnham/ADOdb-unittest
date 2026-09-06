@@ -30,7 +30,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class ReplaceTest extends HelperFunctions
 {
-    
     /**
      * Test for {@see ADODConnection::getUpdateSql()}
      *
@@ -135,7 +134,7 @@ class ReplaceTest extends HelperFunctions
 
         $this->assertSame(
             $aeVar,
-            str_replace("'","", $varCharField),
+            str_replace("'", "", $varCharField),
             sprintf(
                 '[FORCEMODE %s][FETCH %s ] Replace() should have changed ' .
                 'varchar_field to [%s] if the record was updated successfully',

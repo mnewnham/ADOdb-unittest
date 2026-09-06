@@ -27,7 +27,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class InsertIdTest
  *
- * Test cases for for ADOdb Autoincrement value handling 
+ * Test cases for for ADOdb Autoincrement value handling
  */
 class InsertIdTest extends ADOdbCoreSetup
 {
@@ -132,8 +132,8 @@ class InsertIdTest extends ADOdbCoreSetup
             $counter++;
         }
     }
-    
-    
+
+
     /**
      * Test successfully incrementing autoincrement columns
      *
@@ -180,6 +180,4 @@ class InsertIdTest extends ADOdbCoreSetup
             $counter++;
         }
     }
-
-    
 }

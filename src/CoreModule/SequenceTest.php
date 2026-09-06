@@ -43,9 +43,8 @@ class SequenceTest extends ADOdbTestCase
             return;
         }
 
-        
+
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
-      
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->startTrans();
             }
@@ -59,7 +58,6 @@ class SequenceTest extends ADOdbTestCase
             if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
                 $db->completeTrans();
             }
-     
         }
 
         $SQL = "SELECT COUNT(*) AS core_table3_count FROM testtable_3";
@@ -96,14 +94,14 @@ class SequenceTest extends ADOdbTestCase
         $db->completeTrans();
     }
 
-    public function setup() : void {
-         if ($GLOBALS['DriverControl']->hasInternalSequences == false) {
-           $this->markTestSkipped('Driver does not support true sequences');
-           return;
+    public function setup(): void
+    {
+        if ($GLOBALS['DriverControl']->hasInternalSequences == false) {
+            $this->markTestSkipped('Driver does not support true sequences');
+            return;
         }
 
         parent::setup();
-
     }
 
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Tests cases for driver specific string quoting
  *
@@ -251,7 +252,7 @@ class StringQuotingTest extends ADOdbTestCase
         }
 
         $this->assertTrue(
-            (NULL == $returnValue),
+            (null == $returnValue),
             'Qstr should have returned a string set to NULL'
         );
     }
@@ -282,7 +283,7 @@ class StringQuotingTest extends ADOdbTestCase
 
         $nullString = $this->db->addQ(null);
         $this->assertTrue(
-            (NULL === $nullString),
+            (null === $nullString),
             "AddQ() should return NULL in preparation for use in _query"
         );
 
@@ -351,7 +352,7 @@ class StringQuotingTest extends ADOdbTestCase
         */
         $this->assertSame(
             "'0'",
-              $zeroString,
+            $zeroString,
             'The qstr() method should return a quoted zero string \'0\' correctly'
         );
 

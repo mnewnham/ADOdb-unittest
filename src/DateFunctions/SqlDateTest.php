@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class SqlDateTest extends DateHandling
 {
-    
     /**
      * Test for {@see ADOConnection::sqlDate())
      *
@@ -42,7 +41,7 @@ class SqlDateTest extends DateHandling
      *
      */
     #[DataProvider('providerTestSqlDate')]
-    public function testSqlDate(int $testMethod, string $format, ?int $timestamp, int $margin=0): void
+    public function testSqlDate(int $testMethod, string $format, ?int $timestamp, int $margin = 0): void
     {
 
         $this->db->setFetchMode(ADODB_FETCH_NUM);
@@ -61,13 +60,12 @@ class SqlDateTest extends DateHandling
                 'provided timestamp identified by the format string: ' . $format;
                 break;
             case 2:
-                
                 if ($format == 'Q') {
-                    $expected = ceil((new \DateTime)->format('n') / 3);
+                    $expected = ceil((new \DateTime())->format('n') / 3);
                 } else {
                     $expected = date($format);
                 }
-              
+
                 $sql = sprintf(
                     $GLOBALS['DriverControl']->dateMethodExecutor,
                     $this->db->sqlDate($format)
@@ -81,7 +79,6 @@ class SqlDateTest extends DateHandling
                 'current timestamp identified by the format string [ ' . $format . ' ]';
                 break;
             case 3:
-
                 $sql = "SELECT id,{$GLOBALS['DriverControl']->dateTimeField}
                         FROM date_columns_test 
                         WHERE datetime_field IS NOT NULL ";
@@ -89,7 +86,7 @@ class SqlDateTest extends DateHandling
                 $this->db->storeFetchModes();
                 $this->db->setFetchMode(ADODB_FETCH_NUM);
 
-              
+
 
                 $result = $this->db->selectLimit($sql, 1);
                 $baseData = $result->fetchRow();
@@ -103,7 +100,7 @@ class SqlDateTest extends DateHandling
                 } else {
                     $expected = date($format, strtotime($baseData[1]));
                 }
-                
+
                 $dtSql =  $this->db->sqlDate($format, 'datetime_field');
 
                 $sql = sprintf(
@@ -130,11 +127,11 @@ class SqlDateTest extends DateHandling
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
                 $message = 'When the SQL [' . $sql . '] is executed, sqlDate should return the portion of the ' .
-                'date field identified by the format string [ ' . $format . ' ]. ' . 
+                'date field identified by the format string [ ' . $format . ' ]. ' .
                 ' The raw value of the field is [' . $row[1] . ']';
-                break; 
+                break;
 
-                default:
+            default:
                 $this->fail("Invalid test method: $testMethod");
         }
 
@@ -147,7 +144,7 @@ class SqlDateTest extends DateHandling
                 'to'   => $expected + $margin
             ];
 
-            $success = ($actual >= $range['from'] && $actual <= $range['to'] ) ? true : false; 
+            $success = ($actual >= $range['from'] && $actual <= $range['to'] ) ? true : false;
             $message = sprintf(
                 '%s The value should be between %s and %s, actually %s',
                 $message,
@@ -160,7 +157,7 @@ class SqlDateTest extends DateHandling
             $message = sprintf(
                 '$s - Expected %s, got %s',
                 $message,
-                $expected.
+                $expected .
                 $actual
             );
         }
@@ -168,7 +165,6 @@ class SqlDateTest extends DateHandling
         $this->assertTrue(
             $success,
             $message
-           
         );
     }
 
@@ -222,5 +218,4 @@ class SqlDateTest extends DateHandling
             'Now 2 Digit Second Of Minute' => [3, 's', null, 5],
         ];
     }
-
 }

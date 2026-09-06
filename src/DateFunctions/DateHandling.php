@@ -31,7 +31,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class DateHandling extends ADOdbTestCase
 {
-
     /**
      * Sets up a flag used from refreshing the table mid-test
      *
@@ -47,7 +46,7 @@ class DateHandling extends ADOdbTestCase
         parent::setup();
         $GLOBALS['ADOdbConnection']->_errorCode = 0;
         $db = $GLOBALS['ADOdbConnection'];
-    
+
         /*
         * Refreshes the schema at the start of each process
         */
@@ -85,5 +84,4 @@ class DateHandling extends ADOdbTestCase
         $result = $db->execute($sql);
         $db->completeTrans();
     }
-
 }

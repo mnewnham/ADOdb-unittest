@@ -158,7 +158,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $columnTypes = new \columnTypes();
 
         $this->databaseFieldsDefinition = $columnTypes->databaseFieldsDefinition;
-    
     }
 
     /**
@@ -186,7 +185,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $name     = $metaFetch->name;
-        
+
         $fieldArray = explode('_', $name);
 
         $nameData = $this->databaseFieldsDefinition[$fieldArray[1]];
@@ -201,8 +200,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeX;
         } elseif (strcasecmp($expectedActualType, 'typexl') == 0) {
             $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeXL;
-        }      
-        
+        }
+
         /*
         * Stage 1, pass a fieldobject to MetaType() as first arg
         */
@@ -217,10 +216,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 $name,
                 $driverColType,
                 print_r(
-                    $nameData, 
+                    $nameData,
                     true
-                    )
-            
+                )
             )
         );
 
@@ -267,7 +265,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $returnData = [];
         for ($i = 1; $i < $cols; $i++) {
             $field = $executionResult->fetchField($i);
-           
+
             $returnData[$field->name] = array(
                 $field->name,
                 $field->type,

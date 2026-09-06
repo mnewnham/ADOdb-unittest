@@ -44,8 +44,8 @@ class DriverControl extends \CoreControl
      *
      * @var mixed
      */
-    public bool $databaseIsSchema = true; 
-    
+    public bool $databaseIsSchema = true;
+
     /**
      * How to obtain the entire contents of the date_field
      *
@@ -67,11 +67,9 @@ class DriverControl extends \CoreControl
      */
     public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI')";
 
-    
+
     public function __construct()
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
     }
-
-
 }
