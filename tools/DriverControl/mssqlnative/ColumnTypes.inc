@@ -55,8 +55,8 @@ class columnTypes
 
         ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'DECIMAL(16,2)'],
 
-        ['db' => 'DATETIME2', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'DATETIME2'],
-        ['db' => 'TIMESTAMP', 'meta' => 'T', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
+        ['db' => 'DATETIME2', 'meta' => 'TS', 'output' => 'DATETIME', 'build' => 'DATETIME2'],
+        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
 
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
         ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME']
