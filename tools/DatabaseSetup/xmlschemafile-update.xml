@@ -13,7 +13,9 @@
             <NOTNULL/>
             <DEFAULT VALUE="this is a default value"/>
         </field>
-        <field name="nvarchar_field" type="C2" size="240"><NOTNULL/></field>
+        <field name="nvarchar_field" type="C2" size="240"><NOTNULL/>
+            <DEFAULT VALUE="nvarchar change default"/>
+        </field>
 
         <field name="varchar_field_for_default" type="C" size="100">
             <DEFAULT VALUE="this is a no-change default value"/>

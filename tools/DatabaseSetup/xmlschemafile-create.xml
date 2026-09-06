@@ -11,7 +11,9 @@
             <AUTOINCREMENT/>
         </field> 
         <field name="varchar_field" type="C" size="240"><NOTNULL/></field>
-        <field name="nvarchar_field" type="C2" size="120"><NOTNULL/></field>
+        <field name="nvarchar_field" type="C2" size="120"><NOTNULL/>
+            <DEFAULT VALUE="nvarchar create default"/>
+        </field>
         <field name="varchar_field_to_drop" type="C" size="240">
             <DEFAULT VALUE="this is not a default value"/>
         </field>
