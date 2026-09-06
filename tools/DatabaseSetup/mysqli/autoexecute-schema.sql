@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS autoexecute;
+-- DROP TABLE IF EXISTS autoexecute;
 
 CREATE TABLE autoexecute (
 	id INT NOT NULL AUTO_INCREMENT,
