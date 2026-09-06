@@ -144,9 +144,10 @@ class FetchFieldTest extends ADOdbCoreSetup
                 $expectedType,
                 $metaType,
                 sprintf(
-                    '[FETCH %s] Expected field name %s with no bind usage and invalid metaType %s at position %d, found %s',
+                    '[FETCH %s] Expected field name %s with no bind usage and invalid metaType %s for actual type %s at position %d, found %s',
                     $fetchDescription,
                     $fieldObject->name,
+                    $fieldObject->type,
                     $expectedType,
                     $i,
                     $metaType
