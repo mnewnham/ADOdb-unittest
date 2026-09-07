@@ -31,7 +31,7 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $qStrExpectedResult = "Famed author James O\\'Sullivan";
+    public string $qStrExpectedResult = "Famed author James O''Sullivan";
 
 
     public function __construct()
