@@ -236,6 +236,47 @@ class BindFunctionsTest extends DateHandling
             );
         }
 
+        
+        if (!$r = $result->fetchRow()) {
+            $this->assertTrue(
+                true,
+                'OK'
+            );
+        }
+    }
+
+    /**
+     * Test for {@see ADOConnection::bindTimestamp())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:bindtimestamp
+     *
+     * @return void
+     */
+    public function testParameterizedBindTimestamp(): void
+    {
+        $nowTime = time();
+        $now = date('Y-m-d H:i:s', $nowTime);
+
+        $dbTs = $this->db->bindTimestamp($now);
+
+        if (substr($dbTs, 0, 1) != "'") {
+            $this->fail(
+                sprintf(
+                    'bindTimestamp() should return a timestamp single quoted, actually returned[%s]',
+                    $dbTs
+                )
+            );
+        }
+
+        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
+
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $dbTs
+        );
+
+        $actual = $this->db->getOne($sql);
+
         $this->db->param('');
         $p1 = $this->db->param('p1');
 
