@@ -112,10 +112,10 @@ class PdoDriverTest extends ADOdbTestCase
      */
      #[DataProvider('providerConformToBindParameterStyle')]
     public function testConformToBindParameterStyle(
-        $expected,
-        $inputarr,
-        $bindParameterStyle,
-        $sql
+        mixed $expected,
+        mixed $inputarr,
+        int $bindParameterStyle,
+        ?string $sql
     ): void {
 
          $method = new \ReflectionMethod($this->db, 'conformToBindParameterStyle');
