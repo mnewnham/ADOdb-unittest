@@ -1,15 +1,18 @@
 -- Acts as a test for manipulation of date variables
-DROP TABLE IF EXISTS date_columns_test;
 DROP SEQUENCE IF EXISTS date_columns_test_seq;
+DROP TABLE IF EXISTS date_columns_test;
+
 
 CREATE TABLE date_columns_test (
-	id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-	datetime_field DATETIME,
+	id INTEGER NOT NULL,
+	datetime_field TIMESTAMP,
 	date_field DATE,
-	sqldate_test_field DATETIME,
-	offsetdate_test_field DATETIME
+	sqldate_test_field TIMESTAMP,
+	offsetdate_test_field TIMESTAMP
 	
 );
+
+DROP TRIGGER IF EXISTS date_columns_test_seq;
 
 CREATE SEQUENCE date_columns_test_seq
     INCREMENT BY 1
