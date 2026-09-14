@@ -20,6 +20,9 @@ CREATE SEQUENCE seq_test_1 START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_test_2 START WITH 1 INCREMENT BY 1;
 
 
+DROP TABLE IF EXISTS dictionary_change_test_table;
+DROP TABLE IF EXISTS date_columns_test;
+
 DROP TABLE IF EXISTS testtable_3;
 -- Must drop testtable_2 before testtable_1 because of foreign key constraints
 DROP TABLE IF EXISTS testtable_2;
