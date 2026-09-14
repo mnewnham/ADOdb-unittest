@@ -20,7 +20,7 @@ CREATE TABLE dt_foreign_key_target_1 (
 
 CREATE TABLE dictionary_change_test_table (
 	id INTEGER NOT NULL ,
-	date_field DATE NOT NULL,
+	date_field DATE DEFAULT TO_DATE('2030-01-02', 'YYYY-MM-DD'),
 	integer_field SMALLINT DEFAULT 0,
 	droppable_integer_field SMALLINT DEFAULT 0,
 	decimal_field_to_modify NUMBER(8,4) DEFAULT 0,
