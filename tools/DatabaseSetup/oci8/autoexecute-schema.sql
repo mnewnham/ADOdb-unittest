@@ -11,6 +11,7 @@ CREATE TABLE autoexecute (
 	id INTEGER NOT NULL,
     varchar_field VARCHAR(20),
     date_field DATE,
+    datetime_field TIMESTAMP,
     integer_field SMALLINT NOT NULL,
     decimal_field NUMBER(12,2),
     empty_field VARCHAR(240) DEFAULT '',
