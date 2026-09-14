@@ -50,8 +50,8 @@ class columnTypes
         ['db' => 'ENUM', 'meta' => 'C', 'output' => 'ENUM', 'build' => "ENUM('cheddar','shropshire','wenslydale')"], //254
         ['db' => 'SET', 'meta' => 'C', 'output' => 'ENUM', 'build' => "SET('plaice','haddock','cod')"], //254
         ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT(1)'],
-        ['db' => 'BOOLEAN', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'BOOLEAN'],
-        ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'TINYINT(1)'],
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'TINYINT', 'build' => 'BOOLEAN'],
+        ['db' => 'TINYINT', 'meta' => 'L', 'output' => 'TINYINT', 'build' => 'TINYINT(1)'],
         ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT(10)'],
         ['db' => 'MEDIUMINT', 'meta' => 'I4', 'output' => 'INTEGER', 'build' => 'MEDIUMINT(10)'],
         ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER(10)'],
