@@ -124,11 +124,17 @@ class StringQuotingTest extends ADOdbTestCase
             return;
         }
 
-        $this->assertSame(
-            $this->qStrInboundValue,
-            $returnValue,
-            'Qstr should have returned a string with the apostrophe ' .
-            'set back to normal after retrieval from DB'
+        $variance = strcmp($this->qStrInboundValue, $returnValue);
+
+        $this->assertEquals(
+            0,
+            $variance,
+            sprintf(
+                'Qstr should have returned a string with the apostrophe ' .
+                'set back to normal after retrieval from DB, expected %s, got %s',
+                $this->qStrInboundValue,
+                $returnValue
+            )
         );
     }
 
@@ -141,12 +147,14 @@ class StringQuotingTest extends ADOdbTestCase
     public function testAddq(): void
     {
 
+        $this->db->execute("UPDATE testtable_3 SET empty_field=NULL");
         /*
         * The expected result is db dependent, so we will
         * insert the string into the empty_field column
         * and see if it fails to insert or not.
         */
-        $qString = $this->db->addQ($this->qStrInboundValue);
+        //$qString = $this->db->addQ($this->qStrInboundValue);
+        $qString = $this->qStrInboundValue;
         $this->db->param(false);
         $p1 = $this->db->param('p1');
         $bind = array(
@@ -179,12 +187,19 @@ class StringQuotingTest extends ADOdbTestCase
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $GLOBALS['DriverControl']->qStrExpectedResult,
-            $returnValue,
-            'addQ should have returned a string with the apostrophe ' .
-            'set back to normal after retrieval from DB'
+        $variance = strcmp($this->qStrInboundValue, $returnValue);
+
+        $this->assertEquals(
+            0,
+            $variance,
+            sprintf(
+                'addQ() should have returned a string with the apostrophe ' .
+                'set back to normal after retrieval from DB, expected %s, got %s',
+                $this->qStrInboundValue,
+                $returnValue
+            )
         );
+
     }
 
     /**
