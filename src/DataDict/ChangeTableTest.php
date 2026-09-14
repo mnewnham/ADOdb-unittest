@@ -151,9 +151,14 @@ class ChangeTableTest extends DataDictFunctions
 
         $dbdate = str_replace("'", "", $this->db->dbDate('2010-01-01'));
 
+        $newDefault = '';
+        if($metaColumns['DATE_FIELD']->has_default) {
+            str_replace("'", "", $metaColumns['DATE_FIELD']->default_value);
+        }
+
         $this->assertSame(
             $dbdate,
-            str_replace("'", "", $metaColumns['DATE_FIELD']->default_value),
+            $newDefault,
             '[changeTableSql] DATE_FIELD should have changed default from 2030-01-01 to 2010-01-01'
         );
 
