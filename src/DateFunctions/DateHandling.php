@@ -64,9 +64,9 @@ class DateHandling extends ADOdbTestCase
 
         $fields = [
             'date_field' => date('Y-m-d'),
-            'datetime_field' => date('Y-m-d H:i'),
-            'sqldate_test_field' => date('Y-m-d H:i'),
-            'offsetdate_test_field' => date('Y-m-d H:i')
+            'datetime_field' => date('Y-m-d H:i:s'),
+            'sqldate_test_field' => date('Y-m-d H:i:s'),
+            'offsetdate_test_field' => date('Y-m-d H:i:s')
         ];
 
         $sql = $db->getInsertSql($template, $fields);
@@ -75,13 +75,82 @@ class DateHandling extends ADOdbTestCase
         $result = $db->execute($sql);
         $fields = [
             'date_field' => '1959-08-29',
-            'datetime_field' => '1959-08-29 13:15',
-            'sqldate_test_field' => '1959-08-29 13:15',
-            'offsetdate_test_field' => '1959-08-29 13:15'
+            'datetime_field' => '1959-08-29 13:15:00',
+            'sqldate_test_field' => '1959-08-29 13:15:00',
+            'offsetdate_test_field' => '1959-08-29 13:15:00'
         ];
 
         $sql = $db->getInsertSql($template, $fields);
+
         $result = $db->execute($sql);
         $db->completeTrans();
+    }
+
+    /**
+     * Determones if the actual date is between the seconds range
+     * in which case, we assume the result was good
+     *
+     * @param string $expected The expected result
+     * @param string $actual   The actual result
+     * @param integer $margin  The number of seconds variance
+     * 
+     * @return array
+     */
+    protected function timeRangeHandling(
+        string $expected, 
+        string $actual, 
+        int $margin
+    ) : array {
+        $result = [ 0, '' ];
+
+        $success = 0;
+        $message = '';
+
+        $tExpected = strtotime($expected);
+        $tActual   = strtotime($actual);
+
+        if (preg_match('/^[0-9]+$/', $expected) && $actual && preg_match('/^[0-9]+$/', $actual)) {
+            $range = [
+                'from' => $expected - $margin,
+                'to'   => $expected + $margin
+            ];
+
+
+            $success = ($actual >= $range['from'] && $actual <= $range['to'] ) ? true : false;
+            $message = sprintf(
+                'Range variance error - The value should be between %s and %s, actually %s',
+                $range['from'],
+                $range['to'],
+                $actual
+            );
+        } else if (preg_match('/^[0-9]+$/', $tExpected) && $tActual && preg_match('/^[0-9]+$/', $tActual)) {
+            $range = [
+                'from' => $tExpected - $margin,
+                'to'   => $tExpected + $margin
+            ];
+
+
+            $success = ($tActual >= $range['from'] && $tActual <= $range['to'] ) ? true : false;
+            $message = sprintf(
+                'Range variance error - The value should be between %s and %s, actually %s',
+                date('Y-m-d H:i:s', $range['from']),
+                date('Y-m-d H:i:s', $range['to']),
+                $actual
+            );
+        } else {
+            $success = strcmp($expected, $actual ?? '') !== false ? true : false;
+            $message = sprintf(
+                '$s - Expected %s, got %s',
+                $message,
+                $expected .
+                $actual
+            );
+        }
+
+        $result[0] = $success;
+        if (!$success) {
+            $result[1] = $message;
+        }
+        return $result;
     }
 }

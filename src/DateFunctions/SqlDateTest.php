@@ -86,8 +86,6 @@ class SqlDateTest extends DateHandling
                 $this->db->storeFetchModes();
                 $this->db->setFetchMode(ADODB_FETCH_NUM);
 
-
-
                 $result = $this->db->selectLimit($sql, 1);
                 $baseData = $result->fetchRow();
 

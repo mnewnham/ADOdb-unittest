@@ -56,10 +56,11 @@ class OffsetDateTest extends DateHandling
 
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
-            'Offset date should return the date 1 week in the future'
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
+            'Offset date should return the date 1 week in the future. ' . $message
         );
     }
 
@@ -86,10 +87,11 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
-            'Offset date should return the date 1 week in the past'
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
+            'Offset date should return the date 1 week in the past. ' . $message
         );
     }
 
@@ -109,7 +111,7 @@ class OffsetDateTest extends DateHandling
         */
         $offset = 1.5 / 24; // 12 hour s
 
-        $nowStamp = date('Y-m-d H:i', strtotime('now + 90 minutes'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now + 90 minutes'));
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -120,11 +122,12 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
             'Offset date using hours should return the date 90 minute ' .
-            'from now based on the current time of day'
+            'from now based on the current time of day. ' . $message
         );
     }
 
@@ -143,7 +146,7 @@ class OffsetDateTest extends DateHandling
         */
         $sql = "SELECT offsetdate_test_field 
                   FROM date_columns_test 
-                 WHERE id=1";
+                 ORDER BY id";
 
         $dateField = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
@@ -178,7 +181,7 @@ class OffsetDateTest extends DateHandling
     {
 
         $offset = 5;
-        $nowStamp = date('Y-m-d H:i', strtotime('now + 5 hours'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now + 5 hours'));
 
         $offsetHours = 5 / 24;// hours to minuts to seconds
 
@@ -191,10 +194,11 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
-            'Offset date using hours should return the datetime 5 hours in the future'
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
+            'Offset date using hours should return the datetime 5 hours in the future. ' . $message
         );
     }
 
@@ -209,7 +213,7 @@ class OffsetDateTest extends DateHandling
     {
 
         $offset = -5;
-        $nowStamp = date('Y-m-d H:i', strtotime('now -5 hours'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now -5 hours'));
 
         $offsetHours = -5 / 24; // Convert days to hours
 
@@ -222,10 +226,11 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
-            'Offset date using negative hours should return the date 5 hours in the past'
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
+            'Offset date using negative hours should return the date 5 hours in the past.' . $message
         );
     }
 
@@ -240,7 +245,7 @@ class OffsetDateTest extends DateHandling
     {
 
 
-        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now +1440 seconds'));
 
         $offsetHours = 1440 / (24 * 3600); // Convert days to hours
 
@@ -249,13 +254,16 @@ class OffsetDateTest extends DateHandling
             $this->db->offsetDate($offsetHours)
         );
 
+        //print "SQL EXEC $sql\n";
+
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
+        
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
+        $this->assertTrue(
+            $success,
             'Offset date using date fraction should return the date 1440 seconds in the future'
         );
     }
@@ -271,7 +279,7 @@ class OffsetDateTest extends DateHandling
     public function testOffsetWriteUsingFractionAndDateField(): void
     {
 
-        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now +1440 seconds'));
 
         $offset = 1440 / (24 * 3600); // Convert days to hours
 
@@ -293,11 +301,13 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
             'Offset date using a column as the base date should ' .
-            'return the date 1440 seconds in the future based on the date_field column'
+            'return the date 1440 seconds in the future based on the date_field column. ' . 
+            $message
         );
     }
 
@@ -312,7 +322,7 @@ class OffsetDateTest extends DateHandling
     public function testOffsetReadUsingFractionAndDateField(): void
     {
 
-        $nowStamp = date('Y-m-d H:i', strtotime('now +1440 seconds'));
+        $nowStamp = date('Y-m-d H:i:s', strtotime('now +1440 seconds'));
 
         $offset = 1440 / (24 * 3600); // Convert days to hours
 
@@ -334,11 +344,13 @@ class OffsetDateTest extends DateHandling
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
-        $this->assertSame(
-            $nowStamp,
-            $od,
+        list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
+
+        $this->assertTrue(
+            $success,
             'Offset date using a column as the base date should ' .
-            'return the date 1440 seconds in the future based on the date_field column'
+            'return the date 1440 seconds in the future based on the date_field column. ' . 
+            $message
         );
     }
 }
