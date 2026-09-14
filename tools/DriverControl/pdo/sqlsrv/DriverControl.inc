@@ -25,13 +25,41 @@ class DriverControl extends \CoreControl
      */
     public bool $dictionaryRequireTransactions = false;
 
-
     /**
      * What the qstr process should return as a quoted string
      *
      * @var string
      */
     public string $qStrExpectedResult = "Famed author James O''Sullivan";
+
+    /**
+     * How to obtain the entire contents of the datetime_field
+     *
+     * @var string
+     */
+    public string $dateField = 'date_field';
+
+    /**
+     * How to obtain the entire contents of the offsetdate_test_field
+     *
+     * @var string
+     */
+    public string $offsetDateTestField = "FORMAT(offsetdate_test_field, 'yyyy-MM-dd HH:mm:ss')";
+
+
+    /**
+     * How to obtain the entire contents of the datetime_field
+     *
+     * @var string
+     */
+    public string $dateTimeField = "(FORMAT(datetime_field, 'yyyy-MM-dd HH:mm:ss'))";
+
+    /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "FORMAT(CAST(%s AS DATETIME), 'yyyy-MM-dd HH:mm:ss')";
 
 
     public function __construct()

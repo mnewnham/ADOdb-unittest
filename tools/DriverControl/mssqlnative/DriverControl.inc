@@ -37,7 +37,7 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $offsetDateTestField = "FORMAT(offsetdate_test_field, 'yyyy-MM-dd HH:mm')";
+    public string $offsetDateTestField = "FORMAT(offsetdate_test_field, 'yyyy-MM-dd HH:mm:ss')";
 
 
     /**
@@ -45,15 +45,14 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $dateTimeField = "(FORMAT(datetime_field, 'yyyy-MM-dd HH:mm'))";
+    public string $dateTimeField = "(FORMAT(datetime_field, 'yyyy-MM-dd HH:mm:ss'))";
 
-    //$dateFormat = "FORMAT(DATEADD(s, %s, %s), 'yyyy-MM-dd HH:mm')";
-     /**
+    /**
      * Converts a timestamp to a datetime string
      *
      * @var string
      */
-    public string $dateTimeTranslation =  "FORMAT(CAST(%s AS DATETIME), 'yyyy-MM-dd HH:mm')";
+    public string $dateTimeTranslation =  "FORMAT(CAST(%s AS DATETIME), 'yyyy-MM-dd HH:mm:ss')";
 
     public function __construct()
     {

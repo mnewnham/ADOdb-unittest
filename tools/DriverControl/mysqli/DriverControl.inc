@@ -34,12 +34,12 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $offsetDateTestField = "DATE_FORMAT(offsetdate_test_field, '%Y-%m-%d %H:%i')";
+    public string $offsetDateTestField = "DATE_FORMAT(offsetdate_test_field, '%Y-%m-%d %H:%i:%s')";
 
     /**
      * Converts a timestamp to a datetime string
      *
      * @var string
      */
-    public string $dateTimeTranslation =  "DATE_FORMAT(%s, '%%Y-%%m-%%d %%H:%%i')";
+    public string $dateTimeTranslation =  "DATE_FORMAT(%s, '%%Y-%%m-%%d %%H:%%i:%%s')";
 }
