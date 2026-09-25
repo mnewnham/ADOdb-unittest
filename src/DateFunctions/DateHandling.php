@@ -59,8 +59,7 @@ class DateHandling extends ADOdbTestCase
         $success = readSqlIntoDatabase($db, $tableSchema);
 
         $db->startTrans();
-        $db->execute('TRUNCATE TABLE date_columns_test');
-        $template = $db->execute('SELECT * FROM date_columns_test WHERE id=-1');
+           $template = $db->execute('SELECT * FROM date_columns_test WHERE id=-1');
 
         $fields = [
             'date_field' => date('Y-m-d'),
