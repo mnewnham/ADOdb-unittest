@@ -278,7 +278,7 @@ class CacheGetRowTest extends CacheFunctions
 
         $this->db->startTrans();
 
-        print "--------------- Call CSL --------------------\n";
+       
         if ($bind) {
             $result = $this->db->cacheSelectLimit(
                 $this->timeout,

@@ -73,10 +73,6 @@ class MetaSequencesTest extends MetaFunctions
                 $schema
             );
 
-           // print_r($executionResult);
-
-            //list($errno, $errmsg) = $this->assertADOdbError('metaSequences()');
-
             if (is_array($executionResult) && $expectedCount === 0) {
                 $this->assertIsArray(
                     $executionResult,

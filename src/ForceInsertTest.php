@@ -211,10 +211,6 @@ class ForceInsertTest extends ADOdbTestCase
                 $actual = 'ZERO';
             }
 
-            //print "\nFM={$this->forceModeDescriptions[$forceMode]} Index=$index\n";
-           // print_r($columnValues);
-
-
             if (is_null($columnValues[$index])) {
                 $expected = 'NULL';
             } elseif (strlen($columnValues[$index]) == 1) {

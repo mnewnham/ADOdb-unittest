@@ -254,8 +254,6 @@ class OffsetDateTest extends DateHandling
             $this->db->offsetDate($offsetHours)
         );
 
-        //print "SQL EXEC $sql\n";
-
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
