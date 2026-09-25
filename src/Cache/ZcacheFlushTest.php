@@ -84,9 +84,9 @@ class ZcacheFlushTest extends CacheFunctions
         $response = $this->db->cacheFlush();
 
         $this->assertSame(
-            true,
+            null,
             $response,
-            "CacheFlush All should return true"
+            "CacheFlush All should not return a value"
         );
     }
 }
