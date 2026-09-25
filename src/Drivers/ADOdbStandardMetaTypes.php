@@ -38,8 +38,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      */
     const I1_MAX = 127;
     const I2_MAX = 32767;
-    const I4_MAX = 8388607;
-    const I_MAX  = 2147483647;
+    const I3_MAX = 8388607;
+    const I4_MAX  = 2147483647;
     const I8_MAX = 9223372036854775807;
 
     /**
@@ -129,6 +129,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $sql = sprintf($createTableWrapper, $columnString);
 
+       // print "\n------------- ctw ---------------\n$sql\n";
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->startTrans();
         }
@@ -158,16 +160,17 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $columnTypes = new \columnTypes();
 
         $this->databaseFieldsDefinition = $columnTypes->databaseFieldsDefinition;
+
     }
 
     /**
      * Test for {@see ADODDatadict::metaType()]
      * Checks that the correct metatype is returned
      *
-     * @param ?string $metaType
-     * @param int $fieldLength
-     * @param int $offset
-     * @param string $actualResult
+     * @param string $baseFieldName
+     * @param mixed  $fieldType
+     * @param int    $fieldOffset
+     * @param object $metaFetch
      *
      * @return void
      */
@@ -230,12 +233,10 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             sprintf(
                 'Checking ActualType of field [%s] derived from DB ' .
                 'type [%s] using MetaType [%s] returned' .
-                ' by MetaType passing fieldObject as 1st parameter
-                %s',
+                ' by MetaType passing fieldObject as 1st parameter',
                 $name,
                 $driverColType,
-                $expectedMetaType,
-                print_r($metaFetch, true)
+                $expectedMetaType
             )
         );
     }
@@ -352,6 +353,44 @@ class ADOdbStandardMetaTypes extends MetaFunctions
     }
 
     /**
+     * Checks that a maximum I3 value can be inserted
+     *
+     *
+     * @return void
+     */
+    public function testI3ValueInsertions(): void
+    {
+
+        $fields = [];
+
+        foreach ($this->databaseFieldsDefinition as $index => $columnData) {
+            if ($columnData['meta'] == 'I3') {
+                $fields['field_' . $index] = self::I4_MAX - 1;
+            }
+        }
+
+        if (count($fields) == 0) {
+            $this->markTestSkipped(
+                'No I4 columns in database for test insertion'
+            );
+            return;
+        }
+
+        $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
+
+        $sql = $this->db->getInsertSql($template, $fields);
+
+        $this->db->startTrans();
+        $result = $this->db->execute($sql);
+        $this->db->completeTrans();
+
+        $this->assertIsObject(
+            $result,
+            'A Maximum value I4 Integer value should have been inserted'
+        );
+    }
+
+    /**
      * Checks that a maximum I4 value can be inserted
      *
      *
@@ -389,44 +428,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         );
     }
 
-    /**
-     * Checks that a maximum I value can be inserted
-     *
-     *
-     * @return void
-     */
-    public function testIValueInsertions(): void
-    {
-
-        $fields = [];
-
-        foreach ($this->databaseFieldsDefinition as $index => $columnData) {
-            if ($columnData['meta'] == 'I') {
-                $fields['field_' . $index] = self::I_MAX - 1;
-            }
-        }
-
-        if (count($fields) == 0) {
-            $this->markTestSkipped(
-                'No I columns in database for test insertion'
-            );
-            return;
-        }
-
-        $template = $this->db->execute('SELECT * FROM metatype_test WHERE id=-1');
-
-        $sql = $this->db->getInsertSql($template, $fields);
-
-        $this->db->startTrans();
-        $result = $this->db->execute($sql);
-        $this->db->completeTrans();
-
-        $this->assertIsObject(
-            $result,
-            'A Maximum value I Integer value should have been inserted'
-        );
-    }
-
+    
     /**
      * Checks that a maximum I4 value can be inserted
      *
