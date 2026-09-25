@@ -135,7 +135,7 @@ class MssqlnativeDriverTest extends ADOdbTestCase
             ["H:i:s", "test_date" ,  "timeonly","18:55:30"],
             ["d m Y",  "test_date" ,"Space4","17 12 2016"],  // Is done by former method
             ["d m Y",  "NULL" ,"nullSpace4", null],
-            ["m-d-Y","test_date","nowUSdash4","01-01-2016"]
+            ["m-d-Y","test_date","nowUSdash4","12-17-2016"]
         ];
     }
 }
