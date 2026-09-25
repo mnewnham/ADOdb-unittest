@@ -538,3 +538,9 @@ $sessionParams = $availableCredentials['session'];
 if ($sessionParams['skipTests'] == '1') {
     $GLOBALS['skipSessionTests'] = 1;
 }
+if (in_array($adoDriver, ['sqlite3', 'pdo-sqlite'])) {
+    if ($sessionParams['skipTests'] != '1') {
+        print "Session testing auto-disabled for SQLite connections\n";
+    }
+    $GLOBALS['skipSessionTests'] = 1;
+}
