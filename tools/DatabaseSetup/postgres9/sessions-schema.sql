@@ -1,6 +1,5 @@
  -- Schema for testing the ADOdb session management feature
- 
- DROP TABLE IF EXISTS session_test;
+-- DROP TABLE session_test;
 
 CREATE TABLE session_test (
   sesskey VARCHAR( 64 ) NOT NULL DEFAULT '',
@@ -8,6 +7,7 @@ CREATE TABLE session_test (
   expireref VARCHAR( 250 ) DEFAULT '',
   created TIMESTAMP NOT NULL ,
   modified TIMESTAMP NOT NULL ,
+  text_sessdate TEXT,
   sessdata BYTEA,
   PRIMARY KEY ( sesskey )
 

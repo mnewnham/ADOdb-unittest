@@ -23,6 +23,7 @@ DROP SEQUENCE IF EXISTS unittest_genid_no;
 CREATE SEQUENCE seq_test_1 START 1;
 CREATE SEQUENCE seq_test_2 START 1;
 
+DROP TABLE IF EXISTS dictionary_creation_test_table;
 
 DROP TYPE IF EXISTS ENUM_FIELD_TO_KEEP_ENUM_TYPE;
 
@@ -31,9 +32,9 @@ DROP TYPE IF EXISTS ENUM_FIELD_TO_KEEP_ENUM_TYPE;
 CREATE TABLE testtable_1 (
 	id SERIAL,
 	varchar_field VARCHAR(20),
-	datetime_field TIME,
+	datetime_field TIMESTAMP,
 	date_field DATE,
-	integer_field SMALLINT DEFAULT 0,
+	integer_field INT DEFAULT 0,
 	decimal_field decimal(12,2) DEFAULT 0.0,
 	boolean_field BOOLEAN DEFAULT 'FALSE',
 	empty_field VARCHAR(240) DEFAULT '',
@@ -55,8 +56,8 @@ CREATE VIEW testtable_1_view AS
 	WHERE varchar_field IS NOT NULL;
 
 CREATE TABLE testtable_2 (
-    id SERIAL PRIMARY KEY,
-    integer_field SMALLINT DEFAULT 0,
+    id BIGSERIAL PRIMARY KEY,
+    integer_field INT DEFAULT 0,
 	date_field DATE,
 	blob_field BYTEA,
     FOREIGN KEY (integer_field,date_field) REFERENCES testtable_1(integer_field,date_field)
@@ -65,9 +66,9 @@ CREATE TABLE testtable_2 (
 CREATE TABLE testtable_3 (
 	id SERIAL PRIMARY KEY,
 	varchar_field VARCHAR(20),
-	datetime_field TIME,
+	datetime_field TIMESTAMP,
 	date_field DATE,
-	integer_field SMALLINT DEFAULT 0,
+	integer_field INTEGER DEFAULT 0,
 	decimal_field decimal(12,2) DEFAULT 0.0,
 	boolean_field BOOLEAN DEFAULT 'FALSE',
 	empty_field VARCHAR(240) DEFAULT '',
@@ -77,3 +78,12 @@ CREATE TABLE testtable_3 (
 CREATE	UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
 CREATE UNIQUE INDEX vdx33 ON testtable_3 (number_run_field);
 
+DROP TABLE IF EXISTS blob_storage_table;
+
+CREATE TABLE blob_storage_table (
+    id SERIAL PRIMARY KEY,
+    integer_field INTEGER DEFAULT 0,
+	blob_field BYTEA,
+    clob_field TEXT,
+    varchar_field VARCHAR(20)
+);
