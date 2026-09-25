@@ -42,6 +42,18 @@ class ChangeTableTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
+    public function setup() : void {
+        
+        if ($GLOBALS['ADOdbConnection']->dictionaryProvider == 'sqlite') {
+            $this->markTestSkipped(
+                'Skipping test as changeTableSql not currently supported by Sqlite or PDO Sqlite driver'
+            );
+            return;
+        }
+
+        parent::setup();
+    }
+
     /**
      * Test for {@see ADODConnection::changeTableSQL()} retaining Dropped Fields
      *
