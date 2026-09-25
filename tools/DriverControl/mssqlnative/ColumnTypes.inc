@@ -37,12 +37,14 @@ class columnTypes
     public array $databaseFieldsDefinition = [
         ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
         ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
-        ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'BINARY(10)'],
-        ['db' => 'VARBINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'VARBINARY(10)'],
-        ['db' => 'TEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'TEXT'],
+        //['db' => 'BINARY', 'meta' => 'Q', 'output' => 'ROWVERSION', 'build' => 'BINARY(20)'], //Binary(10) == TS
+        ['db' => 'ROWVERSION', 'meta' => 'Q', 'output' => 'ROWVERSION', 'build' => 'ROWVERSION'],
+       // ['db' => 'TIMESTAMP', 'meta' => 'Q', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
+        ['db' => 'VARBINARY', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'VARBINARY(MAX)'],
+        ['db' => 'TEXT', 'meta' => 'XL', 'output' => 'TEXT', 'build' => 'TEXT'],
         ['db' => 'NCHAR', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NCHAR(10)'],
         ['db' => 'NVARCHAR', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NVARCHAR(10)'],
-        ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT'],
+        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT'],
         ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'TINYINT'],
         ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
         ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
@@ -50,7 +52,6 @@ class columnTypes
         ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'FLOAT'],
         ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'DECIMAL(16,2)'],
         ['db' => 'DATETIME2', 'meta' => 'TS', 'output' => 'DATETIME', 'build' => 'DATETIME2'],
-        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
         ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME']
 
