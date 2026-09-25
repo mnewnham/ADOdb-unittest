@@ -58,9 +58,9 @@ class AlterColumnTest extends DataDictFunctions
             return;
         }
 
-        if ($this->adoDriver == 'sqlite3') {
+        if ($GLOBALS['ADOdbConnection']->dictionaryProvider == 'sqlite') {
             $this->markTestSkipped(
-                'Skipping test as AlterColumnSql not currently supported by SQLite driver'
+                'Skipping test as AlterColumnSql not currently supported by Sqlite or PDO Sqlite driver'
             );
             return;
         }
