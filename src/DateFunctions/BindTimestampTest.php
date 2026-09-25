@@ -127,7 +127,7 @@ class BindTimestampTest extends DateHandling
 
         $actual = $this->db->getOne($sql);
 
-        $this->db->param('');
+        $this->db->param(false);
         $p1 = $this->db->param('p1');
 
         $bind = [ 'p1' => $dbTs ];
