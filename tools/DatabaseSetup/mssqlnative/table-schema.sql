@@ -31,7 +31,7 @@ DROP SEQUENCE IF EXISTS unittest_seq;
 -- Testtable_1 is used to test the basic functionality of the meta functions
 -- It has a variety of data types but contains no data
 CREATE TABLE testtable_1 (
-	id BIGINT IDENTITY(1,1),
+	id INTEGER IDENTITY(1,1),
 	varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
@@ -57,7 +57,7 @@ CREATE VIEW testtable_1_view AS
 
 
 CREATE TABLE testtable_3 (
-	id INT IDENTITY(1,1) PRIMARY KEY,
+	id INTEGER IDENTITY(1,1) PRIMARY KEY,
 	varchar_field VARCHAR(20),
 	datetime_field DATETIME,
 	date_field DATE,
@@ -65,7 +65,7 @@ CREATE TABLE testtable_3 (
 	decimal_field DECIMAL(12,2) DEFAULT 0,
 	boolean_field BIT DEFAULT 0,
 	empty_field VARCHAR(240) DEFAULT '',
-	number_run_field INT DEFAULT 0,
+	number_run_field BIGINT DEFAULT 0,
 	blob_field VARBINARY(MAX)
 );
 CREATE UNIQUE INDEX vdx31 ON testtable_3 (varchar_field);
