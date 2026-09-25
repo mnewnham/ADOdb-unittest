@@ -56,6 +56,8 @@ class OidBlobHandlingTest extends ADOdbTestCase
             return;
         }
 
+        /*
+
         $testBlobFile = $GLOBALS['TestingControl']['blob']['testBlob'];
         if (!$testBlobFile) {
             return;
@@ -68,7 +70,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
         $db = $GLOBALS['ADOdbConnection'];
         /*
         * Load the table to test data length tests
-        */
+        *
         $schemaFile = sprintf(
             '%s/DatabaseSetup/%s/blob-storage-table.sql',
             $GLOBALS['unitTestToolsDirectory'],
@@ -76,6 +78,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
         );
 
 
+        
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
@@ -87,7 +90,9 @@ class OidBlobHandlingTest extends ADOdbTestCase
             $db->completeTrans();
         }
 
+        */
 
+        $db = $GLOBALS['ADOdbConnection'];
 
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9202)";
@@ -96,6 +101,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
         $db->Execute($sql);
 
         $db->completeTrans();
+        
     }
 
 
@@ -109,10 +115,10 @@ class OidBlobHandlingTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'postgres9') {
+        if (!in_array($this->adoDriver, ['postgres9', 'pdo-pgsql'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the postgres9 driver'
+                'This test is only applicable for the postgres9 or PDO\pgsql driver'
             );
         }
 
@@ -200,6 +206,8 @@ class OidBlobHandlingTest extends ADOdbTestCase
             $result,
             'updateBlob() should return true on success'
         );
+
+
     }
 
      /**
@@ -216,6 +224,11 @@ class OidBlobHandlingTest extends ADOdbTestCase
             return;
         }
 
+        /*
+        * Do some filesystem checks
+        */
+        $originalFileSize = filesize($this->testBlobFile);
+
         $newFileArray = explode('.', $this->testBlobFile);
         $extension = array_pop($newFileArray);
         $newFile = implode('.', $newFileArray) . '-decoded.' . $extension;
@@ -230,8 +243,6 @@ class OidBlobHandlingTest extends ADOdbTestCase
         list($errno, $errmsg) = $this->assertADOdbError($SQL);
 
         $blob = $this->db->blobDecode($blobSelect);
-
-
 
         list($errno, $errmsg) = $this->assertADOdbError('blobDecode()');
 

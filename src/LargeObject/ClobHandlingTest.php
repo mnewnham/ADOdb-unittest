@@ -65,6 +65,19 @@ class ClobHandlingTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $sql = "DROP TABLE IF EXISTS blob_storage_table";
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+        }
+
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }

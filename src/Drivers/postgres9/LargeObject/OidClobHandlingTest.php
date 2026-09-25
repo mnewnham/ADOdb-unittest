@@ -65,7 +65,7 @@ class OidClobHandlingTest extends ADOdbTestCase
             $GLOBALS['SqlProvider']
         );
 
-
+    /*
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
         }
@@ -75,7 +75,7 @@ class OidClobHandlingTest extends ADOdbTestCase
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->completeTrans();
         }
-
+        */
         $db->startTrans();
         $sql = "INSERT INTO blob_storage_table (integer_field) VALUES (9102)";
         $db->Execute($sql);
@@ -83,6 +83,7 @@ class OidClobHandlingTest extends ADOdbTestCase
         $db->Execute($sql);
 
         $db->completeTrans();
+        
     }
 
     /**
@@ -95,10 +96,10 @@ class OidClobHandlingTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'postgres9') {
+        if (!in_array($this->adoDriver, ['postgres9', 'pdo-pgsql'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the postgres9 driver'
+                'This test is only applicable for the postgres9 or PFO\pgsql driver'
             );
         }
 
