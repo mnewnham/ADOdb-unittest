@@ -52,6 +52,11 @@ class ShutdownSessionTest extends ADOdbTestCase
             $this->markTestSkipped('Session testing is disabled');
             return;
         }
+
+        if ($GLOBALS['ADOdbConnection']->database == ':memory:') {
+            $this->markTestSkipped('Sessions cannot be tested using a memory based connection');
+            return;
+        }
         parent::setup();
     }
 
