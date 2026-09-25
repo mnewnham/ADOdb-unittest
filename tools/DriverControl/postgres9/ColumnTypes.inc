@@ -40,27 +40,28 @@ class columnTypes
        // ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'BINARY(10)'],
         //['db' => 'VARBINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'VARBINARY(10)'],
         ['db' => 'TEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'TEXT'],
-        ['db' => 'BLOB', 'meta' => 'XL', 'output' => 'BLOB', 'build' => 'BYTEA'],
+        ['db' => 'BYTEA', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BYTEA'],
 
         ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
         //['db' => 'NVARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR(10)'],
 
-        ['db' => 'BIT', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT'],
+        ['db' => 'BIT', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BIT'],
 
        // ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'BOOLEAN', 'build' => 'TINYINT'],
-        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
-        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
-        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'],
+        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'INT2', 'build' => 'SMALLINT'],
+        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INT4', 'build' => 'INTEGER'],
+        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'INT8', 'build' => 'BIGINT'],
 
         ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'FLOAT'],
 
         ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'NUMERIC(16,2)'],
 
         //['db' => 'DATETIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'DATETIME'],
-        ['db' => 'TIMESTAMP', 'meta' => 'T', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
+        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
 
         ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
-        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME']
+        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],
+        ['db' => 'SERIAL', 'meta' => 'S', 'output' => 'SERIAL', 'build' => 'SERIAL'],
 
     ];
 

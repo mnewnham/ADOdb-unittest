@@ -41,10 +41,10 @@ class Postgres9DriverTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'postgres9') {
+        if (in_array($this->adoDriver, ['postgres9', 'pdo-pgsql'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the postgres9 driver'
+                'This test is only applicable for the postgres9 or PDO\pgsql driver'
             );
         }
     }
@@ -55,6 +55,6 @@ class Postgres9DriverTest extends ADOdbTestCase
      * @return void
      */
     public function tearDown(): void
-    {
+    { 
     }
 }

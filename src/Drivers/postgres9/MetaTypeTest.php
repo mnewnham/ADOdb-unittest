@@ -43,8 +43,7 @@ class MetaTypeTest extends ADOdbStandardMetaTypes
     {
 
         parent::setup();
-
-        if ($this->adoDriver !== 'postgres9') {
+        if (!in_array($this->adoDriver, ['postgres9', 'pdo-pgsql'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
                 'This test is only applicable for the postgres9 driver'
