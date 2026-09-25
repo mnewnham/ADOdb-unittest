@@ -46,6 +46,13 @@ class DriverControl extends \CoreControl
      */
     public bool $hasInternalSequences = false;
 
+    /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "strftime('%%Y-%%m-%%d %%H:%%M:%%S', %s)";
+
     public function __construct()
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];

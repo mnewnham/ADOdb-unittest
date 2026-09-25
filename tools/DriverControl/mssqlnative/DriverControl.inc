@@ -19,6 +19,14 @@ class DriverControl extends \CoreControl
     public int $fetchBothManner = 0;
 
     /**
+     * Does the driver support index comments
+     *
+     * @var boolean
+     */
+    public bool $supportsIndexComments = false;
+
+
+    /**
      * What the qstr process should return as a quoted string
      *
      * @var string

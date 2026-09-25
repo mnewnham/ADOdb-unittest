@@ -19,6 +19,13 @@ class DriverControl extends \CoreControl
     public int $fetchBothManner = 1;
 
     /**
+     * Does the driver support index comments
+     *
+     * @var boolean
+     */
+    public bool $supportsIndexComments = false;
+
+    /**
      * Do updates to the data dictionary require transactional scope
      *
      * @var boolean
