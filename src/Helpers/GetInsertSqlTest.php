@@ -69,13 +69,19 @@ class GetInsertSqlTest extends HelperFunctions
         * next available id
         */
 
+        //print_r($sql);
+        //print_r($ar);
 
         $sql = $this->db->getInsertSql($template, $ar);
 
+        $this->assertIsString(
+            $sql,
+            'GetInsertSql() should have generated an SQL Statement'
+        );
+
         $this->db->startTrans();
-        if (!$sql) {
-            die('empty sql');
-        }
+        
+        
         $response = $this->db->execute($sql);
         $this->db->completeTrans();
 
