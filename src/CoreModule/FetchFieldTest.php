@@ -27,7 +27,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 /**
  * Class FieldCount
  *
- * Test cases for for ADOdb recordCount
+ * Test cases for for ADOdb fetchfield
  */
 class FetchFieldTest extends ADOdbCoreSetup
 {
@@ -45,7 +45,7 @@ class FetchFieldTest extends ADOdbCoreSetup
     ];
 
     protected $tt1Types = [
-        'S',
+        'I', //Could be serial for auto-increment
         'C',
         'TS',
         'D',
@@ -92,9 +92,6 @@ class FetchFieldTest extends ADOdbCoreSetup
 
         $this->insertFetchMode($fetchMode);
 
-        print "\n---------------------- mc -----------------------\n";
-        print_r($this->db->metaColumns('testtable_3'));
-        print "\n----------------------end mc -----------------------\n";
         $sql = "SELECT id FROM testtable_3 ORDER BY id DESC";
         $lastId = $this->db->getOne($sql);
 
@@ -110,8 +107,6 @@ class FetchFieldTest extends ADOdbCoreSetup
         for ($i = 0; $i < $result->fieldCount(); $i++) {
             $fieldObject = $result->fetchField($i);
 
-            print_r($fieldObject);
-          
             $this->assertIsObject(
                 $fieldObject,
                 sprintf(
