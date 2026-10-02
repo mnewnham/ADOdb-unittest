@@ -94,7 +94,7 @@ class CreateTableTest extends DataDictFunctions
                  CLOB_FIELD X,
                  DECIMAL_FIELD N(8.4) DEFAULT 0 NOTNULL,
                  BOOLEAN_FIELD L NOTNULL DEFAULT 1,
-                 DROPPABLE_FIELD N(10.6) DEFAULT 80.111
+                 DROPPABLE_FIELD N(10.6) DEFAULT 80.111,
               ";
 
 
