@@ -336,6 +336,12 @@ if ($credentials['parameters']) {
     }
 }
 
+/*
+* The table cache is always changing in tests. Disable else tables 
+* may not aooear when required
+*/
+$db->disableKnownTableCache = true;
+
 if ($credentials['dsn']) {
     $db->connect(
         $credentials['dsn'],
