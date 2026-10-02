@@ -54,11 +54,9 @@ class CacheFunctions extends ADOdbTestCase
              return;
         }
 
-        $db->startTrans();
         $SQL = "SELECT COUNT(*) AS cache_table3_count FROM testtable_3";
         $table3DataExists = $db->getOne($SQL);
 
-        $db->completeTrans();
         if ($table3DataExists) {
             // Data already exists, no need to reload
             return;
