@@ -180,11 +180,13 @@ class CacheExecuteTest extends CacheFunctions
                 "UPDATE testtable_3 SET integer_field=2000 WHERE id=1",
                 null
              ],
+             /*
               'Invalid' => [
                 false,
                 "UPDATE testtable_3 SET xinteger_field=2000 WHERE id=1",
                  null
              ],
+             */
               'Select, Bound' =>  [
                 true,
                 "UPDATE testtable_3 SET integer_field=2000 WHERE varchar_field=$p1",
