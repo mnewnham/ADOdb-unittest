@@ -109,9 +109,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             }
 
             $columnStrings[] = sprintf(
-                "
-            field_%d %s",
+                "field_%d_%s %s",
                 $key,
+                str_replace(' ', '', strtolower($data['db'])),
                 $data['build']
             );
         }
@@ -128,8 +128,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         }
 
         $sql = sprintf($createTableWrapper, $columnString);
-
-       // print "\n------------- ctw ---------------\n$sql\n";
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $GLOBALS['ADOdbConnection']->startTrans();
@@ -170,7 +168,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      * @param string $baseFieldName
      * @param mixed  $fieldType
      * @param int    $fieldOffset
-     * @param object $metaFetch
+     * @param object $fetchFieldObject
      *
      * @return void
      */
@@ -179,7 +177,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         string $baseFieldName,
         mixed $fieldType,
         int $fieldOffset,
-        object $metaFetch
+        object $fetchFieldObject,
+        object $metaColumnObject
     ): void {
 
         if (!$baseFieldName) {
@@ -187,17 +186,21 @@ class ADOdbStandardMetaTypes extends MetaFunctions
             return;
         }
 
-        $name     = $metaFetch->name;
+        $name     = $fetchFieldObject->name;
+
+        /*
+        * converts the dynamically created field name, e.g. field_24
+        * into the array offset to lookup e.g. 24
+        */
 
         $fieldArray = explode('_', $name);
 
         $nameData = $this->databaseFieldsDefinition[$fieldArray[1]];
 
-        $expectedActualType    = $nameData['output'];
-        //$expectedSize          = $nameData[1];
-        $expectedMetaType      = $nameData['meta'];
-        $driverColType         = $nameData['db'];
-
+        $expectedActualType     = $nameData['output'];
+        $expectedFetchFieldType = $nameData['ff'];
+        $expectedMetaType       = $nameData['meta'];
+        $driverColType          = $nameData['db'];
 
         if (strcasecmp($expectedActualType, 'typex') == 0) {
             $expectedActualType =  $GLOBALS['ADOdataDictionary']->typeX;
@@ -208,23 +211,38 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         /*
         * Stage 1, pass a fieldobject to MetaType() as first arg
         */
-        $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaFetch);
+        $ffResult = $GLOBALS['ADOdataDictionary']->metaType($fetchFieldObject);
+
+        $this->assertSame(
+            $expectedFetchFieldType,
+            $ffResult,
+            sprintf(
+                'Checking MetaType of field [%s] derived from DB type [%s] using fetchField() returned' .
+                ' %s, should have returned %s',
+                $name,
+                $driverColType,
+                $ffResult,
+                $expectedFetchFieldType
+            )
+        );
+
+        $metaResult = $GLOBALS['ADOdataDictionary']->metaType($metaColumnObject);
 
         $this->assertSame(
             $expectedMetaType,
             $metaResult,
             sprintf(
-                'Checking MetaType of field [%s] derived from DB type [%s] returned' .
-                ' by Metatype passing fieldObject as 1st parameter with name data Object %s',
+                'Checking MetaType of field [%s] derived from DB type [%s] using metaColumns() returned' .
+                ' %s, should have returned %s',
                 $name,
                 $driverColType,
-                print_r(
-                    $nameData,
-                    true
-                )
+                $metaResult,
+                $expectedMetaType
             )
         );
 
+
+        
         $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
 
         $this->assertSame(
@@ -239,6 +257,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 $expectedMetaType
             )
         );
+        
     }
 
      /**
@@ -258,6 +277,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 new \stdClass()
             ]];
         }
+
+        $metaColumns = $GLOBALS['ADOdbConnection']->metaColumns('metatype_test');
+
         $sql = 'SELECT * FROM metatype_test';
         $executionResult = $GLOBALS['ADOdbConnection']->execute($sql);
 
@@ -265,13 +287,15 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $returnData = [];
         for ($i = 1; $i < $cols; $i++) {
-            $field = $executionResult->fetchField($i);
+            $fetchFieldObject = $executionResult->fetchField($i);
+            $metaColumnObject = $metaColumns[strtoupper($fetchFieldObject->name)];
 
-            $returnData[$field->name] = array(
-                $field->name,
-                $field->type,
+            $returnData[$fetchFieldObject->name] = array(
+                $fetchFieldObject->name,
+                $fetchFieldObject->type,
                 $i,
-                $field
+                $fetchFieldObject,
+                $metaColumnObject
             );
         }
 
@@ -290,7 +314,12 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
             if ($columnData['meta'] == 'I1') {
-                $fields['field_' . $index] = self::I1_MAX - 1;
+                $fieldName = sprintf(
+                    "field_%d_%s",
+                    $index,
+                    str_replace(' ', '', strtolower($columnData['db']))
+                );
+                $fields[$fieldName] = self::I1_MAX - 1;
             }
         }
 
@@ -327,7 +356,12 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
             if ($columnData['meta'] == 'I2') {
-                $fields['field_' . $index] = self::I2_MAX - 1;
+                $fieldName = sprintf(
+                    "field_%d_%s",
+                    $index,
+                    str_replace(' ', '', strtolower($columnData['db']))
+                );
+                $fields[$fieldName] = self::I2_MAX - 1;
             }
         }
 
@@ -365,7 +399,12 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
             if ($columnData['meta'] == 'I3') {
-                $fields['field_' . $index] = self::I4_MAX - 1;
+                $fieldName = sprintf(
+                    "field_%d_%s",
+                    $index,
+                    str_replace(' ', '', strtolower($columnData['db']))
+                );
+                $fields[$fieldName] = self::I4_MAX - 1;
             }
         }
 
@@ -403,7 +442,12 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
             if ($columnData['meta'] == 'I4') {
-                $fields['field_' . $index] = self::I4_MAX - 1;
+                $fieldName = sprintf(
+                    "field_%d_%s",
+                    $index,
+                    str_replace(' ', '', strtolower($columnData['db']))
+                );
+                $fields[$fieldName] = self::I4_MAX - 1;
             }
         }
 
@@ -442,7 +486,12 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
             if ($columnData['meta'] == 'I8') {
-                $fields['field_' . $index] = self::I8_MAX - 1;
+                $fieldName = sprintf(
+                    "field_%d_%s",
+                    $index,
+                    str_replace(' ', '', strtolower($columnData['db']))
+                );
+                $fields[$fieldName] = self::I8_MAX - 1;
             }
         }
 
