@@ -35,25 +35,25 @@ class columnTypes
     * @var array
     */
     public array $databaseFieldsDefinition = [
-        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
-        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
-        //['db' => 'BINARY', 'meta' => 'Q', 'output' => 'ROWVERSION', 'build' => 'BINARY(20)'], //Binary(10) == TS
-        ['db' => 'ROWVERSION', 'meta' => 'Q', 'output' => 'ROWVERSION', 'build' => 'ROWVERSION'],
-       // ['db' => 'TIMESTAMP', 'meta' => 'Q', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
-        ['db' => 'VARBINARY', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'VARBINARY(MAX)'],
-        ['db' => 'TEXT', 'meta' => 'XL', 'output' => 'TEXT', 'build' => 'TEXT'],
-        ['db' => 'NCHAR', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NCHAR(10)'],
-        ['db' => 'NVARCHAR', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NVARCHAR(10)'],
-        ['db' => 'BOOLEAN', 'meta' => 'L', 'output' => 'BOOLEAN', 'build' => 'BIT'],
-        ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'TINYINT', 'build' => 'TINYINT'],
-        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
-        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
-        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'BIGINT', 'build' => 'BIGINT'],
-        ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'FLOAT'],
-        ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'DECIMAL(16,2)'],
-        ['db' => 'DATETIME2', 'meta' => 'TS', 'output' => 'DATETIME', 'build' => 'DATETIME2'],
-        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
-        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME']
+        ['db' => 'CHAR', 'meta' => 'C','ff' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
+        ['db' => 'VARCHAR', 'meta' => 'C','ff' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
+        //['db' => 'BINARY', 'meta' => 'Q','ff' => 'C', 'output' => 'ROWVERSION', 'build' => 'BINARY(20)'], //Binary(10) == TS
+        ['db' => 'ROWVERSION', 'meta' => 'Q','ff' => 'Q', 'output' => 'ROWVERSION', 'build' => 'ROWVERSION'],
+       // ['db' => 'TIMESTAMP', 'meta' => 'Q','ff' => 'C', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
+        ['db' => 'VARBINARY', 'meta' => 'B','ff' => 'B', 'output' => 'VARBINARY(MAX)', 'build' => 'VARBINARY(MAX)'],
+        ['db' => 'TEXT', 'meta' => 'XL','ff' => 'XL', 'output' => 'TEXT', 'build' => 'TEXT'],
+        ['db' => 'NCHAR', 'meta' => 'C2','ff' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NCHAR(10)'],
+        ['db' => 'NVARCHAR', 'meta' => 'C2','ff' => 'C2', 'output' => 'NVARCHAR', 'build' => 'NVARCHAR(10)'],
+        ['db' => 'BOOLEAN', 'meta' => 'L','ff' => 'L', 'output' => 'BIT', 'build' => 'BIT'],
+        ['db' => 'TINYINT', 'meta' => 'I1','ff' => 'I', 'output' => 'TINYINT', 'build' => 'TINYINT'],
+        ['db' => 'SMALLINT', 'meta' => 'I2','ff' => 'I', 'output' => 'SMALLINT', 'build' => 'SMALLINT'],
+        ['db' => 'INTEGER', 'meta' => 'I','ff' => 'I', 'output' => 'INTEGER', 'build' => 'INTEGER'],
+        ['db' => 'BIGINT', 'meta' => 'I8','ff' => 'I', 'output' => 'BIGINT', 'build' => 'BIGINT'],
+        ['db' => 'FLOAT', 'meta' => 'F','ff' => 'F', 'output' => 'FLOAT', 'build' => 'FLOAT'],
+        ['db' => 'NUMERIC', 'meta' => 'N','ff' => 'N', 'output' => 'NUMERIC', 'build' => 'DECIMAL(16,2)'],
+        ['db' => 'DATETIME2', 'meta' => 'TS','ff' => 'TS', 'output' => 'DATETIME', 'build' => 'DATETIME2'],
+        ['db' => 'DATE', 'meta' => 'D','ff' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
+        ['db' => 'TIME', 'meta' => 'T','ff' => 'T', 'output' => 'TIME', 'build' => 'TIME']
 
     ];
 
