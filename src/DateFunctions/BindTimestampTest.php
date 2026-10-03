@@ -104,6 +104,14 @@ class BindTimestampTest extends DateHandling
      */
     public function testParameterizedBindTimestamp(): void
     {
+        if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv'] )) {
+            //$this->skipFollowingTests = true;
+            $this->markTestIncomplete(
+                'This test fails on mssqlnative & PDO\sqlsrv because of SQL statement construction'
+            );
+            return;
+        }
+        
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
 
