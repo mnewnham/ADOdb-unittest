@@ -83,10 +83,11 @@ class ChangeTableTest extends DataDictFunctions
         * Changes decimal_field_to_modify from 8.4 to 9.5 and changes default
         */
 
-        $flds = " 
+        $flds = "
+            ID I NOTNULL AUTOINCREMENT, 
             VARCHAR_FIELD C(80) NOTNULL DEFAULT '',
             NVARCHAR_FIELD C2(80) NOTNULL DEFAULT '',
-            date_field D NOTNULL DEFAULT '2010-01-01',
+            date_field D NOTNULL DEFAULT '2030-01-01',
             ANOTHER_INTEGER_FIELD I NOTNULL DEFAULT 0,
             BOOLEAN_FIELD_TO_CHANGE_DEFAULT L DEFAULT 0,
             YET_ANOTHER_VARCHAR_FIELD C2(50) NOTNULL DEFAULT '',
@@ -94,6 +95,7 @@ class ChangeTableTest extends DataDictFunctions
             SMALLINT_TO_EXPAND I4,
             XL_FIELD XL
             ";
+            
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->startTrans();
@@ -161,11 +163,11 @@ class ChangeTableTest extends DataDictFunctions
         * Changes decimal_field_to_modify from 8.4 to 9.5 and changes default
         */
 
-        $dbdate = str_replace("'", "", $this->db->dbDate('2010-01-01'));
+        $dbdate = str_replace("'", "", $this->db->dbDate('2030-01-01'));
 
         $newDefault = '';
         if($metaColumns['DATE_FIELD']->has_default) {
-            str_replace("'", "", $metaColumns['DATE_FIELD']->default_value);
+            $newDefault = str_replace("'", "", $metaColumns['DATE_FIELD']->default_value);
         }
 
         $this->assertSame(

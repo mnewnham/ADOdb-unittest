@@ -26,7 +26,7 @@ CREATE TABLE dictionary_change_test_table (
 	varchar_field VARCHAR(50),
 	nvarchar_field NVARCHAR(50),
 	smallint_to_expand SMALLINT,
-	xl_field VARBINARY(MAX),
+	xl_field TEXT,
 	FOREIGN KEY (droppable_integer_field) REFERENCES dt_foreign_key_target_1(integer_field_1),
 );
 
