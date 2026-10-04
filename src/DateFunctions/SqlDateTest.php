@@ -88,9 +88,13 @@ class SqlDateTest extends DateHandling
 
                 $result = $this->db->selectLimit($sql, 1);
                 $baseData = $result->fetchRow();
-
+                
                 $this->db->restoreFetchModes();
 
+                $this->assertIsArray(
+                    $baseData,
+                    'Locating date_columns_test record with non-null datetime_field failed'
+                );
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
                 if ($format == 'Q') {
