@@ -85,7 +85,7 @@ CREATE VIEW testtable_1_view AS
 CREATE TABLE testtable_3 (
 id INTEGER NOT NULL,
     varchar_field VARCHAR(20),
-    datetime_field DATE,
+    datetime_field TIMESTAMP,
     date_field DATE,
     integer_field SMALLINT NOT NULL,
     decimal_field NUMBER(12,2),
