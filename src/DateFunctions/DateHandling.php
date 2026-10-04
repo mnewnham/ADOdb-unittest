@@ -97,13 +97,18 @@ class DateHandling extends ADOdbTestCase
      */
     protected function timeRangeHandling(
         string $expected, 
-        string $actual, 
+        ?string $actual, 
         int $margin
     ) : array {
         $result = [ 0, '' ];
 
         $success = 0;
         $message = '';
+
+        if (!$actual) {
+            $result [1] = 'An empty actual value was passed to timeRangeHandling()';
+            return $result;
+        }
 
         $tExpected = strtotime($expected);
         $tActual   = strtotime($actual);
