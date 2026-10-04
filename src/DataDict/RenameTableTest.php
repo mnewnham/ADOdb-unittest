@@ -89,6 +89,11 @@ class RenameTableTest extends DataDictFunctions
             return;
         }
 
+        $expectedErrorNo = 0;
+        if ($GLOBALS['ADOdriver'] == 'pdo-sqlsrv') {
+            $expectedErrorNo = '01000';
+        }
+
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
             $sql = 'DROP TABLE IF EXISTS rename_table_renamed';
 
@@ -122,8 +127,13 @@ class RenameTableTest extends DataDictFunctions
 
 
 
-        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
-        if ($errno > 0) {
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction(
+            $sqlArray,
+            null,
+            true,
+            $expectedErrorNo
+        );
+        if ($errno <> $expectedErrorNo) {
             return;
         }
 
@@ -143,8 +153,13 @@ class RenameTableTest extends DataDictFunctions
             'rename_table'
         );
 
-        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
-        if ($errno > 0) {
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction(
+            $sqlArray,
+            null,
+            true,
+            $expectedErrorNo
+        );
+        if ($errno <> $expectedErrorNo) {
             return;
         }
 

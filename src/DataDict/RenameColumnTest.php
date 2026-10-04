@@ -59,6 +59,10 @@ class RenameColumnTest extends DataDictFunctions
             return;
         }
 
+        $expectedErrorNo = 0;
+        if ($GLOBALS['ADOdriver'] == 'pdo-sqlsrv') {
+            $expectedErrorNo = '01000';
+        }
 
         $sqlArray = $this->dataDictionary->renameColumnSQL(
             $this->testTableName,
@@ -66,7 +70,7 @@ class RenameColumnTest extends DataDictFunctions
             'ANOTHER_BOOLEAN_FIELD'
         );
 
-        $assertion = $this->assertIsArray(
+        $this->assertIsArray(
             $sqlArray,
             'renameColumnSql should return an array'
         );
@@ -82,8 +86,13 @@ class RenameColumnTest extends DataDictFunctions
         }
         */
 
-        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
-        if ($errno > 0) {
+        list($result, $errno, $errmsg) = $this->executeDictionaryAction(
+            $sqlArray,
+            null,
+            true,
+            $expectedErrorNo
+        );
+        if ($errno <> $expectedErrorNo) {
             return;
         }
 
@@ -106,8 +115,14 @@ class RenameColumnTest extends DataDictFunctions
                 'BOOLEAN_FIELD'
             );
 
-            list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
-            if ($errno > 0) {
+           
+
+            list($result, $errno, $errmsg) = $this->executeDictionaryAction(
+                $sqlArray,
+                null,
+                true,
+                $expectedErrorNo);
+            if ($errno <> $expectedErrorNo) {
                 return;
             }
 

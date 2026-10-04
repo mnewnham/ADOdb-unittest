@@ -409,7 +409,8 @@ class ADOdbTestCase extends TestCase
     public function executeDictionaryAction(
         mixed $sqlArray,
         ?array $bind = null,
-        $transactions = true
+        bool $transactions = true,
+        string $expectedErrorNumber = '0'
     ): array {
 
         $db = $this->db;
@@ -447,7 +448,7 @@ class ADOdbTestCase extends TestCase
         }
 
         $this->assertEquals(
-            0,
+            $expectedErrorNumber,
             $errno,
             sprintf(
                 'ADOdb array execution of SQL %s%s should not return error: %d - %s',
