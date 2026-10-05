@@ -144,7 +144,7 @@ class OffsetDateTest extends DateHandling
         /*
         * Test using a column as the base date
         */
-        $sql = "SELECT offsetdate_test_field 
+        $sql = "SELECT {$GLOBALS['DriverControl']->offsetDateTestField} 
                   FROM date_columns_test 
                  ORDER BY id";
 
@@ -157,8 +157,7 @@ class OffsetDateTest extends DateHandling
         $sql = "SELECT {$this->db->offsetDate($offset, 'offsetdate_test_field')}
                   FROM date_columns_test 
                  WHERE id=1";
-        list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
-
+        
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
