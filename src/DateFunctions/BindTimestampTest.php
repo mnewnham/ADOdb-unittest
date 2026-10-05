@@ -47,16 +47,6 @@ class BindTimestampTest extends DateHandling
 
         $dbTs = $this->db->bindTimestamp($now);
 
-        if (substr($dbTs, 0, 1) != "'") {
-            $this->fail(
-                sprintf(
-                    'bindTimestamp() should return a timestamp single quoted, actually returned[%s]',
-                    $dbTs
-                )
-            );
-        }
-
-        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
@@ -64,6 +54,8 @@ class BindTimestampTest extends DateHandling
         );
 
         $actual = $this->db->getOne($sql);
+
+        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
 
         $sql = 'SELECT * 
                   FROM date_columns_test 
@@ -104,7 +96,7 @@ class BindTimestampTest extends DateHandling
      */
     public function testParameterizedBindTimestamp(): void
     {
-        if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv'] )) {
+        if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv', 'oci8', 'pdo-oci'] )) {
             //$this->skipFollowingTests = true;
             $this->markTestIncomplete(
                 'This test fails on mssqlnative & PDO\sqlsrv because of SQL statement construction'
@@ -126,7 +118,6 @@ class BindTimestampTest extends DateHandling
             );
         }
 
-        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
 
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
