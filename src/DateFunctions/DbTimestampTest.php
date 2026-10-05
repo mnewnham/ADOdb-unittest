@@ -43,20 +43,16 @@ class DbTimestampTest extends DateHandling
      */
     public function testDbTimestampWithDate(): void
     {
-        //print "\n------------------ start DBTS --------------------\n";
         $nowTime = time();
         $now = date('Y-m-d', $nowTime);
 
         $dbTs = $this->db->dbTimestamp($now);
-        //list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
-
+       
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $dbTs
         );
 
-        //print "DBTS EXEC $sql\n";
-  
         $actualNowTime = strtotime($this->db->getOne($sql));
 
         $this->assertSame(
