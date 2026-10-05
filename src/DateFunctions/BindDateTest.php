@@ -45,12 +45,20 @@ class BindDateTest extends DateHandling
         $today = date('Y-m-d');
 
         $bindDate = $this->db->bindDate($today);
-        list($errno, $errmsg) = $this->assertADOdbError('bindDate()');
+
+        $sql = sprintf(
+                $GLOBALS['DriverControl']->dateMethodExecutor,
+                $bindDate
+        );
 
         $this->assertNotNull(
             $bindDate,
             'bindDate() should return a string to use ' .
             'todays date in ISO format for a bind parameter'
         );
+
+        $actual = $this->db->getOne($sql);
+        list($errno, $errmsg) = $this->assertADOdbError($sql);
+
     }
 }
