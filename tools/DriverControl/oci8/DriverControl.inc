@@ -70,7 +70,7 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $dateField = "TO_CHAR(date_field, 'YYYY-MM-DD HH24:MI')";
+    public string $dateField = "TO_CHAR(date_field, 'YYYY-MM-DD HH24:MI:SS')";
 
     /**
      * How to obtain the entire contents of the datetime_field
@@ -78,4 +78,11 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public string $dateTimeField = "TO_CHAR(datetime_field, 'YYYY-MM-DD HH24:MI:SS')";
+
+    /**
+     * How to obtain the entire contents of the offsetdate_test_field
+     *
+     * @var string
+     */
+    public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI:SS')";
 }
