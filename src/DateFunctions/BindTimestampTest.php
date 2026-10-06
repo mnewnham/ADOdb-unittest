@@ -60,6 +60,9 @@ class BindTimestampTest extends DateHandling
         $sql = 'SELECT * 
                   FROM date_columns_test 
                   WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation, $dbTs);
+        $sql = 'SELECT * 
+                  FROM date_columns_test 
+                  WHERE datetime_field=' . $dbTs;
 
         $result = $this->db->selectLimit($sql, 1, -1);
 

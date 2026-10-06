@@ -274,6 +274,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 '',
                 '',
                 0,
+                new \stdClass(),
                 new \stdClass()
             ]];
         }

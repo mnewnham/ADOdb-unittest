@@ -85,4 +85,18 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI:SS')";
+
+     /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "(TO_CHAR(%s, 'YYYY-MM-DD HH24:MI:SS'))";
+
+    /**
+     * Converts a timestamp to a date string
+     *
+     * @var string
+     */
+    public string $dateTranslation =  "(TO_CHAR(%s, 'YYYY-MM-DD'))";
 }

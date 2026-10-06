@@ -164,7 +164,14 @@ class CoreControl
      *
      * @var string
      */
-    public string $dateTimeTranslation =  "(TO_DATE(%s, 'YYYY-MM-DD HH24:MI:SS'))";
+    public string $dateTimeTranslation =  "%s";
+
+    /**
+     * Converts a timestamp to a date string
+     *
+     * @var string
+     */
+    public string $dateTranslation =  "%s";
 
     /**
      * Does the driver support true internal sequences

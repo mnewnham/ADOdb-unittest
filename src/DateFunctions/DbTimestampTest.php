@@ -70,23 +70,23 @@ class DbTimestampTest extends DateHandling
      * @return void
      *
      */
-    public function testDbTimestampWithTime(): void
+    public function testDbTimestampWithDateTime(): void
     {
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
 
-        $dbTs = $this->db->dbTimestamp($nowTime);
-
-        list($errno, $errmsg) = $this->assertADOdbError('dbTimestamp()');
-
+       
+         $dbTs = sprintf(
+            $GLOBALS['DriverControl']->dateTimeTranslation,
+            $this->db->dbTimestamp($now)
+        );
+       
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $dbTs
         );
 
-        $stringTime = $this->db->getOne($sql);
-
-        $actualNowTime = strtotime($stringTime);
+        $actualNowTime = strtotime($this->db->getOne($sql));
 
         $this->assertSame(
             date('c', $nowTime),
@@ -94,4 +94,37 @@ class DbTimestampTest extends DateHandling
             'dbTimestamp should return a date that evaluates to the calculated timestamp'
         );
     }
+
+    /**
+     * Test for {@see ADOConnection::dbTimestamp())
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:reference:connection:dbtimestamp
+     *
+     * @return void
+     *
+     */
+    public function testDbTimestampWithUnixTime(): void
+    {
+        $nowTime = time();
+        $now = date('Y-m-d H:i:s', $nowTime);
+
+        $dbTs = sprintf(
+            $GLOBALS['DriverControl']->dateTimeTranslation,
+            $this->db->dbTimestamp($nowTime)
+        );
+       
+        $sql = sprintf(
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $dbTs
+        );
+
+        $actualNowTime = strtotime($this->db->getOne($sql));
+
+        $this->assertSame(
+            $nowTime,
+            $actualNowTime,
+            'dbTimestamp should return a datetime portion from the Unix Time'
+        );
+    }
+
 }
