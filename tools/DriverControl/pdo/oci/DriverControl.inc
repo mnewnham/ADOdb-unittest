@@ -43,4 +43,11 @@ class DriverControl extends \CoreControl
      * @var boolean
      */
     public bool $supportsIndexComments = false;
+
+    /**
+     * What the qstr process should return as a quoted string
+     *
+     * @var string
+     */
+    public string $qStrExpectedResult = "Famed author James O''Sullivan";
 }
