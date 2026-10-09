@@ -76,21 +76,19 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      *
      * @return void
      */
-    public static function setUpBeforeClass(): void
-    {
+    public static function setUpBeforeClass(): void {
 
         parent::setUpBeforeClass();
 
-         $columnTypesFile = sprintf(
-             '%s/DriverControl/%s/ColumnTypes.inc',
-             $GLOBALS['unitTestToolsDirectory'],
-             $GLOBALS['SqlProvider']
-         );
+        $columnTypesFile = sprintf(
+            '%s/DriverControl/%s/ColumnTypes.inc',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
 
         if (!file_exists($columnTypesFile)) {
             return;
         }
-
 
         require_once $columnTypesFile;
 
@@ -141,6 +139,19 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
     public function setup(): void
     {
+
+        $classString = get_class($this);
+
+        $classArray = explode('\\',$classString);
+        array_pop($classArray);
+        $providerString = array_pop($classArray);
+
+        if($providerString <> $GLOBALS['SqlProvider']) {
+            $this->markTestSkipped('Incorrect Provider');
+            return;
+        }
+
+
         parent::setup();
 
         $columnTypesFile = sprintf(
@@ -268,6 +279,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
     public static function providerTestDriverSpecificMetaTypes(): array
     {
 
+    
         $tableName = $GLOBALS['ADOdbConnection']->metaTables('T', false, 'metatype_test');
         if (!$tableName) {
             return [[

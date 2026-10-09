@@ -41,7 +41,7 @@ class Oci8DriverTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'oci8') {
+        if (!in_array($this->adoDriver, [ 'oci8', 'pdo-oci'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
                 'This test is only applicable for the Oracle oci8 driver'

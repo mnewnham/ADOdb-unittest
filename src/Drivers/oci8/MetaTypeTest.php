@@ -44,10 +44,10 @@ class MetaTypeTest extends ADOdbStandardMetaTypes
 
         parent::setup();
 
-        if ($this->adoDriver !== 'oci8') {
+        if (!in_array($this->adoDriver, ['oci8', 'pdo-oci'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the oci8 driver'
+                'This test is only applicable for the oci8 or PDO\oci driver'
             );
         }
     }
