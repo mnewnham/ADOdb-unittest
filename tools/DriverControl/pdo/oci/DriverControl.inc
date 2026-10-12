@@ -15,6 +15,16 @@ class DriverControl extends \CoreControl
      */
     public int $nativeModeCasing = 1;
 
+    /**
+     * The way in which the driver retrieves the fields in
+     * FETCH_BOTH mode. Most drivers return the columns as
+     * NUM,ASSOC,NUM,ASSOC. But others may return
+     * ASSOC,NUM,ASSOC,NUM
+     *
+     * @var integer
+     */
+    public int $fetchBothManner = 1;
+
 
     /**
      * If required, what is the stored procedure IN parameter type
@@ -50,4 +60,46 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public string $qStrExpectedResult = "Famed author James O''Sullivan";
+
+    /**
+     * A wrapper to allow the execution of date statements
+     *
+     * @var string
+     */
+    public $dateMethodExecutor = 'SELECT %s AS result FROM dual';
+
+     /**
+     * How to obtain the entire contents of the date_field
+     *
+     * @var string
+     */
+    public string $dateField = "TO_CHAR(date_field, 'YYYY-MM-DD HH24:MI:SS')";
+
+    /**
+     * How to obtain the entire contents of the datetime_field
+     *
+     * @var string
+     */
+    public string $dateTimeField = "TO_CHAR(datetime_field, 'YYYY-MM-DD HH24:MI:SS')";
+
+    /**
+     * How to obtain the entire contents of the offsetdate_test_field
+     *
+     * @var string
+     */
+    public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI:SS')";
+
+     /**
+     * Converts a timestamp to a datetime string
+     *
+     * @var string
+     */
+    public string $dateTimeTranslation =  "(TO_CHAR(%s, 'YYYY-MM-DD HH24:MI:SS'))";
+
+    /**
+     * Converts a timestamp to a date string
+     *
+     * @var string
+     */
+    public string $dateTranslation =  "(TO_CHAR(%s, 'YYYY-MM-DD'))";
 }
