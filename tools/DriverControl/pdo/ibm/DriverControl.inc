@@ -51,21 +51,21 @@ class DriverControl extends \CoreControl
      *
      * @var string
      */
-    public string $dateField = "TO_CHAR(date_field, 'YYYY-MM-DD HH24:MI')";
+    public string $dateField = "TO_CHAR(date_field, 'YYYY-MM-DD HH24:MI:SS')";
 
     /**
      * How to obtain the entire contents of the sqldate_test_field
      *
      * @var string
      */
-    public string $sqlDateTestField = "TO_CHAR(sqldate_test_field, 'YYYY-MM-DD HH24:MI')";
+    public string $sqlDateTestField = "TO_CHAR(sqldate_test_field, 'YYYY-MM-DD HH24:MI:SS')";
 
     /**
      * How to obtain the entire contents of the offsetdate_test_field
      *
      * @var string
      */
-    public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI')";
+    public string $offsetDateTestField = "TO_CHAR(offsetdate_test_field, 'YYYY-MM-DD HH24:MI:SS')";
 
 
     public function __construct()
