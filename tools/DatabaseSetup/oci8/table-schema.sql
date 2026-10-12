@@ -83,7 +83,7 @@ CREATE VIEW testtable_1_view AS
 -- Testtable_3 is loaded with data for testing the cache and sql functions
 
 CREATE TABLE testtable_3 (
-id INTEGER NOT NULL,
+    id INTEGER NOT NULL,
     varchar_field VARCHAR(20),
     datetime_field TIMESTAMP,
     date_field DATE,

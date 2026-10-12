@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS session_test;
 
 CREATE TABLE session_test (
   sesskey VARCHAR( 64 ) DEFAULT '',
-  expiry DATE NOT NULL ,
+  expiry TIMESTAMP NOT NULL ,
   expireref VARCHAR( 250 ) DEFAULT '',
   created DATE NOT NULL ,
   modified DATE NOT NULL ,
