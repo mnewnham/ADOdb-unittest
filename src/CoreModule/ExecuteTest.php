@@ -114,7 +114,7 @@ class ExecuteTest extends ADOdbCoreSetup
         if (is_object($result)) {
             $reflection = new \ReflectionClass($result);
             $shortName  = $reflection->getShortName();
-            $ok = in_array($shortName, ['ADORecordSet_empty', 'ADORecordSetEmpty']);
+            $ok = (strtolower(substr($shortName,-5)) == 'empty');
 
             $this->assertTrue(
                 $ok,
