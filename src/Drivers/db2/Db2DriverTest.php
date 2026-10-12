@@ -42,10 +42,10 @@ class Db2DriverTest extends ADOdbTestCase
 
         parent::setup();
 
-        if ($this->adoDriver !== 'db2') {
+        if (!in_array($this->adoDriver, ['db2', 'pdo-ibm'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
-                'This test is only applicable for the IBM db2 driver'
+                'This test is only applicable for the IBM db2 or PDO\ibm driver'
             );
         }
     }
