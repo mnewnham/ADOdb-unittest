@@ -59,9 +59,6 @@ class BindTimestampTest extends DateHandling
 
         $sql = 'SELECT * 
                   FROM date_columns_test 
-                  WHERE datetime_field=' . sprintf($GLOBALS['DriverControl']->dateTimeTranslation, $dbTs);
-        $sql = 'SELECT * 
-                  FROM date_columns_test 
                   WHERE datetime_field=' . $dbTs;
 
         $result = $this->db->selectLimit($sql, 1, -1);
@@ -99,10 +96,13 @@ class BindTimestampTest extends DateHandling
      */
     public function testParameterizedBindTimestamp(): void
     {
+        /**
+         * @todo either rework the test or fix the parameteruzed query (or both)
+         */
         if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv', 'oci8', 'pdo-oci'] )) {
             //$this->skipFollowingTests = true;
             $this->markTestIncomplete(
-                'This test fails on mssqlnative & PDO\sqlsrv because of SQL statement construction'
+                'This test fails when attached to SQL Server and Oracle databases because of SQL statement construction'
             );
             return;
         }
