@@ -126,7 +126,7 @@ class AutoExecuteTest extends HelperFunctions
     ): void {
 
          $sql = sprintf(
-             "SELECT MAX(%s) FROM %s",
+             "SELECT {$this->db->ifNull('MAX(%s)',0)} FROM %s",
              _adodb_quote_fieldname($this->db, 'id'),
              _adodb_quote_fieldname($this->db, 'autoexecute')
          );
