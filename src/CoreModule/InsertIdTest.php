@@ -180,4 +180,83 @@ class InsertIdTest extends ADOdbCoreSetup
             $counter++;
         }
     }
+
+    /**
+     * Test successfully incrementing autoincrement columns
+     *
+     * @return void
+     */
+    public function testInsertAutoIdWithTableNameAndCaching(): void
+    {
+
+        $this->db->enableMetaDataCaching();
+
+        $sql = "SELECT MAX(id) + 1 FROM insert_auto";
+        $counter = $this->db->getOne($sql);
+
+        $autoAr = array(
+            'integer_field' => 99
+        );
+
+        foreach ($this->testFetchModes as $fetchMode => $fetchModeName) {
+            $this->db->startTrans();
+            $this->insertFetchMode($fetchMode);
+
+            $this->db->hasInsertID = true;
+            $sql = "SELECT * FROM insert_auto WHERE id=-1";
+            $autoTemplate = $this->db->execute($sql);
+
+            //print_r($autoTemplate); exit;
+            $tableName = 'insert_auto';
+
+            $sql = $this->db->getInsertSql($tableName, $autoAr);
+
+            $this->db->execute($sql);
+
+            $insertId = $this->db->insert_id();
+
+            $this->db->completeTrans();
+
+            $this->assertEquals(
+                $counter,
+                $insertId,
+                sprintf(
+                    '[FETCH MODE %s] Auto increment insertid should increment',
+                    $fetchModeName
+                )
+            );
+
+
+            $this->validateResetFetchModes();
+
+
+            $counter++;
+        }
+
+        $metaCacheBool = $this->db->getCachedMetaTable('insert_auto', true);
+
+        $this->assertIsInt(
+            $metaCacheBool,
+            'Calling getCachedMetaTable() with boolean true should return a logical'
+        );
+
+        $metaCache = $this->db->getCachedMetaTable('insert_auto');
+
+        $this->assertIsArray(
+            $metaCache,
+            'Calling getCachedMetaTable() without bool args should return an array'
+        );
+
+        $this->assertIsArray(
+            $metaCache['metacolumns'],
+            'The metacolumns should be stored as an array'
+        );
+
+        $this->assertIsObject(
+            $metaCache['recordset'],
+            'The recordset should be stored as an object'
+        );
+
+
+    }
 }
