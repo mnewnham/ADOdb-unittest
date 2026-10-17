@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tests cases for returnungid when used in MariaDb
  * see https://github.com/ADOdb/ADOdb/pull/1252
@@ -19,6 +20,7 @@
  * @link https://adodb.org ADOdbProject's web site and documentation
  * @link https://github.com/ADOdb/ADOdb Source code and issue tracker
  */
+
 namespace MNewnham\ADOdbUnitTest\Drivers\mysql;
 
 use MNewnham\ADOdbUnitTest\ADOdbTestCase;
@@ -39,7 +41,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ReturningIdTest extends ADOdbTestCase
 {
-
     /**
      * Global setup for the test class
      *
@@ -55,7 +56,7 @@ class ReturningIdTest extends ADOdbTestCase
 
         $info = $db->ServerInfo();
         if (stripos($info['description'], 'mariadb') === false) {
-           return;
+            return;
         }
 
         if ($GLOBALS['DriverControl']->supportsDropIfExists) {
@@ -96,12 +97,12 @@ class ReturningIdTest extends ADOdbTestCase
         }
     }
 
-    
+
     public function setUp(): void
     {
-        
+
         $db = $GLOBALS['ADOdbConnection'];
-        
+
         $info = $db->ServerInfo();
         if (stripos($info['description'], 'mariadb') === false) {
             $this->markTestSkipped('INSERT ... RETURNING requires MariaDB');
@@ -115,7 +116,7 @@ class ReturningIdTest extends ADOdbTestCase
         );
     }
 
-    
+
     /**
      * A duplicate-key violation on a bound INSERT ... RETURNING must be
      * reported through ErrorNo()/ErrorMsg(), not just as a false return.
@@ -139,7 +140,7 @@ class ReturningIdTest extends ADOdbTestCase
 
         $count = $db->GetOne(
             'SELECT COUNT(*) FROM returning_id_test WHERE id = 1'
-            );
+        );
         $this->assertSame(1, (int) $count, 'The duplicate row must never be inserted');
     }
 

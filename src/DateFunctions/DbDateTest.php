@@ -32,8 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class DbDateTest extends DateHandling
 {
-
-    
     /**
      * Test for {@see ADOConnection::dbDate())
      *
@@ -56,5 +54,4 @@ class DbDateTest extends DateHandling
             'todays date in ISO format'
         );
     }
-
 }

@@ -76,7 +76,8 @@ class ADOdbStandardMetaTypes extends MetaFunctions
      *
      * @return void
      */
-    public static function setUpBeforeClass(): void {
+    public static function setUpBeforeClass(): void
+    {
 
         parent::setUpBeforeClass();
 
@@ -142,11 +143,11 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $classString = get_class($this);
 
-        $classArray = explode('\\',$classString);
+        $classArray = explode('\\', $classString);
         array_pop($classArray);
         $providerString = array_pop($classArray);
 
-        if($providerString <> $GLOBALS['SqlProvider']) {
+        if ($providerString <> $GLOBALS['SqlProvider']) {
             $this->markTestSkipped('Incorrect Provider');
             return;
         }
@@ -169,7 +170,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $columnTypes = new \columnTypes();
 
         $this->databaseFieldsDefinition = $columnTypes->databaseFieldsDefinition;
-
     }
 
     /**
@@ -253,7 +253,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         );
 
 
-        
+
         $actualResult = $GLOBALS['ADOdataDictionary']->actualType($metaResult);
 
         $this->assertSame(
@@ -268,7 +268,6 @@ class ADOdbStandardMetaTypes extends MetaFunctions
                 $expectedMetaType
             )
         );
-        
     }
 
      /**
@@ -279,7 +278,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
     public static function providerTestDriverSpecificMetaTypes(): array
     {
 
-    
+
         $tableName = $GLOBALS['ADOdbConnection']->metaTables('T', false, 'metatype_test');
         if (!$tableName) {
             return [[
@@ -485,7 +484,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         );
     }
 
-    
+
     /**
      * Checks that a maximum I4 value can be inserted
      *

@@ -88,7 +88,7 @@ class SqlDateTest extends DateHandling
 
                 $result = $this->db->selectLimit($sql, 1);
                 $baseData = $result->fetchRow();
-                
+
                 $this->db->restoreFetchModes();
 
                 $this->assertIsArray(

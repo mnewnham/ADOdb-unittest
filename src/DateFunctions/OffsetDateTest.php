@@ -157,7 +157,7 @@ class OffsetDateTest extends DateHandling
         $sql = "SELECT {$this->db->offsetDate($offset, 'offsetdate_test_field')}
                   FROM date_columns_test 
                  WHERE id=1";
-        
+
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
 
@@ -256,7 +256,7 @@ class OffsetDateTest extends DateHandling
         list($errno, $errmsg) = $this->assertADOdbError('offsetDate()');
         $od = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-        
+
         list($success, $message) = $this->timeRangeHandling($nowStamp, $od, 5);
 
         $this->assertTrue(
@@ -303,7 +303,7 @@ class OffsetDateTest extends DateHandling
         $this->assertTrue(
             $success,
             'Offset date using a column as the base date should ' .
-            'return the date 1440 seconds in the future based on the date_field column. ' . 
+            'return the date 1440 seconds in the future based on the date_field column. ' .
             $message
         );
     }
@@ -346,7 +346,7 @@ class OffsetDateTest extends DateHandling
         $this->assertTrue(
             $success,
             'Offset date using a column as the base date should ' .
-            'return the date 1440 seconds in the future based on the date_field column. ' . 
+            'return the date 1440 seconds in the future based on the date_field column. ' .
             $message
         );
     }

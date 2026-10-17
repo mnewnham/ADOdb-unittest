@@ -31,8 +31,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Test cases for ADOdb date functions
  */
 class BindDateTest extends DateHandling
-{  
-    
+{
     /**
      * Test for {@see ADOConnection::bindDate())
      *
@@ -47,8 +46,8 @@ class BindDateTest extends DateHandling
         $bindDate = $this->db->bindDate($today);
 
         $sql = sprintf(
-                $GLOBALS['DriverControl']->dateMethodExecutor,
-                $bindDate
+            $GLOBALS['DriverControl']->dateMethodExecutor,
+            $bindDate
         );
 
         $this->assertNotNull(
@@ -59,6 +58,5 @@ class BindDateTest extends DateHandling
 
         $actual = $this->db->getOne($sql);
         list($errno, $errmsg) = $this->assertADOdbError($sql);
-
     }
 }

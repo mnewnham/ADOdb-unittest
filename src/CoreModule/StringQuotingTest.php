@@ -199,7 +199,6 @@ class StringQuotingTest extends ADOdbTestCase
                 $returnValue
             )
         );
-
     }
 
     /**

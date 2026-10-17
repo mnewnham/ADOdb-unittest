@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class BindTimestampTest extends DateHandling
 {
-
     /**
      * Test for {@see ADOConnection::bindTimestamp())
      *
@@ -78,7 +77,7 @@ class BindTimestampTest extends DateHandling
             );
         }
 
-        
+
         if (!$r = $result->fetchRow()) {
             $this->assertTrue(
                 true,
@@ -99,14 +98,14 @@ class BindTimestampTest extends DateHandling
         /**
          * @todo either rework the test or fix the parameteruzed query (or both)
          */
-        if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv', 'oci8', 'pdo-oci'] )) {
+        if (in_array($this->adoDriver, ['mssqlnative', 'pdo-sqlsrv', 'oci8', 'pdo-oci'])) {
             //$this->skipFollowingTests = true;
             $this->markTestIncomplete(
                 'This test fails when attached to SQL Server and Oracle databases because of SQL statement construction'
             );
             return;
         }
-        
+
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
 

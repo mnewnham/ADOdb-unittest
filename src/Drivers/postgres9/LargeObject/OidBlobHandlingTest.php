@@ -78,7 +78,7 @@ class OidBlobHandlingTest extends ADOdbTestCase
         );
 
 
-        
+
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $db->startTrans();
@@ -101,7 +101,6 @@ class OidBlobHandlingTest extends ADOdbTestCase
         $db->Execute($sql);
 
         $db->completeTrans();
-        
     }
 
 
@@ -206,8 +205,6 @@ class OidBlobHandlingTest extends ADOdbTestCase
             $result,
             'updateBlob() should return true on success'
         );
-
-
     }
 
      /**

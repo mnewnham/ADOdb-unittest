@@ -139,7 +139,7 @@ class FetchFieldTest extends ADOdbCoreSetup
             );
 
             $expectedType = $this->tt1Types[$i];
-          
+
             $metaType     = $this->db->metaType($fieldObject);
 
             $this->assertEquals(

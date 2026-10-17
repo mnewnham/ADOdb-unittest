@@ -83,7 +83,6 @@ class OidClobHandlingTest extends ADOdbTestCase
         $db->Execute($sql);
 
         $db->completeTrans();
-        
     }
 
     /**

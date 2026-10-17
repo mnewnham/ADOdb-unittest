@@ -47,7 +47,7 @@ class UserDateTest extends DateHandling
        // print "CALL UD WITH $time\n";
         $userDate = $this->db->userDate($time, 'Y-m-d');
 
-        //print "UD =$userDate\n"; 
+        //print "UD =$userDate\n";
 
         list($errno, $errmsg) = $this->assertADOdbError('userDate()');
 
@@ -79,5 +79,4 @@ class UserDateTest extends DateHandling
             'userTimeStamp should return a time string built from the given timestamp'
         );
     }
-
 }

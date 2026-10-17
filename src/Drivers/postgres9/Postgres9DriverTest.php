@@ -55,6 +55,6 @@ class Postgres9DriverTest extends ADOdbTestCase
      * @return void
      */
     public function tearDown(): void
-    { 
+    {
     }
 }

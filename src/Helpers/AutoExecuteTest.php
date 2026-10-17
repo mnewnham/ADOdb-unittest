@@ -63,7 +63,7 @@ class AutoExecuteTest extends HelperFunctions
             if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
-                $ok = (strtolower(substr($shortName,-5)) == 'empty');
+                $ok = (strtolower(substr($shortName, -5)) == 'empty');
 
                 $this->assertTrue(
                     $ok,
@@ -166,7 +166,7 @@ class AutoExecuteTest extends HelperFunctions
             if (is_object($response)) {
                 $reflection = new \ReflectionClass($response);
                 $shortName  = $reflection->getShortName();
-                $ok = (strtolower(substr($shortName,-5)) == 'empty');
+                $ok = (strtolower(substr($shortName, -5)) == 'empty');
 
                 $this->assertTrue(
                     $ok,
@@ -304,7 +304,7 @@ class AutoExecuteTest extends HelperFunctions
                     if (is_object($response)) {
                         $reflection = new \ReflectionClass($response);
                         $shortName  = $reflection->getShortName();
-                        $ok = (strtolower(substr($shortName,-5)) == 'empty');
+                        $ok = (strtolower(substr($shortName, -5)) == 'empty');
 
                         $this->assertTrue(
                             $ok,

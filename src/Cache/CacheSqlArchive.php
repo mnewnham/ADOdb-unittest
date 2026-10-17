@@ -278,7 +278,7 @@ class CacheGetRowTest extends CacheFunctions
 
         $this->db->startTrans();
 
-       
+
         if ($bind) {
             $result = $this->db->cacheSelectLimit(
                 $this->timeout,

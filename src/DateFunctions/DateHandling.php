@@ -92,14 +92,14 @@ class DateHandling extends ADOdbTestCase
      * @param string $expected The expected result
      * @param string $actual   The actual result
      * @param integer $margin  The number of seconds variance
-     * 
+     *
      * @return array
      */
     protected function timeRangeHandling(
-        string $expected, 
-        ?string $actual, 
+        string $expected,
+        ?string $actual,
         int $margin
-    ) : array {
+    ): array {
         $result = [ 0, '' ];
 
         $success = 0;
@@ -127,7 +127,7 @@ class DateHandling extends ADOdbTestCase
                 $range['to'],
                 $actual
             );
-        } else if (preg_match('/^[0-9]+$/', $tExpected) && $tActual && preg_match('/^[0-9]+$/', $tActual)) {
+        } elseif (preg_match('/^[0-9]+$/', $tExpected) && $tActual && preg_match('/^[0-9]+$/', $tActual)) {
             $range = [
                 'from' => $tExpected - $margin,
                 'to'   => $tExpected + $margin

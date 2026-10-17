@@ -42,8 +42,9 @@ class ChangeTableTest extends DataDictFunctions
         parent::setUpBeforeClass();
     }
 
-    public function setup() : void {
-        
+    public function setup(): void
+    {
+
         if ($GLOBALS['ADOdbConnection']->dictionaryProvider == 'sqlite') {
             $this->markTestSkipped(
                 'Skipping test as changeTableSql not currently supported by Sqlite or PDO Sqlite driver'
@@ -95,7 +96,7 @@ class ChangeTableTest extends DataDictFunctions
             SMALLINT_TO_EXPAND I4,
             XL_FIELD XL
             ";
-            
+
 
         if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
             $this->db->startTrans();
@@ -166,7 +167,7 @@ class ChangeTableTest extends DataDictFunctions
         $dbdate = str_replace("'", "", $this->db->dbDate('2030-01-01'));
 
         $newDefault = '';
-        if($metaColumns['DATE_FIELD']->has_default) {
+        if ($metaColumns['DATE_FIELD']->has_default) {
             $newDefault = str_replace("'", "", $metaColumns['DATE_FIELD']->default_value);
         }
 

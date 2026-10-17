@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class DbTimestampTest extends DateHandling
 {
-
     /**
      * Test for {@see ADOConnection::dbTimestamp())
      *
@@ -47,7 +46,7 @@ class DbTimestampTest extends DateHandling
         $now = date('Y-m-d', $nowTime);
 
         $dbTs = $this->db->dbTimestamp($now);
-       
+
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $dbTs
@@ -75,12 +74,12 @@ class DbTimestampTest extends DateHandling
         $nowTime = time();
         $now = date('Y-m-d H:i:s', $nowTime);
 
-       
+
          $dbTs = sprintf(
-            $GLOBALS['DriverControl']->dateTimeTranslation,
-            $this->db->dbTimestamp($now)
-        );
-       
+             $GLOBALS['DriverControl']->dateTimeTranslation,
+             $this->db->dbTimestamp($now)
+         );
+
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $dbTs
@@ -112,7 +111,7 @@ class DbTimestampTest extends DateHandling
             $GLOBALS['DriverControl']->dateTimeTranslation,
             $this->db->dbTimestamp($nowTime)
         );
-       
+
         $sql = sprintf(
             $GLOBALS['DriverControl']->dateMethodExecutor,
             $dbTs
@@ -126,5 +125,4 @@ class DbTimestampTest extends DateHandling
             'dbTimestamp should return a datetime portion from the Unix Time'
         );
     }
-
 }

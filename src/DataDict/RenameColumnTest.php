@@ -115,13 +115,14 @@ class RenameColumnTest extends DataDictFunctions
                 'BOOLEAN_FIELD'
             );
 
-           
+
 
             list($result, $errno, $errmsg) = $this->executeDictionaryAction(
                 $sqlArray,
                 null,
                 true,
-                $expectedErrorNo);
+                $expectedErrorNo
+            );
             if ($errno <> $expectedErrorNo) {
                 return;
             }

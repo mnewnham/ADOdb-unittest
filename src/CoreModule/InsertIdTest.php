@@ -256,7 +256,5 @@ class InsertIdTest extends ADOdbCoreSetup
             $metaCache['recordset'],
             'The recordset should be stored as an object'
         );
-
-
     }
 }

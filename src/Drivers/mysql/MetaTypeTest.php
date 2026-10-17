@@ -44,7 +44,7 @@ class MetaTypeTest extends ADOdbStandardMetaTypes
 
         parent::setup();
 
-        if (!in_array($this->adoDriver, ['mysqli', 'pdo-mysql'] )) {
+        if (!in_array($this->adoDriver, ['mysqli', 'pdo-mysql'])) {
             $this->skipFollowingTests = true;
             $this->markTestSkipped(
                 'This test is only applicable for the mysqli or PDO\mysql driver'
