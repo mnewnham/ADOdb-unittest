@@ -54,14 +54,12 @@ class GetInsertSqlTest extends HelperFunctions
         $template = $this->db->execute($sql);
 
         $ar = array(
-            'varchar_field' => "GETINSERTSQL'0", //$this->db->qStr("GETINSERTSQL'0") . $fetchMode,
+            'varchar_field' => "GETINSERTSQL'0",
             'integer_field' => 99,
             'number_run_field' => 3001 + $fetchMode,
             'date_field' => date('Y-m-d'),
             'decimal_eval_field' => 0,
-            //'varchar_eval_field' => 'GOODBYE'
             'varchar_eval_field!' => "(CASE WHEN 2003 < 3003 THEN 'HELLO' ELSE 'GOODBYE' END)"
-            //'varchar_eval_field!' => "TO_CHAR(SELECT MAX(number_run_field) FROM testtable_1, '99999')"
         );
 
         /*
