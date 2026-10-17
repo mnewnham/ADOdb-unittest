@@ -401,4 +401,99 @@ class GetUpdateSqlTest extends HelperFunctions
              );
          }
     }
+
+    /**
+     * Test for {@see ADODConnection::getUpdateSql()}
+     *
+     * @link https://adodb.org/dokuwiki/doku.php?id=v5:dictionary:getupdatesql
+     *
+     * @return void
+     */
+     #[DataProvider('globalProviderFetchModes')]
+    public function testGetUpdateSqlWithBoundAndRecordSubset(
+        int $fetchMode,
+        string $fetchDescription
+    ): void {
+
+        $this->insertFetchMode($fetchMode);
+        for ($forceMode = 0; $forceMode < 2; $forceMode++) {
+         $sql = "SELECT {$this->db->ifNull('MAX(id)', 0)} FROM autoexecute";
+            $lastId = $this->db->getOne($sql);
+
+            $this->db->param(false);
+            $p1 = $this->db->param('p1');
+            $bind = [
+                'p1' => $lastId
+            ];
+
+            $sql = "SELECT varchar_field, integer_field 
+                      FROM autoexecute 
+                      WHERE id=$p1 AND integer_field >=0 
+                        AND varchar_field LIKE 'G%' 
+                        AND NOT EXISTS(SELECT ax.id FROM autoexecute ax WHERE ax.id<0 AND ax.integer_field < 0)     
+                    
+                   ORDER BY integer_field
+                   FOR UPDATE";
+    
+            list ($template,$errno,$errmsg) = $this->executeSqlString($sql, $bind);
+
+            $ar = array(
+                'varchar_field' => 'GETUPDATESQL0' . $fetchMode . $forceMode . '-1',
+                'integer_field+' => 1,
+             //'number_run_field' => 4001 + $fetchMode + (10 * $forceMode),
+             //'some_invalid_field' => 'ABC123'
+            );
+
+            /*
+            * This should  update the record fields that are retrieved
+            */
+
+            $sql = $this->db->getUpdateSql($template, $ar, $forceMode);
+
+            $response = $this->db->execute($sql, $bind);
+
+            $this->assertIsObject(
+                $response,
+                'updates should return an object ' .
+                'If the record is updated successfully'
+            );
+
+            if (is_object($response)) {
+                $reflection = new \ReflectionClass($response);
+                $shortName  = $reflection->getShortName();
+                $ok = (strtolower(substr($shortName,-5)) == 'empty');
+
+                $this->assertTrue(
+                    $ok,
+                    'getUpdateSql should return an empty ADORecordSet object ' .
+                    'If the record is created successfully, returned ' . $shortName
+                );
+            }
+
+            $sql = "SELECT varchar_field,integer_field FROM autoexecute ORDER BY id DESC";
+            $result = $this->db->selectLimit($sql, 1);
+            $newRecord = $result->fetchRow();
+
+            if ($fetchMode == 0 || $fetchMode == 3) {
+                 $field = 0;
+            } elseif (ADODB_ASSOC_CASE == ADODB_ASSOC_CASE_UPPER) {
+                 $field = 'VARCHAR_FIELD';
+            } else {
+                 $field = 'varchar_field';
+            }
+
+            $value = $newRecord[$field];
+
+            $this->assertSame(
+                'GETUPDATESQL0' . $fetchMode . $forceMode . '-1',
+                $value,
+                sprintf(
+                    '[%s] [FORCE=%s] updated record should have an varchar_field value %s',
+                    $fetchDescription,
+                    $forceMode,
+                    'GETUPDATESQL0' . $fetchMode  . $forceMode . '-1'
+                )
+            );
+        }
+    }
 }
