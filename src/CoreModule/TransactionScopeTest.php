@@ -55,6 +55,35 @@ class TransactionScopeTest extends ADOdbTestCase
         $SQL = "UPDATE testtable_3 SET varchar_field='LINE 1' WHERE varchar_field IS NULL";
         $db->execute($SQL);
         $db->completeTrans();
+
+        if ($GLOBALS['DriverControl']->supportsDropIfExists) {
+            $sql = "DROP TABLE IF EXISTS transaction_fail_table";
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->startTrans();
+            }
+
+            $db->execute($sql);
+
+            if ($GLOBALS['DriverControl']->dictionaryRequireTransactions) {
+                $db->completeTrans();
+            }
+        }
+
+
+        $flds = "
+        id I PRIMARY KEY,
+        char_field C(20)
+        ";
+
+        $sqlArray = $GLOBALS['ADOdataDictionary']->createTableSQL(
+            'transaction_fail_table',
+            $flds
+        );
+
+
+        $response = $GLOBALS['ADOdataDictionary']->executeSqlArray($sqlArray);
+
     }
 
 
@@ -399,6 +428,162 @@ class TransactionScopeTest extends ADOdbTestCase
                 sprintf(
                     '[%s] VARCHAR_FIELD Data should now be rolled back ' .
                      'in the transaction after commit',
+                    $fetchDescription
+                )
+            );
+        }
+    }
+
+    /**
+     * Test beginning a transaction, committing it, and checking the data
+     *
+     * @return void
+     */
+    public function testBeginAndCommitWithFailTransaction(): void
+    {
+        if ($this->skipFollowingTests) {
+            $this->markTestSkipped(
+                'Skipping testBeginAndFailTransaction as it ' .
+                'is not applicable for the current driver'
+            );
+        }
+
+        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
+            $this->insertFetchMode($fetchMode);
+
+            $this->db->beginTrans();
+            $sql = "DELETE FROM transaction_fail_table";
+            $this->db->execute($sql);
+
+            $this->db->commitTrans();
+
+            $this->db->beginTrans();
+
+            $this->assertEquals(
+                1,
+                $this->db->transCnt,
+                sprintf(
+                    '[%s] Transaction did not start correctly,' .
+                    'transCnt should be equal to 1',
+                    $fetchDescription
+                )
+            );
+
+            /*
+            * First insertion sets up a record that will be duplicated causing
+            a constraint failure
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (1, 'FIRST')"; 
+           
+            $this->db->execute($sql);
+           
+            /*
+            * Second insertion will generate an error which should
+            * cause the transaction scope to fail
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (1, 'SECOND')"; 
+           
+            $this->db->execute($sql);
+
+            /*
+            * third insertion will complete without error which should
+            * confuse the error handling
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (2, 'THIRD')"; 
+           
+            $this->db->execute($sql);
+
+            $success = $this->db->CommitTrans();
+
+            $this->assertFalse(
+                $success,
+                sprintf(
+                    '[%s] CommitTrans should have failed commit ' .
+                     'because a primary key constraint has failed',
+                    $fetchDescription
+                )
+            );
+
+            $sql = "SELECT COUNT(*) FROM transaction_fail_table";
+            $count = $this->db->getOne($sql);
+
+            $this->assertEquals(
+                0,
+                $count,
+                'The count of transactions should be zero. ' . 
+                'All transactions inside the scope should have been rolled back'
+            );
+        }
+    }
+
+    /**
+     * Test beginning a transaction, committing it, and checking the data
+     *
+     * @return void
+     */
+    public function testStartAndCompleteWithFailTransaction(): void
+    {
+        if ($this->skipFollowingTests) {
+            $this->markTestSkipped(
+                'Skipping testBeginAndFailTransaction as it ' .
+                'is not applicable for the current driver'
+            );
+        }
+
+        foreach ($this->testFetchModes as $fetchMode => $fetchDescription) {
+            $this->insertFetchMode($fetchMode);
+
+            $this->db->startTrans();
+            $sql = "DELETE FROM transaction_fail_table";
+            $this->db->execute($sql);
+
+            $this->db->completeTrans();
+
+            $this->db->startTrans();
+
+            $this->assertEquals(
+                1,
+                $this->db->transCnt,
+                sprintf(
+                    '[%s] Transaction did not start correctly,' .
+                    'transCnt should be equal to 1',
+                    $fetchDescription
+                )
+            );
+
+            /*
+            * First insertion sets up a record that will be duplicated causing
+            a constraint failure
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (1, 'FIRST')"; 
+           
+            $result = $this->db->execute($sql);
+           
+            /*
+            * Second insertion will generate an error which should
+            * cause the transaction scope to fail
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (1, 'SECOND')"; 
+           
+            $result = $this->db->execute($sql);
+
+            /*
+            * third insertion will complete without error which should
+            * confuse the error handling
+            */
+            $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (2, 'THIRD')"; 
+           
+            $result = $this->db->execute($sql);
+
+            //print "\nERR = ". $this->db->Err
+            
+            $success = $this->db->CompleteTrans();
+
+            $this->assertFalse(
+                $success,
+                sprintf(
+                    '[%s] CompleteTrans should have failed commit ' .
+                     'because a primary key constraint has failed',
                     $fetchDescription
                 )
             );
