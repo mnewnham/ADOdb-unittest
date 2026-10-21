@@ -125,9 +125,13 @@ class AutoExecuteTest extends HelperFunctions
         string $fetchDescription
     ): void {
 
-         $sql = sprintf(
-             "SELECT {$this->db->ifNull('MAX(%s)',0)} FROM %s",
-             _adodb_quote_fieldname($this->db, 'id'),
+        $maxId = sprintf(
+            'MAX(%s)',
+            _adodb_quote_fieldname($this->db, 'id')
+        );
+        
+        $sql = sprintf(
+             "SELECT {$this->db->ifNull($maxId, 0)} FROM %s",
              _adodb_quote_fieldname($this->db, 'autoexecute')
          );
 
@@ -139,11 +143,11 @@ class AutoExecuteTest extends HelperFunctions
             $lastId
         );
 
-
         for ($forceMode = 0; $forceMode < 2; $forceMode++) {
+
+
             $aeVar = 'AUTOEXECUTE02' . $forceMode . $fetchMode;
 
-            //$this->db->setFetchMode($fetchMode);
             $this->insertFetchMode($fetchMode);
             $ar = array(
                 'varchar_field' => $aeVar,
