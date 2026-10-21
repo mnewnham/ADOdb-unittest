@@ -53,6 +53,14 @@ class DriverControl extends \CoreControl
      */
     public string $dateTimeTranslation =  "strftime('%%Y-%%m-%%d %%H:%%M:%%S', %s)";
 
+    /**
+     * Does the driver support the IF EXISTS statement
+     *
+     * @var boolean
+     */
+    public bool $supportsDropIfExists = true;
+
+
     public function __construct()
     {
         $this->schemaOwner = $GLOBALS['schemaOwner'];
