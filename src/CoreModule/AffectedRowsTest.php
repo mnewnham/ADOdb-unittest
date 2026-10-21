@@ -39,12 +39,11 @@ class AffectedRowsTest extends ADOdbCoreSetup
     public static function setUpBeforeClass(): void
     {
 
-        $db        = $GLOBALS['ADOdbConnection'];
+        $db = $GLOBALS['ADOdbConnection'];
 
         /*
         * load simple insertion schema
         */
-        //$db->startTrans();
 
         $tableSchema = sprintf(
             '%s/DatabaseSetup/%s/insert-id-schema.sql',
