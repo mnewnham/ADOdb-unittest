@@ -1,6 +1,6 @@
 
 -- blob_storage_table is built for blob testing
-DROP TABLE IF EXISTS blob_storage_table;
+-- DROP TABLE IF EXISTS blob_storage_table;
 
 CREATE TABLE blob_storage_table (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
