@@ -54,6 +54,10 @@ class ReturningIdTest extends ADOdbTestCase
         $db        = $GLOBALS['ADOdbConnection'];
         $adoDriver = $GLOBALS['ADOdriver'];
 
+        if ($adoDriver !== 'mysqli') {
+            return;
+        }
+
         $info = $db->ServerInfo();
         if (stripos($info['description'], 'mariadb') === false) {
             return;
@@ -102,6 +106,13 @@ class ReturningIdTest extends ADOdbTestCase
     {
 
         $db = $GLOBALS['ADOdbConnection'];
+
+        if ($GLOBALS['ADOdriver'] !== 'mysqli') {
+            $this->skipFollowingTests = true;
+            $this->markTestSkipped(
+                'This test is only applicable for the mysqli driver'
+            );
+        }
 
         $info = $db->ServerInfo();
         if (stripos($info['description'], 'mariadb') === false) {
