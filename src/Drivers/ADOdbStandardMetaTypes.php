@@ -300,6 +300,9 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $returnData = [];
         for ($i = 1; $i < $cols; $i++) {
             $fetchFieldObject = $executionResult->fetchField($i);
+            if ($fetchFieldObject->name == 'id') {
+                continue;
+            }
             $metaColumnObject = $metaColumns[strtoupper($fetchFieldObject->name)];
 
             $returnData[$fetchFieldObject->name] = array(
