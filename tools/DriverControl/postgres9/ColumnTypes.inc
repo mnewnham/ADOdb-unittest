@@ -35,33 +35,33 @@ class columnTypes
     * @var array
     */
     public array $databaseFieldsDefinition = [
-        ['db' => 'CHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
-        ['db' => 'VARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
-       // ['db' => 'BINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'BINARY(10)'],
-        //['db' => 'VARBINARY', 'meta' => 'C2', 'output' => 'NVARCHAR', 'build' => 'VARBINARY(10)'],
-        ['db' => 'TEXT', 'meta' => 'X', 'output' => 'TEXT', 'build' => 'TEXT'],
-        ['db' => 'BYTEA', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BYTEA'],
+        ['db' => 'CHAR', 'meta' => 'C', 'ff' => 'C', 'output' => 'VARCHAR', 'build' => 'CHAR(10)'],
+        ['db' => 'VARCHAR', 'meta' => 'C', 'ff' => 'C', 'output' => 'VARCHAR', 'build' => 'VARCHAR(10)'],
+       // ['db' => 'BINARY', 'meta' => 'C2', 'ff' => 'C', 'output' => 'NVARCHAR', 'build' => 'BINARY(10)'],
+        //['db' => 'VARBINARY', 'meta' => 'C2', 'ff' => 'C', 'output' => 'NVARCHAR', 'build' => 'VARBINARY(10)'],
+        ['db' => 'TEXT', 'meta' => 'X', 'ff' => 'X', 'output' => 'TEXT', 'build' => 'TEXT'],
+        ['db' => 'BYTEA', 'meta' => 'B', 'ff' => 'B', 'output' => 'BYTEA', 'build' => 'BYTEA'],
 
-        ['db' => 'NCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
-        //['db' => 'NVARCHAR', 'meta' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR(10)'],
+        ['db' => 'NCHAR', 'meta' => 'C', 'ff' => 'C', 'output' => 'VARCHAR', 'build' => 'NCHAR(10)'],
+        //['db' => 'NVARCHAR', 'meta' => 'C', 'ff' => 'C', 'output' => 'VARCHAR', 'build' => 'NVARCHAR(10)'],
 
-        ['db' => 'BIT', 'meta' => 'B', 'output' => 'BLOB', 'build' => 'BIT'],
+        ['db' => 'BIT', 'meta' => 'B', 'ff' => 'B', 'output' => 'BYTEA', 'build' => 'BIT'],
 
-       // ['db' => 'TINYINT', 'meta' => 'I1', 'output' => 'BOOLEAN', 'build' => 'TINYINT'],
-        ['db' => 'SMALLINT', 'meta' => 'I2', 'output' => 'INT2', 'build' => 'SMALLINT'],
-        ['db' => 'INTEGER', 'meta' => 'I', 'output' => 'INT4', 'build' => 'INTEGER'],
-        ['db' => 'BIGINT', 'meta' => 'I8', 'output' => 'INT8', 'build' => 'BIGINT'],
+       // ['db' => 'TINYINT', 'meta' => 'I1', 'ff' => 'C', 'output' => 'BOOLEAN', 'build' => 'TINYINT'],
+        ['db' => 'SMALLINT', 'meta' => 'I2', 'ff' => 'I', 'output' => 'INT2', 'build' => 'SMALLINT'],
+        ['db' => 'INTEGER', 'meta' => 'I', 'ff' => 'I', 'output' => 'INT4', 'build' => 'INTEGER'],
+        ['db' => 'BIGINT', 'meta' => 'I8', 'ff' => 'I', 'output' => 'INT8', 'build' => 'BIGINT'],
 
-        ['db' => 'FLOAT', 'meta' => 'F', 'output' => 'DOUBLE', 'build' => 'FLOAT'],
+        ['db' => 'FLOAT', 'meta' => 'F', 'ff' => 'F', 'output' => 'FLOAT8', 'build' => 'FLOAT'],
 
-        ['db' => 'NUMERIC', 'meta' => 'N', 'output' => 'NUMERIC', 'build' => 'NUMERIC(16,2)'],
+        ['db' => 'NUMERIC', 'meta' => 'N', 'ff' => 'N', 'output' => 'NUMERIC', 'build' => 'NUMERIC(16,2)'],
 
-        //['db' => 'DATETIME', 'meta' => 'T', 'output' => 'DATETIME', 'build' => 'DATETIME'],
-        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
+        //['db' => 'DATETIME', 'meta' => 'T', 'ff' => 'C', 'output' => 'DATETIME', 'build' => 'DATETIME'],
+        ['db' => 'TIMESTAMP', 'meta' => 'TS', 'ff' => 'TS', 'output' => 'TIMESTAMP', 'build' => 'TIMESTAMP'],
 
-        ['db' => 'DATE', 'meta' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
-        ['db' => 'TIME', 'meta' => 'T', 'output' => 'TIME', 'build' => 'TIME'],
-        ['db' => 'SERIAL', 'meta' => 'S', 'output' => 'SERIAL', 'build' => 'SERIAL'],
+        ['db' => 'DATE', 'meta' => 'D', 'ff' => 'D', 'output' => 'DATE', 'build' => 'DATE'],
+        ['db' => 'TIME', 'meta' => 'T', 'ff' => 'T', 'output' => 'TIME', 'build' => 'TIME'],
+        ['db' => 'SERIAL', 'meta' => 'S', 'ff' => 'I', 'output' => 'SERIAL', 'build' => 'SERIAL'],
 
     ];
 
