@@ -425,7 +425,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         if (count($fields) == 0) {
             $this->markTestSkipped(
-                'No I4 columns in database for test insertion'
+                'No I3 columns in database for test insertion'
             );
             return;
         }
@@ -440,7 +440,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
 
         $this->assertIsObject(
             $result,
-            'A Maximum value I4 Integer value should have been inserted'
+            'A Maximum value I3 Integer value should have been inserted'
         );
     }
 
@@ -456,7 +456,7 @@ class ADOdbStandardMetaTypes extends MetaFunctions
         $fields = [];
 
         foreach ($this->databaseFieldsDefinition as $index => $columnData) {
-            if ($columnData['meta'] == 'I4') {
+            if (in_array($columnData['meta'], ['I', 'I4'])) {
                 $fieldName = sprintf(
                     "field_%d_%s",
                     $index,
