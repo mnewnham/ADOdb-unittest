@@ -113,7 +113,7 @@ class GetMedianTest extends ADOdbCoreSetup
                'WHERE id=2'
             ],
             'Return testtable_3, varchar_field' => [
-                'LINE 5',
+                'LINE 4',
                 'testtable_3',
                 'varchar_field',
                'WHERE id>0'
