@@ -150,7 +150,9 @@ class GetInsertSqlTest extends HelperFunctions
 
         $this->insertFetchMode($fetchMode);
 
-        $sql = "SELECT * FROM autoexecute ORDER BY id DESC";
+        $table =  _adodb_quote_fieldname($this->db, 'autoexecute');
+
+        $sql = "SELECT * FROM $table ORDER BY id DESC";
         $lastRecord = $this->db->getRow($sql);
 
         $ar = array(
