@@ -87,4 +87,11 @@ class DriverControl extends \CoreControl
      * @var string
      */
     public string $dateTimeTranslation =  "DATE_FORMAT(%s, '%%Y-%%m-%%d %%H:%%i:%%s')";
+
+    /**
+     * Does the driver support true internal sequences
+     *
+     * @var boolean
+     */
+    public bool $hasInternalSequences = false;
 }
