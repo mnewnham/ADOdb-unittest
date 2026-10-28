@@ -22,15 +22,14 @@
 
 namespace MNewnham\ADOdbUnitTest\Session;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use MNewnham\ADOdbUnitTest\Session\SessionSetup;
 
 /**
  * Class NewSessionTest
  *
  * Test cases for for ADOdb Session Services
  */
-class GarbageCollectorTest extends ADOdbTestCase
+class GarbageCollectorTest extends SessionSetup
 {
     /**
      * Global setup for the test class

@@ -22,16 +22,13 @@
 
 namespace MNewnham\ADOdbUnitTest\Session;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use Override;
-use PHPUnit\Framework\Attributes\DataProvider;
-
+use MNewnham\ADOdbUnitTest\Session\SessionSetup;
 /**
  * Class SessionParametersTest
  *
  * Test cases for for ADOdb Session Services
  */
-class SessionParametersTest extends ADOdbTestCase
+class SessionParametersTest extends SessionSetup
 {
     public static function setUpBeforeClass(): void
     {
@@ -39,19 +36,6 @@ class SessionParametersTest extends ADOdbTestCase
         if ($GLOBALS['skipSessionTests'] == 1) {
             return;
         }
-    }
-
-    public function setup(): void
-    {
-        if ($GLOBALS['skipSessionTests'] == 1) {
-            $this->markTestSkipped('Session testing is disabled');
-            return;
-        }
-        if ($GLOBALS['ADOdbConnection']->database == ':memory:') {
-            $this->markTestSkipped('Sessions cannot be tested using a memory based connection');
-            return;
-        }
-        parent::setup();
     }
 
     /**

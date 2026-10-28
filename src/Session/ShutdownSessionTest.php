@@ -22,15 +22,14 @@
 
 namespace MNewnham\ADOdbUnitTest\Session;
 
-use MNewnham\ADOdbUnitTest\ADOdbTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use MNewnham\ADOdbUnitTest\Session\SessionSetup;
 
 /**
  * Class NewSessionTest
  *
  * Test cases for for ADOdb Session Services
  */
-class ShutdownSessionTest extends ADOdbTestCase
+class ShutdownSessionTest extends SessionSetup
 {
     /**
      * Global setup for the test class
@@ -45,21 +44,6 @@ class ShutdownSessionTest extends ADOdbTestCase
 
         parent::setUpBeforeClass();
     }
-
-    public function setup(): void
-    {
-        if ($GLOBALS['skipSessionTests'] == 1) {
-            $this->markTestSkipped('Session testing is disabled');
-            return;
-        }
-
-        if ($GLOBALS['ADOdbConnection']->database == ':memory:') {
-            $this->markTestSkipped('Sessions cannot be tested using a memory based connection');
-            return;
-        }
-        parent::setup();
-    }
-
 
     /**
      * Test to initialize a new session. We do this so that the session id is constant
