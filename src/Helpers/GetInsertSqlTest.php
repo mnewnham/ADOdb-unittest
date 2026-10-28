@@ -66,10 +66,6 @@ class GetInsertSqlTest extends HelperFunctions
         * This should create a record populated with default values and the
         * next available id
         */
-
-        //print_r($sql);
-        //print_r($ar);
-
         $sql = $this->db->getInsertSql($template, $ar);
 
         $this->assertIsString(

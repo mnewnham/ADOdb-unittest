@@ -206,7 +206,6 @@ class InsertIdTest extends ADOdbCoreSetup
             $sql = "SELECT * FROM insert_auto WHERE id=-1";
             $autoTemplate = $this->db->execute($sql);
 
-            //print_r($autoTemplate); exit;
             $tableName = 'insert_auto';
 
             $sql = $this->db->getInsertSql($tableName, $autoAr);
