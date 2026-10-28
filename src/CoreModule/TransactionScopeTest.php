@@ -72,7 +72,7 @@ class TransactionScopeTest extends ADOdbTestCase
 
 
         $flds = "
-        id I PRIMARY KEY,
+        id I UNIQUE PRIMARY KEY,
         char_field C(20)
         ";
 
@@ -574,9 +574,7 @@ class TransactionScopeTest extends ADOdbTestCase
             $sql = "INSERT INTO transaction_fail_table(id, char_field) VALUES (2, 'THIRD')"; 
            
             $result = $this->db->execute($sql);
-
-            //print "\nERR = ". $this->db->Err
-            
+          
             $success = $this->db->CompleteTrans();
 
             $this->assertFalse(
