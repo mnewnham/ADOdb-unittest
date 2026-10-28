@@ -44,36 +44,10 @@ function expiryNotificationTrigger(?string $expiref, string $key): string
 }
 
 $sessionParameters = $GLOBALS['TestingControl']['session'];
+$testParams    = $GLOBALS['sessionTestParameters'];
+$compression = $testParams['compression'];
+$encryption  = $testParams['encryption'];
 
-$compression = [
-    'gzip' => [
-        'file' => 'adodb-compress-gzip.php',
-        'class' => 'ADODB_Compress_Gzip'
-        ],
-    'bzip2' => [
-        'file' => 'adodb-compress-bzip2.php',
-        'class' => 'ADODB_Compress_Bzip2'
-    ]
-];
-
-$encryption = [
-    'md5' => [
-        'file' => 'adodb-encrypt-md5.php',
-        'class' => 'ADODB_Encrypt_MD5'
-        ],
-    'sha1' => [
-        'file' => 'adodb-encrypt-sha1.php',
-        'class' => 'ADODB_Encrypt_SHA1'
-        ],
-        /*
-        * Horde only works on unix based systems
-        */
-    'secret' => [
-        'file' => 'adodb-encrypt-secret.php',
-        'class' => 'ADODB_Encrypt_Secret'
-        ],
-
-];
 
 if (isset($sessionParameters['horde'])) {
     define('HORDE_BASE', $sessionParameters['horde']);
