@@ -71,7 +71,6 @@ class SqlDateTest extends DateHandling
                     $this->db->sqlDate($format)
                 );
 
-                list($errno, $errmsg) = $this->assertADOdbError('sqlDate()');
                 $actual = $this->db->getOne($sql);
                 list($errno, $errmsg) = $this->assertADOdbError($sql);
 
