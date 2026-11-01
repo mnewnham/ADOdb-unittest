@@ -72,8 +72,6 @@ class CacheSelectLimitTest extends CacheFunctions
 
         $this->db->startTrans();
 
-        ///$this->db->debug = 2;
-
         if ($bind) {
             $result = $this->db->cacheSelectLimit(
                 $this->timeout,
