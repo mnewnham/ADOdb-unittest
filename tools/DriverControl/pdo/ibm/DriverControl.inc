@@ -16,7 +16,7 @@ class DriverControl extends \CoreControl
      *
      * @var integer
      */
-    public int $fetchBothManner = 1;
+    public int $fetchBothManner = self::BOTH_MANNER_ALT_NUM_LAST;
 
     /**
      * Indicates whether native mode casing is upper or lower
