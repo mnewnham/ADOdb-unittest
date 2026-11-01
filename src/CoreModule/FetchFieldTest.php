@@ -140,19 +140,17 @@ class FetchFieldTest extends ADOdbCoreSetup
 
             $expectedType = $this->tt1Types[$i];
 
-            $metaType     = $this->db->metaType($fieldObject);
-
             $this->assertEquals(
                 $expectedType,
-                $metaType,
+                $fieldObject->metaType,
                 sprintf(
-                    '[FETCH %s] Expected field name %s with no bind usage and invalid metaType %s for actual type %s at position %d, found %s',
+                    '[FETCH %s] field name %s with no bind usage and expected metaType %s for actual type %s at position %d, has metatype %s',
                     $fetchDescription,
                     $fieldObject->name,
-                    $fieldObject->type,
                     $expectedType,
+                    $fieldObject->type,
                     $i,
-                    $metaType
+                    $fieldObject->metaType
                 )
             );
         }
