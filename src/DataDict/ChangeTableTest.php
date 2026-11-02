@@ -299,50 +299,5 @@ class ChangeTableTest extends DataDictFunctions
             return;
         }
 
-        return;
-
-        $metaColumns = $this->db->metaColumns($this->testTableName);
-
-
-        /*
-        * Now re-execute wth the drop flag set to true
-        */
-        $sqlArray = $this->dataDictionary->changeTableSQL(
-            $this->testTableName,
-            $flds,
-            false,
-            true
-        );
-
-
-        $assertion = $this->assertIsArray(
-            $sqlArray,
-            'changeTableSql() should alway return an array'
-        );
-
-        if (!$assertion) {
-            return;
-        }
-
-        if (count($sqlArray) == 0) {
-            $this->fail(
-                'changeTableSql() not supported by driver'
-            );
-            return;
-        }
-
-        list($result, $errno, $errmsg) = $this->executeDictionaryAction($sqlArray);
-        if ($errno > 0) {
-            return;
-        }
-
-        $metaColumns = $this->db->metaColumns($this->testTableName);
-
-        $this->assertArrayNotHasKey(
-            'INTEGER_FIELD',
-            $metaColumns,
-            'changeTableSQL() using $dropFlds=true ' .
-            'old column INTEGER_FIELD should be dropped'
-        );
     }
 }
