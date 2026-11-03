@@ -74,6 +74,19 @@ class ActivateSessionTest extends SessionSetup
             $db->completeTrans();
         }
 
+        $schemaFile = sprintf(
+            '%s/DatabaseSetup/%s/sessions-data.sql',
+            $GLOBALS['unitTestToolsDirectory'],
+            $GLOBALS['SqlProvider']
+        );
+
+        if (file_exists($schemaFile)) {
+            $db->startTrans();
+            $ok = readSqlIntoDatabase($db, $schemaFile);
+            $db->completeTrans();
+        }
+
+
         parent::setUpBeforeClass();
     }
 
